@@ -1,17 +1,33 @@
 ---
+import { createClient } from '@sanity/client'
 
+const client = createClient({
+  projectId: 'uievv97s',
+  dataset: 'production',
+  useCdn: false,
+  apiVersion: '2024-01-01',
+})
+
+const pages = await client.fetch(`*[_type == "page"][0...5]{
+  title,
+  slug,
+  seoDescription
+}`)
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne</title>
+  </head>
+  <body>
+    <h1>Jean-Baptiste Vidal</h1>
+    <p>Moniteur-Guide de pêche à la mouche en Bretagne</p>
+    <ul>
+      {pages.map(page => (
+        <li><a href={`/${page.slug.current}`}>{page.title}</a></li>
+      ))}
+    </ul>
+  </body>
 </html>
