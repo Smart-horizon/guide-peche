@@ -1,0 +1,371 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const stages = [
+  {
+    slug: '/peche-de-l-alose-a-la-mouche',
+    espece: 'Migrateurs',
+    titre: 'Saumon & Alose à la mouche',
+    texte: "En Bretagne, les migrateurs sont très bien représentés. Je vous propose de rechercher principalement le saumon atlantique et l'alose sur l'Ellé, l'Aven, l'Elorn, l'Aulne, le Scorff et le Léguer.",
+    saison: 'Mi-mars → Octobre (saumon) · Mi-avril → Juillet (alose)',
+    image: '/images/migrateurs-alose.jpg',
+  },
+  {
+    slug: '/peche-de-la-truite-a-la-mouche-en-bretagne',
+    espece: 'Truite',
+    titre: 'Truite à la mouche en Bretagne',
+    texte: 'Dans le Finistère nous avons de nombreuses rivières très bien peuplées en truites fario sauvages. Je vous emmène sur les meilleures rivières du département pour vous apporter des conseils techniques.',
+    saison: 'Ouverture → Fermeture saison truite',
+    image: '/images/truite-fario.jpg',
+  },
+  {
+    slug: '/peche-du-bar-a-la-mouche',
+    espece: 'Bar',
+    titre: 'Bar à la mouche — bord & bateau',
+    texte: "La Bretagne offre des estuaires exceptionnels pour la pêche du bar. Initiation, perfectionnement, traque à vue, et coaching sur votre bateau. Depuis 2018 avec mon Carolina Skiff.",
+    saison: 'Toute l\'année selon les conditions',
+    image: '/images/bar-mouche.jpg',
+  },
+  {
+    slug: '/peche-du-brochet-a-la-mouche',
+    espece: 'Brochet',
+    titre: 'Brochet à la mouche',
+    texte: 'Sur de petits étangs côtiers, le lac St Michel ou le canal Nantes à Brest. Les attaques explosives du brochet procurent des sensations inoubliables !',
+    saison: 'Printemps & Automne',
+    image: '/images/brochet-jbv.jpg',
+  },
+  {
+    slug: '/stage-spey-cast-et-cours-de-lancer',
+    espece: 'Spey Cast',
+    titre: 'Spey Cast & Cours de lancer',
+    texte: "La technique du lancer Spey est un art pour lequel il faut pratiquer régulièrement. Stages individuels et collectifs pour cannes à deux mains et switch sur l'Ellé, le Blavet, l'Aulne.",
+    saison: 'Toute l\'année',
+    image: '/images/prestation-speycast.jpg',
+  },
+  {
+    slug: '/masterclass',
+    espece: 'Masterclass',
+    titre: 'Masterclass',
+    texte: 'Perfectionnement intensif pour pêcheurs expérimentés. Nymphe au fil, pêche en réservoir, techniques avancées. Des stages en petit groupe pour progresser rapidement.',
+    saison: 'Automne & Hiver',
+    image: '/images/prestation-masterclass.jpg',
+  },
+]
+---
+
+<BaseLayout
+  title="Stage de Pêche à la mouche en Bretagne — Jean-Baptiste Vidal"
+  description="Stage de pêche à la mouche en Bretagne avec Jean-Baptiste Vidal. Stage saumon, alose, truite, bar, brochet, cours de lancer et stage Spey Cast. Moniteur-Guide diplômé d'État."
+  image="/images/hero.jpg"
+>
+
+  <!-- Hero -->
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="container page-hero-content">
+      <p class="eyebrow">Enjoy Fishing</p>
+      <h1>Stages de pêche à la mouche<br /><em>en Bretagne</em></h1>
+      <p class="hero-sub">Journée, week-end ou séjour — toutes espèces, tous niveaux.</p>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="section section--white">
+    <div class="container intro-wrap">
+      <div class="intro-columns">
+        <div>
+          <p>
+            Voici mes différentes prestations de stages de pêche à la mouche en Bretagne le temps
+            d'une journée. Il est possible de choisir une formule sur un week-end ou plusieurs
+            jours avec les formules « Séjours ».
+          </p>
+          <p>
+            Je propose mes prestations sur 3 départements bretons, en fonction de l'espèce et de
+            la saison : le Finistère où je réside, le Morbihan pour l'alose et le saumon, et le
+            Léguer, cette fabuleuse rivière des Côtes d'Armor pour le saumon.
+          </p>
+        </div>
+        <div>
+          <p>
+            La pêche des migrateurs (saumons, aloses et truites de mer), ainsi que la technique
+            du Spey Casting sont mes spécialités en France mais aussi à l'étranger. Cela fait plus
+            de 15 ans que je traque ces poissons assidument à la mouche.
+          </p>
+          <p>
+            Pour plus de renseignements, personnalisation de votre stage ou séjour, contactez-moi
+            par email, téléphone ou dans l'onglet « Contact ».
+          </p>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:2.5rem">
+        <a href="/contact" class="btn btn--ocean">Nous contacter</a>
+        <a href="/tarifs" class="btn btn--outline" style="margin-left:1rem">Consulter les tarifs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grille des stages -->
+  <section class="section section--sand">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Prestations</p>
+        <h2>Mes stages à la journée</h2>
+      </div>
+
+      <div class="stages-grid">
+        {stages.map(stage => (
+          <a href={stage.slug} class="stage-card">
+            <div class="stage-img" style={`background-image: url('${stage.image}')`}>
+              <span class="stage-espece">{stage.espece}</span>
+            </div>
+            <div class="stage-body">
+              <h3>{stage.titre}</h3>
+              <p>{stage.texte}</p>
+              <p class="stage-saison">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                {stage.saison}
+              </p>
+              <span class="stage-lire">En savoir plus →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Le lancer -->
+  <section class="section section--white">
+    <div class="container lancer-layout">
+      <div class="lancer-text">
+        <p class="eyebrow">Technique</p>
+        <h2>L'art du lancer à la mouche</h2>
+        <p>
+          Le lancer est un point clef dans la pratique de notre sport. Il est donc important de
+          bien maîtriser sa technique et sans cesse s'améliorer et progresser.
+        </p>
+        <p>
+          L'enseignement et particulièrement dans l'art de lancer une mouche a toujours été pour
+          moi une vocation. Après 5 ans d'écoles de pêche au sein de la Fédération de Pêche du
+          Finistère, et 8 ans de saisons à l'étranger, j'ai pu apporter mes conseils techniques
+          à plusieurs milliers de personnes.
+        </p>
+        <p>
+          Que ce soit pour pêcher à l'aide d'une canne à une main ou le lancer du Spey Cast pour
+          cannes à deux mains, je vous propose des stages à la journée, mais aussi par sessions
+          afin d'aller à votre rythme et progresser.
+        </p>
+        <a href="/stage-spey-cast-et-cours-de-lancer" class="btn btn--ocean">
+          Stages Spey Cast & Cours de lancer
+        </a>
+      </div>
+      <div class="lancer-photo">
+        <img
+          src="/images/prestation-speycast.jpg"
+          alt="Stage Spey Cast - cours de lancer à la mouche en Bretagne"
+          loading="lazy"
+          width="620"
+          height="413"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section--sand article-cta">
+    <div class="container" style="text-align:center">
+      <h2>Organisons votre stage ensemble</h2>
+      <p>
+        Contactez Jean-Baptiste pour personnaliser votre stage selon votre niveau et vos objectifs.
+        Je reste à votre disposition pour tous renseignements complémentaires.
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
+        <a href="/contact" class="btn btn--ocean">Nous contacter</a>
+        <a href="mailto:enjoy.fishing@hotmail.fr" class="btn btn--outline">enjoy.fishing@hotmail.fr</a>
+        <a href="tel:+33687303456" class="btn btn--ghost">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Hero */
+  .page-hero {
+    position: relative;
+    min-height: 52vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 3.5rem;
+    color: white;
+  }
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.5) 100%),
+      url('/images/prestation-eaudouce.jpg') center / cover no-repeat;
+    background-color: var(--color-ocean);
+  }
+  .page-hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: var(--header-height);
+    max-width: 820px;
+  }
+  .page-hero h1 {
+    color: white;
+    margin: 0.4rem 0 0.75rem;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    line-height: 1.2;
+  }
+  .page-hero h1 em { font-style: italic; color: var(--color-ocean-light); }
+  .hero-sub { color: rgba(255,255,255,0.75); font-size: 1.05rem; }
+
+  /* Sections */
+  .section { padding: 5rem 0; }
+  .section--white { background: white; }
+  .section--sand { background: var(--color-sand); }
+  .section-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 3.5rem;
+  }
+
+  /* Intro */
+  .intro-wrap { max-width: 900px; margin: 0 auto; }
+  .intro-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+  .intro-columns p {
+    color: var(--color-text-muted);
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+  }
+
+  /* Stages grid */
+  .stages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+  .stage-card {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    background: white;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .stage-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+  .stage-img {
+    position: relative;
+    aspect-ratio: 16/10;
+    background: var(--color-ocean) center / cover no-repeat;
+  }
+  .stage-espece {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background: var(--color-ocean-main);
+    color: white;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .stage-body { padding: 1.5rem; }
+  .stage-body h3 {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+    color: var(--color-ocean);
+  }
+  .stage-body p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+  .stage-saison {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem !important;
+    color: var(--color-ocean-mid) !important;
+    font-weight: 500;
+    margin-bottom: 0.75rem !important;
+  }
+  .stage-lire {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ocean-main);
+  }
+
+  /* Lancer layout */
+  .lancer-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .lancer-text h2 { margin: 0.4rem 0 1.5rem; }
+  .lancer-text p {
+    color: var(--color-text-muted);
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+  }
+  .lancer-photo img { width: 100%; height: auto; border-radius: 2px; display: block; }
+
+  /* CTA */
+  .article-cta { padding: 5rem 0; }
+  .article-cta h2 { margin-bottom: 0.75rem; }
+  .article-cta p { color: var(--color-text-muted); max-width: 600px; margin: 0 auto; }
+
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 1.75rem;
+    border-radius: 2px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .btn--ocean { background: var(--color-ocean); color: white; }
+  .btn--ocean:hover { background: var(--color-ocean-main); }
+  .btn--outline { border: 1.5px solid var(--color-ocean-main); color: var(--color-ocean-main); }
+  .btn--outline:hover { background: var(--color-ocean-main); color: white; }
+  .btn--ghost { border: 1.5px solid rgba(13,43,62,0.25); color: var(--color-ocean); }
+  .btn--ghost:hover { border-color: var(--color-ocean); }
+
+  /* Responsive */
+  @media (max-width: 1024px) { .stages-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) {
+    .intro-columns, .lancer-layout { grid-template-columns: 1fr; gap: 2rem; }
+  }
+  @media (max-width: 640px) { .stages-grid { grid-template-columns: 1fr; } }
+</style>

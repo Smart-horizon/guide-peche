@@ -1,0 +1,196 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { createClient } from '@sanity/client'
+import imageUrlBuilder from '@sanity/image-url'
+
+export async function getStaticPaths() {
+  const client = createClient({
+    projectId: 'uievv97s',
+    dataset: 'production',
+    useCdn: false,
+    apiVersion: '2024-01-01',
+  })
+
+  const [pages, prestations, voyages] = await Promise.all([
+    client.fetch(`*[_type == "page" && defined(slug.current) && slug.current != "/"]{ "slug": slug.current }`),
+    client.fetch(`*[_type == "prestation" && defined(slug.current) && slug.current != "/"]{ "slug": slug.current }`),
+    client.fetch(`*[_type == "voyage" && defined(slug.current) && slug.current != "/"]{ "slug": slug.current }`),
+  ])
+
+  return [...pages, ...prestations, ...voyages].map(doc => ({
+    params: { slug: doc.slug },
+  }))
+}
+
+const { slug } = Astro.params
+
+const client = createClient({
+  projectId: 'uievv97s',
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2024-01-01',
+})
+
+const builder = imageUrlBuilder(client)
+const urlFor = (source) => builder.image(source)
+
+// Cherche prestation, puis voyage, puis page générique
+const doc = await client.fetch(
+  `coalesce(
+    *[_type == "prestation" && slug.current == $slug][0]{
+      _type, title, categorie, description, image, tarif, duree, seoTitle, seoDescription
+    },
+    *[_type == "voyage" && slug.current == $slug][0]{
+      _type, title, pays, description, image, periode, prix, especes, seoTitle, seoDescription
+    },
+    *[_type == "page" && slug.current == $slug][0]{
+      _type, title, contenu, image, seoTitle, seoDescription
+    }
+  )`,
+  { slug }
+)
+
+if (!doc) {
+  return Astro.redirect('/404')
+}
+
+const pageTitle = doc.seoTitle || doc.title
+const pageDesc  = doc.seoDescription || ''
+const heroImg   = doc.image ? urlFor(doc.image).width(1400).height(600).url() : null
+---
+
+<BaseLayout title={`${pageTitle} — Jean-Baptiste Vidal`} description={pageDesc}>
+
+  <!-- Hero page -->
+  <section class="page-hero">
+    <div class="page-hero-bg" style={heroImg ? `background-image: url(${heroImg})` : ''}></div>
+    <div class="page-hero-content container">
+      {(doc.categorie || doc.pays) && <p class="eyebrow">{doc.pays ?? doc.categorie}</p>}
+      <h1>{doc.title}</h1>
+      {doc.tarif && (
+        <p class="page-meta">
+          {doc.tarif}
+          {doc.duree && <span> · {doc.duree}</span>}
+        </p>
+      )}
+      {doc.periode && <p class="page-meta">{doc.periode}{doc.especes && ` · ${doc.especes}`}</p>}
+    </div>
+  </section>
+
+  <!-- Contenu principal -->
+  <section class="section">
+    <div class="container page-body">
+      {doc.description && (
+        <div class="prose">
+          {doc.description.map((block) => (
+            block._type === 'block'
+              ? <p>{block.children?.map(c => c.text).join('')}</p>
+              : null
+          ))}
+        </div>
+      )}
+
+      {doc.contenu && (
+        <div class="prose">
+          {doc.contenu.map((block) => (
+            block._type === 'block'
+              ? <p>{block.children?.map(c => c.text).join('')}</p>
+              : null
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA contact -->
+  <section class="section--sand page-cta">
+    <div class="container" style="text-align:center">
+      <h2>Intéressé par cette prestation&nbsp;?</h2>
+      <p>Contactez Jean-Baptiste pour réserver ou obtenir plus d'informations.</p>
+      <div style="display:flex; gap:1rem; justify-content:center; margin-top:1.5rem; flex-wrap:wrap">
+        <a href="/contact" class="btn btn--ocean">Nous contacter</a>
+        <a href="tel:+33687303456" class="btn btn--outline">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 50vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 3rem;
+    color: white;
+  }
+
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(7,24,31,0.85) 0%, rgba(13,43,62,0.5) 100%),
+      var(--color-ocean) center / cover no-repeat;
+  }
+
+  .page-hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: var(--header-height);
+  }
+
+  .page-hero h1 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    color: white;
+    margin-top: 0.5rem;
+  }
+
+  .page-meta {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--color-ocean-light);
+    letter-spacing: 0.05em;
+  }
+
+  .page-body {
+    max-width: 760px;
+  }
+
+  .prose p {
+    color: var(--color-text-muted);
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+  }
+
+  .page-cta {
+    padding: 4rem 0;
+  }
+
+  .page-cta h2 { margin-bottom: 0.75rem; }
+  .page-cta p { color: var(--color-text-muted); }
+
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.75rem;
+    border-radius: 2px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn--ocean { background: var(--color-ocean); color: white; }
+  .btn--ocean:hover { background: var(--color-ocean-main); }
+  .btn--outline { border: 1.5px solid var(--color-ocean-main); color: var(--color-ocean-main); }
+  .btn--outline:hover { background: var(--color-ocean-main); color: white; }
+
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    font-weight: 500;
+  }
+</style>

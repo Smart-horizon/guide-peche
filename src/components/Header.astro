@@ -1,0 +1,309 @@
+---
+const navLinks = [
+  { label: 'Accueil', href: '/' },
+  { label: 'Prestations', href: '/stage-peche-mouche' },
+  {
+    label: 'Voyages',
+    href: '/voyages-peche-mouche',
+    children: [
+      { label: 'Tous les voyages', href: '/voyages-peche-mouche' },
+      { label: 'Argentine — Rio Grande', href: '/voyage-peche-argentine-rio-grande-truite-de-mer' },
+      { label: 'Cuba — Cayo Cruz', href: '/peche-mouche-cuba-cayo-cruz' },
+      { label: 'Cuba — Santa Maria', href: '/peche-mouche-cuba-cayo-santa-maria' },
+      { label: 'Venezuela — Los Roques', href: '/los-roques-venezuela' },
+      { label: 'Mexique', href: '/voyage-peche-mouche-mexique' },
+    ],
+  },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Contact', href: '/contact' },
+]
+
+const { pathname } = Astro.url
+---
+
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo" aria-label="Jean-Baptiste Vidal — Accueil">
+      <span class="logo-initials">JBV</span>
+      <span class="logo-text">
+        <span class="logo-name">Jean-Baptiste Vidal</span>
+        <span class="logo-tagline">Guide de pêche à la mouche · Bretagne</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="site-nav" id="site-nav">
+      <ul>
+        {navLinks.map(({ label, href, children }) => (
+          <li class:list={[{ 'has-dropdown': children }]}>
+            {children ? (
+              <>
+                <a href={href} class:list={['nav-link', { active: pathname.startsWith('/voyage') || pathname === href }]}>
+                  {label}
+                  <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </a>
+                <ul class="dropdown">
+                  {children.map(child => (
+                    <li>
+                      <a href={child.href} class:list={['dropdown-link', { active: pathname === child.href }]}>
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <a href={href} class:list={['nav-link', { active: pathname === href }]}>
+                {label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')
+  const toggle = document.getElementById('nav-toggle')
+  const nav = document.getElementById('site-nav')
+
+  window.addEventListener('scroll', () => {
+    header?.classList.toggle('scrolled', window.scrollY > 40)
+  })
+
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('open')
+    toggle?.setAttribute('aria-expanded', String(open))
+  })
+
+  // Mobile: toggle dropdown on click
+  nav?.querySelectorAll('.has-dropdown > .nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault()
+        link.closest('.has-dropdown')?.classList.toggle('dropdown-open')
+      }
+    })
+  })
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    background: transparent;
+  }
+  .site-header.scrolled {
+    background: var(--color-ocean);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Logo */
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: white;
+  }
+  .logo-initials {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border: 1.5px solid rgba(255,255,255,0.6);
+    width: 44px; height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+  .logo-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; letter-spacing: 0.02em; }
+  .logo-tagline { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; }
+
+  /* Nav — direct child ul only, so .dropdown sub-ul is not affected */
+  .site-nav > ul {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+
+  .site-nav li { position: relative; }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.5rem 0.85rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+    white-space: nowrap;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0.85rem; right: 0.85rem;
+    height: 1px;
+    background: var(--color-ocean-light);
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+  }
+  .nav-link:hover, .nav-link.active { color: white; }
+  .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+  .chevron {
+    transition: transform 0.2s;
+    opacity: 0.7;
+  }
+
+  /* Dropdown */
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    background: var(--color-ocean);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    flex-direction: column;
+    padding: 0.5rem 0;
+    z-index: 200;
+  }
+  .dropdown::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-bottom-color: rgba(255,255,255,0.1);
+    border-top: none;
+  }
+
+  /* Desktop uniquement — hover, pas focus-within */
+  @media (min-width: 769px) {
+    .has-dropdown:hover .dropdown { display: flex; }
+    .has-dropdown:hover .chevron { transform: rotate(180deg); }
+  }
+
+  .dropdown-link {
+    display: block;
+    padding: 0.6rem 1.25rem;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+  .dropdown-link:first-child {
+    font-weight: 600;
+    color: var(--color-ocean-light);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 0.25rem;
+    padding-bottom: 0.75rem;
+  }
+  .dropdown-link:hover, .dropdown-link.active {
+    background: rgba(255,255,255,0.07);
+    color: white;
+  }
+
+  /* Mobile toggle */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 24px; height: 2px;
+    background: white;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .nav-toggle { display: flex; }
+
+    .site-nav {
+      display: none;
+      position: absolute;
+      top: 72px; left: 0; right: 0;
+      background: var(--color-ocean);
+      padding: 1rem 0 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .site-nav.open { display: block; }
+
+    .site-nav > ul { flex-direction: column; gap: 0; }
+
+    .nav-link {
+      padding: 0.85rem 2rem;
+      font-size: 0.85rem;
+      justify-content: space-between;
+    }
+    .nav-link::after { display: none; }
+
+    /* Désactive hover/focus-within sur mobile — uniquement JS */
+    .has-dropdown:hover .dropdown,
+    .has-dropdown:focus-within .dropdown { display: none; }
+
+    /* Mobile dropdown */
+    .dropdown {
+      position: static;
+      transform: none;
+      display: none;
+      background: rgba(0,0,0,0.2);
+      box-shadow: none;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+    }
+    .dropdown::before { display: none; }
+
+    .has-dropdown.dropdown-open .dropdown { display: flex !important; }
+    .has-dropdown.dropdown-open .chevron { transform: rotate(180deg); }
+
+    .dropdown-link {
+      padding: 0.7rem 2rem 0.7rem 3rem;
+      font-size: 0.8rem;
+    }
+    .dropdown-link:first-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+  }
+</style>

@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+<BaseLayout
+  title="Master Class pêche à la mouche — Jean-Baptiste Vidal"
+  description="Master Class organisées par Jean-Baptiste Vidal avec des experts. Pêche en réservoir avec Grégoire Juglaret, nymphe au fil, pêche du bar. Des stages très techniques pour progresser rapidement."
+>
+
+  <!-- HERO -->
+  <section class="prest-hero">
+    <div class="prest-hero__content container">
+      <p class="prest-eyebrow">Masterclass · Saison 2026</p>
+      <h1>Master Class</h1>
+      <p class="prest-sub">Stages d'excellence avec des experts — progresser hors norme</p>
+      <div class="prest-hero__cta">
+        <a href="/contact" class="btn-prim">Réserver une sortie</a>
+        <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="prest-intro section">
+    <div class="container prest-intro__grid">
+      <div class="prest-intro__body">
+        <p>En cette saison 2026, je vais proposer plusieurs Master Class à mes stagiaires afin de leur faire bénéficier de stages très pointus sur différentes techniques de pêche à la mouche.</p>
+        <p>L'idée est de mutualiser les compétences d'un expert et les miennes pour offrir un contenu très technique sur différents thèmes : la pêche en réservoir, la pêche en nymphe au fil, la pêche du bar à la mouche... Des stages à ne rater sous aucun prétexte car l'acquisition de compétences est juste hors norme et permet de progresser bien plus rapidement.</p>
+        <p>Ces stages seront proposés au fil de la saison. Inscrivez-vous à la newsletter pour être informé en priorité des prochaines dates.</p>
+      </div>
+      <aside class="prest-intro__aside">
+        <div class="prest-card-info">
+          <p class="prest-card-info__label">Niveau</p>
+          <p class="prest-card-info__val">Confirmés · Niveau intermédiaire requis</p>
+          <p class="prest-card-info__label">Format</p>
+          <p class="prest-card-info__val">2 journées · 6 à 8 participants maximum · Plans d'eau privés</p>
+          <p class="prest-card-info__label">Contact</p>
+          <p class="prest-card-info__val">06 87 30 34 56<br />enjoy.fishing@hotmail.fr</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MASTERCLASS CARDS -->
+  <section class="section">
+    <div class="container">
+      <div class="mc-grid">
+        <a href="/master-class-peche-en-reservoir" class="mc-card">
+          <img src="/images/masterclass-reservoir-1.jpg" loading="lazy" alt='Master Class pêche en réservoir avec Grégoire Juglaret' />
+          <div class="mc-card__text">
+            <span class="mc-card__title">Master Class "Pêche en réservoir"</span>
+            <span class="mc-card__sub">avec Grégoire Juglaret, Champion du Monde 2025</span>
+          </div>
+        </a>
+        <a href="/master-class-nymphe-au-fil" class="mc-card">
+          <img src="/images/masterclass-nymphe-1.jpg" loading="lazy" alt='Master Class nymphe au fil' />
+          <div class="mc-card__text">
+            <span class="mc-card__title">Master Class "Nymphe au fil"</span>
+            <span class="mc-card__sub">Technique de compétition pour tous</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section class="prest-gallery">
+    <div class="prest-gallery__grid">
+      <img src="/images/masterclass-reservoir-2.jpg" loading="lazy" alt="Master Class pêche en réservoir Bretagne" />
+      <img src="/images/masterclass-nymphe-2.jpg" loading="lazy" alt="Master Class nymphe au fil pêche à la mouche" />
+      <img src="/images/masterclass-reservoir-3.jpg" loading="lazy" alt="Stage intensif pêche à la mouche" />
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="prest-cta-final section section--dark">
+    <div class="container prest-cta-final__inner">
+      <div>
+        <h2>Réservez votre sortie</h2>
+        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+      </div>
+      <div class="prest-cta-final__btns">
+        <a href="/contact" class="btn-prim">Nous contacter</a>
+        <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+.prest-hero {
+  min-height: 72vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4rem;
+  background:
+    linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 60%, rgba(13,43,62,0.3) 100%),
+    url('/images/masterclass-1.jpg') center / cover no-repeat;
+  background-color: var(--color-ocean);
+  color: white;
+}
+.prest-hero__content { position: relative; z-index: 1; }
+.prest-eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-light); margin-bottom: 0.8rem;
+}
+.prest-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
+.prest-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
+.prest-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-prim {
+  background: var(--color-ocean-main); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+.prest-intro__grid {
+  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
+}
+.prest-intro__body p { line-height: 1.8; color: var(--color-text); margin-bottom: 1.2rem; }
+.prest-intro__body p:last-child { margin-bottom: 0; }
+.prest-card-info {
+  background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
+  border-left: 3px solid var(--color-ocean-main);
+}
+.prest-card-info__label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--color-ocean-main); font-weight: 600; margin-top: 1.2rem;
+}
+.prest-card-info__label:first-child { margin-top: 0; }
+.prest-card-info__val { font-size: 0.92rem; color: var(--color-text); line-height: 1.55; }
+/* Masterclass cards */
+.mc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2.5rem 0; }
+.mc-card { position: relative; overflow: hidden; border-radius: 6px; aspect-ratio: 16/9; display: block; text-decoration: none; }
+.mc-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(7,24,31,0.9), rgba(7,24,31,0.25)); z-index: 1; }
+.mc-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.mc-card:hover img { transform: scale(1.04); }
+.mc-card__text { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; z-index: 2; color: white; }
+.mc-card__title { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 400; display: block; margin-bottom: 0.4rem; }
+.mc-card__sub { font-size: 0.8rem; color: rgba(255,255,255,0.65); display: block; }
+/* Gallery */
+.prest-gallery { overflow: hidden; }
+.prest-gallery__grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+}
+.prest-gallery__grid.g4 { grid-template-columns: repeat(4, 1fr); }
+.prest-gallery__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.prest-cta-final__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
+.prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+.prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-ghost-light {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+@media (max-width: 768px) {
+  .prest-intro__grid { grid-template-columns: 1fr; gap: 2rem; }
+  .prest-gallery__grid, .prest-gallery__grid.g4 { grid-template-columns: repeat(2, 1fr); }
+  .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 640px) {
+  .mc-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .prest-hero { min-height: 85vh; padding-bottom: 3rem; }
+  .prest-gallery__grid { grid-template-columns: 1fr; }
+}
+</style>

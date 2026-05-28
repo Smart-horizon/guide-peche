@@ -1,33 +1,1050 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro'
 import { createClient } from '@sanity/client'
+import imageUrlBuilder from '@sanity/image-url'
 
 const client = createClient({
   projectId: 'uievv97s',
   dataset: 'production',
-  useCdn: false,
+  useCdn: true,
   apiVersion: '2024-01-01',
 })
 
-const pages = await client.fetch(`*[_type == "page"][0...5]{
-  title,
-  slug,
-  seoDescription
-}`)
+const builder = imageUrlBuilder(client)
+const urlFor = (source) => builder.image(source)
+
+const prestations = await client.fetch(`
+  *[_type == "prestation"] | order(_createdAt asc) {
+    title, slug, categorie, tarif, duree, image,
+    "description": description[0].children[0].text
+  }
+`)
+
+const temoignages = await client.fetch(`
+  *[_type == "temoignage"] | order(date desc) [0...3] {
+    nom, note, texte, prestation
+  }
+`)
+
+const categoriesLabel = {
+  'eau-douce': 'Eau douce',
+  'bar': 'Pêche du bar',
+  'masterclass': 'Masterclass',
+  'spey-cast': 'Spey Cast & Lancer',
+  'bon-cadeau': 'Bon cadeau',
+}
+
+const categoriesNav = [
+  { value: 'eau-douce', label: 'Eau douce', href: '/peche-a-la-mouche-en-bretagne' },
+  { value: 'bar',       label: 'Pêche du bar', href: '/peche-du-bar-a-la-mouche' },
+  { value: 'masterclass', label: 'Masterclass', href: '/masterclass' },
+  { value: 'spey-cast', label: 'Spey Cast', href: '/stage-spey-cast-et-cours-de-lancer' },
+]
 ---
 
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne</title>
-  </head>
-  <body>
-    <h1>Jean-Baptiste Vidal</h1>
-    <p>Moniteur-Guide de pêche à la mouche en Bretagne</p>
-    <ul>
-      {pages.map(page => (
-        <li><a href={`/${page.slug.current}`}>{page.title}</a></li>
+<BaseLayout
+  title="Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne"
+  description="Moniteur-Guide diplômé, 21 ans de guidage. Stages de pêche à la mouche, guidage bar, truite, alose et brochet en Bretagne-Sud."
+>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">21 ans de guidage</div>
+      <p class="hero-eyebrow">Moniteur-Guide diplômé d'État · Bretagne-Sud</p>
+      <h1>Pêche à la mouche<br /><em>en Bretagne sauvage</em></h1>
+      <p class="hero-sub">
+        La pêche est possible toute l'année en eau douce ou en mer du fait de la complémentarité des milieux. Lacs, réservoirs, rivières, estuaires et côte — une multitude de possibilités en Bretagne-Sud.
+      </p>
+      <div class="hero-cta">
+        <a href="/peche-du-bar-a-la-mouche" class="btn btn--primary">Pêche du bar</a>
+        <a href="/contact" class="btn btn--ghost">Réserver une sortie</a>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ═══ CATÉGORIES RAPIDES ═══ -->
+  <nav class="categories-strip">
+    {categoriesNav.map(cat => (
+      <a href={cat.href} class="cat-item">
+        <span class="cat-label">{cat.label}</span>
+      </a>
+    ))}
+  </nav>
+
+  <!-- ═══ PRESTATIONS ═══ -->
+  <section class="prestations-section">
+    <div class="prestations-header container">
+      <p class="eyebrow">Ce que je propose</p>
+      <h2>Stages &amp; guidages</h2>
+    </div>
+
+    <div class="wildfly-grid">
+      {[
+        {
+          href: '/peche-a-la-mouche-en-bretagne',
+          label: 'Truite · Alose · Brochet',
+          sub: 'Eau douce',
+          img: prestations.find(p => p.categorie === 'eau-douce')?.image
+            ? urlFor(prestations.find(p => p.categorie === 'eau-douce').image).width(900).height(600).url()
+            : '/images/prestation-eaudouce.jpg',
+          size: 'large',
+        },
+        {
+          href: '/peche-du-bar-a-la-mouche',
+          label: 'Pêche du bar',
+          sub: 'Pêche à vue · Bateau',
+          img: prestations.find(p => p.categorie === 'bar')?.image
+            ? urlFor(prestations.find(p => p.categorie === 'bar').image).width(600).height(600).url()
+            : '/images/prestation-bar.jpg',
+          size: 'normal',
+        },
+        {
+          href: '/masterclass',
+          label: 'Masterclass',
+          sub: 'Réservoir · Nymphe au fil',
+          img: prestations.find(p => p.categorie === 'masterclass')?.image
+            ? urlFor(prestations.find(p => p.categorie === 'masterclass').image).width(600).height(400).url()
+            : '/images/prestation-masterclass.jpg',
+          size: 'normal',
+        },
+        {
+          href: '/stage-spey-cast-et-cours-de-lancer',
+          label: 'Spey Cast & Lancer',
+          sub: 'Canne une main · Switch · Spey',
+          img: prestations.find(p => p.categorie === 'spey-cast')?.image
+            ? urlFor(prestations.find(p => p.categorie === 'spey-cast').image).width(600).height(400).url()
+            : '/images/prestation-speycast.jpg',
+          size: 'normal',
+        },
+        {
+          href: '/bon-cadeau',
+          label: 'Bon cadeau',
+          sub: 'Offrir une sortie',
+          img: prestations.find(p => p.categorie === 'bon-cadeau')?.image
+            ? urlFor(prestations.find(p => p.categorie === 'bon-cadeau').image).width(600).height(400).url()
+            : '/images/prestation-cadeau.jpg',
+          size: 'normal',
+        },
+      ].map((card, i) => (
+        <a
+          href={card.href}
+          class={`wf-card ${card.size === 'large' ? 'wf-card--large' : ''}`}
+        >
+          <div class="wf-card-bg" style={`background-image: url(${card.img})`}></div>
+          <div class="wf-overlay"></div>
+          <div class="wf-body">
+            <span class="wf-sub">{card.sub}</span>
+            <strong class="wf-label">{card.label}</strong>
+          </div>
+        </a>
       ))}
-    </ul>
-  </body>
-</html>
+    </div>
+  </section>
+
+  <!-- ═══ LE GUIDE ═══ -->
+  <section class="section section--sand guide-section">
+    <div class="container guide-inner">
+      <div class="guide-photo">
+      </div>
+      <div class="guide-text">
+        <p class="eyebrow">Votre guide</p>
+        <h2>Jean-Baptiste Vidal</h2>
+        <p class="guide-accroche">
+          33 ans de pêche à la mouche et d'expérience à votre service, dont 21 années de guidage en France et à l'étranger.
+        </p>
+        <p>
+          Après des études dans l'environnement et 5 ans à la Fédération de Pêche du Finistère, Jean-Baptiste a guidé 6 saisons sur le Rio Grande (Argentine) pour Nervous Waters, puis en Irlande, Russie et Bolivie. Depuis 2014, il propose ses services de Moniteur-Guide en Bretagne-Sud, tout au long de l'année.
+        </p>
+        <ul class="guide-stats">
+          <li><strong>33 ans</strong> de pêche à la mouche</li>
+          <li><strong>21 ans</strong> de guidage</li>
+          <li><strong>6 saisons</strong> sur le Rio Grande</li>
+          <li><strong>1 bateau</strong> Carolina Skiff</li>
+        </ul>
+        <a href="/jean-baptiste-vidal-moniteur-guide-de-peche" class="btn btn--ocean">Votre guide</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ BAR PROMO ═══ -->
+  <section class="section--dark bar-promo">
+    <div class="container bar-promo-inner">
+      <div class="bar-promo-text">
+        <p class="eyebrow eyebrow--light">Page star du site</p>
+        <h2>Pêche du bar à la mouche</h2>
+        <p>
+          Bar à vue dans les estuaires bretons ou streamer en bateau sur le Carolina Skiff. Poissons trophées de 2 à 5 kg+ dans des cadres sauvages et préservés.
+        </p>
+        <a href="/peche-du-bar-a-la-mouche" class="btn btn--primary">Découvrir les formules</a>
+      </div>
+      <div class="bar-promo-img"></div>
+    </div>
+  </section>
+
+  <!-- ═══ MATÉRIEL & UNIVERS ═══ -->
+  <section class="section hp-materiel">
+    <div class="container hp-materiel__header">
+      <p class="eyebrow">Équipement · Ressources</p>
+      <h2>Matériel &amp; univers</h2>
+    </div>
+    <div class="hp-materiel__grid">
+
+      <a href="/materiel-jeanbaptistevidal" class="hp-mat-card">
+        <div class="hp-mat-card__bg" style="background-image: url('/images/materiel-1.jpg')"></div>
+        <div class="hp-mat-card__body">
+          <p class="hp-mat-card__eyebrow">Cannes · Soies · Moulinets</p>
+          <h3>Mon matériel</h3>
+          <span class="hp-mat-card__arrow">Découvrir →</span>
+        </div>
+      </a>
+
+      <a href="/mouches-de-peche-jeanbaptiste-vidal" class="hp-mat-card">
+        <div class="hp-mat-card__bg" style="background-image: url('/images/truite-fario.jpg')"></div>
+        <div class="hp-mat-card__body">
+          <p class="hp-mat-card__eyebrow">Streamers · Nymphes · Sèches</p>
+          <h3>Mes mouches</h3>
+          <span class="hp-mat-card__arrow">Découvrir →</span>
+        </div>
+      </a>
+
+      <a href="/bateau-bar-a-la-mouche" class="hp-mat-card">
+        <div class="hp-mat-card__bg" style="background-image: url('/images/bateau-3.jpg')"></div>
+        <div class="hp-mat-card__body">
+          <p class="hp-mat-card__eyebrow">Carolina Skiff · Fond plat</p>
+          <h3>Le bateau</h3>
+          <span class="hp-mat-card__arrow">Découvrir →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ═══ TÉMOIGNAGES ═══ -->
+  <section class="hp-temo">
+    <div class="container hp-temo__inner">
+
+      <!-- Colonne gauche : quote rotative -->
+      <div class="hp-temo__left">
+        <p class="hp-temo__eyebrow">Ce qu'ils disent</p>
+        <div class="hp-temo__mark">&ldquo;</div>
+        <div class="hp-temo__rotator" id="temoRotator">
+          <figure class="hp-temo__quote hp-temo__quote--active">
+            <blockquote>Il m'a fallu désapprendre pour réapprendre. 5 jours de stage intensif au saumon à la mouche en Bretagne&nbsp;: le site est proprement magnifique et les rivières sont brunes et mystérieuses.</blockquote>
+            <figcaption>
+              <strong class="hp-temo__name">Diego</strong>
+              <span class="hp-temo__cat">Stage saumon & Spey Cast</span>
+              <span class="hp-temo__stars">★★★★★</span>
+            </figcaption>
+          </figure>
+          <figure class="hp-temo__quote">
+            <blockquote>Jean-Baptiste connaît le poisson par cœur, ses habitudes, les sites qui vont bien. Super matos, super conseils. Très agréable et efficace. Grande expérience du guidage.</blockquote>
+            <figcaption>
+              <strong class="hp-temo__name">Marc</strong>
+              <span class="hp-temo__cat">Découverte bar à vue & bateau</span>
+              <span class="hp-temo__stars">★★★★★</span>
+            </figcaption>
+          </figure>
+          <figure class="hp-temo__quote">
+            <blockquote>Ce fut un vrai plaisir d'apprendre avec toi. Pas de stress, de la rigolade et surtout un excellent prof qui ne se contente pas de l'apprentissage brut du lancer mais fait découvrir l'art qu'est véritablement la pêche à la mouche.</blockquote>
+            <figcaption>
+              <strong class="hp-temo__name">Fiona et Romain</strong>
+              <span class="hp-temo__cat">Découverte de la pêche à la mouche</span>
+              <span class="hp-temo__stars">★★★★★</span>
+            </figcaption>
+          </figure>
+          <figure class="hp-temo__quote">
+            <blockquote>Je conseille à tout le monde d'essayer de prendre ces gros bars que Jean‑Baptiste connaît par&nbsp;cœur — ressentir ces montées d'adrénaline à la vue de bars énormes postés devant vous.</blockquote>
+            <figcaption>
+              <strong class="hp-temo__name">Vincent</strong>
+              <span class="hp-temo__cat">Bar à vue & bateau, Bretagne-Sud</span>
+              <span class="hp-temo__stars">★★★★★</span>
+            </figcaption>
+          </figure>
+        </div>
+        <!-- Dots -->
+        <div class="hp-temo__dots" id="temoDots">
+          <button class="hp-temo__dot hp-temo__dot--active" aria-label="Témoignage 1"></button>
+          <button class="hp-temo__dot" aria-label="Témoignage 2"></button>
+          <button class="hp-temo__dot" aria-label="Témoignage 3"></button>
+          <button class="hp-temo__dot" aria-label="Témoignage 4"></button>
+        </div>
+      </div>
+
+      <!-- Colonne droite : score + CTA -->
+      <div class="hp-temo__right">
+        <div class="hp-temo__score">
+          <div class="hp-temo__score-num">5.0</div>
+          <div class="hp-temo__score-stars">★★★★★</div>
+          <div class="hp-temo__score-label">26 témoignages</div>
+        </div>
+        <div class="hp-temo__divider"></div>
+        <p class="hp-temo__pitch">Des pêcheurs de toute la France font confiance à Jean-Baptiste depuis&nbsp;2004.</p>
+        <a href="/temoignages" class="hp-temo__cta">Lire tous les témoignages</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ CTA FINALE ═══ -->
+  <section class="section cta-section">
+    <div class="container cta-inner">
+      <h2>Prêt pour votre première sortie&nbsp;?</h2>
+      <p>Contactez Jean-Baptiste pour construire votre programme selon votre niveau, vos espèces cibles et vos disponibilités.</p>
+      <div class="cta-btns">
+        <a href="/contact" class="btn btn--ocean">Nous contacter</a>
+        <a href="/disponibilites-guidages" class="btn btn--outline">Voir les disponibilités 2026</a>
+      </div>
+      <p class="cta-tel">Ou par téléphone : <a href="tel:+33687303456">06 87 30 34 56</a> · <a href="mailto:enjoy.fishing@hotmail.fr">enjoy.fishing@hotmail.fr</a></p>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* ══════════════════════════════════════
+     HERO
+  ══════════════════════════════════════ */
+  .hero {
+    position: relative;
+    min-height: 80svh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 7rem;
+    overflow: hidden;
+    color: white;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(7,24,31,0.9) 0%, rgba(13,43,62,0.55) 50%, rgba(13,43,62,0.4) 100%),
+      url('/images/hero.jpg') center / cover no-repeat;
+    background-color: var(--color-ocean);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    width: 100%;
+    margin: 0 0 0 auto;
+    padding: 0 4rem 0 2rem;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--color-ocean-main);
+    color: white;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.35rem 0.85rem;
+    border-radius: 2px;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+
+  .hero-content h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    color: white;
+    margin-bottom: 1.5rem;
+    max-width: 680px;
+  }
+
+  .hero-content h1 em {
+    font-style: italic;
+    color: rgba(255,255,255,0.88);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2rem;
+    width: 24px;
+    height: 38px;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+  }
+  .hero-scroll span {
+    width: 3px; height: 8px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 2px;
+    animation: bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%,100% { transform: translateY(0); opacity:1; }
+    50% { transform: translateY(8px); opacity:0.3; }
+  }
+
+  /* ══════════════════════════════════════
+     CATÉGORIES STRIP
+  ══════════════════════════════════════ */
+  .categories-strip {
+    display: flex;
+    background: var(--color-ocean);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .categories-strip::-webkit-scrollbar { display: none; }
+
+  .cat-item {
+    flex: 1;
+    min-width: 140px;
+    padding: 1.1rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.2s, color 0.2s;
+  }
+  .cat-item:last-child { border-right: none; }
+  .cat-item:hover { background: var(--color-ocean-main); color: white; }
+
+  /* ══════════════════════════════════════
+     PRESTATIONS — WILD FLY STYLE
+  ══════════════════════════════════════ */
+  .prestations-section { background: #fff; }
+
+  .prestations-header {
+    text-align: center;
+    padding: 4rem 2rem 2.5rem;
+  }
+
+  .wildfly-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 420px 300px;
+    gap: 4px;
+  }
+
+  /* Carte large : col 1-2, row 1 */
+  .wf-card--large {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+  }
+
+  /* Bar : col 3, row 1 */
+  .wf-card:nth-child(2) {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+  }
+
+  /* 3 petites : row 2 */
+  .wf-card:nth-child(3) { grid-column: 1; grid-row: 2; }
+  .wf-card:nth-child(4) { grid-column: 2; grid-row: 2; }
+  .wf-card:nth-child(5) { grid-column: 3; grid-row: 2; }
+
+  .wf-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    background: var(--color-ocean);
+  }
+
+  .wf-card-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.6s ease;
+  }
+
+  .wf-card:hover .wf-card-bg {
+    transform: scale(1.06);
+  }
+
+  .wf-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 24, 31, 0.25);
+    transition: background 0.35s ease;
+  }
+
+  .wf-card:hover::after {
+    background: rgba(7, 24, 31, 0.1);
+  }
+
+  .wf-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.75) 0%, transparent 55%);
+    z-index: 1;
+    transition: opacity 0.35s ease;
+  }
+
+  .wf-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 1.75rem 1.75rem;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .wf-sub {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    font-weight: 500;
+  }
+
+  .wf-label {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: white;
+  }
+
+  .wf-card--large .wf-label {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    .wildfly-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 280px 280px 240px;
+    }
+    .wf-card--large { grid-column: 1 / 3; grid-row: 1; }
+    .wf-card:nth-child(2) { grid-column: 1; grid-row: 2; }
+    .wf-card:nth-child(3) { grid-column: 2; grid-row: 2; }
+    .wf-card:nth-child(4) { grid-column: 1; grid-row: 3; }
+    .wf-card:nth-child(5) { grid-column: 2; grid-row: 3; }
+  }
+
+  @media (max-width: 560px) {
+    .wildfly-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(5, 260px);
+    }
+    .wf-card--large, .wf-card:nth-child(2),
+    .wf-card:nth-child(3), .wf-card:nth-child(4),
+    .wf-card:nth-child(5) {
+      grid-column: 1; grid-row: auto;
+    }
+  }
+
+  /* ══════════════════════════════════════
+     LE GUIDE
+  ══════════════════════════════════════ */
+  .section--sand { background: var(--color-sand); }
+
+  .guide-inner {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .guide-photo {
+    aspect-ratio: 3/4;
+    background: var(--color-ocean-main) url('/images/votre-guide.avif') center / cover no-repeat;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .guide-photo-frame {
+    position: absolute;
+    inset: -12px;
+    border: 1.5px solid var(--color-ocean-main);
+    border-radius: 3px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .guide-accroche {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--color-ocean-main);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .guide-text p {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .guide-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    list-style: none;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 3px;
+    border-left: 3px solid var(--color-ocean-main);
+  }
+
+  .guide-stats li {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+  .guide-stats strong {
+    display: block;
+    font-size: 1.5rem;
+    font-family: var(--font-serif);
+    color: var(--color-ocean);
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+
+  /* ══════════════════════════════════════
+     TÉMOIGNAGES HP
+  ══════════════════════════════════════ */
+  .hp-temo {
+    background: linear-gradient(135deg, #07181f 0%, #0d2b3e 55%, #0a2030 100%);
+    padding: 5rem 0;
+    overflow: hidden;
+  }
+  .hp-temo__inner {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  /* ── Colonne gauche ── */
+  .hp-temo__eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    margin-bottom: 0.5rem;
+  }
+  .hp-temo__mark {
+    font-family: var(--font-serif);
+    font-size: 7rem;
+    line-height: 0.6;
+    color: var(--color-ocean-light);
+    opacity: 0.35;
+    margin-bottom: 1rem;
+    user-select: none;
+  }
+  .hp-temo__rotator {
+    position: relative;
+    min-height: 200px;
+    margin-bottom: 2rem;
+  }
+  .hp-temo__quote {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+  .hp-temo__quote--active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .hp-temo__quote blockquote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.45rem;
+    line-height: 1.6;
+    color: white;
+    margin: 0 0 1.4rem;
+  }
+  .hp-temo__quote figcaption {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .hp-temo__name {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .hp-temo__cat {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.82rem;
+  }
+  .hp-temo__cat::before { content: '·'; margin-right: 0.75rem; }
+  .hp-temo__stars { color: #f59e0b; font-size: 0.88rem; letter-spacing: 0.05em; }
+  .hp-temo__stars::before { content: '·'; color: rgba(255,255,255,0.3); margin-right: 0.75rem; }
+  /* Dots */
+  .hp-temo__dots {
+    display: flex;
+    gap: 8px;
+  }
+  .hp-temo__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    padding: 0;
+  }
+  .hp-temo__dot--active {
+    background: var(--color-ocean-light);
+    transform: scale(1.3);
+  }
+
+  /* ── Colonne droite ── */
+  .hp-temo__right {
+    border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 3rem;
+  }
+  .hp-temo__score {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .hp-temo__score-num {
+    font-family: var(--font-serif);
+    font-size: 5rem;
+    font-weight: 400;
+    color: white;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .hp-temo__score-stars {
+    display: block;
+    color: #f59e0b;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+  }
+  .hp-temo__score-label {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .hp-temo__divider {
+    width: 40px;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin: 0 auto 1.8rem;
+  }
+  .hp-temo__pitch {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .hp-temo__cta {
+    display: block;
+    text-align: center;
+    background: var(--color-ocean-light);
+    color: var(--color-ocean);
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 4px;
+    transition: background 0.2s, transform 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .hp-temo__cta:hover {
+    background: white;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 860px) {
+    .hp-temo__inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hp-temo__right { border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding-left: 0; padding-top: 2.5rem; }
+    .hp-temo__quote blockquote { font-size: 1.2rem; }
+  }
+
+  /* ══════════════════════════════════════
+     MATÉRIEL & UNIVERS
+  ══════════════════════════════════════ */
+  .hp-materiel { background: #fff; }
+
+  .hp-materiel__header {
+    text-align: center;
+    padding-bottom: 2.5rem;
+  }
+  .hp-materiel__header .eyebrow { margin-bottom: 0.6rem; }
+
+  .hp-materiel__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .hp-mat-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    aspect-ratio: 4/3;
+    background: var(--color-ocean);
+  }
+
+  .hp-mat-card__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s ease;
+  }
+
+  .hp-mat-card:hover .hp-mat-card__bg {
+    transform: scale(1.06);
+  }
+
+  .hp-mat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.82) 0%, rgba(7,24,31,0.25) 60%, transparent 100%);
+  }
+
+  .hp-mat-card__body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.6rem 1.8rem;
+    z-index: 1;
+  }
+
+  .hp-mat-card__eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    margin-bottom: 0.4rem;
+  }
+
+  .hp-mat-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .hp-mat-card__arrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.65);
+    transition: color 0.2s;
+  }
+
+  .hp-mat-card:hover .hp-mat-card__arrow {
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .hp-materiel__grid { grid-template-columns: 1fr; }
+    .hp-mat-card { aspect-ratio: 16/9; }
+  }
+
+  /* ══════════════════════════════════════
+     BAR PROMO
+  ══════════════════════════════════════ */
+  .bar-promo {
+    padding: 5rem 0;
+  }
+
+  .bar-promo-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .bar-promo-text p {
+    color: rgba(255,255,255,0.75);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .bar-promo-img {
+    aspect-ratio: 4/3;
+    background: var(--color-ocean-main) url('/images/bar-promo.jpg') center / cover no-repeat;
+    border-radius: 3px;
+    opacity: 0.85;
+  }
+
+  .eyebrow--light { color: var(--color-ocean-light); }
+
+  /* ══════════════════════════════════════
+     CTA FINALE
+  ══════════════════════════════════════ */
+  .cta-section { background: var(--color-sand); }
+
+  .cta-inner {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-inner h2 { margin-bottom: 1rem; }
+  .cta-inner > p { color: var(--color-text-muted); margin-bottom: 2rem; line-height: 1.7; }
+
+  .cta-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-tel {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+  .cta-tel a {
+    color: var(--color-ocean-main);
+    font-weight: 500;
+  }
+
+  /* ══════════════════════════════════════
+     BOUTONS
+  ══════════════════════════════════════ */
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.75rem;
+    border-radius: 2px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .btn--primary {
+    background: var(--color-ocean-main);
+    color: white;
+  }
+  .btn--primary:hover { background: #155080; transform: translateY(-1px); }
+
+  .btn--ghost {
+    border: 1.5px solid rgba(255,255,255,0.5);
+    color: white;
+  }
+  .btn--ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  .btn--ocean {
+    background: var(--color-ocean);
+    color: white;
+  }
+  .btn--ocean:hover { background: var(--color-ocean-main); }
+
+  .btn--outline {
+    border: 1.5px solid var(--color-ocean-main);
+    color: var(--color-ocean-main);
+  }
+  .btn--outline:hover { background: var(--color-ocean-main); color: white; }
+
+  /* ══════════════════════════════════════
+     UTILITAIRES
+  ══════════════════════════════════════ */
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════ */
+  @media (max-width: 1024px) {
+    .prestations-grid { grid-template-columns: repeat(2, 1fr); }
+    .guide-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .guide-photo { aspect-ratio: 16/9; max-height: 320px; }
+    .bar-promo-inner { grid-template-columns: 1fr; }
+    .bar-promo-img { display: none; }
+  }
+
+  @media (max-width: 640px) {
+    .prestations-grid { grid-template-columns: 1fr; }
+    .guide-stats { grid-template-columns: repeat(2, 1fr); }
+    .hero { padding-bottom: 5rem; }
+    .hero-cta { flex-direction: column; }
+    .cat-item { min-width: 120px; font-size: 0.65rem; }
+    .hero-content { padding: 0 1.5rem; max-width: 100%; }
+    .hp-temo__rotator { min-height: 260px; }
+    .hp-temo__quote blockquote { font-size: 1.1rem; }
+    .hp-temo__mark { font-size: 5rem; }
+  }
+</style>
+
+<script>
+  (() => {
+    const rotator = document.getElementById('temoRotator');
+    const dotsContainer = document.getElementById('temoDots');
+    if (!rotator) return;
+
+    const quotes = rotator.querySelectorAll('.hp-temo__quote');
+    const dots   = dotsContainer ? dotsContainer.querySelectorAll('.hp-temo__dot') : [];
+    let current  = 0;
+    let timer;
+
+    function show(n) {
+      quotes[current].classList.remove('hp-temo__quote--active');
+      dots[current]?.classList.remove('hp-temo__dot--active');
+      current = (n + quotes.length) % quotes.length;
+      quotes[current].classList.add('hp-temo__quote--active');
+      dots[current]?.classList.add('hp-temo__dot--active');
+    }
+
+    function start() {
+      timer = setInterval(() => show(current + 1), 6000);
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        clearInterval(timer);
+        show(i);
+        start();
+      });
+    });
+
+    start();
+  })();
+</script>

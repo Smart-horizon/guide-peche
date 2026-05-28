@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Mouches de pêche à la mouche — Jean-Baptiste Vidal"
+  description="Les mouches de pêche à la mouche de Jean-Baptiste Vidal : streamers bar, nymphes, sèches truite, mouches migrateurs. Guide Bretagne-Sud."
+>
+
+  <!-- HERO -->
+  <section class="prest-hero">
+    <div class="prest-hero__content container">
+      <p class="prest-eyebrow">Streamers · Nymphes · Sèches</p>
+      <h1>Mes mouches de pêche</h1>
+      <p class="prest-sub">Streamers bar, nymphes au fil, sèches de rivière — les patterns qui fonctionnent</p>
+      <div class="prest-hero__cta">
+        <a href="/contact" class="btn-prim">Réserver une sortie</a>
+        <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="prest-intro section">
+    <div class="container prest-intro__grid">
+      <div class="prest-intro__body">
+        <p>La sélection des mouches est un art en soi. Après des années de pratique dans des contextes très variés — bar en estuaire, truite en rivière, alose et saumon en migrateur — j'ai développé mes propres patterns adaptés aux espèces et conditions bretonnes.</p>
+        <p>Chaque mouche que j'utilise a été testée sur le terrain, affinée au fil des saisons. Du streamer agressif pour le bar en chasse aux nymphes fines pour la truite exigeante, chaque imitation a sa raison d'être.</p>
+      </div>
+      <aside class="prest-intro__aside">
+        <div class="prest-card-info">
+          <p class="prest-card-info__label">Bar</p>
+          <p class="prest-card-info__val">Streamers · Deceiver · Clouser · Poppers</p>
+          <p class="prest-card-info__label">Truite & Ombre</p>
+          <p class="prest-card-info__val">Nymphes · Sèches · Émergeantes</p>
+          <p class="prest-card-info__label">Migrateurs</p>
+          <p class="prest-card-info__val">Patterns spécifiques alose & saumon</p>
+          <p class="prest-card-info__label">Contact</p>
+          <p class="prest-card-info__val">06 87 30 34 56<br />enjoy.fishing@hotmail.fr</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section class="prest-gallery">
+    <div class="prest-gallery__grid">
+      <img src="/images/truite-1.jpg" loading="lazy" alt="Mouches de pêche à la mouche — nymphes et sèches" />
+      <img src="/images/truite-2.jpg" loading="lazy" alt="Streamer pour la pêche du bar à la mouche" />
+      <img src="/images/truite-3.jpg" loading="lazy" alt="Mouches de pêche en rivière bretonne" />
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="prest-cta-final section section--dark">
+    <div class="container prest-cta-final__inner">
+      <div>
+        <h2>Réservez votre sortie</h2>
+        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+      </div>
+      <div class="prest-cta-final__btns">
+        <a href="/contact" class="btn-prim">Nous contacter</a>
+        <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* HERO */
+.prest-hero {
+  min-height: 72vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4rem;
+  background:
+    linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 60%, rgba(13,43,62,0.3) 100%),
+    url('/images/truite-fario.jpg') center / cover no-repeat;
+  background-color: var(--color-ocean);
+  color: white;
+}
+.prest-hero__content { position: relative; z-index: 1; }
+.prest-eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-light); margin-bottom: 0.8rem;
+}
+.prest-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
+.prest-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
+.prest-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-prim {
+  background: var(--color-ocean-main); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+/* INTRO */
+.prest-intro__grid {
+  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
+}
+.prest-intro__body p { line-height: 1.8; color: var(--color-text); margin-bottom: 1.2rem; }
+.prest-intro__body p:last-child { margin-bottom: 0; }
+.prest-card-info {
+  background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
+  border-left: 3px solid var(--color-ocean-main);
+}
+.prest-card-info__label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--color-ocean-main); font-weight: 600; margin-top: 1.2rem;
+}
+.prest-card-info__label:first-child { margin-top: 0; }
+.prest-card-info__val { font-size: 0.92rem; color: var(--color-text); line-height: 1.55; }
+
+/* GALERIE */
+.prest-gallery { overflow: hidden; }
+.prest-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.prest-gallery__grid.g4 { grid-template-columns: repeat(4, 1fr); }
+.prest-gallery__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+
+/* CTA FINAL */
+.prest-cta-final__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
+.prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+.prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-ghost-light {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .prest-intro__grid { grid-template-columns: 1fr; gap: 2rem; }
+  .prest-gallery__grid,
+  .prest-gallery__grid.g4 { grid-template-columns: repeat(2, 1fr); }
+  .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .prest-hero { min-height: 85vh; padding-bottom: 3rem; }
+  .prest-gallery__grid { grid-template-columns: 1fr; }
+}
+</style>

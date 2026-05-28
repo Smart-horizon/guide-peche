@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Mon bateau — Carolina Skiff pêche à la mouche — Jean-Baptiste Vidal"
+  description="Le Carolina Skiff de Jean-Baptiste Vidal, bateau à fond plat spécialement aménagé pour la pêche à la mouche en estuaire et sur la côte bretonne."
+>
+
+  <!-- HERO -->
+  <section class="prest-hero">
+    <div class="prest-hero__content container">
+      <p class="prest-eyebrow">Carolina Skiff · Fond plat</p>
+      <h1>Le bateau</h1>
+      <p class="prest-sub">Un skiff spécialement aménagé pour la pêche à la mouche — estuaires et côte bretonne</p>
+      <div class="prest-hero__cta">
+        <a href="/contact" class="btn-prim">Réserver une sortie</a>
+        <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="prest-intro section">
+    <div class="container prest-intro__grid">
+      <div class="prest-intro__body">
+        <p>Depuis 2018, je propose des sorties guidées à bord de mon Carolina Skiff, un bateau à fond plat spécialement conçu pour la pêche à la mouche. Ce type d'embarcation, très utilisé en Floride et en Amérique du Sud pour le tarpon et le bonefish, est idéal pour la pêche du bar à vue en estuaire.</p>
+        <p>Son faible tirant d'eau permet d'accéder à des zones impossibles d'accès depuis la rive, de se poster silencieusement face aux postes à bars et de dériver en toute discrétion sur les bancs de sable. Aménagé pour accueillir 1 à 2 pêcheurs dans les meilleures conditions, il est équipé d'une plateforme de lancer à l'avant.</p>
+      </div>
+      <aside class="prest-intro__aside">
+        <div class="prest-card-info">
+          <p class="prest-card-info__label">Capacité</p>
+          <p class="prest-card-info__val">1 à 2 pêcheurs maximum</p>
+          <p class="prest-card-info__label">Zone</p>
+          <p class="prest-card-info__val">Estuaires & côte Bretagne-Sud</p>
+          <p class="prest-card-info__label">Spécificités</p>
+          <p class="prest-card-info__val">Fond plat · Plateforme avant · Moteur électrique · Silencieux</p>
+          <p class="prest-card-info__label">Contact</p>
+          <p class="prest-card-info__val">06 87 30 34 56<br />enjoy.fishing@hotmail.fr</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section class="prest-gallery">
+    <div class="prest-gallery__grid g4">
+      <img src="/images/bateau-1.jpg" loading="lazy" alt="Carolina Skiff — bateau pêche à la mouche Bretagne" />
+      <img src="/images/bateau-2.png" loading="lazy" alt="Sortie guidée bar à la mouche en bateau" />
+      <img src="/images/bateau-3.jpg" loading="lazy" alt="Le bateau de Jean-Baptiste Vidal — fond plat estuaire" />
+      <img src="/images/bar-bateau-7.jpg" loading="lazy" alt="Plateforme de lancer sur le Carolina Skiff" />
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="prest-cta-final section section--dark">
+    <div class="container prest-cta-final__inner">
+      <div>
+        <h2>Réservez votre sortie</h2>
+        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+      </div>
+      <div class="prest-cta-final__btns">
+        <a href="/contact" class="btn-prim">Nous contacter</a>
+        <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* HERO */
+.prest-hero {
+  min-height: 72vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4rem;
+  background:
+    linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 60%, rgba(13,43,62,0.3) 100%),
+    url('/images/bar-bateau-carolina.jpg') center / cover no-repeat;
+  background-color: var(--color-ocean);
+  color: white;
+}
+.prest-hero__content { position: relative; z-index: 1; }
+.prest-eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-light); margin-bottom: 0.8rem;
+}
+.prest-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
+.prest-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
+.prest-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-prim {
+  background: var(--color-ocean-main); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+/* INTRO */
+.prest-intro__grid {
+  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
+}
+.prest-intro__body p { line-height: 1.8; color: var(--color-text); margin-bottom: 1.2rem; }
+.prest-intro__body p:last-child { margin-bottom: 0; }
+.prest-card-info {
+  background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
+  border-left: 3px solid var(--color-ocean-main);
+}
+.prest-card-info__label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--color-ocean-main); font-weight: 600; margin-top: 1.2rem;
+}
+.prest-card-info__label:first-child { margin-top: 0; }
+.prest-card-info__val { font-size: 0.92rem; color: var(--color-text); line-height: 1.55; }
+
+/* GALERIE */
+.prest-gallery { overflow: hidden; }
+.prest-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.prest-gallery__grid.g4 { grid-template-columns: repeat(4, 1fr); }
+.prest-gallery__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+
+/* CTA FINAL */
+.prest-cta-final__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
+.prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+.prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-ghost-light {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .prest-intro__grid { grid-template-columns: 1fr; gap: 2rem; }
+  .prest-gallery__grid,
+  .prest-gallery__grid.g4 { grid-template-columns: repeat(2, 1fr); }
+  .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .prest-hero { min-height: 85vh; padding-bottom: 3rem; }
+  .prest-gallery__grid { grid-template-columns: 1fr; }
+}
+</style>

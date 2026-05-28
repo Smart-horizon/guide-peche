@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { createClient } from '@sanity/client'
+import imageUrlBuilder from '@sanity/image-url'
+
+export async function getStaticPaths() {
+  const client = createClient({
+    projectId: 'uievv97s',
+    dataset: 'production',
+    useCdn: false,
+    apiVersion: '2024-01-01',
+  })
+  const articles = await client.fetch(
+    `*[_type == "article" && defined(slug.current)]{ "slug": slug.current }`
+  )
+  return articles.map(a => ({ params: { slug: a.slug } }))
+}
+
+const { slug } = Astro.params
+
+const client = createClient({
+  projectId: 'uievv97s',
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2024-01-01',
+})
+
+const builder = imageUrlBuilder(client)
+const urlFor = (source) => builder.image(source)
+
+const article = await client.fetch(
+  `*[_type == "article" && slug.current == $slug][0]{
+    title, slug, date, image, extrait, contenu, tags, espece, seoTitle, seoDescription
+  }`,
+  { slug }
+)
+
+if (!article) return Astro.redirect('/blog')
+
+const especeLabel = {
+  bar: 'Bar', truite: 'Truite', saumon: 'Saumon',
+  alose: 'Alose', brochet: 'Brochet', exotique: 'Exotique',
+}
+
+const heroImg = article.image ? urlFor(article.image).width(1400).height(600).url() : null
+const dateFormatee = article.date
+  ? new Date(article.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+  : null
+---
+
+<BaseLayout
+  title={`${article.seoTitle || article.title} — Jean-Baptiste Vidal`}
+  description={article.seoDescription || article.extrait || ''}
+>
+
+  <!-- Hero article -->
+  <section class="article-hero">
+    <div class="article-hero-bg" style={heroImg ? `background-image: url(${heroImg})` : ''}></div>
+    <div class="container article-hero-content">
+      <div class="article-meta">
+        {article.espece && <span class="badge">{especeLabel[article.espece] ?? article.espece}</span>}
+        {dateFormatee && <time datetime={article.date}>{dateFormatee}</time>}
+      </div>
+      <h1>{article.title}</h1>
+      {article.extrait && <p class="article-extrait">{article.extrait}</p>}
+    </div>
+  </section>
+
+  <!-- Contenu -->
+  <article class="section">
+    <div class="container article-body">
+
+      {article.contenu?.map((block) => {
+        if (block._type !== 'block') return null
+        const text = block.children?.map(c => c.text).join('') ?? ''
+        if (!text.trim()) return null
+        const style = block.style ?? 'normal'
+        if (style === 'h2') return <h2>{text}</h2>
+        if (style === 'h3') return <h3>{text}</h3>
+        if (style === 'blockquote') return <blockquote>{text}</blockquote>
+        return <p>{text}</p>
+      })}
+
+      {article.tags?.length > 0 && (
+        <div class="article-tags">
+          {article.tags.map(tag => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+
+    </div>
+  </article>
+
+  <!-- Nav retour -->
+  <div class="article-nav container">
+    <a href="/blog" class="retour">← Retour au blog</a>
+  </div>
+
+  <!-- CTA -->
+  <section class="section--sand article-cta">
+    <div class="container" style="text-align:center">
+      <h2>Envie de vivre ça en vrai&nbsp;?</h2>
+      <p>Contactez Jean-Baptiste pour réserver une sortie sur ses rivières et côtes favorites.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
+        <a href="/contact" class="btn btn--ocean">Nous contacter</a>
+        <a href="tel:+33687303456" class="btn btn--outline">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .article-hero {
+    position: relative;
+    min-height: 55vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 3.5rem;
+    color: white;
+  }
+  .article-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 100%),
+      var(--color-ocean) center / cover no-repeat;
+  }
+  .article-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    padding-top: var(--header-height);
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .badge {
+    background: var(--color-ocean-main);
+    color: white;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .article-meta time {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.04em;
+  }
+
+  .article-hero h1 { color: white; margin-bottom: 1rem; }
+  .article-extrait {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.65;
+    max-width: 640px;
+  }
+
+  /* Corps de l'article */
+  .article-body {
+    max-width: 720px;
+  }
+  .article-body p {
+    color: var(--color-text-muted);
+    line-height: 1.85;
+    margin-bottom: 1.4rem;
+    font-size: 1.025rem;
+  }
+  .article-body h2 {
+    margin: 2.5rem 0 1rem;
+    color: var(--color-ocean);
+  }
+  .article-body h3 {
+    margin: 2rem 0 0.75rem;
+    color: var(--color-text);
+  }
+  .article-body blockquote {
+    border-left: 3px solid var(--color-ocean-main);
+    margin: 2rem 0;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-ocean);
+    background: var(--color-mist);
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* Tags */
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-mist);
+  }
+  .tag {
+    padding: 0.3rem 0.75rem;
+    background: var(--color-mist);
+    color: var(--color-ocean-main);
+    font-size: 0.72rem;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+  }
+
+  /* Nav retour */
+  .article-nav {
+    padding: 1.5rem 2rem;
+  }
+  .retour {
+    font-size: 0.8rem;
+    color: var(--color-ocean-main);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .retour:hover { text-decoration: underline; }
+
+  /* CTA */
+  .article-cta { padding: 4rem 0; }
+  .article-cta h2 { margin-bottom: 0.75rem; }
+  .article-cta p { color: var(--color-text-muted); }
+
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.75rem;
+    border-radius: 2px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn--ocean { background: var(--color-ocean); color: white; }
+  .btn--ocean:hover { background: var(--color-ocean-main); }
+  .btn--outline { border: 1.5px solid var(--color-ocean-main); color: var(--color-ocean-main); }
+  .btn--outline:hover { background: var(--color-ocean-main); color: white; }
+</style>

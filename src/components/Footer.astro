@@ -1,0 +1,171 @@
+---
+const year = new Date().getFullYear()
+
+const navLinks = [
+  { label: 'Accueil',      href: '/' },
+  { label: 'Prestations',  href: '/stage-peche-mouche' },
+  { label: 'Bar à la mouche', href: '/peche-du-bar-a-la-mouche' },
+  { label: 'Rivières',     href: '/peche-a-la-mouche-en-bretagne' },
+  { label: 'Voyages',      href: '/voyages-peche-mouche' },
+  { label: 'Témoignages',  href: '/temoignages' },
+  { label: 'À propos',     href: '/jean-baptiste-vidal-moniteur-guide-de-peche' },
+  { label: 'Contact',      href: '/contact' },
+]
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">Jean-Baptiste Vidal</a>
+      <p class="footer-bio">
+        Moniteur-Guide diplômé d'État.<br />
+        Pêche à la mouche en rivières de Bretagne.
+      </p>
+      <address class="footer-contact">
+        <a href="tel:+33687303456">06 87 30 34 56</a>
+        <a href="mailto:enjoy.fishing@hotmail.fr">enjoy.fishing@hotmail.fr</a>
+      </address>
+    </div>
+
+    <nav class="footer-nav" aria-label="Navigation secondaire">
+      <h3>Navigation</h3>
+      <ul>
+        {navLinks.map(({ label, href }) => (
+          <li><a href={href}>{label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="footer-certif">
+      <h3>Certifications</h3>
+      <ul>
+        <li>BP JEPS « Pêche de Loisir » — 2005</li>
+        <li>UCC « Pêche de loisir en milieu maritime »</li>
+        <li>Carte pro n° 02913ED0228</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© {year} Jean-Baptiste Vidal — ENJOY FISHING — Siret 789636313</p>
+    <p>Tous droits réservés</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-footer);
+    color: rgba(255, 255, 255, 0.75);
+    padding-top: 4rem;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 3rem;
+  }
+
+  /* Brand column */
+  .footer-logo {
+    display: inline-block;
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .footer-bio {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    opacity: 0.85;
+  }
+
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-style: normal;
+    font-size: 0.85rem;
+  }
+
+  .footer-contact a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-contact a:hover {
+    color: var(--color-ocean-light);
+  }
+
+  /* Nav & certif columns */
+  .footer-nav h3,
+  .footer-certif h3 {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+  }
+
+  .footer-nav ul,
+  .footer-certif ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer-nav a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s;
+  }
+
+  .footer-nav a:hover {
+    color: white;
+  }
+
+  .footer-certif li {
+    font-size: 0.825rem;
+    line-height: 1.4;
+  }
+
+  /* Bottom bar */
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 0.25rem;
+      text-align: center;
+    }
+  }
+</style>

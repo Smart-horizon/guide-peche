@@ -1,0 +1,210 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Pêche du bar à la mouche en Bretagne — Jean-Baptiste Vidal, Guide"
+  description="Pêche du bar à la mouche avec Jean-Baptiste Vidal, Moniteur-Guide de pêche. Initiation et perfectionnement à la pêche du bar. Pêche du bord et en bateau. Recherche de très gros bars à vue."
+>
+
+  <!-- HERO -->
+  <section class="prest-hero">
+    <div class="prest-hero__content container">
+      <p class="prest-eyebrow">Bar à la mouche · Bretagne-Sud</p>
+      <h1>Pêche du bar à la mouche en Bretagne</h1>
+      <p class="prest-sub">Depuis 2000 en Bretagne-Sud — bar à vue, en bateau, en estuaire</p>
+      <div class="prest-hero__cta">
+        <a href="/contact" class="btn-prim">Réserver une sortie</a>
+        <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="prest-intro section">
+    <div class="container prest-intro__grid">
+      <div class="prest-intro__body">
+        <p>La France offre un linéaire de littoral conséquent, et la Bretagne parmi les côtes et les estuaires les plus prisés pour la pêche du bar. Souvent pratiqué en bateau dans les baies, et sur les pointes rocheuses, la pêche du bord est cependant possible, notamment en estuaire.</p>
+        <p>Depuis mon arrivée en Bretagne en 2000, j'ai rapidement été attiré par la pêche du bar, poisson que je n'avais jamais eu l'occasion de prendre à la mouche auparavant. Traquer les labrax en estuaire devient rapidement une passion dévorante à l'instar de la pêche en exotique, mais demande une connaissance de terrain indéniable et une compréhension du fonctionnement de cet écosystème particulier.</p>
+        <p>Après une phase de prospection depuis plusieurs années, je propose mes services de guide de pêche à la mouche en Bretagne sur différents estuaires pour vous initier et vous perfectionner dans la pêche du bar à la mouche du bord et également en bateau à bord de mon Carolina Skiff.</p>
+        <p>Discrétion, approche à pas de loup, et précision sont de rigueur pour déjouer la méfiance des gros bars dans peu d'eau.</p>
+
+        <!-- SOUS-PRESTATIONS -->
+        <div class="sub-grid">
+          <a href="/initiation-peche-du-bar-a-la-mouche" class="sub-card">
+            <img src="/images/bar-initiation-6.jpg" loading="lazy" alt="Initiation bar à la mouche en Bretagne-Sud" />
+            <div class="sub-card__text">
+              <span class="sub-card__title">Initiation bar à la mouche</span>
+              <span class="sub-card__sub">Pour débuter et devenir autonome</span>
+            </div>
+          </a>
+          <a href="/peche-du-bar-perfectionnement" class="sub-card">
+            <img src="/images/bar-perf-9.jpg" loading="lazy" alt="Perfectionnement pêche du bar à la mouche" />
+            <div class="sub-card__text">
+              <span class="sub-card__title">Perfectionnement</span>
+              <span class="sub-card__sub">Progresser et rechercher les gros poissons</span>
+            </div>
+          </a>
+          <a href="/peche-du-bar-a-vue-a-la-mouche" class="sub-card">
+            <img src="/images/bar-vue-6.jpg" loading="lazy" alt="Bar à vue en estuaire breton" />
+            <div class="sub-card__text">
+              <span class="sub-card__title">Bar à vue en estuaire</span>
+              <span class="sub-card__sub">Le graal du bar à la mouche</span>
+            </div>
+          </a>
+          <a href="/peche-mouche-bar-bateau-bretagne" class="sub-card">
+            <img src="/images/bar-bateau.jpg" loading="lazy" alt="Pêche du bar en bateau — Carolina Skiff" />
+            <div class="sub-card__text">
+              <span class="sub-card__title">Pêche en bateau</span>
+              <span class="sub-card__sub">Sur mon Carolina Skiff spécial mouche</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <aside class="prest-intro__aside">
+        <div class="prest-card-info">
+          <p class="prest-card-info__label">Niveau</p>
+          <p class="prest-card-info__val">Tous niveaux</p>
+          <p class="prest-card-info__label">Format</p>
+          <p class="prest-card-info__val">Initiation · Perfectionnement · Bar à vue · Coaching · Bateau</p>
+          <p class="prest-card-info__label">Contact</p>
+          <p class="prest-card-info__val">06 87 30 34 56<br />enjoy.fishing@hotmail.fr</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- GALERIE -->
+  <section class="prest-gallery">
+    <div class="prest-gallery__grid prest-gallery__grid--4">
+      <img src="/images/bar-7.jpg" loading="lazy" alt="Bar à la mouche en estuaire breton" />
+      <img src="/images/bar-9.jpg" loading="lazy" alt="Beau bar capturé à la mouche en Bretagne" />
+      <img src="/images/bar-12.jpg" loading="lazy" alt="Pêche du bar à la mouche depuis le bord" />
+      <img src="/images/bar-a-vue.jpg" loading="lazy" alt="Bar à vue en estuaire — Jean-Baptiste Vidal" />
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="prest-cta-final section section--dark">
+    <div class="container prest-cta-final__inner">
+      <div>
+        <h2>Réservez votre sortie</h2>
+        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+      </div>
+      <div class="prest-cta-final__btns">
+        <a href="/contact" class="btn-prim">Nous contacter</a>
+        <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* HERO */
+.prest-hero {
+  min-height: 72vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4rem;
+  background:
+    linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 60%, rgba(13,43,62,0.3) 100%),
+    url('/images/bar-estuaire.jpg') center / cover no-repeat;
+  background-color: var(--color-ocean);
+  color: white;
+}
+.prest-hero__content { position: relative; z-index: 1; }
+.prest-eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-light); margin-bottom: 0.8rem;
+}
+.prest-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
+.prest-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
+.prest-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-prim {
+  background: var(--color-ocean-main); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+/* INTRO */
+.prest-intro__grid {
+  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
+}
+.prest-intro__body p { line-height: 1.8; color: var(--color-text); margin-bottom: 1.2rem; }
+.prest-intro__body p:last-child { margin-bottom: 0; }
+.prest-card-info {
+  background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
+  border-left: 3px solid var(--color-ocean-main);
+}
+.prest-card-info__label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--color-ocean-main); font-weight: 600; margin-top: 1.2rem;
+}
+.prest-card-info__label:first-child { margin-top: 0; }
+.prest-card-info__val { font-size: 0.92rem; color: var(--color-text); line-height: 1.55; }
+
+/* SOUS-PRESTATIONS */
+.sub-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin: 2.5rem 0;
+}
+.sub-card {
+  position: relative; border-radius: 6px; overflow: hidden; cursor: pointer;
+  aspect-ratio: 3/2; display: block; text-decoration: none;
+}
+.sub-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,24,31,0.85), rgba(7,24,31,0.2));
+  z-index: 1;
+}
+.sub-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.sub-card:hover img { transform: scale(1.04); }
+.sub-card__text { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem; z-index: 2; color: white; }
+.sub-card__title { font-family: var(--font-serif); font-size: 1rem; font-weight: 400; display: block; margin-bottom: 0.2rem; }
+.sub-card__sub { font-size: 0.72rem; color: rgba(255,255,255,0.65); display: block; }
+
+/* GALERIE */
+.prest-gallery { overflow: hidden; }
+.prest-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.prest-gallery__grid.prest-gallery__grid--4 { grid-template-columns: repeat(4, 1fr); }
+.prest-gallery__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+
+/* CTA FINAL */
+.prest-cta-final__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
+.prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+.prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-ghost-light {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .prest-intro__grid { grid-template-columns: 1fr; gap: 2rem; }
+  .prest-gallery__grid { grid-template-columns: repeat(2, 1fr); }
+  .prest-gallery__grid.prest-gallery__grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+  .sub-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .prest-hero { min-height: 85vh; padding-bottom: 3rem; }
+  .prest-gallery__grid { grid-template-columns: 1fr; }
+}
+</style>
