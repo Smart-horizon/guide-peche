@@ -3,8 +3,11 @@ import sanity from '@sanity/astro'
 import sitemap from '@astrojs/sitemap'
 import react from '@astrojs/react'
 
+import cloudflare from '@astrojs/cloudflare';
+
 export default defineConfig({
   site: 'https://jeanbaptistevidalguidepeche.com',
+
   vite: {
     optimizeDeps: {
       include: [
@@ -25,6 +28,7 @@ export default defineConfig({
       noExternal: ['@sanity/visual-editing', '@sanity/ui'],
     },
   },
+
   integrations: [
     react(),
     sanity({
@@ -39,4 +43,6 @@ export default defineConfig({
     }),
     sitemap(),
   ],
+
+  adapter: cloudflare(),
 })
