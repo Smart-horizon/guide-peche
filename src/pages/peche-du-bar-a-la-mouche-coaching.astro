@@ -1,64 +1,160 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import MatierielBtn from '../components/MatierielBtn.astro'
+import BarSubNav from '../components/BarSubNav.astro'
 ---
 
 <BaseLayout
   title="Coaching pêche du bar à la mouche — Jean-Baptiste Vidal"
-  description="Coaching personnalisé sur vos spots favoris ou sur votre bateau. Jean-Baptiste Vidal vous accompagne pour progresser à la pêche du bar à la mouche."
+  description="Coaching personnalisé pour la pêche du bar à la mouche sur vos spots favoris ou à bord de votre bateau. Matériel, lancer, stratégie — progressez rapidement avec Jean-Baptiste Vidal, guide professionnel en Bretagne-Sud."
 >
 
-  <!-- HERO -->
-  <section class="prest-hero">
-    <div class="prest-hero__content container">
-      <p class="prest-eyebrow">Bar à la mouche · Coaching personnalisé</p>
-      <h1>Coaching pêche du bar à la mouche</h1>
-      <p class="prest-sub">Sur vos coins favoris ou à bord de votre bateau</p>
-      <div class="prest-hero__cta">
+  <!-- ═══ HERO ═══ -->
+  <section class="voy-hero">
+    <div class="voy-hero__bg"></div>
+    <div class="voy-hero__overlay"></div>
+    <div class="voy-hero__content container">
+      <p class="voy-eyebrow">Bar à la mouche · Coaching personnalisé · Sur vos spots</p>
+      <h1>Coaching bar à la mouche<br /><span class="voy-hero__sub">Sur vos coins favoris ou à bord de votre bateau</span></h1>
+      <p class="voy-lead">Vous pêchez déjà aux leurres ou débutez à la mouche ? Je viens sur vos spots pour vous transmettre mon expertise et vous permettre de pêcher le bar à la mouche avec aisance et succès.</p>
+      <div class="voy-hero__cta">
         <a href="/contact" class="btn-prim">Réserver une sortie</a>
         <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
+        <MatierielBtn href="/materiel-mouche-bar" label="Matériel bar" />
       </div>
+    </div>
+    <div class="voy-hero__scroll">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </div>
   </section>
 
-  <!-- INTRO -->
-  <section class="prest-intro section">
-    <div class="container prest-intro__grid">
-      <div class="prest-intro__body">
-        <p>Vous êtes déjà pêcheur (aux leurres, ou débutant moucheur) mais ne maîtrisez pas bien la pêche à la mouche, et vous souhaitez découvrir ou améliorer votre technique ?</p>
-        <p>Je vous propose de vous accompagner et vous « coacher » sur vos coins favoris du bord ou sur votre bateau pour développer vos compétences et vous permettre de pêcher le bar à la mouche avec aisance et succès.</p>
-        <p>Une formule sur mesure, adaptée à votre niveau et à vos objectifs, sur les spots que vous connaissez déjà. Le coaching peut se faire à la journée ou à la demi-journée.</p>
+  <!-- ═══ CHIFFRES CLÉS ═══ -->
+  <div class="voy-stats">
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">Mi-avril – Nov</span>
+      <span class="voy-stats__label">Saison de coaching</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">4–8 h</span>
+      <span class="voy-stats__label">Demi-journée ou journée</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">Tous niveaux</span>
+      <span class="voy-stats__label">Débutants bienvenus</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">25 ans</span>
+      <span class="voy-stats__label">d'expérience à la mouche</span>
+    </div>
+  </div>
+
+  <!-- ═══ INTRO ═══ -->
+  <section class="section section--white">
+    <div class="container voy-intro">
+      <div class="voy-intro__text">
+        <p class="eyebrow">Coaching · Bar à la mouche</p>
+        <h2>Mon expertise directement sur vos secteurs de pêche</h2>
+        <p>Vous êtes déjà pêcheur aux leurres ou débutant moucheur, et vous souhaitez découvrir ou améliorer votre technique à la mouche ? Je viens vous accompagner et vous coacher sur vos coins favoris du bord ou à bord de votre propre bateau — là où vous pêchez déjà, dans un environnement que vous connaissez.</p>
+        <p>Fort de plus de 25 ans de pêche à la mouche intensive en France et à l'étranger pour de nombreuses espèces d'eau douce et marines, je mets tout mon savoir-faire à votre disposition pour vous faire progresser rapidement dans la pratique de la pêche du bar à la mouche.</p>
+        <p>Chaque journée de coaching est calée sur les conditions du moment : marées, coefficients, météo, direction du vent, luminosité et couleur de l'eau. Une prestation entièrement sur mesure, adaptée à votre niveau et à vos objectifs — à la journée ou à la demi-journée.</p>
       </div>
-      <aside class="prest-intro__aside">
-        <div class="prest-card-info">
-          <p class="prest-card-info__label">Niveau</p>
-          <p class="prest-card-info__val">Tous niveaux</p>
-          <p class="prest-card-info__label">Format</p>
-          <p class="prest-card-info__val">Journée · Demi-journée · Sur vos spots · Sur votre bateau</p>
-          <p class="prest-card-info__label">Contact</p>
-          <p class="prest-card-info__val">06 87 30 34 56<br />enjoy.fishing@hotmail.fr</p>
-        </div>
+      <aside class="voy-intro__card">
+        <p class="card-label">Niveau</p>
+        <p class="card-val">Tous niveaux · Débutants moucheurs bienvenus</p>
+        <p class="card-label">Format</p>
+        <p class="card-val">Journée · Demi-journée · Sur vos spots · Sur votre bateau</p>
+        <p class="card-label">Durée</p>
+        <p class="card-val">4 à 8 heures selon marées et formule choisie</p>
+        <p class="card-label">Saison</p>
+        <p class="card-val">Mi-avril à fin novembre</p>
+        <p class="card-label">Tarifs</p>
+        <p class="card-val">300–320 € / jour · + frais de déplacement · Dégressif à 2 pêcheurs</p>
+        <a href="/contact" class="card-cta">Réserver</a>
       </aside>
     </div>
   </section>
 
-  <!-- GALERIE -->
-  <section class="prest-gallery">
-    <div class="prest-gallery__grid">
-      <img src="/images/bar-coaching-7.jpg" loading="lazy" alt="Coaching pêche du bar à la mouche en Bretagne-Sud" />
-      <img src="/images/bar-promo.jpg" loading="lazy" alt="Jean-Baptiste Vidal coach de pêche à la mouche" />
-      <img src="/images/bar-estuaire.jpg" loading="lazy" alt="Pêche du bar à la mouche en estuaire breton" />
+  <!-- ═══ PROGRAMME ═══ -->
+  <section class="section section--sand">
+    <div class="container">
+      <p class="eyebrow">Programme</p>
+      <h2>Au programme d'une journée de coaching</h2>
+      <p class="section-intro">Quatre axes de travail pour progresser rapidement et pêcher le bar à la mouche avec autonomie et efficacité — sur vos propres spots, dans vos propres conditions.</p>
+
+      <div class="prog-rows">
+
+        <!-- 1 — Coaching bar -->
+        <div class="prog-row">
+          <div class="prog-row__img">
+            <img src="/images/BC1.avif" alt="Coaching pêche du bar à la mouche — Jean-Baptiste Vidal" loading="lazy" />
+          </div>
+          <div class="prog-row__body">
+            <div class="prog-row__num">01</div>
+            <h3>Coaching sur vos spots</h3>
+            <p class="prog-row__tag">Sur mesure · Vos secteurs · Votre niveau · Votre bateau</p>
+            <p>Le coaching se déroule entièrement dans votre environnement de pêche — vos estuaires, votre côte, votre bateau. Pas de déplacement sur mes spots : c'est moi qui viens à vous, pour vous apporter mon expertise directement là où vous pêchez, dans des conditions que vous connaissez déjà.</p>
+            <p>Cette approche sur mesure permet de progresser plus vite : on travaille sur vos problèmes concrets, vos lacunes spécifiques, vos habitudes à corriger. Chaque sortie de coaching est unique et construite autour de vos objectifs du moment.</p>
+          </div>
+        </div>
+
+        <!-- 2 — Choix du matériel -->
+        <div class="prog-row prog-row--reverse">
+          <div class="prog-row__img">
+            <img src="/images/BC2.avif" alt="Choix du matériel pour la pêche du bar à la mouche" loading="lazy" />
+          </div>
+          <div class="prog-row__body">
+            <div class="prog-row__num">02</div>
+            <h3>Choix du matériel</h3>
+            <p class="prog-row__tag">Canne · Soie · Pointe · Fluorocarbone · Mouches</p>
+            <p>Savoir s'équiper et choisir le matériel adapté à la technique et aux conditions est primordial. On passe en revue ensemble la taille et la puissance de canne, le type de soie, la pointe et le fluorocarbone — chaque élément de la chaîne doit être cohérent avec vos objectifs.</p>
+            <p>Le choix des mouches selon la saison, les postes et les conditions n'est pas à prendre à la légère — c'est souvent lui qui fait la différence entre une journée mémorable et une journée blanche. Une étape fondamentale pour bien s'adapter à ce milieu exigeant.</p>
+          </div>
+        </div>
+
+        <!-- 3 — Apprentissage du lancer -->
+        <div class="prog-row">
+          <div class="prog-row__img">
+            <img src="/images/BC3.avif" alt="Apprentissage du lancer mouche pour la pêche du bar" loading="lazy" />
+          </div>
+          <div class="prog-row__body">
+            <div class="prog-row__num">03</div>
+            <h3>Apprentissage du lancer</h3>
+            <p class="prog-row__tag">Simple traction · Double traction · Roulé · Back handed</p>
+            <p>La pêche du bar est exigeante : elle demande de lancer des mouches souvent volumineuses et lestées à 15 mètres et plus. Maîtriser la simple et double traction est indispensable pour gagner en vitesse et en distance — c'est le point clef d'une pêche en mer efficace.</p>
+            <p>On travaille aussi le lancer roulé, le lancer arrière-main (back handed), la boucle serrée face au vent et l'exploitation du vent arrière. Autant de techniques qui permettent de s'adapter à toutes les conditions bretonnes — et d'en tirer parti.</p>
+          </div>
+        </div>
+
+        <!-- 4 — Stratégies de pêche -->
+        <div class="prog-row prog-row--reverse">
+          <div class="prog-row__img">
+            <img src="/images/BC4.avif" alt="Stratégie de pêche du bar — lecture des postes et des marées" loading="lazy" />
+          </div>
+          <div class="prog-row__body">
+            <div class="prog-row__num">04</div>
+            <h3>Stratégies de pêche</h3>
+            <p class="prog-row__tag">Préparation · Marées · Postes · Lecture de l'eau</p>
+            <p>Aller à la pêche est une chose — partir bien préparé avec une stratégie définie en est une autre. Je vous enseigne à construire une approche structurée : choix du spot en fonction des marées, lecture des courants, timing d'intervention, gestion de l'approche.</p>
+            <p>Comme je dis souvent à mes stagiaires : « on apprend toujours quelque chose à chaque sortie. » C'est l'accumulation progressive d'expériences et d'observations qui construit un vrai pêcheur autonome — je vous aide à accélérer ce processus.</p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
+
+  <!-- NAVIGATION CROISÉE BAR -->
+  <BarSubNav current="coaching" />
 
   <!-- CTA FINAL -->
   <section class="prest-cta-final section section--dark">
     <div class="container prest-cta-final__inner">
       <div>
-        <h2>Réservez votre sortie</h2>
-        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+        <h2>Réservez votre coaching</h2>
+        <p>Sur vos spots · 300–320 € / jour · Disponibilités sur demande — réponse sous 24h.</p>
       </div>
       <div class="prest-cta-final__btns">
-        <a href="/contact" class="btn-prim">Nous contacter</a>
+        <a href="/contact" class="btn-prim">Me contacter</a>
         <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
       </div>
     </div>
@@ -67,88 +163,190 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 </BaseLayout>
 
 <style>
-/* HERO */
-.prest-hero {
-  min-height: 72vh;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 4rem;
-  background:
-    linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 60%, rgba(13,43,62,0.3) 100%),
-    url('/images/bar-coaching-6.jpg') center / cover no-repeat;
-  background-color: var(--color-ocean);
-  color: white;
-}
-.prest-hero__content { position: relative; z-index: 1; }
-.prest-eyebrow {
-  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--color-ocean-light); margin-bottom: 0.8rem;
-}
-.prest-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
-.prest-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
-.prest-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
-.btn-prim {
-  background: var(--color-ocean-main); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: background 0.2s;
-}
-.btn-prim:hover { background: #144b72; }
-.btn-ghost {
-  border: 1.5px solid rgba(255,255,255,0.4); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: border-color 0.2s, background 0.2s;
-}
-.btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+  /* ── HERO ── */
+  .voy-hero {
+    position: relative;
+    min-height: 78vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 5rem;
+    color: white;
+    overflow: hidden;
+  }
+  .voy-hero__bg {
+    position: absolute; inset: 0;
+    background: url('/images/BC1.avif') center / cover no-repeat;
+    background-color: var(--color-ocean);
+  }
+  .voy-hero__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.9) 0%, rgba(13,43,62,0.5) 55%, rgba(13,43,62,0.25) 100%);
+  }
+  .voy-hero__content { position: relative; z-index: 1; }
+  .voy-eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--color-ocean-light); font-weight: 500; margin-bottom: 1rem;
+  }
+  .voy-hero__content h1 {
+    font-family: var(--font-serif); font-weight: 400; color: white;
+    margin-bottom: 1.5rem; max-width: 680px;
+    font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1;
+  }
+  .voy-hero__sub {
+    display: block; font-size: clamp(1.1rem, 3vw, 1.8rem);
+    font-weight: 300; opacity: 0.75;
+  }
+  .voy-lead {
+    font-size: 1rem; line-height: 1.7;
+    color: rgba(255,255,255,0.75); max-width: 560px; margin-bottom: 2.5rem;
+  }
+  .voy-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .voy-hero__scroll {
+    position: absolute; bottom: 2rem; right: 2rem;
+    color: rgba(255,255,255,0.4); z-index: 1;
+    animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .btn-prim {
+    background: var(--color-ocean-main); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none; transition: background 0.2s;
+  }
+  .btn-prim:hover { background: #144b72; }
+  .btn-ghost {
+    border: 1.5px solid rgba(255,255,255,0.4); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
-/* INTRO */
-.prest-intro__grid {
-  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
-}
-.prest-intro__body p { line-height: 1.8; color: var(--color-text); margin-bottom: 1.2rem; }
-.prest-intro__body p:last-child { margin-bottom: 0; }
-.prest-card-info {
-  background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
-  border-left: 3px solid var(--color-ocean-main);
-}
-.prest-card-info__label {
-  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--color-ocean-main); font-weight: 600; margin-top: 1.2rem;
-}
-.prest-card-info__label:first-child { margin-top: 0; }
-.prest-card-info__val { font-size: 0.92rem; color: var(--color-text); line-height: 1.55; }
+  /* ── STATS BAR ── */
+  .voy-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--color-ocean);
+  }
+  .voy-stats__item {
+    padding: 1.4rem 1rem; text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .voy-stats__item:last-child { border-right: none; }
+  .voy-stats__num {
+    font-family: var(--font-serif); font-size: 1.5rem;
+    color: white; font-weight: 500; line-height: 1;
+  }
+  .voy-stats__label {
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 400;
+  }
 
-/* GALERIE */
-.prest-gallery { overflow: hidden; }
-.prest-gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-}
-.prest-gallery__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+  /* ── INTRO ── */
+  .section--white { background: #fff; }
+  .voy-intro {
+    display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
+  }
+  .eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-ocean-main); font-weight: 600; margin-bottom: 0.75rem;
+  }
+  .voy-intro__text h2 { margin-bottom: 1.25rem; }
+  .voy-intro__text p { line-height: 1.8; color: var(--color-text); margin-bottom: 1rem; }
+  .voy-intro__text p:last-child { margin-bottom: 0; }
+  .voy-intro__card {
+    background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
+    border-left: 3px solid var(--color-ocean-main);
+    position: sticky; top: 90px;
+  }
+  .card-label {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--color-ocean-main); font-weight: 600; margin-top: 1.1rem;
+  }
+  .card-label:first-child { margin-top: 0; }
+  .card-val { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; }
+  .card-cta {
+    display: block; margin-top: 1.4rem; text-align: center;
+    background: var(--color-ocean-main); color: white;
+    padding: 0.7rem 1rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.88rem; text-decoration: none; transition: background 0.2s;
+  }
+  .card-cta:hover { background: #144b72; }
 
-/* CTA FINAL */
-.prest-cta-final__inner {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 2rem; flex-wrap: wrap;
-}
-.prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
-.prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
-.prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-.btn-ghost-light {
-  border: 1.5px solid rgba(255,255,255,0.4); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: border-color 0.2s;
-}
-.btn-ghost-light:hover { border-color: white; }
+  /* ── PROGRAMME ── */
+  .section--sand { background: var(--color-sand); }
+  .section-intro {
+    font-size: 1rem; line-height: 1.7; color: var(--color-text-muted, #555);
+    max-width: 640px; margin-bottom: 2.5rem;
+  }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .prest-intro__grid { grid-template-columns: 1fr; gap: 2rem; }
-  .prest-gallery__grid { grid-template-columns: repeat(2, 1fr); }
-  .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
-}
-@media (max-width: 480px) {
-  .prest-hero { min-height: 85vh; padding-bottom: 3rem; }
-  .prest-gallery__grid { grid-template-columns: 1fr; }
-}
+  .prog-rows { display: flex; flex-direction: column; gap: 2rem; }
+
+  .prog-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+  .prog-row--reverse .prog-row__img { order: 2; }
+  .prog-row--reverse .prog-row__body { order: 1; }
+
+  .prog-row__img { overflow: hidden; min-height: 340px; }
+  .prog-row__img img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.5s ease;
+  }
+  .prog-row:hover .prog-row__img img { transform: scale(1.04); }
+
+  .prog-row__body {
+    padding: 2.5rem 3rem; background: white;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .prog-row__num {
+    font-family: var(--font-serif); font-size: 2.5rem; font-weight: 300;
+    color: rgba(27,94,138,0.15); line-height: 1; margin-bottom: 0.4rem;
+  }
+  .prog-row__body h3 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+  .prog-row__tag {
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--color-ocean-main); font-weight: 500; margin-bottom: 1.1rem; display: block;
+  }
+  .prog-row__body p { line-height: 1.75; color: var(--color-text-muted, #555); font-size: 0.9rem; margin-bottom: 0.8rem; }
+  .prog-row__body p:last-child { margin-bottom: 0; }
+
+  /* ── CTA FINAL ── */
+  .prest-cta-final__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
+  .prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+  .prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-ghost-light {
+    border: 1.5px solid rgba(255,255,255,0.4); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none; transition: border-color 0.2s;
+  }
+  .btn-ghost-light:hover { border-color: white; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .voy-stats { grid-template-columns: repeat(2, 1fr); }
+    .voy-stats__item:nth-child(2) { border-right: none; }
+    .voy-intro { grid-template-columns: 1fr; gap: 2rem; }
+    .voy-intro__card { position: static; }
+    .prog-row { grid-template-columns: 1fr; }
+    .prog-row--reverse .prog-row__img,
+    .prog-row--reverse .prog-row__body { order: unset; }
+    .prog-row__img { min-height: 240px; }
+    .prog-row__body { padding: 2rem 2rem; }
+  }
+  @media (max-width: 560px) {
+    .voy-hero { min-height: 88vh; padding-bottom: 3.5rem; }
+    .voy-stats { grid-template-columns: 1fr 1fr; }
+    .prog-row__body { padding: 2rem 1.5rem; }
+    .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+  }
 </style>

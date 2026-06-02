@@ -1,65 +1,201 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import MatierielBtn from '../components/MatierielBtn.astro'
+import BarSubNav from '../components/BarSubNav.astro'
 ---
 
 <BaseLayout
   title="Pêche du bar à la mouche en bateau — Jean-Baptiste Vidal"
-  description="Sortie bar à la mouche en bateau en Bretagne-Sud. Carolina Skiff spécial pêche à la mouche, estuaires et côte, streamer et mouches de surface."
+  description="Sortie bar à la mouche en bateau en Bretagne-Sud. Carolina Skiff JV15 spécial pêche à la mouche, estuaires et côte, streamer et mouches de surface. Guidage 1 ou 2 pêcheurs."
 >
 
-  <!-- HERO -->
-  <section class="prest-hero">
-    <div class="prest-hero__content container">
-      <p class="prest-eyebrow">Bar à la mouche · En bateau</p>
-      <h1>Pêche du bar en bateau</h1>
-      <p class="prest-sub">À bord de mon Carolina Skiff — estuaires et côte bretonne</p>
-      <div class="prest-hero__cta">
+  <!-- ═══ HERO ═══ -->
+  <section class="voy-hero">
+    <div class="voy-hero__bg"></div>
+    <div class="voy-hero__overlay"></div>
+    <div class="voy-hero__content container">
+      <p class="voy-eyebrow">Bar à la mouche · En bateau · Bretagne-Sud</p>
+      <h1>Pêche du bar en bateau<br /><span class="voy-hero__sub">À bord de mon Carolina Skiff spécial mouche</span></h1>
+      <p class="voy-lead">Estuaires et côte bretonne — accédez aux meilleurs postes à bars, invisibles depuis le bord, à bord d'un flat boat conçu pour la pêche à la mouche.</p>
+      <div class="voy-hero__cta">
         <a href="/contact" class="btn-prim">Réserver une sortie</a>
         <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
+        <MatierielBtn href="/materiel-mouche-bar" label="Matériel bar" />
       </div>
+    </div>
+    <div class="voy-hero__scroll">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </div>
   </section>
 
-  <!-- INTRO -->
-  <section class="prest-intro section">
-    <div class="container prest-intro__grid">
-      <div class="prest-intro__body">
-        <p>Après avoir guidé de nombreuses années en bateau à l'étranger, depuis 2018 je me suis équipé d'un bateau spécialement adapté à la pêche à la mouche en estuaire et en mer : un Carolina Skiff à fond plat.</p>
-        <p>Ce « skiff » ou « flat boat », c'est-à-dire bateau à fond plat « spécial mouche » et à petit tirant d'eau, permet d'accéder à des zones peu accessibles du bord et de se positionner idéalement face aux postes à bars.</p>
-        <p>Au streamer et mouches de surface, en dérive, en estuaire et sur la côte, nous recherchons les bars sur des postes bien précis, parfois sur chasse, tout au long de la journée, dans un cadre magnifique que nous offre la Bretagne-Sud.</p>
+  <!-- ═══ CHIFFRES CLÉS ═══ -->
+  <div class="voy-stats">
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">Mai – Nov</span>
+      <span class="voy-stats__label">Saison de pêche</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">6–8 h</span>
+      <span class="voy-stats__label">Journée de guidage</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">2 max</span>
+      <span class="voy-stats__label">Pêcheurs par sortie</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">320 €</span>
+      <span class="voy-stats__label">Tarif individuel / jour</span>
+    </div>
+  </div>
+
+  <!-- ═══ INTRO ═══ -->
+  <section class="section section--white">
+    <div class="container voy-intro">
+      <div class="voy-intro__text">
+        <p class="eyebrow">Bar à la mouche · En bateau</p>
+        <h2>Un outil taillé pour la pêche à la mouche en estuaire</h2>
+        <p>Après avoir guidé de nombreuses années en bateau à l'étranger, depuis 2018 je me suis équipé d'un Carolina Skiff JV15 — un « flat boat » à fond plat et à faible tirant d'eau spécialement conçu pour la pêche à la mouche en estuaire et en mer.</p>
+        <p>La pêche du bar en bateau est complémentaire à la pêche depuis le bord : elle permet de prospecter de nombreuses zones inaccessibles depuis la rive, de se déplacer rapidement entre les postes, et d'approcher discrètement les bars grâce à un moteur électrique à l'avant — silencieux, maniable, précis.</p>
+        <p>Je vous emmène sur plusieurs estuaires de mon secteur géographique (Sud-Bretagne) en fonction de la saison, des marées, des coefficients et des conditions de pêche : direction du vent, luminosité, couleur de l'eau. Une journée entière calée sur les meilleures marées de la saison.</p>
       </div>
-      <aside class="prest-intro__aside">
-        <div class="prest-card-info">
-          <p class="prest-card-info__label">Niveau</p>
-          <p class="prest-card-info__val">Tous niveaux</p>
-          <p class="prest-card-info__label">Format</p>
-          <p class="prest-card-info__val">Journée complète · Sortie à la journée · 1 ou 2 pêcheurs max</p>
-          <p class="prest-card-info__label">Contact</p>
-          <p class="prest-card-info__val">06 87 30 34 56<br />enjoy.fishing@hotmail.fr</p>
-        </div>
+      <aside class="voy-intro__card">
+        <p class="card-label">Niveau</p>
+        <p class="card-val">Pêcheurs initiés · Maîtrise de la double traction requise</p>
+        <p class="card-label">Format</p>
+        <p class="card-val">Journée complète · 6 à 8h selon marées · 1 ou 2 pêcheurs</p>
+        <p class="card-label">Bateau</p>
+        <p class="card-val">Carolina Skiff JV15 · Fond plat · Faible tirant d'eau</p>
+        <p class="card-label">Motorisation</p>
+        <p class="card-val">Suzuki 40 CV 4T · Minn Kota Powerdrive 70 lbs · Batterie lithium</p>
+        <p class="card-label">Équipements</p>
+        <p class="card-val">Sondeur Humminbird · Portes-cannes mouche · 2 plates-formes</p>
+        <p class="card-label">Saison</p>
+        <p class="card-val">Mai à novembre · Dates selon meilleures marées</p>
+        <p class="card-label">Tarifs</p>
+        <p class="card-val">320 € / jour (individuel) · Dégressif à 2 pêcheurs</p>
+        <a href="/contact" class="card-cta">Réserver</a>
       </aside>
     </div>
   </section>
 
-  <!-- GALERIE -->
-  <section class="prest-gallery">
-    <div class="prest-gallery__grid g4">
-      <img src="/images/bateau-1.jpg" loading="lazy" alt="Pêche du bar en bateau — sortie guidée Bretagne-Sud" />
-      <img src="/images/bateau-2.png" loading="lazy" alt="Bar à la mouche en estuaire breton" />
-      <img src="/images/bateau-3.jpg" loading="lazy" alt="Carolina Skiff — bateau spécial pêche à la mouche" />
-      <img src="/images/bateau-4.jpg" loading="lazy" alt="Guidage bar en bateau sur la côte bretonne" />
+  <!-- ═══ VIDÉO MIS EN AVANT ═══ -->
+  <section class="section section--dark voy-video-section">
+    <div class="container voy-video">
+      <p class="eyebrow eyebrow--light">En images</p>
+      <h2>Une journée de pêche du bar en bateau</h2>
+      <p class="section-intro section-intro--light">Streamer, mouches de surface, recherche des postes sur la côte bretonne — une sortie filmée à bord du Carolina Skiff.</p>
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/Qnwlz4MA5q0?start=79"
+          title="Pêche du bar à la mouche en bateau — Jean-Baptiste Vidal"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
     </div>
   </section>
+
+  <!-- ═══ PROGRAMME ═══ -->
+  <section class="section section--sand">
+    <div class="container">
+      <p class="eyebrow">Le bateau &amp; la technique</p>
+      <h2>Comment se déroule une sortie</h2>
+      <p class="section-intro">Du choix du spot aux techniques de lancer, voici les quatre dimensions d'une journée de bar à la mouche en bateau.</p>
+
+      <div class="prog-rows">
+
+        <!-- 1 — Le Carolina Skiff -->
+        <div class="prog-row">
+          <div class="prog-row__img">
+            <img src="/images/PB2.avif" alt="Le Carolina Skiff JV15 — bateau spécial pêche à la mouche" loading="lazy" />
+          </div>
+          <div class="prog-row__body">
+            <div class="prog-row__num">01</div>
+            <h3>Le Carolina Skiff JV15 — un flat boat taillé pour la mouche</h3>
+            <p class="prog-row__tag">Fond plat · Suzuki 40 CV · Minn Kota 70 lbs · Sondeur Humminbird</p>
+            <p>Le Carolina Skiff JV15 est un skiff américain à fond plat conçu pour naviguer dans très peu d'eau. Motorisé par un <strong>Suzuki 40 CV 4 temps</strong> à trim électrique — silencieux, peu consommant, peu polluant — il permet des déplacements rapides entre les postes. À l'avant, un <strong>moteur électrique Minn Kota Powerdrive 70 lbs</strong> alimenté par une batterie lithium à très haute autonomie assure les dérives et approches en totale discrétion.</p>
+            <p>Deux grandes plates-formes avant et arrière accueillent confortablement deux pêcheurs. Le bateau est équipé de <strong>portes-cannes et rangements spécial mouche</strong>, d'accroche-mouches, et d'un <strong>sondeur Humminbird</strong> qui fournit en temps réel la profondeur, la température de l'eau et la présence de poissons sous la coque.</p>
+          </div>
+        </div>
+
+        <!-- 2 — Techniques de pêche -->
+        <div class="prog-row prog-row--reverse">
+          <div class="prog-row__img">
+            <img src="/images/PB3.avif" alt="Pêche du bar au streamer et mouches de surface depuis le bateau" loading="lazy" />
+          </div>
+          <div class="prog-row__body">
+            <div class="prog-row__num">02</div>
+            <h3>Streamers &amp; mouches de surface</h3>
+            <p class="prog-row__tag">Streamer · Gurgler · Popper · Soie intermédiaire &amp; plongeante</p>
+            <p>Depuis le bateau, on pêche principalement au streamer en soie intermédiaire et plongeante — la technique la plus productive pour prospecter les postes à bars en profondeur, en dérive ou à l'ancre.</p>
+            <p>Mais c'est la pêche aux mouches de surface (gurgler, popper, slider) qui garantit les actions les plus spectaculaires : voir un bar exploser sur une mouche en surface depuis un bateau stabilisé est une expérience inoubliable. On adapte la technique selon les conditions du moment.</p>
+          </div>
+        </div>
+
+        <!-- 3 — Prospection des postes -->
+        <div class="prog-row">
+          <div class="prog-row__img">
+            <img src="/images/PB4.avif" alt="Prospection des postes à bars en estuaire depuis le bateau" loading="lazy" />
+          </div>
+          <div class="prog-row__body">
+            <div class="prog-row__num">03</div>
+            <h3>Prospection des postes</h3>
+            <p class="prog-row__tag">Estuaires · Côte · Dérive · Lecture de l'eau</p>
+            <p>Le bateau multiplie les possibilités de prospection : en dérive sur un courant de marée, ancré face à une pointe rocheuse, ou en progression lente sur une vasière. On accède à des configurations impossibles depuis le bord — îlots, passes, chenaux, herbiers immergés.</p>
+            <p>Je vous emmène sur mes meilleurs spots en fonction de la marée du jour, du vent et de la saison. Un planning des meilleures marées peut être communiqué à l'avance pour optimiser la date de votre sortie.</p>
+          </div>
+        </div>
+
+        <!-- 4 — Niveau et qualité des prises -->
+        <div class="prog-row prog-row--reverse">
+          <div class="prog-row__img">
+            <img src="/images/PB5.avif" alt="Beau bar capturé à la mouche depuis le bateau en Bretagne-Sud" loading="lazy" />
+          </div>
+          <div class="prog-row__body">
+            <div class="prog-row__num">04</div>
+            <h3>Une pêche technique &amp; ludique</h3>
+            <p class="prog-row__tag">Double traction · Pêcheurs initiés · Bars 50 cm+</p>
+            <p>La pêche en bateau est ludique mais exigeante : elle nécessite une bonne maîtrise du lancer, notamment de la double traction, ainsi qu'un bon équilibre à bord. Ce n'est pas une pêche pour débutants — bien que je puisse aussi vous former pour débuter la pêche du bar.</p>
+            <p>Les bars de plus de 50 cm sont présents et montent régulièrement sur nos mouches. La taille est souvent plus modeste que celle des gros bars traqués à vue en estuaire, mais les prises sont régulières et les actions souvent spectaculaires — notamment aux mouches de surface.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ GALERIE ═══ -->
+  <section class="section section--white">
+    <div class="container">
+      <p class="eyebrow">Galerie</p>
+      <h2>Sorties en bateau</h2>
+      <div class="pb-gallery">
+        <img src="/images/PB6.avif"  alt="Bar à la mouche en bateau — Bretagne-Sud" loading="lazy" />
+        <img src="/images/PB7.avif"  alt="Prise de bar au streamer depuis le Carolina Skiff" loading="lazy" />
+        <img src="/images/PB8.avif"  alt="Guidage bar en bateau — Jean-Baptiste Vidal" loading="lazy" />
+        <img src="/images/PB9.avif"  alt="Bar capturé à la mouche de surface en estuaire" loading="lazy" />
+        <img src="/images/PB10.avif" alt="Pêche en bateau — côte bretonne" loading="lazy" />
+        <img src="/images/PB11.avif" alt="Sortie guidée bar à la mouche en bateau" loading="lazy" />
+        <img src="/images/PB12.avif" alt="Bar de qualité pris à la mouche depuis le skiff" loading="lazy" />
+        <img src="/images/PB13.avif" alt="Techniques de lancer depuis le plat-bord" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- NAVIGATION CROISÉE BAR -->
+  <BarSubNav current="bateau" />
 
   <!-- CTA FINAL -->
   <section class="prest-cta-final section section--dark">
     <div class="container prest-cta-final__inner">
       <div>
-        <h2>Réservez votre sortie</h2>
-        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+        <h2>Réservez votre sortie en bateau</h2>
+        <p>320 € / jour · Dégressif à 2 pêcheurs · Disponibilités selon marées — réponse sous 24h.</p>
       </div>
       <div class="prest-cta-final__btns">
-        <a href="/contact" class="btn-prim">Nous contacter</a>
+        <a href="/contact" class="btn-prim">Me contacter</a>
         <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
       </div>
     </div>
@@ -68,90 +204,218 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 </BaseLayout>
 
 <style>
-/* HERO */
-.prest-hero {
-  min-height: 72vh;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 4rem;
-  background:
-    linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 60%, rgba(13,43,62,0.3) 100%),
-    url('/images/bateau-3.jpg') center / cover no-repeat;
-  background-color: var(--color-ocean);
-  color: white;
-}
-.prest-hero__content { position: relative; z-index: 1; }
-.prest-eyebrow {
-  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--color-ocean-light); margin-bottom: 0.8rem;
-}
-.prest-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
-.prest-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
-.prest-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
-.btn-prim {
-  background: var(--color-ocean-main); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: background 0.2s;
-}
-.btn-prim:hover { background: #144b72; }
-.btn-ghost {
-  border: 1.5px solid rgba(255,255,255,0.4); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: border-color 0.2s, background 0.2s;
-}
-.btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+  /* ── HERO ── */
+  .voy-hero {
+    position: relative;
+    min-height: 78vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 5rem;
+    color: white;
+    overflow: hidden;
+  }
+  .voy-hero__bg {
+    position: absolute; inset: 0;
+    background: url('/images/PB1.avif') center / cover no-repeat;
+    background-color: var(--color-ocean);
+  }
+  .voy-hero__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.9) 0%, rgba(13,43,62,0.5) 55%, rgba(13,43,62,0.25) 100%);
+  }
+  .voy-hero__content { position: relative; z-index: 1; }
+  .voy-eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--color-ocean-light); font-weight: 500; margin-bottom: 1rem;
+  }
+  .voy-hero__content h1 {
+    font-family: var(--font-serif); font-weight: 400; color: white;
+    margin-bottom: 1.5rem; max-width: 680px;
+    font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1;
+  }
+  .voy-hero__sub {
+    display: block; font-size: clamp(1.1rem, 3vw, 1.8rem);
+    font-weight: 300; opacity: 0.75;
+  }
+  .voy-lead {
+    font-size: 1rem; line-height: 1.7;
+    color: rgba(255,255,255,0.75); max-width: 560px; margin-bottom: 2.5rem;
+  }
+  .voy-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .voy-hero__scroll {
+    position: absolute; bottom: 2rem; right: 2rem;
+    color: rgba(255,255,255,0.4); z-index: 1;
+    animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .btn-prim {
+    background: var(--color-ocean-main); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none; transition: background 0.2s;
+  }
+  .btn-prim:hover { background: #144b72; }
+  .btn-ghost {
+    border: 1.5px solid rgba(255,255,255,0.4); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
-/* INTRO */
-.prest-intro__grid {
-  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
-}
-.prest-intro__body p { line-height: 1.8; color: var(--color-text); margin-bottom: 1.2rem; }
-.prest-intro__body p:last-child { margin-bottom: 0; }
-.prest-card-info {
-  background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
-  border-left: 3px solid var(--color-ocean-main);
-}
-.prest-card-info__label {
-  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--color-ocean-main); font-weight: 600; margin-top: 1.2rem;
-}
-.prest-card-info__label:first-child { margin-top: 0; }
-.prest-card-info__val { font-size: 0.92rem; color: var(--color-text); line-height: 1.55; }
+  /* ── STATS BAR ── */
+  .voy-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--color-ocean);
+  }
+  .voy-stats__item {
+    padding: 1.4rem 1rem; text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .voy-stats__item:last-child { border-right: none; }
+  .voy-stats__num {
+    font-family: var(--font-serif); font-size: 1.5rem;
+    color: white; font-weight: 500; line-height: 1;
+  }
+  .voy-stats__label {
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 400;
+  }
 
-/* GALERIE */
-.prest-gallery { overflow: hidden; }
-.prest-gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-}
-.prest-gallery__grid.g4 { grid-template-columns: repeat(4, 1fr); }
-.prest-gallery__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+  /* ── INTRO ── */
+  .section--white { background: #fff; }
+  .voy-intro {
+    display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
+  }
+  .eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-ocean-main); font-weight: 600; margin-bottom: 0.75rem;
+  }
+  .eyebrow--light { color: var(--color-ocean-light); }
+  .voy-intro__text h2 { margin-bottom: 1.25rem; }
+  .voy-intro__text p { line-height: 1.8; color: var(--color-text); margin-bottom: 1rem; }
+  .voy-intro__text p:last-child { margin-bottom: 0; }
+  .voy-intro__card {
+    background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
+    border-left: 3px solid var(--color-ocean-main);
+    position: sticky; top: 90px;
+  }
+  .card-label {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--color-ocean-main); font-weight: 600; margin-top: 1.1rem;
+  }
+  .card-label:first-child { margin-top: 0; }
+  .card-val { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; }
+  .card-cta {
+    display: block; margin-top: 1.4rem; text-align: center;
+    background: var(--color-ocean-main); color: white;
+    padding: 0.7rem 1rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.88rem; text-decoration: none; transition: background 0.2s;
+  }
+  .card-cta:hover { background: #144b72; }
 
-/* CTA FINAL */
-.prest-cta-final__inner {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 2rem; flex-wrap: wrap;
-}
-.prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
-.prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
-.prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-.btn-ghost-light {
-  border: 1.5px solid rgba(255,255,255,0.4); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: border-color 0.2s;
-}
-.btn-ghost-light:hover { border-color: white; }
+  /* ── VIDÉO MIS EN AVANT ── */
+  .voy-video { max-width: 900px; margin: 0 auto; text-align: center; }
+  .voy-video h2 { color: white; margin-bottom: 0.75rem; }
+  .section-intro {
+    font-size: 1rem; line-height: 1.7; color: var(--color-text-muted, #555);
+    max-width: 640px; margin: 0 auto 2rem;
+  }
+  .section-intro--light { color: rgba(255,255,255,0.7); }
+  .video-wrap {
+    position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+    border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+  .video-wrap iframe {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+  }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .prest-intro__grid { grid-template-columns: 1fr; gap: 2rem; }
-  .prest-gallery__grid,
-  .prest-gallery__grid.g4 { grid-template-columns: repeat(2, 1fr); }
-  .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
-}
-@media (max-width: 480px) {
-  .prest-hero { min-height: 85vh; padding-bottom: 3rem; }
-  .prest-gallery__grid { grid-template-columns: 1fr; }
-}
+  /* ── PROGRAMME ── */
+  .section--sand { background: var(--color-sand); }
+
+  .prog-rows { display: flex; flex-direction: column; gap: 2rem; }
+
+  .prog-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+  .prog-row--reverse .prog-row__img { order: 2; }
+  .prog-row--reverse .prog-row__body { order: 1; }
+
+  .prog-row__img { overflow: hidden; min-height: 340px; }
+  .prog-row__img img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.5s ease;
+  }
+  .prog-row:hover .prog-row__img img { transform: scale(1.04); }
+
+  .prog-row__body {
+    padding: 2.5rem 3rem; background: white;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .prog-row__num {
+    font-family: var(--font-serif); font-size: 2.5rem; font-weight: 300;
+    color: rgba(27,94,138,0.15); line-height: 1; margin-bottom: 0.4rem;
+  }
+  .prog-row__body h3 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+  .prog-row__tag {
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--color-ocean-main); font-weight: 500; margin-bottom: 1.1rem; display: block;
+  }
+  .prog-row__body p { line-height: 1.75; color: var(--color-text-muted, #555); font-size: 0.9rem; margin-bottom: 0.8rem; }
+  .prog-row__body p:last-child { margin-bottom: 0; }
+
+  /* ── GALERIE ── */
+  .pb-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 2rem;
+  }
+  .pb-gallery img {
+    width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+    border-radius: 4px;
+    transition: transform 0.4s ease;
+  }
+  .pb-gallery img:hover { transform: scale(1.02); }
+
+  /* ── CTA FINAL ── */
+  .prest-cta-final__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
+  .prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+  .prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-ghost-light {
+    border: 1.5px solid rgba(255,255,255,0.4); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none; transition: border-color 0.2s;
+  }
+  .btn-ghost-light:hover { border-color: white; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .voy-stats { grid-template-columns: repeat(2, 1fr); }
+    .voy-stats__item:nth-child(2) { border-right: none; }
+    .voy-intro { grid-template-columns: 1fr; gap: 2rem; }
+    .voy-intro__card { position: static; }
+    .prog-row { grid-template-columns: 1fr; }
+    .prog-row--reverse .prog-row__img,
+    .prog-row--reverse .prog-row__body { order: unset; }
+    .prog-row__img { min-height: 240px; }
+    .prog-row__body { padding: 2rem 2rem; }
+    .pb-gallery { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .voy-hero { min-height: 88vh; padding-bottom: 3.5rem; }
+    .voy-stats { grid-template-columns: 1fr 1fr; }
+    .prog-row__body { padding: 2rem 1.5rem; }
+    .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+  }
 </style>

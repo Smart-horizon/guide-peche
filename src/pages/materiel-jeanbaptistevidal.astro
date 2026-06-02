@@ -3,16 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
 <BaseLayout
-  title="Mon matériel de pêche à la mouche — Jean-Baptiste Vidal"
-  description="Cannes, soies, moulinets et matériel de pêche à la mouche sélectionnés par Jean-Baptiste Vidal, guide en Bretagne-Sud. Ses recommandations pour la pêche du bar et de la truite."
+  title="Matériel pour la pêche à la mouche en Bretagne — Jean-Baptiste Vidal"
+  description="Cannes, soies, moulinets et accessoires utilisés par Jean-Baptiste Vidal pour pêcher en France et à l'étranger. Partenaires SAGE, Redington, RIO, Royal Wulff, Loon Outdoors, Adams Built."
 >
 
   <!-- HERO -->
   <section class="prest-hero">
     <div class="prest-hero__content container">
-      <p class="prest-eyebrow">Équipement · Recommandations</p>
-      <h1>Mon matériel de pêche</h1>
-      <p class="prest-sub">Cannes, soies, moulinets et mouches — les équipements que j'utilise et recommande</p>
+      <p class="prest-eyebrow">Équipement · Recommandations · Partenaires</p>
+      <h1>Mon matériel de pêche à la mouche</h1>
+      <p class="prest-sub">Le matériel que j'utilise pour mes pêches en France et à l'étranger — 33 ans d'expérience au service de vos choix</p>
       <div class="prest-hero__cta">
         <a href="/contact" class="btn-prim">Réserver une sortie</a>
         <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
@@ -24,17 +24,20 @@ import BaseLayout from '../layouts/BaseLayout.astro'
   <section class="prest-intro section">
     <div class="container prest-intro__grid">
       <div class="prest-intro__body">
-        <p>Après plus de 33 ans de pêche à la mouche et 21 ans de guidage en France et à l'étranger, j'ai sélectionné des équipements qui ont fait leurs preuves dans toutes les conditions. Du bar en estuaire breton à la truite de mer en Patagonie, ce matériel m'accompagne au quotidien.</p>
-        <p>Je travaille en partenariat avec des marques qui partagent mes valeurs : qualité, durabilité et performance sur le terrain. Retrouvez ici mes recommandations pour les cannes, soies, moulinets, polyleaders et mouches adaptés à chaque type de pêche.</p>
+        <p>Après plus de 33 ans de pêche à la mouche et 21 ans de guidage professionnel en France et dans le monde entier, j'ai eu la chance de tester une quantité considérable de matériel dans des conditions très variées. Du bar à vue en estuaire breton au bonefish sur les flats cubains, en passant par la truite de mer en Patagonie ou le saumon en Russie — ce matériel m'accompagne au quotidien.</p>
+        <p>Je travaille en partenariat avec des marques qui partagent mes valeurs : qualité de fabrication, durabilité et performance sur le terrain. Ces marques me font confiance et je les recommande en toute indépendance, ayant moi-même validé chaque produit dans des conditions réelles.</p>
+        <p>Retrouvez ci-dessous mes recommandations organisées par type de pêche, ainsi que mes partenaires privilégiés.</p>
       </div>
       <aside class="prest-intro__aside">
         <div class="prest-card-info">
           <p class="prest-card-info__label">Cannes</p>
-          <p class="prest-card-info__val">Single hand · Switch · Deux mains</p>
+          <p class="prest-card-info__val">SAGE · Redington</p>
           <p class="prest-card-info__label">Soies</p>
-          <p class="prest-card-info__val">Flottante · Intermédiaire · Plongeante</p>
-          <p class="prest-card-info__label">Partenaires</p>
-          <p class="prest-card-info__val">Guideline · Airflo · Hardy</p>
+          <p class="prest-card-info__val">RIO · Royal Wulff</p>
+          <p class="prest-card-info__label">Accessoires</p>
+          <p class="prest-card-info__val">Loon Outdoors · Adams Built</p>
+          <p class="prest-card-info__label">Revendeur</p>
+          <p class="prest-card-info__val">Ardent Pêche — Pontivy</p>
           <p class="prest-card-info__label">Contact</p>
           <p class="prest-card-info__val">06 87 30 34 56<br />enjoy.fishing@hotmail.fr</p>
         </div>
@@ -42,13 +45,157 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     </div>
   </section>
 
+  <!-- GRILLE 6 SOUS-PAGES -->
+  <section class="section mat-subpages">
+    <div class="container">
+      <p class="eyebrow">Par type de pêche</p>
+      <h2>Choisir son matériel</h2>
+      <p class="mat-subpages__intro">Chaque type de pêche a ses exigences propres. Retrouvez mes recommandations détaillées pour chaque spécialité.</p>
+
+      <div class="mat-subpages__grid">
+
+        <a href="/materiel-mouche-migrateur" class="mat-subpage-card">
+          <div class="mat-subpage-card__img" style="background-image: url('/images/materiel-migrateur-1.jpg')"></div>
+          <div class="mat-subpage-card__body">
+            <p class="mat-subpage-card__tag">Saumon · Alose · Truite de mer</p>
+            <h3>Matériel migrateurs</h3>
+            <p>Cannes Spey, soies Shooting Head et Skagit pour les grandes rivières bretonnes.</p>
+            <span class="mat-subpage-card__arrow">Voir le matériel →</span>
+          </div>
+        </a>
+
+        <a href="/materiel-mouche-truite" class="mat-subpage-card">
+          <div class="mat-subpage-card__img" style="background-image: url('/images/materiel-truite-1.jpg')"></div>
+          <div class="mat-subpage-card__body">
+            <p class="mat-subpage-card__tag">Truite fario · Truite de mer</p>
+            <h3>Matériel truite</h3>
+            <p>Cannes légères 7-9 pieds, soies RIO et mouches sèches pour les rivières de Bretagne.</p>
+            <span class="mat-subpage-card__arrow">Voir le matériel →</span>
+          </div>
+        </a>
+
+        <a href="/materiel-mouche-bar" class="mat-subpage-card">
+          <div class="mat-subpage-card__img" style="background-image: url('/images/materiel-bar-1.jpg')"></div>
+          <div class="mat-subpage-card__body">
+            <p class="mat-subpage-card__tag">Bar · Eau salée · Estuaires</p>
+            <h3>Matériel bar</h3>
+            <p>Cannes puissances 8-10, moulinets étanches et soies RIO Striper pour la pêche du bar.</p>
+            <span class="mat-subpage-card__arrow">Voir le matériel →</span>
+          </div>
+        </a>
+
+        <a href="/materiel-mouche-reservoir" class="mat-subpage-card">
+          <div class="mat-subpage-card__img" style="background-image: url('/images/reservoir-2.jpg')"></div>
+          <div class="mat-subpage-card__body">
+            <p class="mat-subpage-card__tag">Truite arc-en-ciel · Plan d'eau</p>
+            <h3>Matériel réservoir</h3>
+            <p>Cannes 9 pieds #6-8, soies en 3 densités et mouches spécifiques pour le réservoir.</p>
+            <span class="mat-subpage-card__arrow">Voir le matériel →</span>
+          </div>
+        </a>
+
+        <a href="/materiel-mouche-brochet" class="mat-subpage-card">
+          <div class="mat-subpage-card__img" style="background-image: url('/images/brochet-jbv.jpg')"></div>
+          <div class="mat-subpage-card__body">
+            <p class="mat-subpage-card__tag">Brochet · Grand prédateur</p>
+            <h3>Matériel brochet</h3>
+            <p>Cannes puissances 9-10, soies Rio Pike et grosses mouches pour le grand brochet.</p>
+            <span class="mat-subpage-card__arrow">Voir le matériel →</span>
+          </div>
+        </a>
+
+        <a href="/materiel-mouche-peche-exotique" class="mat-subpage-card">
+          <div class="mat-subpage-card__img" style="background-image: url('/images/materiel-exotique-1.jpg')"></div>
+          <div class="mat-subpage-card__body">
+            <p class="mat-subpage-card__tag">Bonefish · Permit · Tarpon · Dorado</p>
+            <h3>Matériel exotique</h3>
+            <p>Équipement haute performance pour Cuba, Venezuela, Argentine et Mexique.</p>
+            <span class="mat-subpage-card__arrow">Voir le matériel →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTENAIRES -->
+  <section class="section mat-partners">
+    <div class="container">
+      <p class="eyebrow">Mes partenaires</p>
+      <h2>Marques que j'utilise et recommande</h2>
+
+      <div class="mat-brand-grid">
+
+        <div class="mat-brand">
+          <div class="mat-brand__logo">
+            <img src="/images/logos/sage-fly.jpg" alt="Sage Fly Fishing" loading="lazy" />
+          </div>
+          <div class="mat-brand__body">
+            <p>La référence mondiale en matière de cannes à mouche haut de gamme. Les modèles R8, Maverick, Sonic et Payload sont mes compagnons depuis de nombreuses années. Conçues aux États-Unis, elles offrent une technologie de pointe et une durabilité exceptionnelle.</p>
+          </div>
+        </div>
+
+        <div class="mat-brand">
+          <div class="mat-brand__logo">
+            <img src="/images/logos/redington-logo.jpg" alt="Redington" loading="lazy" />
+          </div>
+          <div class="mat-brand__body">
+            <p>Des cannes puissantes et polyvalentes à un excellent rapport qualité/prix. La Claymore pour le Spey, la Predator pour les gros prédateurs — des cannes fiables qui ont fait leurs preuves dans des conditions difficiles.</p>
+          </div>
+        </div>
+
+        <div class="mat-brand">
+          <div class="mat-brand__logo">
+            <img src="/images/logos/rio-logo.jpg" alt="RIO Products" loading="lazy" />
+          </div>
+          <div class="mat-brand__body">
+            <p>Mon choix exclusif pour les soies de pêche. RIO couvre tous les types de pêche avec une gamme complète : Rio Gold et Technical Trout pour la truite, Rio Striper pour le bar, Rio Pike pour les gros prédateurs, Rio Outbound pour les longues distances.</p>
+          </div>
+        </div>
+
+        <div class="mat-brand">
+          <div class="mat-brand__logo mat-brand__logo--dark">
+            <img src="/images/logos/royalwulff-logo.png" alt="Royal Wulff Products" loading="lazy" />
+          </div>
+          <div class="mat-brand__body">
+            <p>Des soies de qualité, conçues pour la précision et la polyvalence. La gamme Triangle Taper est particulièrement appréciée pour la pêche en rivière avec des cannes à action modérée.</p>
+          </div>
+        </div>
+
+        <div class="mat-brand">
+          <div class="mat-brand__logo">
+            <img src="/images/logos/loon-logo.png" alt="Loon Outdoors" loading="lazy" />
+          </div>
+          <div class="mat-brand__body">
+            <p>Les meilleurs produits d'entretien et de montage de mouches : colles UV, flottants, graisses et produits de maintenance. Une gamme complète pour les pêcheurs exigeants qui soignent leur matériel.</p>
+          </div>
+        </div>
+
+        <div class="mat-brand">
+          <div class="mat-brand__logo mat-brand__logo--dark">
+            <img src="/images/logos/adamsbuilt-logo.png" alt="Adams Built" loading="lazy" />
+          </div>
+          <div class="mat-brand__body">
+            <p>Épuisettes artisanales de haute qualité, construites à la main. Des filets beaux et fonctionnels, à utiliser avec les pinces de remise à l'eau pour une pêche responsable.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mat-ardent">
+        <h3>Ardent Pêche — Pontivy</h3>
+        <p>Mon partenaire local et revendeur de confiance. <strong>Ardent Pêche et Mail Orion, situés à Pontivy</strong>, importent et distribuent les grandes marques de pêche à la mouche en Bretagne. Vous y trouverez tout le matériel que je recommande, avec des conseils d'experts.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- GALERIE -->
   <section class="prest-gallery">
     <div class="prest-gallery__grid g4">
-      <img src="/images/materiel-1.jpg" loading="lazy" alt="Matériel de pêche à la mouche — canne et moulinet" />
-      <img src="/images/materiel-2.jpg" loading="lazy" alt="Soies de pêche à la mouche pour bar et truite" />
-      <img src="/images/materiel-3.jpg" loading="lazy" alt="Équipement pêche à la mouche en rivière" />
-      <img src="/images/materiel-4.jpg" loading="lazy" alt="Matériel pêche du bar à la mouche en Bretagne" />
+      <img src="/images/materiel-1.jpg" loading="lazy" alt="Matériel de pêche à la mouche — canne et moulinet SAGE" />
+      <img src="/images/materiel-2.jpg" loading="lazy" alt="Soies de pêche à la mouche RIO" />
+      <img src="/images/materiel-3.jpg" loading="lazy" alt="Équipement pêche à la mouche — accessoires Loon" />
+      <img src="/images/materiel-hero.jpg" loading="lazy" alt="Matériel pêche à la mouche Jean-Baptiste Vidal" />
     </div>
   </section>
 
@@ -56,11 +203,11 @@ import BaseLayout from '../layouts/BaseLayout.astro'
   <section class="prest-cta-final section section--dark">
     <div class="container prest-cta-final__inner">
       <div>
-        <h2>Réservez votre sortie</h2>
-        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+        <h2>Des questions sur le matériel ?</h2>
+        <p>Jean-Baptiste vous conseille sur le meilleur équipement pour votre pratique.</p>
       </div>
       <div class="prest-cta-final__btns">
-        <a href="/contact" class="btn-prim">Nous contacter</a>
+        <a href="/contact" class="btn-prim">Me contacter</a>
         <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
       </div>
     </div>
@@ -92,13 +239,13 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 .btn-prim {
   background: var(--color-ocean-main); color: white;
   padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: background 0.2s;
+  transition: background 0.2s; text-decoration: none;
 }
 .btn-prim:hover { background: #144b72; }
 .btn-ghost {
   border: 1.5px solid rgba(255,255,255,0.4); color: white;
   padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, background 0.2s; text-decoration: none;
 }
 .btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
@@ -119,12 +266,118 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 .prest-card-info__label:first-child { margin-top: 0; }
 .prest-card-info__val { font-size: 0.92rem; color: var(--color-text); line-height: 1.55; }
 
+/* SOUS-PAGES GRID */
+.mat-subpages { background: var(--color-sand-dark, #f0eff0); }
+.mat-subpages__intro {
+  max-width: 640px; line-height: 1.7; margin-bottom: 3rem; color: var(--color-text);
+}
+.mat-subpages__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.mat-subpage-card {
+  background: white; border-radius: 8px; overflow: hidden;
+  text-decoration: none; display: flex; flex-direction: column;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.mat-subpage-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  transform: translateY(-3px);
+}
+.mat-subpage-card__img {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+.mat-subpage-card__body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.mat-subpage-card__tag {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--color-ocean-main); margin-bottom: 0.5rem; font-weight: 600;
+}
+.mat-subpage-card h3 {
+  font-size: 1.1rem; color: var(--color-ocean); margin-bottom: 0.7rem;
+}
+.mat-subpage-card p {
+  font-size: 0.875rem; line-height: 1.6; color: var(--color-text);
+  flex: 1; margin-bottom: 1.2rem;
+}
+.mat-subpage-card__arrow {
+  font-size: 0.85rem; color: var(--color-ocean-main); font-weight: 500;
+  align-self: flex-start;
+}
+
+/* PARTENAIRES */
+.mat-partners { background: white; }
+.mat-partners > .container > p.eyebrow { margin-bottom: 0.4rem; }
+.mat-partners > .container > h2 { margin-bottom: 0.8rem; }
+.mat-brand-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem; margin-top: 3rem; margin-bottom: 2rem;
+}
+.mat-brand {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: white;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.mat-brand:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+/* Zone logo */
+.mat-brand__logo {
+  background: #f5f4f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.mat-brand__logo--dark {
+  background: #12202b;
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+.mat-brand__logo img {
+  max-height: 72px;
+  max-width: 180px;
+  width: 100%;
+  object-fit: contain;
+  display: block;
+}
+/* Corps texte */
+.mat-brand__body {
+  padding: 1.25rem 1.4rem;
+  flex: 1;
+}
+.mat-brand__body p {
+  font-size: 0.875rem; line-height: 1.7; color: var(--color-text);
+  margin: 0;
+}
+.mat-ardent {
+  background: var(--color-sand); border-radius: 6px; padding: 2rem;
+  border-left: 4px solid var(--color-ocean-main);
+}
+.mat-ardent h3 {
+  font-size: 1rem; color: var(--color-ocean); margin-bottom: 0.7rem;
+}
+.mat-ardent p {
+  font-size: 0.9rem; line-height: 1.7; color: var(--color-text);
+}
+
 /* GALERIE */
 .prest-gallery { overflow: hidden; }
 .prest-gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
+  display: grid; gap: 0;
 }
 .prest-gallery__grid.g4 { grid-template-columns: repeat(4, 1fr); }
 .prest-gallery__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
@@ -140,16 +393,24 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 .btn-ghost-light {
   border: 1.5px solid rgba(255,255,255,0.4); color: white;
   padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: border-color 0.2s;
+  text-decoration: none; transition: border-color 0.2s;
 }
 .btn-ghost-light:hover { border-color: white; }
 
 /* RESPONSIVE */
+@media (max-width: 900px) {
+  .mat-subpages__grid,
+  .mat-brand-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+}
 @media (max-width: 768px) {
   .prest-intro__grid { grid-template-columns: 1fr; gap: 2rem; }
-  .prest-gallery__grid,
   .prest-gallery__grid.g4 { grid-template-columns: repeat(2, 1fr); }
   .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 600px) {
+  .mat-subpages__grid { grid-template-columns: 1fr; }
+  .mat-brand-grid { grid-template-columns: repeat(2, 1fr); }
+  .mat-brand__logo { height: 100px; }
 }
 @media (max-width: 480px) {
   .prest-hero { min-height: 85vh; padding-bottom: 3rem; }

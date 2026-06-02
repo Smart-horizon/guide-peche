@@ -1,0 +1,341 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const partners = [
+  {
+    slug: 'ffmgp',
+    ext: 'jpg',
+    name: 'FFMGP',
+    fullName: 'Fédération Française des Moniteurs Guides de Pêche',
+    tag: 'Organisme professionnel',
+    desc: "Je suis membre de la FFMGP, la fédération qui regroupe les moniteurs-guides de pêche professionnels en France. Consultez leur site pour trouver un guide ou obtenir des renseignements sur la pêche à la mouche.",
+    url: 'https://www.ffmgp.com/',
+    label: 'ffmgp.com',
+  },
+  {
+    slug: 'orion',
+    ext: 'jpg',
+    name: 'Orion Fly Fishing · Ardent Pêche',
+    fullName: 'Orion Fly Fishing · Ardent Pêche — Pontivy',
+    tag: 'Distributeur matériel',
+    desc: "Orion Fly Fishing est l'importateur des marques SAGE, REDINGTON et RIO en France. Leur magasin Ardent Pêche, situé à Pontivy, est une adresse de choix. Depuis 2015, ce partenariat me permet de tester et d'utiliser les meilleures cannes, moulinets et soies — que vous pourrez essayer gratuitement lors de vos journées en ma compagnie.",
+    url: 'https://ardent-peche.com/',
+    label: 'ardent-peche.com',
+  },
+  {
+    slug: 'sage',
+    ext: 'jpg',
+    name: 'SAGE',
+    fullName: 'Sage Fly Fishing',
+    tag: 'Canne & moulinet',
+    desc: "Grâce à mon partenariat avec Ardent Pêche, je bénéficie chaque année des cannes et moulinets SAGE — des outils reconnus dans le monde entier pour leur qualité et leur précision. Vous pourrez les essayer lors de vos journées en ma compagnie.",
+    url: 'https://www.sageflyfish.com/',
+    label: 'sageflyfish.com',
+  },
+  {
+    slug: 'simms',
+    ext: 'png',
+    name: 'SIMMS',
+    fullName: 'Simms Fishing Products',
+    tag: 'Vêtements de pêche',
+    desc: "Membre du Guide Program chez SIMMS depuis 2007. La référence absolue en matière de vêtements de pêche : waders, bottes, vestes — des produits premium que j'utilise au quotidien pour toutes mes pêches en Bretagne et à l'étranger.",
+    url: 'https://www.simmsfishing.com/',
+    label: 'simmsfishing.com',
+  },
+  {
+    slug: 'redington',
+    ext: 'jpg',
+    name: 'Redington',
+    fullName: 'Redington Fly Fishing',
+    tag: 'Canne & waders',
+    desc: "Vous pourrez essayer les cannes, moulinets et waders Redington lors de vos journées en ma compagnie. Une marque sérieuse qui propose d'excellents rapports qualité/prix, idéale pour les pêcheurs qui débutent ou progressent.",
+    url: 'https://www.redington.com/',
+    label: 'redington.com',
+  },
+  {
+    slug: 'rio',
+    ext: 'gif',
+    name: 'RIO Products',
+    fullName: 'RIO Fly Lines',
+    tag: 'Soies & bas de ligne',
+    desc: "Les soies RIO sont mes soies de référence pour toutes mes pêches — bar, truite, saumon, poissons exotiques. Grâce au partenariat avec Ardent Pêche, vous les découvrirez et les utiliserez lors de vos sorties en ma compagnie.",
+    url: 'https://www.rioproducts.com/',
+    label: 'rioproducts.com',
+  },
+  {
+    slug: 'costa',
+    ext: 'png',
+    name: 'Costa del Mar',
+    fullName: 'Costa del Mar — Polarisantes',
+    tag: 'Optique polarisante',
+    desc: "J'utilise les lunettes Costa del Mar depuis plus de 10 ans pour toutes mes pêches en France et à l'étranger. Les verres 580 offrent la meilleure polarisation du marché — indispensables pour les pêches à vue du bar et des poissons des flats.",
+    url: 'https://www.costadelmar.com/',
+    label: 'costadelmar.com',
+  },
+  {
+    slug: 'hpa',
+    ext: 'png',
+    name: 'HPA',
+    fullName: 'HPA — Bagagerie étanche',
+    tag: 'Bagagerie étanche',
+    desc: "J'utilise la bagagerie HPA depuis des années : sacoches, bananes et sacs étanches de qualité professionnelle. Le sac INFLADRY est particulièrement intéressant pour les journées sur l'eau — rien ne rentre, rien ne sort.",
+    url: 'https://www.hpa-shop.fr/',
+    label: 'hpa-shop.fr',
+  },
+  {
+    slug: 'navicom',
+    ext: 'png',
+    name: 'Navicom · We-Van',
+    fullName: 'Navicom — Électronique marine',
+    tag: 'Électronique marine',
+    desc: "Depuis 2018, mon partenariat avec Navicom me permet d'acquérir du matériel électronique de qualité à prix pro. J'ai ainsi équipé mon bateau d'un sondeur Humminbird et d'un moteur électrique Minn Kota, essentiels pour mes pêches du bar et du brochet.",
+    url: 'https://www.navicom.fr/',
+    label: 'navicom.fr',
+  },
+  {
+    slug: 'fdp-finistere',
+    ext: 'png',
+    name: 'Fédération Pêche Finistère',
+    fullName: 'Fédération de Pêche du Finistère',
+    tag: 'Fédération pêche',
+    desc: "La Fédération de Pêche et de Protection du Milieu Aquatique du Finistère œuvre pour la préservation des rivières et milieux aquatiques bretons. Je soutiens leur démarche pour la protection du patrimoine piscicole local.",
+    url: 'https://www.peche-en-finistere.fr/',
+    label: 'peche-en-finistere.fr',
+  },
+  {
+    slug: 'dhdlaika',
+    ext: 'png',
+    name: 'DHD LAIKA',
+    fullName: 'Agence DHD LAIKA — Voyages de pêche',
+    tag: 'Voyages de pêche',
+    desc: "Depuis fin 2023, je développe un partenariat avec l'Agence DHD LAIKA pour vous proposer de m'accompagner en voyage sur différentes destinations dans le monde : Los Roques au Venezuela, Xcalak au Mexique, et bien d'autres destinations à venir.",
+    url: 'https://www.agence-dhdlaika.com/',
+    label: 'agence-dhdlaika.com',
+  },
+]
+---
+
+<BaseLayout
+  title="Partenaires — Jean-Baptiste Vidal, Guide de pêche à la mouche Bretagne"
+  description="Découvrez les marques et partenaires qui accompagnent Jean-Baptiste Vidal dans sa pratique de la pêche à la mouche en Bretagne : SAGE, SIMMS, RIO, Costa del Mar, DHD LAIKA et bien d'autres."
+>
+
+  <!-- HERO -->
+  <section class="part-hero">
+    <div class="part-hero__content container">
+      <p class="part-eyebrow">Matériel · Partenaires · Voyages</p>
+      <h1>Mes partenaires</h1>
+      <p class="part-sub">Des partenariats construits sur la confiance et l'exigence — les marques que j'utilise au quotidien sur le terrain, en Bretagne et à l'étranger.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="section part-intro">
+    <div class="container part-intro__inner">
+      <p>Au fil des années, j'ai noué des partenariats solides avec des marques qui partagent ma vision de la pêche à la mouche : l'exigence du matériel, le respect des milieux naturels et la passion du poisson sauvage. Retrouvez ci-dessous toutes les marques et organisations avec lesquelles je collabore — du matériel que j'utilise chaque jour à l'agence qui organise mes voyages de pêche exotique.</p>
+    </div>
+  </section>
+
+  <!-- GRILLE PARTENAIRES -->
+  <section class="section part-grid-section">
+    <div class="container">
+      <div class="part-grid">
+        {partners.map(p => (
+          <article class="part-card">
+            <div class="part-card__logo-wrap">
+              <img
+                src={`/images/partner-${p.slug}.${p.ext}`}
+                alt={`Logo ${p.name}`}
+                class="part-card__logo"
+                loading="lazy"
+              />
+            </div>
+            <div class="part-card__body">
+              <span class="part-card__tag">{p.tag}</span>
+              <h2 class="part-card__name">{p.name}</h2>
+              <p class="part-card__desc">{p.desc}</p>
+            </div>
+            <a
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="part-card__link"
+              aria-label={`Visiter le site ${p.name}`}
+            >
+              {p.label}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--dark part-cta">
+    <div class="container part-cta__inner">
+      <div>
+        <h2>Testez le matériel avec moi</h2>
+        <p>Lors de chaque journée de guidage, vous bénéficiez gratuitement de l'ensemble de mon matériel partenaire — cannes SAGE, soies RIO, waders Redington.</p>
+      </div>
+      <div class="part-cta__btns">
+        <a href="/contact" class="btn-prim">Réserver une sortie</a>
+        <a href="/materiel-jeanbaptistevidal" class="btn-ghost-light">Voir tout le matériel</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.part-hero {
+  min-height: 52vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4rem;
+  background: linear-gradient(to top, var(--color-ocean-dark, #0d2b3e) 0%, #1B5E8A 100%);
+  color: white;
+}
+.part-hero__content { position: relative; z-index: 1; }
+.part-eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-light); margin-bottom: 0.8rem;
+}
+.part-hero h1 { color: white; margin-bottom: 1rem; max-width: 600px; }
+.part-sub { color: rgba(255,255,255,0.75); max-width: 520px; line-height: 1.65; }
+
+/* ── Intro ──────────────────────────────────────────────────────────────── */
+.section { padding: 5rem 0; }
+.part-intro { background: var(--color-sand, #f8f7f4); }
+.part-intro__inner {
+  max-width: 760px;
+}
+.part-intro__inner p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+/* ── Grille partenaires ─────────────────────────────────────────────────── */
+.part-grid-section { background: white; }
+.part-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.part-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: box-shadow 0.25s, transform 0.25s;
+  background: white;
+}
+.part-card:hover {
+  box-shadow: 0 8px 32px rgba(27,94,138,0.10);
+  transform: translateY(-3px);
+}
+
+.part-card__logo-wrap {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 2rem;
+  background: #fafafa;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.part-card__logo {
+  max-width: 100%;
+  max-height: 72px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: grayscale(20%);
+  transition: filter 0.2s;
+}
+.part-card:hover .part-card__logo { filter: grayscale(0%); }
+
+.part-card__body {
+  flex: 1;
+  padding: 1.4rem 1.4rem 0.8rem;
+}
+.part-card__tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-ocean-main);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.part-card__name {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-ocean);
+  margin: 0 0 0.75rem;
+  line-height: 1.3;
+}
+.part-card__desc {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--color-text-muted, #555);
+  margin: 0;
+}
+
+.part-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 1rem 1.4rem 1.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-ocean-main);
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(27,94,138,0.25);
+  padding-bottom: 0.15rem;
+  transition: color 0.2s, border-color 0.2s;
+  align-self: flex-start;
+}
+.part-card__link:hover { color: var(--color-ocean); border-color: var(--color-ocean); }
+
+/* ── CTA ────────────────────────────────────────────────────────────────── */
+.section--dark { background: var(--color-ocean); }
+.part-cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.part-cta__inner h2 { color: white; margin-bottom: 0.5rem; }
+.part-cta__inner > div:first-child p { color: rgba(255,255,255,0.65); max-width: 480px; }
+.part-cta__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-prim {
+  background: var(--color-ocean-main); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost-light {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .part-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .part-hero { min-height: 60vh; padding-bottom: 3rem; }
+  .part-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .part-cta__inner { flex-direction: column; align-items: flex-start; }
+}
+</style>

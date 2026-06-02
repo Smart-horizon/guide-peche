@@ -1,0 +1,594 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const pressItems = [
+  {
+    id: 'pm153',
+    magazine: 'Pêche Mouche',
+    issue: 'N° 153',
+    date: 'Novembre–Décembre 2022',
+    year: 2022,
+    title: 'Portrait — Jean-Baptiste Vidal, monsieur Migrateur',
+    desc: "Portrait signé Erwan Balanca, photographe professionnel. Ce numéro contient également ma rubrique régulière \"Mouches du moment\".",
+    cover: 'press-pm153.png',
+    page: 'press-pm153-page.png',
+    link: null,
+    linkLabel: null,
+    type: 'Portrait',
+  },
+  {
+    id: 'vdp152',
+    magazine: 'Voyages de Pêche',
+    issue: 'N° 152',
+    date: 'Avril–Mai 2022',
+    year: 2022,
+    title: 'Traque du bar à la mouche en Bretagne-Sud',
+    desc: "Mon article sur la pêche du bar à la mouche dans les estuaires et sur les côtes de Bretagne-Sud — estuaires, platiers rocheux, eaux claires.",
+    cover: 'press-vdp152.png',
+    page: 'press-vdp152-page.jpg',
+    link: 'https://www.voyagesdepeche.com/numerique/vdp152/#p=8',
+    linkLabel: 'Lire le magazine en ligne',
+    type: 'Article',
+  },
+  {
+    id: 'livre',
+    magazine: 'Livre',
+    issue: null,
+    date: '2020',
+    year: 2020,
+    title: '"Merveilles du monde en Bretagne" — Hélène Prigent · Chapitre "Un air de Norvège"',
+    desc: "Hélène Prigent rend hommage au saumon breton à travers mes photos et mes activités de Moniteur-Guide dans ce bel ouvrage. Disponible à la FNAC et dans les espaces culturels.",
+    cover: 'press-livre.jpg',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Livre',
+  },
+  {
+    id: 'pm123',
+    magazine: 'Pêche Mouche',
+    issue: 'N° 123',
+    date: 'Novembre–Décembre 2017',
+    year: 2017,
+    title: 'Rubrique régulière — Mouches du moment',
+    desc: "Ma rubrique de montage \"Mouches du moment\", puis \"Votre boîte à mouches\" — publiée chaque numéro depuis Novembre 2011 jusqu'à l'arrêt du magazine en Janvier 2025.",
+    cover: 'press-pm123.png',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Rubrique',
+  },
+  {
+    id: 'pm104',
+    magazine: 'Pêche Mouche',
+    issue: 'N° 104',
+    date: 'Septembre–Octobre 2014',
+    year: 2014,
+    title: 'Traque du bar dans les estuaires bretons + Bonefish de Nouvelle-Calédonie',
+    desc: "Double article : technique bar sur les estuaires bretons, et voyage en Nouvelle-Calédonie avec \"Les énormes bones du caillou\". Plus un article technique sur les cannes Switch.",
+    cover: 'press-pm104.jpg',
+    page: 'press-pm104-page.png',
+    link: null,
+    linkLabel: null,
+    type: 'Double article',
+  },
+  {
+    id: 'pm103',
+    magazine: 'Pêche Mouche',
+    issue: 'N° 103',
+    date: 'Juillet–Août 2014',
+    year: 2014,
+    title: 'Pêche des castillons en Bretagne',
+    desc: "Article technique sur la pêche des castillons (saumons d'été) dans les rivières bretonnes — l'une des meilleures destinations en France pour la pêche du saumon.",
+    cover: 'press-pm103.jpg',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Article technique',
+  },
+  {
+    id: 'salmo54',
+    magazine: 'Revue SALMO',
+    issue: 'N° 54',
+    date: 'Juin 2014',
+    year: 2014,
+    title: 'Double page — Mes 3 mouches préférées',
+    desc: "Une double page attribuée à un pêcheur qui présente ses trois mouches préférées ou caractéristiques. Merci à Olivier Plasseraud pour cette publication.",
+    cover: 'press-salmo54.jpg',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Sélection',
+  },
+  {
+    id: 'fieldstreams',
+    magazine: 'Field & Stream (USA)',
+    issue: null,
+    date: 'Novembre 2013',
+    year: 2013,
+    title: 'Double page — Guide au lodge de Kau Tapen, Rio Grande',
+    desc: "Le photographe Tim Romano de Field & Stream nous a rendu visite en 2012 au lodge de Kau Tapen sur le Rio Grande. En l'honneur de mes services de guide et manager, il m'a mis au devant des projecteurs dans cet article.",
+    cover: 'press-fieldstreams.jpg',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Magazine US',
+  },
+  {
+    id: 'pm93',
+    magazine: 'Pêche Mouche',
+    issue: 'N° 93',
+    date: 'Novembre–Décembre 2012',
+    year: 2012,
+    title: 'Permit — L\'ultime Challenge',
+    desc: "Le Mexique et la Baie d'Ascencion — l'une des meilleures destinations pour traquer le permit dans les eaux turquoises de Punta Allen. Une traque passionnante et subtile.",
+    cover: 'press-pm93.jpg',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Article voyage',
+  },
+  {
+    id: 'pm92',
+    magazine: 'Pêche Mouche',
+    issue: 'N° 92',
+    date: 'Septembre–Octobre 2012',
+    year: 2012,
+    title: 'Guide de pêche international — une passion, un métier',
+    desc: "À travers cet article, je fais découvrir le métier des guides de pêche internationaux qui vivent dans des lodges du monde entier pour partager leur passion.",
+    cover: 'press-pm92.jpg',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Portrait métier',
+  },
+  {
+    id: 'pm89',
+    magazine: 'Pêche Mouche',
+    issue: 'N° 89',
+    date: 'Mars–Avril 2012',
+    year: 2012,
+    title: 'Grosses truites de mer argentines — Sachez les séduire',
+    desc: "Article technique sur la pêche de la truite de mer géante du Rio Grande, sous les vents patagoniques et les couchers de soleil les plus beaux que j'ai vus au monde.",
+    cover: 'press-pm89.jpg',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Article technique',
+  },
+  {
+    id: 'flylife61',
+    magazine: 'Fly Life Magazine (Australie)',
+    issue: 'N° 61',
+    date: 'Printemps 2010',
+    year: 2010,
+    title: 'Couverture — Pêche en Terre de Feu, Rio Grande',
+    desc: "Tom Krucera raconte son voyage en Terre de Feu sur le Rio Grande où je l'ai guidé. Belle photos et histoires de pêche. Une première couverture pour moi — merci à lui et à Fly Life !",
+    cover: 'press-flylife61.jpg',
+    page: null,
+    link: '/pdfs/article-fly-life-2010.pdf',
+    linkLabel: 'Lire l\'article (PDF, EN)',
+    type: '⭐ Couverture',
+  },
+  {
+    id: 'vdp2008nov',
+    magazine: 'Voyages de Pêche',
+    issue: null,
+    date: 'Novembre 2008',
+    year: 2008,
+    title: 'Les truites géantes du bout du monde',
+    desc: "Mon expérience sur le Rio Grande en Argentine — là où les truites de mer atteignent des tailles hors norme. Une destination incontournable pour le pêcheur qui s'attaque à la truite de mer.",
+    cover: 'press-vdp2008nov.jpg',
+    page: null,
+    link: '/pdfs/article-voyages-de-peche-truites-tdf-2008.pdf',
+    linkLabel: 'Lire l\'article (PDF)',
+    type: 'Article voyage',
+  },
+  {
+    id: 'vdp2008aout',
+    magazine: 'Voyages de Pêche',
+    issue: null,
+    date: 'Août 2008',
+    year: 2008,
+    title: 'La Ponoi au fil des saisons',
+    desc: "La Ponoi — l'une des meilleures rivières du monde pour le saumon atlantique. J'y ai fait une saison de 5 mois en 2007 au lodge de Ryabaga Camp. Une expérience unique.",
+    cover: 'press-vdp2008aout.jpg',
+    page: null,
+    link: '/pdfs/article-voyages-de-peche-ponoi-russie-2008.pdf',
+    linkLabel: 'Lire l\'article (PDF)',
+    type: 'Article voyage',
+  },
+  {
+    id: 'fishfly2007',
+    magazine: 'Fish & Fly (USA)',
+    issue: 'N° 5',
+    date: 'Midseason 2007',
+    year: 2007,
+    title: 'Mini fishing report — Saison sur la Ponoi',
+    desc: "Petite parution dans le magazine américain Fish & Fly. Ayant guidé le rédacteur en chef Tom Pero sur la Ponoi en 2007, il a souhaité me remercier d'un mini rapport de pêche. J'avais fait un saumon de 18 livres seul en bateau — un moment inoubliable !",
+    cover: 'press-fishfly2007.gif',
+    page: null,
+    link: null,
+    linkLabel: null,
+    type: 'Parution',
+  },
+]
+---
+
+<BaseLayout
+  title="Revue de presse — Jean-Baptiste Vidal, Moniteur-Guide de pêche à la mouche"
+  description="Revue de presse de Jean-Baptiste Vidal, moniteur-guide de pêche à la mouche en Bretagne : articles dans Pêche Mouche, Voyages de Pêche, Fly Life Australie, Field & Stream USA et bien d'autres."
+>
+
+  <!-- HERO -->
+  <section class="press-hero" style="background-image: linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.55) 50%, rgba(13,43,62,0.4) 100%), url('/images/P1.avif');">
+    <div class="press-hero__content container">
+      <p class="press-eyebrow">Pêche Mouche · Voyages de Pêche · Field &amp; Stream · Fly Life</p>
+      <h1>Revue de presse</h1>
+      <p class="press-sub">Plus de 15 ans de collaboration avec la presse spécialisée — en France et à l'étranger. Articles techniques, portraits, reportages de voyage et une couverture internationale.</p>
+    </div>
+    <div class="press-hero__stats">
+      <div class="container press-stats-row">
+        <div class="press-stat">
+          <span class="press-stat__num">14+</span>
+          <span class="press-stat__label">ans dans Pêche Mouche</span>
+        </div>
+        <div class="press-stat">
+          <span class="press-stat__num">4</span>
+          <span class="press-stat__label">magazines étrangers</span>
+        </div>
+        <div class="press-stat">
+          <span class="press-stat__num">1</span>
+          <span class="press-stat__label">couverture internationale</span>
+        </div>
+        <div class="press-stat">
+          <span class="press-stat__num">2007–2025</span>
+          <span class="press-stat__label">période de publication</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="section press-intro">
+    <div class="container press-intro__inner">
+      <div class="press-intro__text">
+        <p>Depuis novembre 2011 j'écrivais dans le magazine <strong>Pêche Mouche</strong>, qui a malheureusement été arrêté en janvier 2025. J'y ai collaboré pour différents articles — "coins de pêche", "portraits", "technique de Pro" — et j'y ai créé puis animé pendant plusieurs années la rubrique de montage "Mouches du moment", puis "Votre boîte à mouches".</p>
+        <p>J'écris également ponctuellement pour le <strong>magazine des Voyages de Pêche</strong> sur différents séjours à l'étranger, et j'ai pu apparaître dans des magazines étrangers — dont une couverture en Australie ! Ces dernières années, j'écris aussi très régulièrement sur le site <strong>Pêche.com</strong>, dont je gère toute la partie pêche à la mouche.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRILLE ARTICLES -->
+  <section class="section press-grid-section">
+    <div class="container">
+      <div class="press-grid">
+        {pressItems.map(item => (
+          <article class="press-card">
+            <div class="press-card__cover-wrap">
+              <img
+                src={`/images/${item.cover}`}
+                alt={`${item.magazine}${item.issue ? ' ' + item.issue : ''} — ${item.title}`}
+                class="press-card__cover"
+                loading="lazy"
+              />
+              <span class="press-card__type-badge">{item.type}</span>
+            </div>
+            <div class="press-card__body">
+              <div class="press-card__meta">
+                <span class="press-card__magazine">{item.magazine}</span>
+                {item.issue && <span class="press-card__issue">{item.issue}</span>}
+                <span class="press-card__date">{item.date}</span>
+              </div>
+              <h2 class="press-card__title">{item.title}</h2>
+              <p class="press-card__desc">{item.desc}</p>
+              {item.link && (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="press-card__link"
+                >
+                  {item.linkLabel}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PECHE.COM -->
+  <section class="section press-pechecom">
+    <div class="container press-pechecom__inner">
+      <div class="press-pechecom__text">
+        <p class="press-eyebrow-sm">Contribution régulière</p>
+        <h2>Pêche.com — Toute la partie mouche</h2>
+        <p>Ces dernières années, j'écris très régulièrement sur le site Pêche.com, dont je m'occupe de toute la partie pêche à la mouche. Des articles sur de nombreux sujets : techniques, espèces, destinations, matériel.</p>
+      </div>
+      <a href="https://www.peche.com/" target="_blank" rel="noopener noreferrer" class="btn-ocean">
+        Lire mes articles sur Pêche.com
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--dark press-cta">
+    <div class="container press-cta__inner">
+      <div>
+        <h2>Journalistes &amp; photographes</h2>
+        <p>Disponible pour des reportages, interviews ou accompagnements photo sur le terrain en Bretagne et à l'étranger.</p>
+      </div>
+      <div class="press-cta__btns">
+        <a href="/contact-jeanbaptiste-vidal-guide-de-peche" class="btn-prim">Me contacter</a>
+        <a href="/videos-jeanbaptiste-vidal-moniteur-guide-de-peche" class="btn-ghost-light">Voir les vidéos</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.press-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-size: cover;
+  background-position: center 25%;
+  background-color: #07181f;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.press-hero__content {
+  position: relative;
+  z-index: 1;
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+.press-eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-light); margin-bottom: 0.8rem;
+}
+.press-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
+.press-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; }
+
+/* Stats bar */
+.press-hero__stats {
+  background: rgba(0,0,0,0.3);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 1.5rem 0;
+  position: relative;
+  z-index: 1;
+}
+.press-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.press-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+.press-stat__num {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+.press-stat__label {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+
+/* ── Intro ──────────────────────────────────────────────────────────────── */
+.section { padding: 5rem 0; }
+.press-intro { background: var(--color-sand, #f8f7f4); }
+.press-intro__inner { max-width: 820px; }
+.press-intro__text p { font-size: 1rem; line-height: 1.8; color: var(--color-text); margin-bottom: 1rem; }
+.press-intro__text p:last-child { margin-bottom: 0; }
+.press-intro__text strong { color: var(--color-ocean); font-weight: 600; }
+
+/* ── Grille articles ────────────────────────────────────────────────────── */
+.press-grid-section { background: white; }
+.press-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.press-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: box-shadow 0.25s, transform 0.25s;
+  background: white;
+}
+.press-card:hover {
+  box-shadow: 0 8px 32px rgba(27,94,138,0.10);
+  transform: translateY(-3px);
+}
+
+/* Cover */
+.press-card__cover-wrap {
+  position: relative;
+  height: 260px;
+  background: #0d2b3e;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.press-card__cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.4s ease;
+}
+.press-card:hover .press-card__cover { transform: scale(1.03); }
+
+.press-card__type-badge {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: white;
+  background: rgba(27,94,138,0.85);
+  padding: 0.2rem 0.6rem;
+  border-radius: 2px;
+  backdrop-filter: blur(4px);
+}
+
+/* Body */
+.press-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.25rem 1.4rem;
+}
+
+.press-card__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.7rem;
+}
+.press-card__magazine {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+}
+.press-card__issue {
+  font-size: 0.72rem;
+  color: var(--color-ocean);
+  font-weight: 500;
+}
+.press-card__date {
+  font-size: 0.7rem;
+  color: rgba(0,0,0,0.38);
+  margin-left: auto;
+}
+
+.press-card__title {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-ocean);
+  line-height: 1.4;
+  margin: 0 0 0.75rem;
+}
+.press-card__desc {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--color-text-muted, #555);
+  margin: 0;
+  flex: 1;
+}
+.press-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-ocean-main);
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(27,94,138,0.25);
+  padding-bottom: 0.1rem;
+  align-self: flex-start;
+  transition: color 0.2s, border-color 0.2s;
+}
+.press-card__link:hover { color: var(--color-ocean); border-color: var(--color-ocean); }
+
+/* ── Pêche.com ──────────────────────────────────────────────────────────── */
+.press-pechecom { background: var(--color-sand, #f8f7f4); }
+.press-pechecom__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.press-eyebrow-sm {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-main); margin-bottom: 0.5rem;
+}
+.press-pechecom__text h2 { color: var(--color-ocean); margin-bottom: 0.75rem; }
+.press-pechecom__text p { line-height: 1.8; color: var(--color-text); max-width: 560px; }
+.btn-ocean {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--color-ocean);
+  color: white;
+  padding: 0.85rem 1.8rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.btn-ocean:hover { background: #0d2b3e; }
+
+/* ── CTA ────────────────────────────────────────────────────────────────── */
+.section--dark { background: var(--color-ocean); }
+.press-cta__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.press-cta__inner h2 { color: white; margin-bottom: 0.5rem; }
+.press-cta__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+.press-cta__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-prim {
+  background: var(--color-ocean-main); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost-light {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .press-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .press-stats-row { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .press-pechecom__inner { flex-direction: column; align-items: flex-start; }
+  .press-cta__inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 640px) {
+  .press-hero__content { padding-top: 4rem; padding-bottom: 2rem; }
+  .press-grid { grid-template-columns: 1fr; }
+  .press-card__cover-wrap { height: 220px; }
+  .press-stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

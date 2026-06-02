@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sélection photos — Argentine Rio Grande</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #07181f; color: #fff; font-family: sans-serif; padding: 2rem; }
+  h1 { font-size: 1.4rem; margin-bottom: 0.4rem; color: #7EC8E3; }
+  p { font-size: 0.9rem; color: #aaa; margin-bottom: 2rem; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .card { position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; border: 3px solid transparent; transition: border-color 0.2s; }
+  .card:hover { border-color: #7EC8E3; }
+  .card.selected { border-color: #4caf50; }
+  .card img { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
+  .badge {
+    position: absolute; top: 8px; left: 8px;
+    background: rgba(7,24,31,0.85); color: #fff;
+    font-size: 0.8rem; font-weight: bold; padding: 3px 8px; border-radius: 3px;
+  }
+  .check {
+    position: absolute; top: 8px; right: 8px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #4caf50; display: none; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .card.selected .check { display: flex; }
+  .footer { margin-top: 2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  .sel-count { color: #7EC8E3; font-size: 1rem; }
+  .btn { padding: 0.6rem 1.4rem; border-radius: 4px; border: none; cursor: pointer; font-size: 0.9rem; }
+  .btn-all { background: #1B5E8A; color: #fff; }
+  .btn-none { background: #333; color: #fff; }
+  .result { margin-top: 1.5rem; background: #0d2b3e; border-radius: 6px; padding: 1rem 1.2rem; font-size: 0.85rem; color: #cde; line-height: 1.8; display: none; }
+  .result.show { display: block; }
+</style>
+</head>
+<body>
+
+<h1>Photos Argentine — Rio Grande, Terre de Feu</h1>
+<p>Cliquez sur les photos à conserver. Les autres seront retirées du carrousel.</p>
+
+<h2 style="color:#7EC8E3;font-size:1rem;margin-bottom:0.5rem;margin-top:0">📸 Galerie principale (carrousel lodge)</h2>
+
+<div class="grid" id="grid">
+  <div class="card" data-n="1">
+    <img src="/images/argentine-rg-1.jpg" alt="Photo 1" loading="lazy">
+    <div class="badge">1</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="2">
+    <img src="/images/argentine-rg-2.jpg" alt="Photo 2" loading="lazy">
+    <div class="badge">2</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="3">
+    <img src="/images/argentine-rg-3.jpg" alt="Photo 3" loading="lazy">
+    <div class="badge">3</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="4">
+    <img src="/images/argentine-rg-4.jpg" alt="Photo 4" loading="lazy">
+    <div class="badge">4</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="5">
+    <img src="/images/argentine-rg-5.jpg" alt="Photo 5" loading="lazy">
+    <div class="badge">5</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="6">
+    <img src="/images/argentine-rg-6.jpg" alt="Photo 6" loading="lazy">
+    <div class="badge">6</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="7">
+    <img src="/images/argentine-rg-7.jpg" alt="Photo 7" loading="lazy">
+    <div class="badge">7</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="8">
+    <img src="/images/argentine-rg-8.jpg" alt="Photo 8" loading="lazy">
+    <div class="badge">8</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="9">
+    <img src="/images/argentine-rg-9.jpg" alt="Photo 9" loading="lazy">
+    <div class="badge">9</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="10">
+    <img src="/images/argentine-rg-10.jpg" alt="Photo 10" loading="lazy">
+    <div class="badge">10</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="11">
+    <img src="/images/argentine-rg-11.jpg" alt="Photo 11" loading="lazy">
+    <div class="badge">11</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="12">
+    <img src="/images/argentine-rg-12.jpg" alt="Photo 12" loading="lazy">
+    <div class="badge">12</div>
+    <div class="check">✓</div>
+  </div>
+</div>
+
+<h2 style="color:#e8a44a;font-size:1rem;margin:2rem 0 0.5rem">⚠️ Images supplémentaires trouvées (peut-être "Les poissons" ?)</h2>
+<p style="margin-bottom:1rem">Ces 2 images étaient dans le code HTML de la page Wix mais pas dans la galerie principale :</p>
+<div class="grid" style="margin-bottom:2rem">
+  <div class="card" data-n="A">
+    <img src="/images/arg-fish-2.jpg" alt="Extra A" loading="lazy">
+    <div class="badge" style="background:#e8a44a;color:#000">A</div>
+    <div class="check">✓</div>
+  </div>
+  <div class="card" data-n="B">
+    <img src="/images/arg-fish-b.jpg" alt="Extra B" loading="lazy">
+    <div class="badge" style="background:#e8a44a;color:#000">B</div>
+    <div class="check">✓</div>
+  </div>
+</div>
+
+<div class="footer">
+  <span class="sel-count" id="count">0 photo(s) sélectionnée(s)</span>
+  <button class="btn btn-all" onclick="selectAll()">Tout sélectionner</button>
+  <button class="btn btn-none" onclick="selectNone()">Tout désélectionner</button>
+  <button class="btn" style="background:#1B5E8A;color:#fff" onclick="showResult()">Voir ma sélection</button>
+</div>
+
+<div class="result" id="result"></div>
+
+<script>
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(c => c.addEventListener('click', () => {
+    c.classList.toggle('selected');
+    updateCount();
+  }));
+
+  function updateCount() {
+    const n = document.querySelectorAll('.card.selected').length;
+    document.getElementById('count').textContent = n + ' photo(s) sélectionnée(s)';
+  }
+
+  function selectAll() {
+    cards.forEach(c => c.classList.add('selected'));
+    updateCount();
+  }
+
+  function selectNone() {
+    cards.forEach(c => c.classList.remove('selected'));
+    updateCount();
+  }
+
+  function showResult() {
+    const sel = [...document.querySelectorAll('.card.selected')].map(c => 'Photo ' + c.dataset.n);
+    const div = document.getElementById('result');
+    if (sel.length === 0) {
+      div.innerHTML = '⚠️ Aucune photo sélectionnée.';
+    } else {
+      div.innerHTML = '<strong>Votre sélection :</strong> ' + sel.join(', ') + '<br><br>Dites-moi les numéros à conserver et je mets à jour le carrousel !';
+    }
+    div.classList.add('show');
+  }
+</script>
+</body>
+</html>

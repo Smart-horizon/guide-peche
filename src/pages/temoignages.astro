@@ -1,8 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { stegaClient } from '../lib/sanity.js'
 
 const seoTitle = "Témoignages & Avis — Jean-Baptiste Vidal, Guide de Pêche à la Mouche"
 const seoDescription = "Témoignages et avis de stagiaires et clients de Jean-Baptiste Vidal, moniteur-guide de pêche à la mouche en Bretagne-Sud. Bar, saumon, alose, Spey Cast, truite et voyages."
+
+// ── Témoignages depuis Sanity (ajoutés par JBV dans le Studio) ──
+const sanityTemoignages = await stegaClient.fetch(
+  `*[_type == "temoignage"] | order(date desc) { nom, date, note, prestation, texte }`
+)
 
 /* ──────────────────────────────────────────────
    DONNÉES ISSUES DE scraped/contenu.json — NE PAS INVENTER
@@ -428,6 +434,43 @@ const sections = [
     </ul>
   </nav>
 
+  <!-- ══════════════════════════ SANITY — RÉCENTS ══════════════ -->
+  {sanityTemoignages.length > 0 && (
+    <section class="section section--white temo-section" id="recents">
+      <div class="container">
+        <div class="temo-section__header">
+          <div>
+            <p class="sanity-eyebrow">✦ Nouveaux témoignages</p>
+            <h2>Récemment ajoutés</h2>
+            <p class="temo-section__sub">Témoignages ajoutés directement par Jean-Baptiste depuis le Studio.</p>
+          </div>
+        </div>
+        <div class="temo-grid">
+          {sanityTemoignages.map((t: any) => (
+            <article class="temo-card">
+              <div class="temo-card__header">
+                <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
+                <div>
+                  <strong class="temo-card__name">{t.nom}</strong>
+                  {t.prestation && <span class="temo-card__type">{t.prestation}</span>}
+                  {t.date && <span class="temo-card__type">{new Date(t.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long' })}</span>}
+                </div>
+              </div>
+              <blockquote class="temo-card__quote">
+                {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
+              </blockquote>
+              {t.note && (
+                <div class="temo-card__stars" aria-label={`${t.note} étoiles`}>
+                  {'★'.repeat(t.note)}{'☆'.repeat(5 - t.note)}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- ══════════════════════════ BAR ══════════════════════════ -->
   <section class="temo-section section section--sand" id="bar">
     <div class="container">
@@ -635,6 +678,16 @@ const sections = [
 </BaseLayout>
 
 <style>
+  /* ── SANITY EYEBROW ── */
+  .sanity-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
   /* ── HERO ── */
   .temo-hero {
     background: var(--color-ocean);

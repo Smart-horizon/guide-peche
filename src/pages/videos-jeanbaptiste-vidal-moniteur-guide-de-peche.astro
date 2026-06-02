@@ -1,0 +1,387 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const videos = [
+  {
+    id: 'Zt7PfyaxK2A',
+    title: "Capture d'un joli bar breton à vue à la mouche",
+    species: 'Bar à vue',
+    desc: "La pêche à vue du bar reste pour moi l'approche la plus intense et la plus exigeante. Ici, une belle capture sur les côtes bretonnes — approche furtive, lecture du poisson, lancer de précision. Chaque opportunité est unique."
+  },
+  {
+    id: 'zFXx2k-FeQ0',
+    title: "Petite session pike",
+    species: 'Brochet',
+    desc: "Le brochet à la mouche, c'est un jeu de prédateur. Gros streamers, nage lente, attaque explosive. Une pêche technique et physique que je propose sur les plans d'eau et rivières de Bretagne intérieure."
+  },
+  {
+    id: 'RXI6fXU7dkI',
+    title: "Pêche du bar à vue — ma grande passion !",
+    species: 'Bar à vue',
+    desc: "La pêche du bar à vue à la mouche est ma passion. Débusquer le poisson dans les transparences, l'approcher sans l'alerter, le convaincre avec la bonne mouche... Rien n'égale ce moment de grâce sur nos estuaires bretons."
+  },
+  {
+    id: 'awyFLI1r9zY',
+    title: "Pêche de l'alose à la mouche en Bretagne",
+    species: 'Alose',
+    desc: "L'alose feinte remonte nos rivières bretonnes chaque printemps — une fenêtre courte mais intense. Je la pêche à la mouche dans les zones de courant, avec des patterns légers et argentés que je monte moi-même."
+  },
+  {
+    id: 'Yhru2NjIIFQ',
+    title: "Pêche du bar à vue à la mouche en Bretagne",
+    species: 'Bar à vue',
+    desc: "Session de pêche du bar à vue sur les côtes du Finistère. Conditions idéales, eaux claires, poissons actifs. Ce type de journée résume tout ce que j'aime dans ce métier : lire l'eau, anticiper, déclencher."
+  },
+  {
+    id: 'y2EpbTF1Bzc',
+    title: "Pêche du saumon à la mouche en Bretagne",
+    species: 'Saumon',
+    desc: "Le saumon atlantique sur nos rivières bretonnes — une pêche qui demande patience, technique et humilité. Je vous emmène sur les meilleurs parcours du Finistère, avec des mouches que j'ai montées spécialement pour ces eaux."
+  },
+  {
+    id: 'Ub_ITeA7Avo',
+    title: "Pêche du saumon sur les meilleures rivières de Bretagne",
+    species: 'Saumon',
+    desc: "Exploration des plus beaux parcours à saumon de Bretagne. Rivières à fond de granit, pools profonds, courants vifs — des décors sauvages où le saumon atlantique peut encore être capturé à la mouche."
+  },
+  {
+    id: 'Xx3v53rw_BU',
+    title: "Carangue cojinua de Los Roques prise à la mouche",
+    species: 'Voyage · Los Roques',
+    desc: "Sur les flats de Los Roques au Venezuela, les carangues sont partout — rapides, agressives, imprévisibles. Une prise mémorable sur l'archipel que j'accompagne chaque année avec mes clients. La pêche exotique à son meilleur."
+  },
+  {
+    id: 'INSqeDyUT64',
+    title: "Big cuda on the fly",
+    species: 'Voyage · Mer',
+    desc: "Une grosse barracuda au leurre mouche — l'attaque est foudroyante, le combat intense. Ce type de prise est l'un des grands frissons des destinations exotiques que je propose avec l'agence DHD LAIKA."
+  },
+  {
+    id: 'Qnwlz4MA5q0',
+    title: "Pêche du bar à la mouche en Bretagne Sud",
+    species: 'Bar',
+    desc: "Session de pêche du bar à la mouche sur les côtes de Bretagne-Sud, entre Quimper et Quimperlé. Mon terrain de jeu quotidien depuis plus de 20 ans — estuaires, pointes rocheuses, plages de sable. Un territoire incroyablement riche."
+  },
+  {
+    id: 'n3uvGBx6jb8',
+    title: "Pêche du bar à vue à la mouche — saison 2017",
+    species: 'Bar à vue',
+    desc: "Retour sur la saison 2017 — quelques-unes des plus belles captures de bars à vue que j'ai réalisées cette année-là. Les conditions étaient exceptionnelles : eaux cristallines, poissons actifs sur les platiers rocheux."
+  },
+  {
+    id: 'vTkpRBhMN2Y',
+    title: "Technique de Spey Casting",
+    species: 'Spey Cast',
+    desc: "Le Spey Casting est une technique de lancer à deux mains indispensable pour les grandes rivières à saumon. Je propose des stages spécialisés pour maîtriser cette approche — du simple Spey au double Spey en passant par le Perry Poke."
+  },
+  {
+    id: 'q1DFsP3-tyM',
+    title: "Pêche à la mouche en Bretagne",
+    species: 'Bretagne',
+    desc: "Un regard sur la pêche à la mouche en Bretagne — ses rivières à saumon, ses estuaires à bar, ses réservoirs à truite. Une région d'une richesse exceptionnelle pour le pêcheur à la mouche, que je fais découvrir depuis 21 ans."
+  },
+  {
+    id: 'wd-2iagMTxc',
+    title: "Session brochet en Bretagne",
+    species: 'Brochet',
+    desc: "Le brochet à la mouche sur les rivières et plans d'eau bretons — un adversaire de taille qui exige du matériel solide et des mouches imposantes. Une pêche que je propose notamment en bateau sur mon Carolina Skiff."
+  },
+  {
+    id: 'cPECaBSAcug',
+    title: "Spey cast en Bretagne avec Jean-Baptiste Vidal",
+    species: 'Spey Cast',
+    desc: "Démonstration de Spey Casting sur une rivière bretonne. Une technique élégante et efficace pour couvrir les grandes plages d'eau sans back-cast — idéale pour les rivières bordées de végétation et les longues dérives à saumon."
+  },
+]
+---
+
+<BaseLayout
+  title="Vidéos de pêche à la mouche — Jean-Baptiste Vidal, Guide Bretagne"
+  description="Retrouvez toutes les vidéos de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne : bar à vue, saumon, alose, brochet, Spey Cast et voyages exotiques. Chaîne Enjoy Fishing."
+>
+
+  <!-- HERO -->
+  <section class="vid-hero">
+    <div class="vid-hero__content container">
+      <p class="vid-eyebrow">Bar · Saumon · Alose · Brochet · Voyage · Spey Cast</p>
+      <h1>Mes vidéos de pêche</h1>
+      <p class="vid-sub">Retrouvez toutes mes sessions de pêche à la mouche filmées en Bretagne et à l'étranger — du bar à vue sur les côtes finistériennes aux poissons des flats des Caraïbes.</p>
+      <a
+        href="https://www.youtube.com/@EnjoyFishing29"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="vid-hero__channel"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+          <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+        </svg>
+        S'abonner à la chaîne Enjoy Fishing
+      </a>
+    </div>
+  </section>
+
+  <!-- LISTE VIDÉOS -->
+  <section class="section videos-section">
+    <div class="container">
+      <div class="videos-header">
+        <div>
+          <p class="vid-eyebrow-sm">Chaîne YouTube</p>
+          <h2>Toutes les vidéos</h2>
+        </div>
+        <a href="https://www.youtube.com/@EnjoyFishing29" target="_blank" rel="noopener noreferrer" class="vid-channel-link">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+            <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+          </svg>
+          @EnjoyFishing29 sur YouTube
+        </a>
+      </div>
+      <div class="vid-list">
+        {videos.map((v, i) => (
+          <article class:list={['vid-row', { 'vid-row--reverse': i % 2 === 1 }]}>
+            <div class="vid-row__thumb" data-yt={v.id}>
+              <img
+                src={`https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`}
+                alt={v.title}
+                loading="lazy"
+                onerror={`this.src='https://img.youtube.com/vi/${v.id}/hqdefault.jpg'`}
+              />
+              <button class="vid-row__play" aria-label={`Lancer : ${v.title}`}>
+                <svg viewBox="0 0 64 64" fill="none" width="56" height="56">
+                  <circle cx="32" cy="32" r="31" fill="rgba(7,24,31,0.68)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+                  <polygon points="26,20 50,32 26,44" fill="white"/>
+                </svg>
+              </button>
+            </div>
+            <div class="vid-row__info">
+              <span class="vid-row__tag">{v.species}</span>
+              <h3 class="vid-row__title">{v.title}</h3>
+              <p class="vid-row__desc">{v.desc}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="section section--dark vid-cta">
+    <div class="container vid-cta__inner">
+      <div>
+        <h2>Vivez l'expérience en vrai</h2>
+        <p>Les vidéos donnent un aperçu — une journée de guidage avec moi vous plongera au cœur de ces pêches.</p>
+      </div>
+      <div class="vid-cta__btns">
+        <a href="/contact" class="btn-prim">Réserver une sortie</a>
+        <a href="/peche-du-bar-a-la-mouche" class="btn-ghost-light">Découvrir le bar à vue</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+// ── YouTube click-to-play ────────────────────────────────────────────────
+document.querySelectorAll<HTMLElement>('.vid-row__thumb').forEach(thumb => {
+  thumb.addEventListener('click', () => {
+    const id = thumb.dataset.yt
+    if (!id) return
+    thumb.style.height = thumb.offsetHeight + 'px'
+    thumb.style.aspectRatio = 'unset'
+    thumb.innerHTML = `<iframe
+      src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1"
+      title="Vidéo pêche à la mouche"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen
+      style="position:absolute;inset:0;width:100%;height:100%;border:none;display:block;"
+    ></iframe>`
+  })
+})
+</script>
+
+<style>
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.vid-hero {
+  min-height: 60vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4.5rem;
+  background: linear-gradient(160deg, #07181f 0%, #1B5E8A 60%, #0d2b3e 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.vid-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 40%, rgba(126,200,227,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.vid-hero__content { position: relative; z-index: 1; }
+.vid-eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-light); margin-bottom: 0.8rem;
+}
+.vid-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
+.vid-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
+
+.vid-hero__channel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 0.65rem 1.4rem;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+.vid-hero__channel:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* ── Section vidéos ─────────────────────────────────────────────────────── */
+.section { padding: 5rem 0; }
+.videos-section { background: white; }
+.vid-eyebrow-sm {
+  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-ocean-main); margin-bottom: 0.5rem;
+}
+.videos-section h2 { color: var(--color-ocean); margin-bottom: 0; }
+
+.videos-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+  flex-wrap: wrap;
+}
+.vid-channel-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(27,94,138,0.3);
+  padding-bottom: 0.2rem;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.vid-channel-link:hover { color: var(--color-ocean); border-color: var(--color-ocean); }
+
+.vid-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(5rem, 35vh, 28rem);
+}
+
+.vid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.vid-row--reverse .vid-row__thumb { order: 2; }
+.vid-row--reverse .vid-row__info  { order: 1; }
+
+.vid-row__thumb {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: #07181f;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.vid-row__thumb img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.5s ease;
+}
+.vid-row__thumb:hover img { transform: scale(1.03); }
+.vid-row__thumb iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+}
+.vid-row__play {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: none; cursor: pointer;
+  transition: transform 0.25s;
+}
+.vid-row__play:hover { transform: scale(1.08); }
+
+.vid-row__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+.vid-row__tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-ocean-main);
+  margin-bottom: 0.75rem;
+}
+.vid-row__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 600;
+  color: var(--color-ocean);
+  line-height: 1.3;
+  margin: 0 0 1.1rem;
+}
+.vid-row__desc {
+  font-size: 0.88rem;
+  color: var(--color-text-muted, #555);
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ── CTA ────────────────────────────────────────────────────────────────── */
+.section--dark { background: var(--color-ocean); }
+.vid-cta__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.vid-cta__inner h2 { color: white; margin-bottom: 0.5rem; }
+.vid-cta__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+.vid-cta__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-prim {
+  background: var(--color-ocean-main); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost-light {
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .vid-row { grid-template-columns: 1fr; gap: 1.75rem; }
+  .vid-row--reverse .vid-row__thumb { order: 0; }
+  .vid-row--reverse .vid-row__info  { order: 0; }
+  .vid-list { gap: clamp(4rem, 35vh, 20rem); }
+  .videos-header { flex-direction: column; align-items: flex-start; margin-bottom: 2.5rem; }
+}
+@media (max-width: 768px) {
+  .vid-cta__inner { flex-direction: column; align-items: flex-start; }
+  .vid-row__title { font-size: 1.1rem; }
+}
+@media (max-width: 580px) {
+  .vid-hero { min-height: 70vh; padding-bottom: 3rem; }
+  .vid-list { gap: clamp(3rem, 25vh, 12rem); }
+}
+</style>

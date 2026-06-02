@@ -1,0 +1,140 @@
+---
+// Navigation croisée entre les 5 pages spécifiques bar
+// Usage : <BarSubNav current="initiation" />
+
+const { current } = Astro.props
+
+const allPages = [
+  {
+    id: 'initiation',
+    href: '/initiation-peche-du-bar-a-la-mouche',
+    label: 'Initiation bar à la mouche',
+    sub: 'Pour débuter et devenir autonome',
+    img: '/images/bar-initiation-6.jpg',
+  },
+  {
+    id: 'perfectionnement',
+    href: '/peche-du-bar-perfectionnement',
+    label: 'Perfectionnement',
+    sub: 'Progresser et rechercher les gros poissons',
+    img: '/images/bar-perf-9.jpg',
+  },
+  {
+    id: 'vue',
+    href: '/peche-du-bar-a-vue-a-la-mouche',
+    label: 'Bar à vue en estuaire',
+    sub: 'Le graal du bar à la mouche',
+    img: '/images/bar-vue-hq.jpg',
+  },
+  {
+    id: 'bateau',
+    href: '/peche-mouche-bar-bateau-bretagne',
+    label: 'Pêche en bateau',
+    sub: 'Sur mon Carolina Skiff spécial mouche',
+    img: '/images/bateau-3.jpg',
+  },
+  {
+    id: 'coaching',
+    href: '/peche-du-bar-a-la-mouche-coaching',
+    label: 'Coaching bar à la mouche',
+    sub: 'Analyse vidéo · Débriefing · Progression ciblée',
+    img: '/images/bar-coaching-6.jpg',
+  },
+]
+
+const others = allPages.filter(p => p.id !== current)
+---
+
+<section class="bar-subnav">
+  <div class="bar-subnav__header container">
+    <p class="bar-subnav__eyebrow">Bar à la mouche · Bretagne-Sud</p>
+    <h2>Découvrez aussi</h2>
+  </div>
+  <div class="bar-subnav__grid">
+    {others.map(page => (
+      <a href={page.href} class="bsn-card">
+        <div class="bsn-card__bg" style={`background-image: url('${page.img}')`}></div>
+        <div class="bsn-card__overlay"></div>
+        <div class="bsn-card__body">
+          <span class="bsn-card__sub">{page.sub}</span>
+          <strong class="bsn-card__label">{page.label}</strong>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .bar-subnav { background: #fff; }
+  .bar-subnav__header {
+    text-align: center;
+    padding: 3.5rem 2rem 2rem;
+  }
+  .bar-subnav__eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-ocean-main); font-weight: 600; margin-bottom: 0.5rem;
+  }
+  .bar-subnav__header h2 { margin: 0; }
+
+  .bar-subnav__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 320px;
+    gap: 4px;
+  }
+
+  .bsn-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    background: var(--color-ocean);
+  }
+  .bsn-card__bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    transition: transform 0.6s ease;
+  }
+  .bsn-card:hover .bsn-card__bg { transform: scale(1.06); }
+  .bsn-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(7,24,31,0.25);
+    transition: background 0.35s ease;
+  }
+  .bsn-card:hover::after { background: rgba(7,24,31,0.08); }
+  .bsn-card__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.82) 0%, transparent 55%);
+    z-index: 1;
+  }
+  .bsn-card__body {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1.25rem 1.5rem 1.5rem;
+    z-index: 2;
+    display: flex; flex-direction: column; gap: 0.2rem;
+  }
+  .bsn-card__sub {
+    font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--color-ocean-light); font-weight: 500;
+  }
+  .bsn-card__label {
+    font-family: var(--font-serif);
+    font-size: 1.2rem; font-weight: 500; line-height: 1.2; color: white;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .bar-subnav__grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 240px 240px;
+    }
+  }
+  @media (max-width: 480px) {
+    .bar-subnav__grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(4, 220px);
+    }
+  }
+</style>

@@ -1,10 +1,41 @@
 ---
 const navLinks = [
   { label: 'Accueil', href: '/' },
-  { label: 'Prestations', href: '/stage-peche-mouche' },
+  { label: 'Le guide', href: '/jean-baptiste-vidal-moniteur-guide-de-peche' },
+  {
+    label: 'Prestations',
+    href: '/stage-peche-mouche',
+    activePrefix: '/stage-peche-mouche',
+    children: [
+      { label: 'Toutes les prestations', href: '/stage-peche-mouche' },
+      { label: 'Bar à la mouche', href: '/peche-du-bar-a-la-mouche' },
+      { label: 'Rivières & eau douce', href: '/peche-a-la-mouche-en-bretagne' },
+      { label: 'Masterclass', href: '/masterclass' },
+      { label: 'Spey Cast & lancer', href: '/stage-spey-cast-et-cours-de-lancer' },
+      { label: 'Bon cadeau', href: '/bon-cadeau-peche-mouche' },
+      { label: 'Tarifs', href: '/tarifs' },
+      { label: 'Disponibilités 2026', href: '/disponibilites-guidages' },
+    ],
+  },
+  {
+    label: 'Matériel & univers',
+    href: '/materiel-jeanbaptistevidal',
+    activePrefix: '/materiel',
+    children: [
+      { label: 'Tout le matériel', href: '/materiel-jeanbaptistevidal' },
+      { label: 'Migrateurs', href: '/materiel-mouche-migrateur' },
+      { label: 'Truite', href: '/materiel-mouche-truite' },
+      { label: 'Bar', href: '/materiel-mouche-bar' },
+      { label: 'Réservoir', href: '/materiel-mouche-reservoir' },
+      { label: 'Brochet', href: '/materiel-mouche-brochet' },
+      { label: 'Pêche exotique', href: '/materiel-mouche-peche-exotique' },
+      { label: 'Mes mouches', href: '/mouches-de-peche-jeanbaptiste-vidal' },
+    ],
+  },
   {
     label: 'Voyages',
     href: '/voyages-peche-mouche',
+    activePrefix: '/voyage',
     children: [
       { label: 'Tous les voyages', href: '/voyages-peche-mouche' },
       { label: 'Argentine — Rio Grande', href: '/voyage-peche-argentine-rio-grande-truite-de-mer' },
@@ -15,6 +46,15 @@ const navLinks = [
     ],
   },
   { label: 'Blog', href: '/blog' },
+  {
+    label: 'Divers',
+    href: '/partenaires-jeanbaptistevidal',
+    children: [
+      { label: 'Partenaires', href: '/partenaires-jeanbaptistevidal' },
+      { label: 'Vidéos', href: '/videos-jeanbaptiste-vidal-moniteur-guide-de-peche' },
+      { label: 'Revue de presse', href: '/revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche' },
+    ],
+  },
   { label: 'Contact', href: '/contact' },
 ]
 
@@ -24,7 +64,6 @@ const { pathname } = Astro.url
 <header class="site-header" id="site-header">
   <div class="header-inner">
     <a href="/" class="logo" aria-label="Jean-Baptiste Vidal — Accueil">
-      <span class="logo-initials">JBV</span>
       <span class="logo-text">
         <span class="logo-name">Jean-Baptiste Vidal</span>
         <span class="logo-tagline">Guide de pêche à la mouche · Bretagne</span>
@@ -37,11 +76,11 @@ const { pathname } = Astro.url
 
     <nav class="site-nav" id="site-nav">
       <ul>
-        {navLinks.map(({ label, href, children }) => (
+        {navLinks.map(({ label, href, children, activePrefix }) => (
           <li class:list={[{ 'has-dropdown': children }]}>
             {children ? (
               <>
-                <a href={href} class:list={['nav-link', { active: pathname.startsWith('/voyage') || pathname === href }]}>
+                <a href={href} class:list={['nav-link', { active: (activePrefix && pathname.startsWith(activePrefix)) || pathname === href }]}>
                   {label}
                   <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
                 </a>
@@ -122,18 +161,6 @@ const { pathname } = Astro.url
     gap: 0.75rem;
     text-decoration: none;
     color: white;
-  }
-  .logo-initials {
-    font-family: var(--font-serif);
-    font-size: 1.4rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    border: 1.5px solid rgba(255,255,255,0.6);
-    width: 44px; height: 44px;
-    display: grid;
-    place-items: center;
-    border-radius: 2px;
-    flex-shrink: 0;
   }
   .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
   .logo-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; letter-spacing: 0.02em; }

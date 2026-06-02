@@ -1,66 +1,235 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import MatierielBtn from '../components/MatierielBtn.astro'
 ---
+
 <BaseLayout
-  title="Pêche de l'alose à la mouche en Bretagne — Jean-Baptiste Vidal"
-  description="Guidage pêche de l'alose à la mouche sur l'Aulne, le Blavet, l'Ellé, l'Elorn. Mai-juin, migrateur passionnant. Jean-Baptiste Vidal, guide Bretagne-Sud."
+  title="Pêche de l'alose à la mouche en Bretagne — Jean-Baptiste Vidal, Guide"
+  description="Guidage pêche de l'alose à la mouche sur l'Aulne, le Blavet, l'Ellé, l'Elorn. Mi-avril à juillet. Migrateur combatif et passionnant. Jean-Baptiste Vidal, guide Bretagne-Sud."
 >
 
-  <!-- HERO -->
-  <section class="prest-hero">
-    <div class="prest-hero__content container">
-      <p class="prest-eyebrow">Alose · Rivières de Bretagne-Sud</p>
-      <h1>Pêche de l'alose à la mouche</h1>
-      <p class="prest-sub">Migrateur passionnant sur les rivières bretonnes — mai à juillet</p>
-      <div class="prest-hero__cta">
+  <!-- ═══ HERO ═══ -->
+  <section class="voy-hero">
+    <div class="voy-hero__bg"></div>
+    <div class="voy-hero__overlay"></div>
+    <div class="voy-hero__content container">
+      <p class="voy-eyebrow">Alose · Migrateur · Rivières de Bretagne</p>
+      <h1>Pêche de l'alose<br /><span class="voy-hero__sub">à la mouche en Bretagne</span></h1>
+      <p class="voy-lead">Un migrateur encore confidentiel, d'une puissance et d'une combativité remarquables. Sur l'Aulne, le Blavet et les rivières bretonnes, Jean-Baptiste vous guide à la rencontre de ce prédateur fascinant.</p>
+      <div class="voy-hero__cta">
         <a href="/contact" class="btn-prim">Réserver une sortie</a>
         <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
+        <MatierielBtn href="/materiel-mouche-migrateur" label="Matériel migrateurs" />
       </div>
+    </div>
+    <div class="voy-hero__scroll">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </div>
   </section>
 
-  <!-- INTRO -->
-  <section class="prest-intro section">
-    <div class="container prest-intro__grid">
-      <div class="prest-intro__body">
-        <p>L'alose est un migrateur encore peu recherché en Bretagne, même si une poignée de passionnés lui consacre beaucoup de temps. C'est une pêche très intéressante, active et passionnante, qui procure de bonnes sensations avec du matériel adapté.</p>
-        <p>Cela fait plus de 15 ans que je les recherche activement sur différentes rivières, tout au long de la saison, que ce soit en technique traditionnelle en rivières canalisées ou à vue en rivière moyenne. Les aloses colonisent plusieurs rivières du Finistère mais aussi du 22 et 56.</p>
-        <p>Je vous propose de vous apporter mes services de guide de pêche à la mouche en Bretagne, pour vous permettre de mieux connaître la pêche de cette espèce parfois capricieuse et technique, notamment sur l'Aulne, le Blavet, mais aussi le bas de l'Ellé, l'Elorn ou de l'Odet. Une pêche très active avec beaucoup de touches, de rushs et sauts acrobatiques !</p>
+  <!-- ═══ CHIFFRES CLÉS ═══ -->
+  <div class="voy-stats">
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">Mi-avril</span>
+      <span class="voy-stats__label">Début de saison</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">Fin juillet</span>
+      <span class="voy-stats__label">Fin de saison</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">Aulne · Blavet · Ellé</span>
+      <span class="voy-stats__label">Rivières phares</span>
+    </div>
+    <div class="voy-stats__item">
+      <span class="voy-stats__num">300 €</span>
+      <span class="voy-stats__label">Tarif / journée</span>
+    </div>
+  </div>
+
+  <!-- ═══ INTRO ═══ -->
+  <section class="section section--white">
+    <div class="container voy-intro">
+      <div class="voy-intro__text">
+        <p class="eyebrow">Guidage alose · Bretagne-Sud</p>
+        <h2>Un migrateur confidentiel et inoubliable</h2>
+        <p>L'alose est un migrateur encore peu recherché en Bretagne, même si une poignée de connaisseurs attendent avec impatience leur grand retour chaque année dès la mi-avril. C'est une pêche très intéressante, active et passionnante, qui procure de bonnes sensations avec du matériel adapté.</p>
+        <p>Depuis plus de 20 ans, je les recherche activement sur différentes rivières, tout au long de la saison, que ce soit en technique traditionnelle sur rivières canalisées ou à vue en rivière moyenne. Les aloses colonisent plusieurs rivières du Finistère mais aussi du Morbihan et des Côtes-d'Armor.</p>
+        <p>Je vous propose de vous emmener sur plusieurs rivières en fonction de la saison et des conditions de pêche, pour vous apporter mes compétences et vous faire vivre une expérience unique avec ce poisson exceptionnel.</p>
       </div>
-      <aside class="prest-intro__aside">
-        <div class="prest-card-info">
-          <p class="prest-card-info__label">Niveau</p>
-          <p class="prest-card-info__val">Tous niveaux</p>
-          <p class="prest-card-info__label">Format</p>
-          <p class="prest-card-info__val">Journée · Demi-journée · Période : mai à juillet</p>
-          <p class="prest-card-info__label">Rivières</p>
-          <p class="prest-card-info__val">Aulne · Blavet · Ellé · Elorn · Odet</p>
-          <p class="prest-card-info__label">Contact</p>
-          <p class="prest-card-info__val">06 87 30 34 56<br />enjoy.fishing@hotmail.fr</p>
-        </div>
+      <aside class="voy-intro__card">
+        <p class="card-label">Niveau</p>
+        <p class="card-val">Tous niveaux</p>
+        <p class="card-label">Format</p>
+        <p class="card-val">Journée · Demi-journée · Coup du soir (4–8h)</p>
+        <p class="card-label">Saison Aulne / Blavet</p>
+        <p class="card-val">Mi-avril → fin juin</p>
+        <p class="card-label">Saison rivières</p>
+        <p class="card-val">Fin mai → fin juillet</p>
+        <p class="card-label">Rivières</p>
+        <p class="card-val">Aulne · Blavet · Ellé · Elorn · Odet · Goyen · Scorf</p>
+        <p class="card-label">Tarifs</p>
+        <p class="card-val">300 € / jour — dégressifs à partir de 2 pêcheurs</p>
+        <a href="/contact" class="card-cta">Vérifier les disponibilités</a>
       </aside>
     </div>
   </section>
 
-  <!-- GALERIE -->
-  <section class="prest-gallery">
-    <div class="prest-gallery__grid g4">
-      <img src="/images/guide-alose-1.jpg" loading="lazy" alt="Guidage pêche de l'alose à la mouche" />
-      <img src="/images/guide-alose-2.jpg" loading="lazy" alt="Alose à la mouche en Bretagne" />
-      <img src="/images/guide-alose-3.jpg" loading="lazy" alt="Guide pêche alose rivière bretonne" />
-      <img src="/images/alose-1.jpg" loading="lazy" alt="Belle alose prise à la mouche" />
+  <!-- ═══ VIDÉO ═══ -->
+  <section class="section section--dark">
+    <div class="container voy-video">
+      <p class="eyebrow eyebrow--light">Film · Pêche de l'alose</p>
+      <h2>Alose et saumon sur les rivières bretonnes</h2>
+      <p class="section-intro section-intro--light">L'Aulne et le Blavet au printemps — en compagnie de Jean-Daniel, venu de Suisse spécialement pour traquer les migrateurs bretons. Belles captures, combats explosifs et souvenirs impérissables.</p>
+      <div class="video-wrap">
+        <iframe
+          src="https://player.vimeo.com/video/197506448?color=7EC8E3&title=0&byline=0&portrait=0"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+          title="Pêche de l'alose à la mouche en Bretagne — Jean-Baptiste Vidal"
+        ></iframe>
+      </div>
     </div>
   </section>
 
-  <!-- CTA FINAL -->
-  <section class="prest-cta-final section section--dark">
+  <!-- ═══ PROGRAMME ═══ -->
+  <section class="section section--sand">
+    <div class="container">
+      <p class="eyebrow">Découverte de l'alose</p>
+      <h2 style="margin-bottom:2.5rem">Ce qui vous attend</h2>
+      <div class="prog-rows">
+
+        <!-- 01 Un migrateur formidable -->
+        <div class="prog-row">
+          <div class="prog-row__img">
+            <img src="/images/AL%202.avif" loading="lazy" alt="L'alose — un migrateur formidable en Bretagne" />
+          </div>
+          <div class="prog-row__body">
+            <span class="prog-row__num">01</span>
+            <span class="prog-row__tag">Biologie · Comportement</span>
+            <h3>Un migrateur formidable</h3>
+            <p>La grande alose (<em>alosa alosa</em>), de la famille des Clupéidés, est la plus grande des aloses et peut dépasser les 3 kg. Elle remonte nos cours d'eau bretons à partir de la mi-avril et ce jusqu'à la mi-juillet sur les rivières les plus fraîches. Les populations sont en augmentation depuis une dizaine d'années.</p>
+            <p>C'est un poisson très combatif, agressif, qui ne se rend pas facilement et procure de très bonnes sensations — un vrai régal pour le pêcheur à la mouche polyvalent !</p>
+          </div>
+        </div>
+
+        <!-- 02 Sa pêche à la mouche -->
+        <div class="prog-row prog-row--reverse">
+          <div class="prog-row__img">
+            <img src="/images/AL%203.avif" loading="lazy" alt="Technique de pêche de l'alose à la mouche" />
+          </div>
+          <div class="prog-row__body">
+            <span class="prog-row__num">02</span>
+            <span class="prog-row__tag">Technique · Mouches · Animation</span>
+            <h3>Sa pêche à la mouche</h3>
+            <p>Les aloses se pêchent généralement en dérive 3/4 aval avec des nymphes/streamers de couleurs vives : orange, jaune, vert chartreuse, rose. La technique consiste à présenter la mouche au bon étage et à la bonne vitesse selon les conditions — niveaux d'eau, débit, température.</p>
+            <p>Il faut être très concentré lors de la dérive pour ne pas rater les touches. Les ferrades sont fulgurantes et les aloses vous surprendront par leur puissance lors des rushs et sauts acrobatiques !</p>
+          </div>
+        </div>
+
+        <!-- 03 Matériel & lancer -->
+        <div class="prog-row">
+          <div class="prog-row__img">
+            <img src="/images/AL%204.avif" loading="lazy" alt="Canne switch et Spey Cast pour la pêche de l'alose" />
+          </div>
+          <div class="prog-row__body">
+            <span class="prog-row__num">03</span>
+            <span class="prog-row__tag">Matériel · Lancer · Spey Cast</span>
+            <h3>Matériel et techniques de lancer</h3>
+            <p>Sur l'Aulne et le Blavet, on utilise une canne de 9 à 10 pieds, puissance 7–8 en début de saison, ou une canne Switch permettant de couvrir rapidement les secteurs. En fin de saison, quand les niveaux baissent, une puissance 6 suffit.</p>
+            <p>J'initierai ou perfectionnerai votre Spey Cast — une technique idéale pour ces rivières où l'espace pour le lancer en arrière est souvent limité. Quel que soit votre niveau, vous repartirez avec des gestes solides.</p>
+          </div>
+        </div>
+
+        <!-- 04 L'Aulne et le Blavet -->
+        <div class="prog-row prog-row--reverse">
+          <div class="prog-row__img">
+            <img src="/images/AL%205.avif" loading="lazy" alt="L'Aulne et le Blavet — rivières à aloses en Bretagne" />
+          </div>
+          <div class="prog-row__body">
+            <span class="prog-row__num">04</span>
+            <span class="prog-row__tag">Rivières · Aulne · Blavet</span>
+            <h3>L'Aulne et le Blavet</h3>
+            <p>Ces deux rivières canalisées offrent en Bretagne les plus grandes concentrations d'aloses. Chaque année, plusieurs milliers de grandes aloses et aloses feintes (<em>alosa fallax</em>) colonisent ces cours d'eau de la mi-avril à fin juin.</p>
+            <p>Elles se concentrent au pied des barrages et des premières écluses — au plus grand plaisir des pêcheurs à la mouche. L'eau se réchauffe rapidement sur ces rivières canalisées, ce qui les rend précoces par rapport aux autres cours d'eau.</p>
+          </div>
+        </div>
+
+        <!-- 05 Autres cours d'eau -->
+        <div class="prog-row">
+          <div class="prog-row__img">
+            <img src="/images/AL%206.avif" loading="lazy" alt="Pêche de l'alose à vue sur les petites rivières bretonnes" />
+          </div>
+          <div class="prog-row__body">
+            <span class="prog-row__num">05</span>
+            <span class="prog-row__tag">À vue · Ellé · Elorn · Odet</span>
+            <h3>Mais aussi sur d'autres cours d'eau…</h3>
+            <p>Depuis quelques années, les aloses colonisent aussi l'Ellé, l'Elorn, le Goyen, l'Odet, la Penzé, le Scorf, le Trieux. Sur ces cours d'eau aux eaux plus claires, il est possible de les repérer à vue et de leur présenter de petites nymphes très colorées.</p>
+            <p>Une pêche 100% à vue, où l'on voit l'alose venir engloutir la mouche de manière souvent furtive — il faut être attentif et très rapide pour ferrer au bon moment. Sur ces petits cours d'eau, les combats sont explosifs et les sensations garanties !</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ GALERIE ═══ -->
+  <section class="al-gallery-section">
+    <div class="al-gallery">
+      <img src="/images/AL%207.avif"  loading="lazy" alt="Pêche de l'alose à la mouche en Bretagne" />
+      <img src="/images/AL%208.avif"  loading="lazy" alt="Alose à la mouche — rivières bretonnes" />
+      <img src="/images/AL%209.avif"  loading="lazy" alt="Guidage alose Jean-Baptiste Vidal" />
+      <img src="/images/AL%2010.avif" loading="lazy" alt="Alose sur l'Aulne en Bretagne" />
+      <img src="/images/AL%2011.avif" loading="lazy" alt="Pêche de l'alose — migrateur puissant" />
+      <img src="/images/AL%2012.avif" loading="lazy" alt="Alose et saumon — Bretagne" />
+      <img src="/images/AL%2013.avif" loading="lazy" alt="Guidage pêche alose Bretagne-Sud" />
+      <img src="/images/AL%2014.avif" loading="lazy" alt="Alose à la mouche — Aulne" />
+      <img src="/images/AL%2015.avif" loading="lazy" alt="Pêche du migrateur en Bretagne" />
+      <img src="/images/AL%2016.avif" loading="lazy" alt="Belle alose prise à la mouche" />
+      <img src="/images/AL%2017.avif" loading="lazy" alt="Alose à la mouche — Blavet" />
+      <img src="/images/AL%2018.avif" loading="lazy" alt="Pêche de l'alose en rivière canalisée" />
+      <img src="/images/AL%2019.avif" loading="lazy" alt="Guidage alose — rivières bretonnes" />
+      <img src="/images/AL%2020.avif" loading="lazy" alt="Alose capturée à la mouche" />
+      <img src="/images/AL%2021.avif" loading="lazy" alt="Pêche de l'alose à la mouche" />
+      <img src="/images/AL%2022.avif" loading="lazy" alt="Rivières bretonnes — alose à la mouche" />
+      <img src="/images/AL%2023.avif" loading="lazy" alt="Alose en Bretagne — guide JBV" />
+      <img src="/images/AL%2024.avif" loading="lazy" alt="Pêche migrateur Bretagne-Sud" />
+      <img src="/images/AL%2025.avif" loading="lazy" alt="Alose à la mouche — technique en dérive" />
+      <img src="/images/AL%2026.avif" loading="lazy" alt="Guidage pêche de l'alose — Finistère" />
+      <img src="/images/AL%2027.avif" loading="lazy" alt="Belle alose — rivières de Bretagne" />
+    </div>
+  </section>
+
+  <!-- ═══ BLOG LINK ═══ -->
+  <section class="section section--white">
+    <div class="container blog-section">
+      <div class="blog-card">
+        <div class="blog-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/></svg>
+        </div>
+        <div class="blog-card__body">
+          <p class="eyebrow">Blog · Enjoy Fishing</p>
+          <h3>Reportage : pêche de l'alose à la mouche sur les meilleures rivières</h3>
+          <p>Article de fond sur la pêche de l'alose à la mouche en Bretagne — techniques, saisons, rivières, retours d'expérience et conseils de Jean-Baptiste.</p>
+          <a href="http://www.enjoyfishing.fr/archive/2016/02/08/peche-de-l-alose-a-la-mouche-sur-les-meilleures-rivieres-de-3066155.html#more"
+             class="blog-card__btn" target="_blank" rel="noopener noreferrer">
+            Lire l'article sur Enjoy Fishing →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA FINAL ═══ -->
+  <section class="section section--dark">
     <div class="container prest-cta-final__inner">
       <div>
-        <h2>Réservez votre sortie</h2>
-        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+        <h2>Réservez votre sortie alose</h2>
+        <p>Saison mi-avril → fin juillet · Disponibilités et tarifs sur demande.</p>
       </div>
       <div class="prest-cta-final__btns">
-        <a href="/contact" class="btn-prim">Nous contacter</a>
+        <a href="/contact" class="btn-prim">Me contacter</a>
         <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
       </div>
     </div>
@@ -69,78 +238,225 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 </BaseLayout>
 
 <style>
-.prest-hero {
-  min-height: 72vh;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 4rem;
-  background:
-    linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 60%, rgba(13,43,62,0.3) 100%),
-    url('/images/migrateurs-alose.jpg') center / cover no-repeat;
-  background-color: var(--color-ocean);
-  color: white;
-}
-.prest-hero__content { position: relative; z-index: 1; }
-.prest-eyebrow {
-  font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--color-ocean-light); margin-bottom: 0.8rem;
-}
-.prest-hero h1 { color: white; margin-bottom: 1rem; max-width: 680px; }
-.prest-sub { color: rgba(255,255,255,0.75); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
-.prest-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
-.btn-prim {
-  background: var(--color-ocean-main); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: background 0.2s;
-}
-.btn-prim:hover { background: #144b72; }
-.btn-ghost {
-  border: 1.5px solid rgba(255,255,255,0.4); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: border-color 0.2s, background 0.2s;
-}
-.btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
-.prest-intro__grid {
-  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
-}
-.prest-intro__body p { line-height: 1.8; color: var(--color-text); margin-bottom: 1.2rem; }
-.prest-intro__body p:last-child { margin-bottom: 0; }
-.prest-card-info {
-  background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
-  border-left: 3px solid var(--color-ocean-main);
-}
-.prest-card-info__label {
-  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--color-ocean-main); font-weight: 600; margin-top: 1.2rem;
-}
-.prest-card-info__label:first-child { margin-top: 0; }
-.prest-card-info__val { font-size: 0.92rem; color: var(--color-text); line-height: 1.55; }
-.prest-gallery { overflow: hidden; }
-.prest-gallery__grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
-}
-.prest-gallery__grid.g4 { grid-template-columns: repeat(4, 1fr); }
-.prest-gallery__grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
-.prest-cta-final__inner {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 2rem; flex-wrap: wrap;
-}
-.prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
-.prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
-.prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-.btn-ghost-light {
-  border: 1.5px solid rgba(255,255,255,0.4); color: white;
-  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
-  transition: border-color 0.2s;
-}
-.btn-ghost-light:hover { border-color: white; }
-@media (max-width: 768px) {
-  .prest-intro__grid { grid-template-columns: 1fr; gap: 2rem; }
-  .prest-gallery__grid, .prest-gallery__grid.g4 { grid-template-columns: repeat(2, 1fr); }
-  .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
-}
-@media (max-width: 480px) {
-  .prest-hero { min-height: 85vh; padding-bottom: 3rem; }
-  .prest-gallery__grid { grid-template-columns: 1fr; }
-}
+  /* ── HERO ── */
+  .voy-hero {
+    position: relative; min-height: 80vh;
+    display: flex; align-items: flex-end; padding-bottom: 5rem;
+    color: white; overflow: hidden;
+  }
+  .voy-hero__bg {
+    position: absolute; inset: 0;
+    background: url('/images/AL%201.avif') center / cover no-repeat;
+    background-color: var(--color-ocean);
+  }
+  .voy-hero__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.9) 0%, rgba(13,43,62,0.5) 55%, rgba(13,43,62,0.25) 100%);
+  }
+  .voy-hero__content { position: relative; z-index: 1; }
+  .voy-eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--color-ocean-light); font-weight: 500; margin-bottom: 1rem;
+  }
+  .voy-hero__content h1 {
+    font-family: var(--font-serif); font-weight: 400; color: white;
+    margin-bottom: 1.5rem; max-width: 680px;
+    font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1;
+  }
+  .voy-hero__sub {
+    display: block; font-size: clamp(1.1rem, 3vw, 1.8rem);
+    font-weight: 300; opacity: 0.75;
+  }
+  .voy-lead {
+    font-size: 1rem; line-height: 1.7;
+    color: rgba(255,255,255,0.75); max-width: 560px; margin-bottom: 2.5rem;
+  }
+  .voy-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .voy-hero__scroll {
+    position: absolute; bottom: 2rem; right: 2rem;
+    color: rgba(255,255,255,0.4); z-index: 1;
+    animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  .btn-prim {
+    background: var(--color-ocean-main); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none; transition: background 0.2s;
+  }
+  .btn-prim:hover { background: #144b72; }
+  .btn-ghost {
+    border: 1.5px solid rgba(255,255,255,0.4); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ── STATS ── */
+  .voy-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--color-ocean);
+  }
+  .voy-stats__item {
+    padding: 1.4rem 1rem; text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .voy-stats__item:last-child { border-right: none; }
+  .voy-stats__num {
+    font-family: var(--font-serif); font-size: 1.5rem;
+    color: white; font-weight: 500; line-height: 1;
+  }
+  .voy-stats__label {
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 400;
+  }
+
+  /* ── INTRO ── */
+  .section--white { background: #fff; }
+  .voy-intro {
+    display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: start;
+  }
+  .eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-ocean-main); font-weight: 600; margin-bottom: 0.75rem;
+  }
+  .eyebrow--light { color: var(--color-ocean-light); }
+  .voy-intro__text h2 { margin-bottom: 1.25rem; }
+  .voy-intro__text p { line-height: 1.8; color: var(--color-text); margin-bottom: 1rem; }
+  .voy-intro__text p:last-child { margin-bottom: 0; }
+  .voy-intro__card {
+    background: var(--color-sand); border-radius: 6px; padding: 1.6rem;
+    border-left: 3px solid var(--color-ocean-main);
+    position: sticky; top: 90px;
+  }
+  .card-label {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--color-ocean-main); font-weight: 600; margin-top: 1.1rem;
+  }
+  .card-label:first-child { margin-top: 0; }
+  .card-val { font-size: 0.9rem; color: var(--color-text); line-height: 1.5; }
+  .card-cta {
+    display: block; margin-top: 1.4rem; text-align: center;
+    background: var(--color-ocean-main); color: white;
+    padding: 0.7rem 1rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.88rem; text-decoration: none; transition: background 0.2s;
+  }
+  .card-cta:hover { background: #144b72; }
+
+  /* ── VIDÉO ── */
+  .voy-video { max-width: 900px; margin: 0 auto; text-align: center; }
+  .voy-video h2 { color: white; margin-bottom: 0.75rem; }
+  .section-intro {
+    font-size: 1rem; line-height: 1.7; color: var(--color-text-muted, #555);
+    max-width: 640px; margin: 0 auto 2rem;
+  }
+  .section-intro--light { color: rgba(255,255,255,0.7); }
+  .video-wrap {
+    position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+    border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+  .video-wrap iframe {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+  }
+
+  /* ── PROGRAMME ── */
+  .section--sand { background: var(--color-sand); }
+  .prog-rows { display: flex; flex-direction: column; gap: 2rem; }
+  .prog-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+  .prog-row--reverse .prog-row__img { order: 2; }
+  .prog-row--reverse .prog-row__body { order: 1; }
+  .prog-row__img { overflow: hidden; min-height: 340px; }
+  .prog-row__img img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.5s ease;
+  }
+  .prog-row:hover .prog-row__img img { transform: scale(1.04); }
+  .prog-row__body {
+    padding: 2.5rem 3rem; background: white;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .prog-row__num {
+    font-family: var(--font-serif); font-size: 2.5rem; font-weight: 300;
+    color: rgba(27,94,138,0.15); line-height: 1; margin-bottom: 0.4rem;
+  }
+  .prog-row__body h3 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+  .prog-row__tag {
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--color-ocean-main); font-weight: 500; margin-bottom: 1.1rem; display: block;
+  }
+  .prog-row__body p { line-height: 1.75; color: var(--color-text-muted, #555); font-size: 0.9rem; margin-bottom: 0.8rem; }
+  .prog-row__body p:last-child { margin-bottom: 0; }
+
+  /* ── GALERIE ── */
+  .al-gallery-section { overflow: hidden; }
+  .al-gallery {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  }
+  .al-gallery img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+
+  /* ── BLOG ── */
+  .blog-section { max-width: 800px; }
+  .blog-card {
+    display: flex; gap: 2rem; align-items: flex-start;
+    background: var(--color-sand); border-radius: 8px; padding: 2rem 2.5rem;
+    border-left: 4px solid var(--color-ocean-main);
+  }
+  .blog-card__icon {
+    flex-shrink: 0; width: 52px; height: 52px;
+    background: var(--color-ocean-main); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; color: white;
+  }
+  .blog-card__body h3 { font-size: 1.15rem; margin-bottom: 0.6rem; }
+  .blog-card__body p { line-height: 1.75; color: var(--color-text-muted, #555); font-size: 0.92rem; margin-bottom: 1.2rem; }
+  .blog-card__btn {
+    display: inline-block; background: var(--color-ocean-main); color: white;
+    padding: 0.65rem 1.4rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.9rem; text-decoration: none; transition: background 0.2s;
+  }
+  .blog-card__btn:hover { background: #144b72; }
+
+  /* ── CTA FINAL ── */
+  .prest-cta-final__inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
+  .prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+  .prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-ghost-light {
+    border: 1.5px solid rgba(255,255,255,0.4); color: white;
+    padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500;
+    font-size: 0.95rem; text-decoration: none; transition: border-color 0.2s;
+  }
+  .btn-ghost-light:hover { border-color: white; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .voy-stats { grid-template-columns: repeat(2, 1fr); }
+    .voy-stats__item:nth-child(2) { border-right: none; }
+    .voy-intro { grid-template-columns: 1fr; gap: 2rem; }
+    .voy-intro__card { position: static; }
+    .prog-row { grid-template-columns: 1fr; }
+    .prog-row--reverse .prog-row__img,
+    .prog-row--reverse .prog-row__body { order: unset; }
+    .prog-row__img { min-height: 240px; }
+    .prog-row__body { padding: 2rem 2rem; }
+    .al-gallery { grid-template-columns: repeat(3, 1fr); }
+    .blog-card { flex-direction: column; gap: 1rem; padding: 1.5rem; }
+  }
+  @media (max-width: 560px) {
+    .voy-hero { min-height: 88vh; padding-bottom: 3.5rem; }
+    .voy-stats { grid-template-columns: 1fr 1fr; }
+    .prog-row__body { padding: 2rem 1.5rem; }
+    .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+    .al-gallery { grid-template-columns: repeat(2, 1fr); }
+  }
 </style>
