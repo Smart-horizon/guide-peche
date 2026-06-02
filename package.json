@@ -8,11 +8,13 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "preview": "npm run build && wrangler dev",
+    "astro": "astro",
+    "generate-types": "wrangler types",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.5.5",
+    "@astrojs/cloudflare": "^13.6.0",
     "@astrojs/react": "^5.0.6",
     "@astrojs/sitemap": "^3.7.3",
     "@sanity/astro": "^3.4.0",
@@ -24,5 +26,11 @@
     "cheerio": "^1.2.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "wrangler": "^4.96.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }
