@@ -112,6 +112,12 @@ export const sectionHero = {
       type: 'string',
       description: 'Ex : /materiel-mouche-bar — laisser vide si non souhaité',
     },
+    {
+      name: 'btnMaterielLabel', title: 'Bouton matériel — libellé',
+      type: 'string',
+      initialValue: 'Matériel',
+      description: 'Ex : "Matériel bar", "Matériel truite"…',
+    },
   ],
   preview: {
     select: { title: 'titre', subtitle: 'eyebrow', media: 'image' },

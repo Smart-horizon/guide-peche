@@ -29,11 +29,10 @@ const doc = await stegaClient.fetch(
       _type, title, categorie,
       pagebuilder[]{
         ...,
-        "imageUrl":  image.asset->url,
-        photos[]{ ..., "url": asset->url },
-        images[]{ ..., "url": asset->url },
-        cards[]{ ..., "imageUrl": image.asset->url },
-        "texteImageUrl": image.asset->url,
+        image{ asset->{ _id, url, metadata{ dimensions } } },
+        photos[]{ asset->{ _id, url } },
+        images[]{ asset->{ _id, url } },
+        cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
       },
       seoTitle, seoDescription, ogImage
     },
@@ -57,8 +56,8 @@ const pageTitle    = doc.seoTitle || heroSection?.titre || doc.title
 const pageDesc     = doc.seoDescription || ''
 const ogImg        = doc.ogImage
   ? urlFor(doc.ogImage).width(1200).height(630).url()
-  : heroSection?.imageUrl
-    ? `${heroSection.imageUrl}?w=1200&h=630&fit=crop`
+  : heroSection?.image
+    ? urlFor(heroSection.image).width(1200).height(630).url()
     : undefined
 
 // ── Rendu Portable Text ───────────────────────────────────────────────────────
@@ -108,9 +107,11 @@ const heroHeight = (h: string) => {
   return v === 'medium' ? '52vh' : v === 'compact' ? '36vh' : '72vh'
 }
 
-const heroBg = (imageUrl: string) => imageUrl
-  ? `background:linear-gradient(to top,rgba(7,24,31,.9) 0%,rgba(13,43,62,.45) 70%,rgba(13,43,62,.3) 100%),url(${imageUrl});background-size:cover;background-position:center`
-  : 'background:var(--color-ocean)'
+const heroBg = (image: any) => {
+  if (!image?.asset) return 'background:var(--color-ocean)'
+  const url = urlFor(image).width(1600).height(900).url()
+  return `background:linear-gradient(to top,rgba(7,24,31,.88) 0%,rgba(13,43,62,.45) 60%,rgba(13,43,62,.3) 100%),url(${url}) center/cover no-repeat`
+}
 ---
 
 <BaseLayout title={`${pageTitle} — Jean-Baptiste Vidal`} description={pageDesc} image={ogImg}>
@@ -122,7 +123,7 @@ const heroBg = (imageUrl: string) => imageUrl
     {/* ════════════ HERO ════════════ */}
     {s._type === 'sectionHero' && (
       <section class="pb-hero" style={`min-height:${heroHeight(s.hauteur)}`}>
-        <div class="pb-hero__bg" style={heroBg(s.imageUrl)}></div>
+        <div class="pb-hero__bg" style={heroBg(s.image)}></div>
         <div class="pb-hero__content container">
           {s.eyebrow && <p class="pb-eyebrow">{s.eyebrow}</p>}
           <h1 class="pb-hero__h1">{s.titre}</h1>
@@ -131,7 +132,7 @@ const heroBg = (imageUrl: string) => imageUrl
             <a href={s.btnReserverLien || '/contact'} class="btn-prim">{s.btnReserverTexte || 'Réserver une sortie'}</a>
             <a href={`tel:${(s.btnTelTexte || '06 87 30 34 56').replace(/\s/g,'')}`} class="btn-ghost">{s.btnTelTexte || '06 87 30 34 56'}</a>
             {s.btnMaterielLien && (
-              <MatierielBtn href={s.btnMaterielLien} label="Matériel" />
+              <MatierielBtn href={s.btnMaterielLien} label={s.btnMaterielLabel || 'Matériel'} />
             )}
           </div>
         </div>
@@ -166,12 +167,14 @@ const heroBg = (imageUrl: string) => imageUrl
         {s.titre && <div class="container" style="padding-top:3rem"><h2 class="pb-section-titre">{s.titre}</h2></div>}
         <div class="sous-grid" data-count={s.cards?.length}>
           {s.cards?.map((c: any, i: number) => {
-            const isLast = i === s.cards.length - 1
-            const isOdd  = s.cards.length % 2 === 1
-            const bg     = c.imageUrl ? `url(${c.imageUrl})` : 'var(--color-ocean)'
+            const isLast   = i === s.cards.length - 1
+            const isOdd    = s.cards.length % 2 === 1
+            const cardImgUrl = c.image?.asset
+              ? urlFor(c.image).width(800).height(600).fit('crop').url()
+              : null
             return (
               <a href={c.lien||'#'} class:list={['wf-card', isOdd&&isLast&&'wf-card--wide']}>
-                <div class="wf-card-bg" style={bg ? `background-image:url(${c.imageUrl})` : ''}></div>
+                <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl})` : ''}></div>
                 <div class="wf-overlay"></div>
                 <div class="wf-body">
                   {c.sousTitre && <span class="wf-sub">{c.sousTitre}</span>}
@@ -214,7 +217,7 @@ const heroBg = (imageUrl: string) => imageUrl
           {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
           <div class="galerie-grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||3},1fr)`}>
             {s.photos?.map((p: any) => (
-              <img src={`${p.url}?w=600&h=450&fit=crop`} alt={p.alt||''} loading="lazy" class="galerie-img"/>
+              <img src={urlFor(p).width(600).height(450).fit('crop').url()} alt={p.alt||''} loading="lazy" class="galerie-img"/>
             ))}
           </div>
         </div>
@@ -288,7 +291,7 @@ const heroBg = (imageUrl: string) => imageUrl
               {s.images?.map((img: any) => (
                 <div class="carr3-slide">
                   <img
-                    src={`${img.url}?w=600&fit=crop`}
+                    src={urlFor(img).width(600).url()}
                     alt={img.alt||''}
                     loading="lazy"
                     style={`aspect-ratio:${stegaClean(s.ratio)||'4/3'};object-fit:cover;width:100%;border-radius:4px`}
@@ -437,38 +440,37 @@ const heroBg = (imageUrl: string) => imageUrl
 .pb-intro__grid {
   display: grid;
   grid-template-columns: 1fr 300px;
-  gap: 3rem;
+  gap: 4rem;
   align-items: start;
 }
 .info-card {
   background: var(--color-sand);
-  border: 1px solid #e0dfd9;
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: 6px;
+  padding: 1.6rem;
+  border-left: 3px solid var(--color-ocean-main);
   position: sticky;
   top: calc(var(--header-height) + 2rem);
 }
 .info-lbl {
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
+  font-size: 0.7rem;
   text-transform: uppercase;
+  letter-spacing: 0.1em;
   color: var(--color-ocean-main);
   font-weight: 600;
-  margin-bottom: 0.15rem;
-  margin-top: 1rem;
+  margin-top: 1.2rem;
 }
 .info-lbl:first-child { margin-top: 0; }
 .info-val {
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   color: var(--color-text);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 /* ── PROSE (Portable Text) ── */
 .prose :global(.pb-p) {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   line-height: 1.8;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.2rem;
   font-size: 1rem;
 }
 .prose :global(.pb-h2) {
@@ -495,7 +497,8 @@ const heroBg = (imageUrl: string) => imageUrl
 .prose :global(figure img) { border-radius: 6px; width: 100%; }
 
 /* ── CARDS (sous-prestations) ── */
-.pb-cards { background: var(--color-ocean); overflow: hidden; }
+/* Pas de background sur la section = gap blanc entre les cartes (comme l'original) */
+.pb-cards { overflow: hidden; }
 .pb-section-titre {
   margin-bottom: 2rem;
   color: var(--color-text);
