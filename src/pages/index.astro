@@ -16,7 +16,7 @@ const hero = {
   eyebrow:      hp?.hero?.eyebrow      ?? "Moniteur-Guide diplômé d'État · Bretagne-Sud",
   titre:        hp?.hero?.titre        ?? 'Pêche à la mouche',
   titreItalic:  hp?.hero?.titreItalic  ?? 'en Bretagne sauvage',
-  texte:        hp?.hero?.texte        ?? "La pêche est possible toute l'année en eau douce ou en mer du fait de la complémentarité des milieux. Lacs, réservoirs, rivières, estuaires et côte — une multitude de possibilités en Bretagne-Sud.",
+  texte:        hp?.hero?.texte        ?? "La pêche est possible toute l'année en eau douce ou en mer du fait de la complémentarité des milieux. Lacs, réservoirs, rivières, estuaires et côte : une multitude de possibilités en Bretagne-Sud.",
   imageUrl:     hp?.hero?.image        ? urlFor(hp.hero.image).width(1920).height(1080).url() : '/images/hero.jpg',
   btn1Texte:    hp?.hero?.bouton1Texte ?? 'Pêche du bar',
   btn1Lien:     hp?.hero?.bouton1Lien  ?? '/peche-du-bar-a-la-mouche',
@@ -34,8 +34,8 @@ const guide = {
   stats:       hp?.guide?.stats       ?? [
     { nombre: '33 ans',    label: 'de pêche à la mouche' },
     { nombre: '21 ans',    label: 'de guidage' },
-    { nombre: '6 saisons', label: 'sur le Rio Grande' },
-    { nombre: '1 bateau',  label: 'Carolina Skiff' },
+    { nombre: '8 ans', label: "de guidage à l'étranger" },
+    { nombre: 'Voyages', label: 'Organisation de voyages' },
   ],
   boutonTexte: hp?.guide?.boutonTexte ?? 'Votre guide',
   boutonLien:  hp?.guide?.boutonLien  ?? '/jean-baptiste-vidal-moniteur-guide-de-peche',
@@ -124,7 +124,7 @@ const sectionData: Record<string, { position: number; visible: boolean }> = {
   guide:       { position: hp?.guide?.position       ?? 2, visible: hp?.guide?.visible       !== false },
   bar:         { position: hp?.bar?.position         ?? 3, visible: hp?.bar?.visible         !== false },
   materiel:    { position: hp?.materiel?.position    ?? 5, visible: hp?.materiel?.visible    !== false },
-  temo:        { position: hp?.temo?.position        ?? 6, visible: hp?.temo?.visible        !== false },
+  temo:        { position: hp?.temo?.position        ?? 7, visible: hp?.temo?.visible        !== false },
 }
 
 // Renvoie `order: N` (+ `display: none` si masquée)
@@ -147,8 +147,15 @@ const prestations = await client.fetch(`
 `)
 
 // ── Témoignages (stegaClient — textes affichés directement)
+// Seuls ceux cochés "Afficher sur l'accueil" dans Sanity Studio apparaissent ici.
+// S'il n'y en a aucun de coché, on affiche les 6 premiers par orderRank (fallback).
 const sanityTemoignages = await stegaClient.fetch(`
-  *[_type == "temoignage"] | order(orderRank asc, _createdAt asc) [0...6] {
+  *[_type == "temoignage" && afficherAccueil == true] | order(orderRank asc) [0...6] {
+    _id, nom, note, texte, prestation
+  }
+`)
+const temoignagesFallbackQuery = await stegaClient.fetch(`
+  *[_type == "temoignage"] | order(orderRank asc) [0...6] {
     _id, nom, note, texte, prestation
   }
 `)
@@ -160,7 +167,9 @@ const fallbackTemoignages = [
   { _id: 'f3', nom: 'Fiona et Romain', prestation: 'Découverte de la pêche à la mouche', note: 5, texte: "Ce fut un vrai plaisir d'apprendre avec toi. Pas de stress, de la rigolade et surtout un excellent prof qui ne se contente pas de l'apprentissage brut du lancer mais fait découvrir l'art qu'est véritablement la pêche à la mouche." },
   { _id: 'f4', nom: 'Vincent', prestation: 'Bar à vue & bateau, Bretagne-Sud', note: 5, texte: "Je conseille à tout le monde d'essayer de prendre ces gros bars que Jean-Baptiste connaît par cœur — ressentir ces montées d'adrénaline à la vue de bars énormes postés devant vous." },
 ]
-const temoignages = sanityTemoignages.length > 0 ? sanityTemoignages : fallbackTemoignages
+const temoignages = sanityTemoignages.length > 0
+  ? sanityTemoignages
+  : (temoignagesFallbackQuery.length > 0 ? temoignagesFallbackQuery : fallbackTemoignages)
 
 // ── Section prestations : cartes avec images Sanity
 // La carte stocke directement son slug de categorie → plus de lookup par label
@@ -203,12 +212,15 @@ const prestationsSection = {
   <section class="hero">
     <div class="hero-bg" style={`background-image: linear-gradient(to top, rgba(7,24,31,0.9) 0%, rgba(13,43,62,0.55) 50%, rgba(13,43,62,0.4) 100%), url('${hero.imageUrl}')`}></div>
     <div class="hero-content">
-      <div class="hero-badge">{hero.badge}</div>
+      <div class="hero-badges">
+        <div class="hero-badge">{hero.badge}</div>
+        <div class="hero-badge hero-badge--mouche">🪶 Exclusivement Mouche</div>
+      </div>
       <p class="hero-eyebrow">{hero.eyebrow}</p>
       <h1>{hero.titre}<br /><em>{hero.titreItalic}</em></h1>
       <p class="hero-sub">{hero.texte}</p>
       <div class="hero-cta">
-        <a href={hero.btn1Lien} class="btn btn--primary">{hero.btn1Texte}</a>
+        
         <a href={hero.btn2Lien} class="btn btn--ghost">{hero.btn2Texte}</a>
       </div>
     </div>
@@ -398,6 +410,36 @@ const prestationsSection = {
     </div>
   </section>
 
+  <!-- ═══ BON CADEAU ═══ -->
+  <section class="hp-cadeau" style="order: 6">
+    <div class="hp-cadeau__bg"></div>
+    <div class="hp-cadeau__overlay"></div>
+    <div class="container hp-cadeau__inner">
+      <div class="hp-cadeau__content">
+        <p class="hp-cadeau__eyebrow">🎁 Idée cadeau</p>
+        <h2 class="hp-cadeau__titre">Offrez une expérience<br/><em>inoubliable</em></h2>
+        <p class="hp-cadeau__texte">Offrez à un proche une journée de pêche à la mouche en Bretagne. Initiation, perfectionnement ou sortie guidée — le bon cadeau est valable sur toutes les prestations, eau douce ou bar en mer.</p>
+        <div class="hp-cadeau__actions">
+          <a href="/bon-cadeau-peche-mouche" class="hp-cadeau__btn hp-cadeau__btn--prim">Découvrir le bon cadeau</a>
+          <a href="/contact" class="hp-cadeau__btn hp-cadeau__btn--ghost">Demander un renseignement</a>
+        </div>
+      </div>
+      <div class="hp-cadeau__aside">
+        <div class="hp-cadeau__card">
+          <p class="hp-cadeau__card-label">Format</p>
+          <p class="hp-cadeau__card-val">Journée · Demi-journée</p>
+          <p class="hp-cadeau__card-label">Valable sur</p>
+          <p class="hp-cadeau__card-val">Toutes les prestations · Eau douce &amp; Bar</p>
+          <p class="hp-cadeau__card-label">Validité</p>
+          <p class="hp-cadeau__card-val">1 an à compter de la date d'achat</p>
+          <p class="hp-cadeau__card-label">Envoi</p>
+          <p class="hp-cadeau__card-val">Par e-mail ou courrier · Personnalisable</p>
+          <a href="/bon-cadeau-peche-mouche" class="hp-cadeau__card-cta">Commander →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ TÉMOIGNAGES ═══ -->
   <section class="hp-temo" style={sStyle('temo')}>
     <div class="container hp-temo__inner">
@@ -470,6 +512,7 @@ const prestationsSection = {
     min-height: 80svh;
     display: flex;
     align-items: flex-end;
+    padding-top: 160px;
     padding-bottom: 7rem;
     overflow: hidden;
     color: white;
@@ -493,6 +536,13 @@ const prestationsSection = {
     padding: 0 4rem 0 2rem;
   }
 
+  .hero-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
   .hero-badge {
     display: inline-block;
     background: var(--color-ocean-main);
@@ -503,7 +553,7 @@ const prestationsSection = {
     font-weight: 500;
     padding: 0.35rem 0.85rem;
     border-radius: 2px;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0;
   }
 
   .hero-eyebrow {
@@ -559,6 +609,10 @@ const prestationsSection = {
   @keyframes bob {
     0%,100% { transform: translateY(0); opacity:1; }
     50% { transform: translateY(8px); opacity:0.3; }
+  }
+
+  @media (max-width: 640px) {
+    .hero-bg { background-position: left center; }
   }
 
   /* ══════════════════════════════════════
@@ -767,6 +821,90 @@ const prestationsSection = {
   /* ══════════════════════════════════════
      TÉMOIGNAGES HP
   ══════════════════════════════════════ */
+  /* ══════════════════════════════════════
+     BON CADEAU
+  ══════════════════════════════════════ */
+  .hp-cadeau {
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+  }
+  .hp-cadeau__bg {
+    position: absolute; inset: 0;
+    background: url('/images/prestation-cadeau.jpg') center / cover no-repeat;
+  }
+  .hp-cadeau__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg, rgba(7,24,31,0.93) 0%, rgba(13,43,62,0.82) 50%, rgba(13,43,62,0.55) 100%);
+  }
+  .hp-cadeau__inner {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 5rem;
+    align-items: center;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  .hp-cadeau__eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-ocean-light); font-weight: 600; margin-bottom: 1rem;
+  }
+  .hp-cadeau__titre {
+    font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400; color: white; line-height: 1.1; margin-bottom: 1.5rem;
+  }
+  .hp-cadeau__titre em { color: var(--color-ocean-light); font-style: italic; }
+  .hp-cadeau__texte {
+    font-size: 1rem; line-height: 1.75; color: rgba(255,255,255,0.72);
+    max-width: 520px; margin-bottom: 2.5rem;
+  }
+  .hp-cadeau__actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .hp-cadeau__btn {
+    display: inline-block; padding: 0.8rem 2rem; border-radius: 4px;
+    font-weight: 500; font-size: 0.95rem; text-decoration: none; transition: all 0.2s;
+  }
+  .hp-cadeau__btn--prim {
+    background: var(--color-ocean-light); color: #07181f;
+  }
+  .hp-cadeau__btn--prim:hover { background: white; }
+  .hp-cadeau__btn--ghost {
+    border: 1.5px solid rgba(255,255,255,0.35); color: white;
+  }
+  .hp-cadeau__btn--ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  .hp-cadeau__card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 2rem;
+    backdrop-filter: blur(8px);
+  }
+  .hp-cadeau__card-label {
+    font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--color-ocean-light); font-weight: 700; margin-top: 1.2rem;
+  }
+  .hp-cadeau__card-label:first-child { margin-top: 0; }
+  .hp-cadeau__card-val {
+    font-size: 0.88rem; color: rgba(255,255,255,0.8); line-height: 1.5;
+  }
+  .hp-cadeau__card-cta {
+    display: block; margin-top: 1.6rem; text-align: center;
+    background: var(--color-ocean-light); color: #07181f;
+    padding: 0.7rem 1rem; border-radius: 4px; font-weight: 600;
+    font-size: 0.9rem; text-decoration: none; transition: background 0.2s;
+  }
+  .hp-cadeau__card-cta:hover { background: white; }
+
+  @media (max-width: 860px) {
+    .hp-cadeau__inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hp-cadeau__aside { display: none; }
+  }
+  @media (max-width: 560px) {
+    .hp-cadeau__actions { flex-direction: column; }
+  }
+
   .hp-temo {
     background: linear-gradient(135deg, #07181f 0%, #0d2b3e 55%, #0a2030 100%);
     padding: 5rem 0;
@@ -819,6 +957,10 @@ const prestationsSection = {
     line-height: 1.6;
     color: white;
     margin: 0 0 1.4rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
   }
   .hp-temo__quote figcaption {
     display: flex;
