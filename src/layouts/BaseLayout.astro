@@ -3,25 +3,45 @@ import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import VisualEditingPreview from '../components/VisualEditingPreview.tsx'
 import { client } from '../lib/sanity.js'
+import imageUrlBuilder from '@sanity/image-url'
 
-// SEO globaux depuis Sanity — fallbacks si le document n'existe pas encore
-const siteParams = await client.fetch(
-  `*[_id == "siteParametres"][0]{ siteTitle, siteDescription }`
-)
+const builder = imageUrlBuilder(client)
+const urlFor  = (source: any) => builder.image(source)
+
+// ── Un seul fetch pour tout le site (SEO global + données Footer) ──────────
+const params = await client.fetch(`*[_id == "siteParametres"][0]{
+  siteTitle, siteDescription, ogImage,
+  telephone, email, adresse, footerTexte, mentionsLegales,
+  facebook, instagram, youtube, vimeo
+}`)
 
 interface Props {
   title?: string
   description?: string
-  image?: string
+  image?: string   // URL directe — prioritaire sur ogImage Sanity
 }
 
 const {
-  title = siteParams?.siteTitle || 'Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne',
-  description = siteParams?.siteDescription || 'Moniteur-Guide diplômé, Jean-Baptiste Vidal vous accompagne pour la pêche à la mouche sur les plus belles rivières de Bretagne.',
-  image = '/og-default.jpg',
+  title       = params?.siteTitle       || 'Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne',
+  description = params?.siteDescription || 'Moniteur-Guide diplômé, Jean-Baptiste Vidal vous accompagne pour la pêche à la mouche sur les plus belles rivières de Bretagne.',
+  image       = params?.ogImage
+    ? urlFor(params.ogImage).width(1200).height(630).url()
+    : '/og-default.jpg',
 } = Astro.props
 
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url
+
+// ── Données passées au Footer (évite un second fetch) ─────────────────────
+const footerProps = {
+  telephone: params?.telephone || '06 87 30 34 56',
+  email:     params?.email     || 'enjoy.fishing@hotmail.fr',
+  adresse:   params?.adresse   || null,
+  footerBio: params?.footerTexte || "Moniteur-Guide diplômé d'État.\nPêche à la mouche en rivières de Bretagne.",
+  instagram: params?.instagram || null,
+  facebook:  params?.facebook  || null,
+  youtube:   params?.youtube   || null,
+  vimeo:     params?.vimeo     || null,
+}
 ---
 
 <!doctype html>
@@ -59,7 +79,7 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer {...footerProps} />
     <!-- Visual Editing — s'active UNIQUEMENT dans l'iframe Studio ou avec ?sanity-preview-perspective -->
     <!-- Les visiteurs normaux ne voient jamais les encadrés bleus -->
     <VisualEditingPreview client:only="react" />

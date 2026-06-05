@@ -1,25 +1,31 @@
 ---
-import { client } from '../lib/sanity.js'
+// Les données arrivent via props depuis BaseLayout (un seul fetch centralisé)
+interface Props {
+  telephone?: string
+  email?:     string
+  adresse?:   string | null
+  footerBio?: string
+  instagram?: string | null
+  facebook?:  string | null
+  youtube?:   string | null
+  vimeo?:     string | null
+}
 
-const year = new Date().getFullYear()
+const {
+  telephone = '06 87 30 34 56',
+  email     = 'enjoy.fishing@hotmail.fr',
+  adresse   = null,
+  footerBio = "Moniteur-Guide diplômé d'État.\nPêche à la mouche en rivières de Bretagne.",
+  instagram = null,
+  facebook  = null,
+  youtube   = null,
+  vimeo     = null,
+} = Astro.props
 
-// Fetch paramètres depuis Sanity (fallbacks sur les valeurs actuelles)
-const params = await client.fetch(
-  `*[_id == "siteParametres"][0]{
-    telephone, email, adresse, footerTexte,
-    facebook, instagram, youtube, vimeo
-  }`
-)
-
-const phone        = params?.telephone   || '06 87 30 34 56'
-const email        = params?.email       || 'enjoy.fishing@hotmail.fr'
-const footerBio    = params?.footerTexte || "Moniteur-Guide diplômé d'État.\nPêche à la mouche en rivières de Bretagne."
-const phoneHref    = 'tel:+33' + phone.replace(/\s/g, '').replace(/^0/, '')
-const instagram    = params?.instagram   || null
-const facebook     = params?.facebook    || null
-const youtube      = params?.youtube     || null
-const vimeo        = params?.vimeo       || null
-const hasSocial    = instagram || facebook || youtube || vimeo
+const year      = new Date().getFullYear()
+const phone     = telephone
+const phoneHref = 'tel:+33' + phone.replace(/\s/g, '').replace(/^0/, '')
+const hasSocial = instagram || facebook || youtube || vimeo
 
 const navLinks = [
   { label: 'Accueil',             href: '/' },
@@ -47,6 +53,7 @@ const navLinks = [
       <address class="footer-contact">
         <a href={phoneHref}>{phone}</a>
         <a href={`mailto:${email}`}>{email}</a>
+        {adresse && <span class="footer-adresse">{adresse}</span>}
       </address>
       {hasSocial && (
         <div class="footer-social">
@@ -140,6 +147,12 @@ const navLinks = [
     gap: 0.4rem;
     font-style: normal;
     font-size: 0.85rem;
+  }
+
+  .footer-adresse {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.82rem;
+    font-style: normal;
   }
 
   .footer-contact a {
