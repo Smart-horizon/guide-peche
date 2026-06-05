@@ -1,0 +1,500 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const seoTitle = "Tarifs stages et guidages 2026 — Jean-Baptiste Vidal, Guide de pêche Bretagne"
+const seoDescription = "Tarifs des stages et guidages de pêche à la mouche en Bretagne avec Jean-Baptiste Vidal : bar, truite, alose, saumon, brochet, réservoir, Spey Cast. Bretagne-Sud."
+
+const prestations = [
+  {
+    categorie: 'Bar à la mouche',
+    color: 'ocean',
+    items: [
+      { label: 'Initiation bar à la mouche',           lien: '/initiation-peche-du-bar-a-la-mouche' },
+      { label: 'Perfectionnement bar',                  lien: '/peche-du-bar-perfectionnement' },
+      { label: 'Bar à vue en estuaire',                 lien: '/peche-du-bar-a-vue-a-la-mouche' },
+      { label: 'Bar en bateau « spécial mouche »',      lien: '/peche-mouche-bar-bateau-bretagne' },
+      { label: 'Coaching bar',                          lien: '/peche-du-bar-a-la-mouche-coaching' },
+    ],
+  },
+  {
+    categorie: 'Eau douce & migrateurs',
+    color: 'sand',
+    items: [
+      { label: 'Initiation pêche à la mouche',          lien: '/peche-a-la-mouche-en-bretagne' },
+      { label: 'Perfectionnement truite en rivière',    lien: '/peche-de-la-truite-a-la-mouche-en-bretagne' },
+      { label: 'Pêche de la grande alose',              lien: '/peche-de-l-alose-a-la-mouche' },
+      { label: 'Pêche du brochet à la mouche',          lien: '/peche-du-brochet-a-la-mouche' },
+      { label: 'Pêche de la truite en réservoir',       lien: '/peche-de-la-truite-en-reservoir' },
+      { label: 'Stage Père / enfant (– de 16 ans)',     lien: '/contact' },
+      { label: 'Pêche du saumon',                       lien: null, note: 'Fermée en 2026' },
+    ],
+  },
+  {
+    categorie: 'Technique & perfectionnement',
+    color: 'sand',
+    items: [
+      { label: 'Cours de lancer — canne une main',      lien: '/cours-de-lancer-peche-a-la-mouche' },
+      { label: 'Stage Spey Cast — switch & deux mains', lien: '/stage-spey-cast' },
+      { label: 'Masterclass réservoir',                 lien: '/master-class-peche-en-reservoir' },
+      { label: 'Masterclass nymphe au fil',             lien: '/master-class-nymphe-au-fil' },
+    ],
+  },
+]
+
+const inclus = [
+  "L'enseignement et le guidage (7 à 8 h environ)",
+  "Le prêt de matériel haut de gamme si nécessaire (canne, soie, moulinets, bas de ligne)",
+  "Les mouches du guide",
+  "Le matériel consommable",
+  "Les boissons non alcoolisées",
+  "Aide à l'acquisition du permis de pêche, matériel, hébergement et activités (sur demande)",
+]
+
+const nonInclus = [
+  "Le permis de pêche",
+  "Les waders ou bottes",
+  "Les repas",
+  "Le transport sur le lieu de pêche",
+  "L'hébergement",
+]
+
+const supplements = [
+  { label: "Assortiment migrateur saumon (obligatoire)", prix: "50 €", note: "Fourni sur demande" },
+  { label: "Permis journalier réservoir", prix: "15 – 23 €", note: "Etang Neuf (22) · Parc Ar Bihan (56)" },
+  { label: "Supplément carburant — 50 km A+R", prix: "20 €", note: "Guidage hors secteur géographique" },
+  { label: "Supplément carburant — 100 km A+R", prix: "30 €", note: "" },
+  { label: "Supplément carburant — 150 km A+R", prix: "40 €", note: "" },
+]
+---
+
+<BaseLayout title={seoTitle} description={seoDescription}>
+
+  <!-- HERO -->
+  <section class="tarif-hero">
+    <div class="container tarif-hero__inner">
+      <p class="eyebrow-light">Bretagne-Sud · 2026</p>
+      <h1>Tarifs des stages & guidages</h1>
+      <p class="hero-sub">Enseignements et guidages pour pêcheurs débutants, confirmés et experts — eau douce, bar, migrateurs, technique.</p>
+      <a href="/contact" class="btn-prim">Demander un devis</a>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="section section--white">
+    <div class="container intro-grid">
+      <div class="intro-text">
+        <p class="eyebrow">Tarifs 2026</p>
+        <h2>Stages de pêche à la mouche en Bretagne</h2>
+        <p>Sur cette page, vous trouverez le tarif de mes stages de pêche à la mouche et de mes prestations pour la pêche en Bretagne.</p>
+        <p>N'hésitez pas à me contacter si vous souhaitez d'autres renseignements ou pour discuter de votre futur stage ou séjour de pêche en Bretagne.</p>
+        <div class="contact-inline">
+          <a href="tel:0687303456" class="contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.72A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            06 87 30 34 56
+          </a>
+          <a href="mailto:enjoy.fishing@hotmail.fr" class="contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            enjoy.fishing@hotmail.fr
+          </a>
+        </div>
+      </div>
+      <div class="intro-card">
+        <p class="intro-card__title">Durée des prestations</p>
+        <p class="intro-card__val">7 à 8 heures environ</p>
+        <p class="intro-card__title">Niveaux</p>
+        <p class="intro-card__val">Débutants · Confirmés · Experts</p>
+        <p class="intro-card__title">Zone géographique</p>
+        <p class="intro-card__val">Bretagne-Sud — Finistère · Morbihan</p>
+        <p class="intro-card__title">Contact</p>
+        <p class="intro-card__val">06 87 30 34 56<br/>enjoy.fishing@hotmail.fr</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLEAU DES TARIFS PAR CATÉGORIE -->
+  {prestations.map(cat => (
+    <section class={`section tarif-section tarif-section--${cat.color}`}>
+      <div class="container">
+        <h2 class="tarif-cat-title">{cat.categorie}</h2>
+        <div class="tarif-table">
+          <div class="tarif-table__head">
+            <span class="col-prestation">Prestation</span>
+            <span class="col-prix">1 personne</span>
+            <span class="col-prix">2 personnes</span>
+            <span class="col-note">Notes</span>
+          </div>
+          {cat.items.map(item => (
+            <div class:list={['tarif-row', { 'tarif-row--closed': !!item.note }]}>
+              <span class="col-prestation">
+                {item.lien && !item.note
+                  ? <a href={item.lien} class="tarif-link">{item.label}</a>
+                  : <span>{item.label}</span>
+                }
+              </span>
+              <span class="col-prix">
+                {item.note
+                  ? <span class="tag-closed">{item.note}</span>
+                  : <span class="prix">Sur demande</span>
+                }
+              </span>
+              <span class="col-prix">
+                {item.note ? '' : <span class="prix">Sur demande</span>}
+              </span>
+              <span class="col-note"></span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- CE QUI EST INCLUS -->
+  <section class="section section--ocean">
+    <div class="container inclus-grid">
+      <div>
+        <p class="eyebrow-light">Dans le tarif</p>
+        <h2 class="light">Ce qui est inclus</h2>
+        <ul class="inclus-list">
+          {inclus.map(item => (
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow-light-muted">Hors tarif</p>
+        <h2 class="light">Non inclus</h2>
+        <ul class="noninclus-list">
+          {nonInclus.map(item => (
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPLÉMENTS -->
+  <section class="section section--sand">
+    <div class="container">
+      <p class="eyebrow">Informations pratiques</p>
+      <h2>Suppléments & frais annexes</h2>
+      <div class="suppl-list">
+        {supplements.map(s => (
+          <div class="suppl-row">
+            <span class="suppl-label">{s.label}</span>
+            {s.note && <span class="suppl-note">{s.note}</span>}
+            <span class="suppl-prix">{s.prix}</span>
+          </div>
+        ))}
+      </div>
+      <p class="suppl-footer">
+        Un supplément carburant peut être appliqué pour tout guidage ou cours de lancer se déroulant sur un site éloigné du secteur géographique habituel (ex. : saumon de l'Elorn, saumon du Léguer, hors Finistère-Sud).
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--dark prest-cta-final">
+    <div class="container prest-cta-final__inner">
+      <div>
+        <h2>Réservez votre stage</h2>
+        <p>Disponibilités et tarifs détaillés sur demande — réponse sous 24h.</p>
+      </div>
+      <div class="prest-cta-final__btns">
+        <a href="/contact" class="btn-prim">Me contacter</a>
+        <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.tarif-hero {
+  min-height: 52vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4rem;
+  background:
+    linear-gradient(to top, rgba(7,24,31,0.92) 0%, rgba(13,43,62,0.5) 100%),
+    url('/images/bar-perf-9.jpg') center / cover no-repeat;
+  background-color: var(--color-ocean);
+  color: white;
+}
+.tarif-hero__inner { position: relative; z-index: 1; }
+.eyebrow-light {
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--color-ocean-light); font-weight: 500; margin-bottom: 0.5rem;
+}
+.tarif-hero h1 { color: white; margin: 0.4rem 0 1rem; max-width: 700px; }
+.hero-sub { color: rgba(255,255,255,0.7); max-width: 560px; line-height: 1.65; margin-bottom: 2rem; }
+
+/* ── Sections ──────────────────────────────────────────────────────────── */
+.section { padding: 4.5rem 0; }
+.section--white { background: white; }
+.section--sand  { background: var(--color-sand); }
+.section--ocean { background: var(--color-ocean); }
+.section--dark  { background: var(--color-ocean); }
+
+.eyebrow {
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--color-ocean-main); font-weight: 500; margin-bottom: 0.5rem;
+}
+.eyebrow-light-muted {
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); font-weight: 500; margin-bottom: 0.5rem;
+}
+h2.light { color: white; margin: 0.4rem 0 1.5rem; }
+
+/* ── Intro ─────────────────────────────────────────────────────────────── */
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 4.5rem;
+  align-items: start;
+}
+.intro-text h2 { margin: 0.4rem 0 1.2rem; }
+.intro-text p { line-height: 1.8; color: var(--color-text-muted, #555); margin-bottom: 1rem; }
+
+.contact-inline {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+.contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--color-ocean-main);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(27,94,138,0.25);
+  padding-bottom: 0.15rem;
+  transition: color 0.2s;
+}
+.contact-item:hover { color: var(--color-ocean); }
+
+.intro-card {
+  background: var(--color-sand);
+  border-radius: 4px;
+  padding: 1.6rem;
+  border-left: 3px solid var(--color-ocean-main);
+  position: sticky;
+  top: 5rem;
+}
+.intro-card__title {
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--color-ocean-main); font-weight: 700; margin-top: 1.2rem;
+}
+.intro-card__title:first-child { margin-top: 0; }
+.intro-card__val {
+  font-size: 0.88rem; color: var(--color-text-muted, #555); line-height: 1.55; margin-bottom: 0;
+}
+
+/* ── Tableau de tarifs ─────────────────────────────────────────────────── */
+.tarif-section--ocean { background: white; }
+.tarif-section--sand  { background: var(--color-sand); }
+
+.tarif-cat-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  color: var(--color-ocean);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--color-ocean-main);
+}
+
+.tarif-table { width: 100%; }
+
+.tarif-table__head {
+  display: grid;
+  grid-template-columns: 1fr 130px 130px 160px;
+  gap: 0;
+  padding: 0.5rem 1rem;
+  background: var(--color-ocean);
+  border-radius: 3px 3px 0 0;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+}
+
+.tarif-row {
+  display: grid;
+  grid-template-columns: 1fr 130px 130px 160px;
+  gap: 0;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  align-items: center;
+  background: transparent;
+  transition: background 0.15s;
+}
+.tarif-row:hover { background: rgba(27,94,138,0.04); }
+.tarif-row--closed { opacity: 0.5; }
+
+.col-prestation { font-size: 0.9rem; color: var(--color-text, #1a1a1f); line-height: 1.4; }
+.col-prix {
+  font-size: 0.88rem;
+  color: var(--color-text-muted, #555);
+  text-align: center;
+}
+.col-note { font-size: 0.75rem; color: var(--color-text-muted, #555); padding-left: 0.5rem; }
+
+.tarif-link {
+  color: var(--color-ocean-main);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.tarif-link:hover { color: var(--color-ocean); text-decoration: underline; }
+
+.prix {
+  font-weight: 600;
+  color: var(--color-ocean);
+  font-size: 0.88rem;
+}
+
+.tag-closed {
+  display: inline-block;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(0,0,0,0.08);
+  color: rgba(0,0,0,0.45);
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+/* ── Inclus / Non inclus ───────────────────────────────────────────────── */
+.inclus-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.inclus-list, .noninclus-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.inclus-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.55;
+}
+.inclus-list li svg { flex-shrink: 0; color: var(--color-ocean-light); margin-top: 0.2rem; }
+.noninclus-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.55;
+}
+.noninclus-list li svg { flex-shrink: 0; color: rgba(255,255,255,0.3); margin-top: 0.2rem; }
+
+/* ── Suppléments ───────────────────────────────────────────────────────── */
+.suppl-list {
+  margin: 2rem 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 780px;
+}
+.suppl-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.suppl-label {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--color-text, #1a1a1f);
+}
+.suppl-note {
+  font-size: 0.72rem;
+  color: var(--color-text-muted, #777);
+  font-style: italic;
+  flex-shrink: 0;
+  max-width: 220px;
+}
+.suppl-prix {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-ocean);
+  min-width: 70px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.suppl-footer {
+  font-size: 0.82rem;
+  color: var(--color-text-muted, #777);
+  line-height: 1.65;
+  max-width: 740px;
+  font-style: italic;
+  margin-top: 1rem;
+}
+
+/* ── CTA Final ─────────────────────────────────────────────────────────── */
+.prest-cta-final__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.prest-cta-final__inner h2 { color: white; margin-bottom: 0.5rem; }
+.prest-cta-final__inner > div:first-child p { color: rgba(255,255,255,0.65); }
+.prest-cta-final__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.btn-prim {
+  display: inline-block;
+  background: var(--color-ocean-main); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost-light {
+  display: inline-block;
+  border: 1.5px solid rgba(255,255,255,0.4); color: white;
+  padding: 0.75rem 1.8rem; border-radius: 4px; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .intro-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .intro-card { position: static; }
+  .inclus-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .tarif-table__head { grid-template-columns: 1fr 100px 100px; }
+  .tarif-table__head .col-note { display: none; }
+  .tarif-row { grid-template-columns: 1fr 100px 100px; }
+  .tarif-row .col-note { display: none; }
+}
+@media (max-width: 600px) {
+  .tarif-table__head { grid-template-columns: 1fr 90px; }
+  .tarif-table__head span:nth-child(3),
+  .tarif-table__head span:nth-child(4) { display: none; }
+  .tarif-row { grid-template-columns: 1fr 90px; }
+  .tarif-row span:nth-child(3),
+  .tarif-row span:nth-child(4) { display: none; }
+  .suppl-note { display: none; }
+  .prest-cta-final__inner { flex-direction: column; align-items: flex-start; }
+}
+</style>

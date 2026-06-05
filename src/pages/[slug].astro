@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import { client } from '../lib/sanity.js'
+import { client, stegaClient } from '../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
-const builder = imageUrlBuilder(client)
+const builder = imageUrlBuilder(stegaClient)
 const urlFor  = (source: any) => builder.image(source)
 
-// ── Routes statiques ─────────────────────────────────────────────────────────
+// ── Routes statiques (client non-stega — juste des slugs) ────────────────────
 export async function getStaticPaths() {
   const [pages, prestations, voyages] = await Promise.all([
     client.fetch(`*[_type == "page"       && defined(slug.current)]{ "slug": slug.current }`),
@@ -20,8 +21,8 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params
 
-// ── Fetch du document ────────────────────────────────────────────────────────
-const doc = await client.fetch(
+// ── Fetch du document (stegaClient — active les overlays Visual Editing) ─────
+const doc = await stegaClient.fetch(
   `coalesce(
     *[_type == "prestation" && slug.current == $slug][0]{
       _type, title, categorie,
@@ -94,13 +95,17 @@ const bgClass: Record<string,string> = {
   mist:  'section--mist',
   dark:  'section--dark',
 }
+// stegaClean sur un fond (champ enum)
+const bg = (fond: string) => bgClass[stegaClean(fond) ?? ''] ?? ''
 
 // ── YouTube ID ────────────────────────────────────────────────────────────────
 const ytId = (url: string) => url?.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)?.[1] ?? null
 
 // ── Helpers hero (évite les TypeScript génériques dans le JSX) ──────────────
-const heroHeight = (h: string) =>
-  h === 'medium' ? '52vh' : h === 'compact' ? '36vh' : '72vh'
+const heroHeight = (h: string) => {
+  const v = stegaClean(h)
+  return v === 'medium' ? '52vh' : v === 'compact' ? '36vh' : '72vh'
+}
 
 const heroBg = (imageUrl: string) => imageUrl
   ? `background:linear-gradient(to top,rgba(7,24,31,.9) 0%,rgba(13,43,62,.45) 70%,rgba(13,43,62,.3) 100%),url(${imageUrl});background-size:cover;background-position:center`
@@ -137,7 +142,7 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ INTRO + INFO CARD ════════════ */}
     {s._type === 'sectionIntro' && (
-      <section class={`section pb-intro ${bgClass[s.fond]||''}`}>
+      <section class={`section pb-intro ${bg(s.fond)||''}`}>
         <div class="container pb-intro__grid">
           <div class="prose" set:html={blocks(s.texte)} />
           {s.showInfoCard !== false && (
@@ -183,7 +188,7 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ TEXTE ════════════ */}
     {s._type === 'sectionTexte' && (
-      <section class={`section pb-texte ${bgClass[s.fond]||''}`}>
+      <section class={`section pb-texte ${bg(s.fond)||''}`}>
         <div class="container" style={`max-width:${s.largeur==='wide'?'960px':s.largeur==='full'?'var(--max-width)':'760px'}`}>
           <div class="prose" set:html={blocks(s.texte)} />
         </div>
@@ -192,8 +197,8 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ TEXTE + IMAGE ════════════ */}
     {s._type === 'sectionTexteImage' && (
-      <section class={`section pb-ti ${bgClass[s.fond]||''}`}>
-        <div class="container pb-ti__grid" data-pos={s.imagePosition||'right'}>
+      <section class={`section pb-ti ${bg(s.fond)||''}`}>
+        <div class="container pb-ti__grid" data-pos={stegaClean(s.imagePosition)||'right'}>
           <div class="prose" set:html={blocks(s.texte)} />
           {s.texteImageUrl && (
             <figure class="pb-ti__fig">
@@ -206,10 +211,10 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ GALERIE ════════════ */}
     {s._type === 'sectionGalerie' && (
-      <section class={`section pb-galerie ${bgClass[s.fond]||'section--mist'}`}>
+      <section class={`section pb-galerie ${bg(s.fond)||'section--mist'}`}>
         <div class="container">
           {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
-          <div class="galerie-grid" style={`grid-template-columns:repeat(${s.colonnes||3},1fr)`}>
+          <div class="galerie-grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||3},1fr)`}>
             {s.photos?.map((p: any) => (
               <img src={`${p.url}?w=600&h=450&fit=crop`} alt={p.alt||''} loading="lazy" class="galerie-img"/>
             ))}
@@ -220,7 +225,7 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ VIDÉO ════════════ */}
     {s._type === 'sectionVideo' && ytId(s.url) && (
-      <section class={`section pb-video ${bgClass[s.fond]||'section--sand'}`}>
+      <section class={`section pb-video ${bg(s.fond)||'section--sand'}`}>
         <div class="container" style="max-width:860px">
           {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
           <div class="video-wrap">
@@ -237,7 +242,7 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ STATS ════════════ */}
     {s._type === 'sectionStats' && (
-      <section class={`section pb-stats ${bgClass[s.fond]||'section--dark'}`}>
+      <section class={`section pb-stats ${bg(s.fond)||'section--dark'}`}>
         <div class="container pb-stats__grid">
           {s.stats?.map((st: any) => (
             <div class="pb-stat">
@@ -251,10 +256,10 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ CTA FINAL ════════════ */}
     {s._type === 'sectionCta' && (
-      <section class={`section pb-cta ${bgClass[s.style]||bgClass.dark}`}>
+      <section class={`section pb-cta ${bg(s.style)||'section--dark'}`}>
         <div class="container pb-cta__inner">
           <div>
-            <h2 class={s.style==='dark'||!s.style?'pb-cta__h2':''} style={s.style==='dark'||!s.style?'color:white':''}>{s.titre}</h2>
+            <h2 class="pb-cta__h2" style={stegaClean(s.style)==='dark'||!s.style?'color:white':''}>{s.titre}</h2>
             {s.texte && <p class="pb-cta__sub">{s.texte}</p>}
           </div>
           <div class="pb-cta__btns">
@@ -267,7 +272,7 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ BANNIÈRE ════════════ */}
     {s._type === 'sectionBanniere' && (
-      <div class={`pb-banniere pb-banniere--${s.style||'ocean'}`}>
+      <div class={`pb-banniere pb-banniere--${stegaClean(s.style)||'ocean'}`}>
         {s.lien
           ? <a href={s.lien} class="pb-banniere__inner container">{s.texte}</a>
           : <p class="pb-banniere__inner container">{s.texte}</p>
@@ -277,7 +282,7 @@ const heroBg = (imageUrl: string) => imageUrl
 
     {/* ════════════ CARROUSEL 3 IMAGES ════════════ */}
     {s._type === 'sectionCarrousel3Images' && (
-      <section class={`section pb-carr ${bgClass[s.fond]||''}`}>
+      <section class={`section pb-carr ${bg(s.fond)||''}`}>
         <div class="container">
           {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
           <div class="carr3-track-wrap">
@@ -288,7 +293,7 @@ const heroBg = (imageUrl: string) => imageUrl
                     src={`${img.url}?w=600&fit=crop`}
                     alt={img.alt||''}
                     loading="lazy"
-                    style={`aspect-ratio:${s.ratio||'4/3'};object-fit:cover;width:100%;border-radius:4px`}
+                    style={`aspect-ratio:${stegaClean(s.ratio)||'4/3'};object-fit:cover;width:100%;border-radius:4px`}
                   />
                   {img.legende && <p class="carr3-legende">{img.legende}</p>}
                 </div>
