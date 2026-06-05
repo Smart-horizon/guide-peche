@@ -199,6 +199,20 @@ export const sectionCards = {
             { name: 'sousTitre', title: 'Sous-titre / accroche', type: 'string' },
             { name: 'lien',      title: 'URL cible',           type: 'string' },
             { name: 'image',     title: 'Photo de fond',       type: 'image', options: { hotspot: true } },
+            {
+              name: 'positionPhoto',
+              title: 'Position de la photo',
+              type: 'string',
+              options: {
+                list: [
+                  { title: '⬛ Centre (défaut)', value: 'center center' },
+                  { title: '⬆️ Haut',            value: 'center 20%'   },
+                  { title: '⬇️ Bas',             value: 'center bottom'},
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'center center',
+            },
           ],
           preview: {
             select: { title: 'titre', subtitle: 'lien', media: 'image' },
