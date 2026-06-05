@@ -6,7 +6,7 @@ import imageUrlBuilder from '@sanity/image-url'
 const builder = imageUrlBuilder(client)
 const urlFor  = (source: any) => builder.image(source)
 
-// ── Routes statiques ────────────────────────────────────────────────────────
+// ── Routes statiques ─────────────────────────────────────────────────────────
 export async function getStaticPaths() {
   const [pages, prestations, voyages] = await Promise.all([
     client.fetch(`*[_type == "page"       && defined(slug.current)]{ "slug": slug.current }`),
@@ -14,24 +14,26 @@ export async function getStaticPaths() {
     client.fetch(`*[_type == "voyage"     && defined(slug.current)]{ "slug": slug.current }`),
   ])
   return [...pages, ...prestations, ...voyages]
-    .filter(doc => doc.slug && doc.slug !== '/')
-    .map(doc => ({ params: { slug: doc.slug } }))
+    .filter(d => d.slug && d.slug !== '/')
+    .map(d => ({ params: { slug: d.slug } }))
 }
 
 const { slug } = Astro.params
 
-// ── Fetch du document (prestation en priorité) ───────────────────────────────
+// ── Fetch du document ────────────────────────────────────────────────────────
 const doc = await client.fetch(
   `coalesce(
     *[_type == "prestation" && slug.current == $slug][0]{
       _type, title, categorie,
-      image, heroEyebrow, heroSubtitle, heroMaterielLien,
-      description,
-      sousPrestations[]{ titre, sousTitre, lien, image },
-      niveau, format, saison, tarif, duree,
-      gallery[]{ ..., "url": asset->url },
-      videoUrl,
-      seoTitle, seoDescription
+      pagebuilder[]{
+        ...,
+        "imageUrl":  image.asset->url,
+        photos[]{ ..., "url": asset->url },
+        images[]{ ..., "url": asset->url },
+        cards[]{ ..., "imageUrl": image.asset->url },
+        "texteImageUrl": image.asset->url,
+      },
+      seoTitle, seoDescription, ogImage
     },
     *[_type == "voyage" && slug.current == $slug][0]{
       _type, title, pays, description, image,
@@ -48,470 +50,648 @@ const doc = await client.fetch(
 if (!doc) return Astro.redirect('/404')
 
 // ── SEO ───────────────────────────────────────────────────────────────────────
-const pageTitle = doc.seoTitle || doc.title
-const pageDesc  = doc.seoDescription || ''
-const ogImg     = doc.image ? urlFor(doc.image).width(1200).height(630).url() : undefined
+const heroSection  = doc.pagebuilder?.find((s: any) => s._type === 'sectionHero')
+const pageTitle    = doc.seoTitle || heroSection?.titre || doc.title
+const pageDesc     = doc.seoDescription || ''
+const ogImg        = doc.ogImage
+  ? urlFor(doc.ogImage).width(1200).height(630).url()
+  : heroSection?.imageUrl
+    ? `${heroSection.imageUrl}?w=1200&h=630&fit=crop`
+    : undefined
 
-// ── Hero ──────────────────────────────────────────────────────────────────────
-const heroImg   = doc.image ? urlFor(doc.image).width(1600).height(900).url() : null
-const isPrestation = doc._type === 'prestation'
-const isVoyage     = doc._type === 'voyage'
-
-// ── Info card ──────────────────────────────────────────────────────────────────
-const infoCard = isPrestation ? [
-  doc.niveau  && { label: 'Niveau',   value: doc.niveau },
-  doc.format  && { label: 'Format',   value: doc.format },
-  doc.saison  && { label: 'Saison',   value: doc.saison },
-  doc.tarif   && { label: 'Tarif',    value: doc.tarif },
-  doc.duree   && { label: 'Durée',    value: doc.duree },
-].filter(Boolean) : isVoyage ? [
-  doc.periode && { label: 'Période',  value: doc.periode },
-  doc.prix    && { label: 'À partir de', value: doc.prix },
-  doc.especes && { label: 'Espèces',  value: doc.especes },
-].filter(Boolean) : []
-
-// ── Rendu Portable Text ────────────────────────────────────────────────────────
-function renderBlocks(blocks: any[]): string {
-  if (!blocks?.length) return ''
-  return blocks.map(block => {
-    if (block._type !== 'block') {
-      if (block._type === 'image' && block.asset) {
-        const imgUrl = urlFor(block).width(900).url()
-        return `<figure><img src="${imgUrl}" alt="${block.alt || ''}" loading="lazy" /></figure>`
+// ── Rendu Portable Text ───────────────────────────────────────────────────────
+function blocks(content: any[]): string {
+  if (!content?.length) return ''
+  return content.map((b: any) => {
+    if (b._type !== 'block') {
+      if (b._type === 'image' && b.asset) {
+        const u = urlFor(b).width(900).url()
+        return `<figure><img src="${u}" alt="${b.alt || ''}" loading="lazy"/></figure>`
       }
       return ''
     }
-    const text = (block.children || []).map((span: any) => {
-      let t = span.text || ''
+    const html = (b.children || []).map((span: any) => {
+      let t = (span.text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       if (span.marks?.includes('strong')) t = `<strong>${t}</strong>`
       if (span.marks?.includes('em'))     t = `<em>${t}</em>`
-      const linkMark = (span.marks || []).find((m: string) => m?.length > 5)
-      if (linkMark) {
-        const href = block.markDefs?.find((d: any) => d._key === linkMark)?.href
+      const linkKey = (span.marks || []).find((m: any) => m?.length > 5)
+      if (linkKey) {
+        const href = b.markDefs?.find((d: any) => d._key === linkKey)?.href
         if (href) t = `<a href="${href}">${t}</a>`
       }
       return t
     }).join('')
-    const styles: Record<string, string> = { h2: 'h2', h3: 'h3', normal: 'p', blockquote: 'blockquote' }
-    const tag = styles[block.style] || 'p'
-    return `<${tag}>${text}</${tag}>`
+    const tag: Record<string,string> = { h2:'h2', h3:'h3', blockquote:'blockquote', normal:'p' }
+    const el = tag[b.style] || 'p'
+    return `<${el} class="pb-${el}">${html}</${el}>`
   }).join('')
 }
 
-const descHtml = renderBlocks(doc.description || doc.contenu || [])
-
-// ── YouTube embed ──────────────────────────────────────────────────────────────
-function getYoutubeId(url: string): string | null {
-  const m = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)
-  return m ? m[1] : null
+// ── Fond de section ───────────────────────────────────────────────────────────
+const bgClass: Record<string,string> = {
+  white: '',
+  sand:  'section--sand',
+  mist:  'section--mist',
+  dark:  'section--dark',
 }
-const youtubeId = doc.videoUrl ? getYoutubeId(doc.videoUrl) : null
 
-// ── Sous-prestations ──────────────────────────────────────────────────────────
-const sousPrestations: any[] = doc.sousPrestations || []
-const hasSous = sousPrestations.length > 0
+// ── YouTube ID ────────────────────────────────────────────────────────────────
+const ytId = (url: string) => url?.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)?.[1] ?? null
+
+// ── Helpers hero (évite les TypeScript génériques dans le JSX) ──────────────
+const heroHeight = (h: string) =>
+  h === 'medium' ? '52vh' : h === 'compact' ? '36vh' : '72vh'
+
+const heroBg = (imageUrl: string) => imageUrl
+  ? `background:linear-gradient(to top,rgba(7,24,31,.9) 0%,rgba(13,43,62,.45) 70%,rgba(13,43,62,.3) 100%),url(${imageUrl});background-size:cover;background-position:center`
+  : 'background:var(--color-ocean)'
 ---
 
 <BaseLayout title={`${pageTitle} — Jean-Baptiste Vidal`} description={pageDesc} image={ogImg}>
 
-  <!-- ══════════════════════════ HERO ══════════════════════════ -->
-  <section class="ph">
-    <div
-      class="ph__bg"
-      style={heroImg
-        ? `background-image: linear-gradient(to top, rgba(7,24,31,.9) 0%, rgba(13,43,62,.45) 70%, rgba(13,43,62,.3) 100%), url(${heroImg})`
-        : `background: var(--color-ocean)`}
-    ></div>
-    <div class="ph__content container">
-      {doc.heroEyebrow && <p class="ph__eyebrow">{doc.heroEyebrow}</p>}
-      {isVoyage && doc.pays  && <p class="ph__eyebrow">{doc.pays}</p>}
-      <h1 class="ph__h1">{doc.title}</h1>
-      {doc.heroSubtitle && <p class="ph__sub">{doc.heroSubtitle}</p>}
-      {isVoyage && doc.periode && <p class="ph__sub">{doc.periode}{doc.especes ? ` · ${doc.especes}` : ''}</p>}
-      <div class="ph__cta">
-        <a href="/contact"       class="btn-prim">Réserver une sortie</a>
-        <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
-        {doc.heroMaterielLien && (
-          <a href={doc.heroMaterielLien} class="btn-mat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-            Matériel
-          </a>
-        )}
-      </div>
-    </div>
-  </section>
+  {/* ── PAGE BUILDER ── */}
+  {doc.pagebuilder?.map((s: any) => (
 
-  <!-- ══════════════════════════ INTRO + INFO CARD ══════════════ -->
-  {(descHtml || infoCard.length > 0) && (
-    <section class="section pi">
-      <div class="container pi__grid">
+    <>
+    {/* ════════════ HERO ════════════ */}
+    {s._type === 'sectionHero' && (
+      <section class="pb-hero" style={`min-height:${heroHeight(s.hauteur)}`}>
+        <div class="pb-hero__bg" style={heroBg(s.imageUrl)}></div>
+        <div class="pb-hero__content container">
+          {s.eyebrow && <p class="pb-eyebrow">{s.eyebrow}</p>}
+          <h1 class="pb-hero__h1">{s.titre}</h1>
+          {s.sousTitre && <p class="pb-hero__sub">{s.sousTitre}</p>}
+          <div class="pb-hero__cta">
+            <a href={s.btnReserverLien || '/contact'} class="btn-prim">{s.btnReserverTexte || 'Réserver une sortie'}</a>
+            <a href={`tel:${(s.btnTelTexte || '06 87 30 34 56').replace(/\s/g,'')}`} class="btn-ghost">{s.btnTelTexte || '06 87 30 34 56'}</a>
+            {s.btnMaterielLien && (
+              <a href={s.btnMaterielLien} class="btn-mat">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                Matériel
+              </a>
+            )}
+          </div>
+        </div>
+      </section>
+    )}
 
-        {/* Texte principal */}
-        {descHtml && (
-          <div class="pi__body prose" set:html={descHtml} />
-        )}
-
-        {/* Info card */}
-        {infoCard.length > 0 && (
-          <aside class="pi__aside">
-            <div class="info-card">
-              {infoCard.map((row: any) => (
-                <>
-                  <p class="info-card__label">{row.label}</p>
-                  <p class="info-card__val">{row.value}</p>
-                </>
-              ))}
-              <p class="info-card__label">Contact</p>
-              <p class="info-card__val">
-                06 87 30 34 56<br />
-                enjoy.fishing@hotmail.fr
-              </p>
-            </div>
-          </aside>
-        )}
-
-      </div>
-    </section>
-  )}
-
-  <!-- ══════════════════════════ SOUS-PRESTATIONS ════════════════ -->
-  {hasSous && (
-    <section class="sous-section">
-      <div class="sous-grid" data-count={sousPrestations.length}>
-        {sousPrestations.map((sp: any, i: number) => {
-          const bg = sp.image
-            ? urlFor(sp.image).width(800).height(600).url()
-            : null
-          const isLast = i === sousPrestations.length - 1
-          const isOdd  = sousPrestations.length % 2 === 1
-          return (
-            <a
-              href={sp.lien || '#'}
-              class:list={['wf-card', isOdd && isLast && 'wf-card--wide']}
-            >
-              {bg && <div class="wf-card-bg" style={`background-image:url(${bg})`}></div>}
-              {!bg && <div class="wf-card-bg"></div>}
-              <div class="wf-overlay"></div>
-              <div class="wf-body">
-                {sp.sousTitre && <span class="wf-sub">{sp.sousTitre}</span>}
-                <strong class="wf-label">{sp.titre}</strong>
+    {/* ════════════ INTRO + INFO CARD ════════════ */}
+    {s._type === 'sectionIntro' && (
+      <section class={`section pb-intro ${bgClass[s.fond]||''}`}>
+        <div class="container pb-intro__grid">
+          <div class="prose" set:html={blocks(s.texte)} />
+          {s.showInfoCard !== false && (
+            <aside>
+              <div class="info-card">
+                {s.niveau && <><p class="info-lbl">Niveau</p><p class="info-val">{s.niveau}</p></>}
+                {s.format && <><p class="info-lbl">Format</p><p class="info-val">{s.format}</p></>}
+                {s.saison && <><p class="info-lbl">Saison</p><p class="info-val">{s.saison}</p></>}
+                {s.tarif  && <><p class="info-lbl">Tarif</p> <p class="info-val">{s.tarif}</p></>}
+                {s.duree  && <><p class="info-lbl">Durée</p> <p class="info-val">{s.duree}</p></>}
+                <p class="info-lbl">Contact</p>
+                <p class="info-val">06 87 30 34 56<br/>enjoy.fishing@hotmail.fr</p>
               </div>
-            </a>
-          )
-        })}
-      </div>
-    </section>
-  )}
+            </aside>
+          )}
+        </div>
+      </section>
+    )}
 
-  <!-- ══════════════════════════ GALERIE ═════════════════════════ -->
-  {doc.gallery?.length > 0 && (
-    <section class="section section--mist gallery-section">
-      <div class="container">
-        <div class="gallery-grid">
-          {doc.gallery.map((img: any) => (
-            <img
-              src={urlFor(img).width(600).height(450).url()}
-              alt={img.alt || doc.title}
-              loading="lazy"
-              class="gallery-img"
-            />
+    {/* ════════════ CARDS ════════════ */}
+    {s._type === 'sectionCards' && (
+      <section class="pb-cards">
+        {s.titre && <div class="container" style="padding-top:3rem"><h2 class="pb-section-titre">{s.titre}</h2></div>}
+        <div class="sous-grid" data-count={s.cards?.length}>
+          {s.cards?.map((c: any, i: number) => {
+            const isLast = i === s.cards.length - 1
+            const isOdd  = s.cards.length % 2 === 1
+            const bg     = c.imageUrl ? `url(${c.imageUrl})` : 'var(--color-ocean)'
+            return (
+              <a href={c.lien||'#'} class:list={['wf-card', isOdd&&isLast&&'wf-card--wide']}>
+                <div class="wf-card-bg" style={`background-image:${bg}`}></div>
+                <div class="wf-overlay"></div>
+                <div class="wf-body">
+                  {c.sousTitre && <span class="wf-sub">{c.sousTitre}</span>}
+                  <strong class="wf-label">{c.titre}</strong>
+                </div>
+              </a>
+            )
+          })}
+        </div>
+      </section>
+    )}
+
+    {/* ════════════ TEXTE ════════════ */}
+    {s._type === 'sectionTexte' && (
+      <section class={`section pb-texte ${bgClass[s.fond]||''}`}>
+        <div class="container" style={`max-width:${s.largeur==='wide'?'960px':s.largeur==='full'?'var(--max-width)':'760px'}`}>
+          <div class="prose" set:html={blocks(s.texte)} />
+        </div>
+      </section>
+    )}
+
+    {/* ════════════ TEXTE + IMAGE ════════════ */}
+    {s._type === 'sectionTexteImage' && (
+      <section class={`section pb-ti ${bgClass[s.fond]||''}`}>
+        <div class="container pb-ti__grid" data-pos={s.imagePosition||'right'}>
+          <div class="prose" set:html={blocks(s.texte)} />
+          {s.texteImageUrl && (
+            <figure class="pb-ti__fig">
+              <img src={`${s.texteImageUrl}?w=680&fit=crop`} alt={s.image?.alt || ''} loading="lazy" />
+            </figure>
+          )}
+        </div>
+      </section>
+    )}
+
+    {/* ════════════ GALERIE ════════════ */}
+    {s._type === 'sectionGalerie' && (
+      <section class={`section pb-galerie ${bgClass[s.fond]||'section--mist'}`}>
+        <div class="container">
+          {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
+          <div class="galerie-grid" style={`grid-template-columns:repeat(${s.colonnes||3},1fr)`}>
+            {s.photos?.map((p: any) => (
+              <img src={`${p.url}?w=600&h=450&fit=crop`} alt={p.alt||''} loading="lazy" class="galerie-img"/>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════ VIDÉO ════════════ */}
+    {s._type === 'sectionVideo' && ytId(s.url) && (
+      <section class={`section pb-video ${bgClass[s.fond]||'section--sand'}`}>
+        <div class="container" style="max-width:860px">
+          {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
+          <div class="video-wrap">
+            <iframe
+              src={`https://www.youtube.com/embed/${ytId(s.url)}`}
+              title={s.titre || pageTitle}
+              allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════ STATS ════════════ */}
+    {s._type === 'sectionStats' && (
+      <section class={`section pb-stats ${bgClass[s.fond]||'section--dark'}`}>
+        <div class="container pb-stats__grid">
+          {s.stats?.map((st: any) => (
+            <div class="pb-stat">
+              <strong class="pb-stat__num">{st.nombre}</strong>
+              <span  class="pb-stat__lbl">{st.label}</span>
+            </div>
           ))}
         </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )}
 
-  <!-- ══════════════════════════ VIDÉO ══════════════════════════ -->
-  {youtubeId && (
-    <section class="section section--sand video-section">
-      <div class="container" style="max-width:860px">
-        <div class="video-wrap">
-          <iframe
-            src={`https://www.youtube.com/embed/${youtubeId}`}
-            title={doc.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
+    {/* ════════════ CTA FINAL ════════════ */}
+    {s._type === 'sectionCta' && (
+      <section class={`section pb-cta ${bgClass[s.style]||bgClass.dark}`}>
+        <div class="container pb-cta__inner">
+          <div>
+            <h2 class={s.style==='dark'||!s.style?'pb-cta__h2':''} style={s.style==='dark'||!s.style?'color:white':''}>{s.titre}</h2>
+            {s.texte && <p class="pb-cta__sub">{s.texte}</p>}
+          </div>
+          <div class="pb-cta__btns">
+            <a href={s.btn1Lien||'/contact'} class="btn-prim">{s.btn1Texte||'Me contacter'}</a>
+            {s.btn2Texte && <a href={s.btn2Lien||'tel:0687303456'} class="btn-ghost-light">{s.btn2Texte}</a>}
+          </div>
         </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )}
 
-  <!-- ══════════════════════════ CTA FINAL ══════════════════════ -->
-  <section class="section section--dark pf-cta">
-    <div class="container pf-cta__inner">
-      <div>
-        <h2>Réservez votre sortie</h2>
-        <p>Disponibilités et tarifs sur demande — réponse sous 24h.</p>
+    {/* ════════════ BANNIÈRE ════════════ */}
+    {s._type === 'sectionBanniere' && (
+      <div class={`pb-banniere pb-banniere--${s.style||'ocean'}`}>
+        {s.lien
+          ? <a href={s.lien} class="pb-banniere__inner container">{s.texte}</a>
+          : <p class="pb-banniere__inner container">{s.texte}</p>
+        }
       </div>
-      <div class="pf-cta__btns">
-        <a href="/contact"       class="btn-prim">Me contacter</a>
-        <a href="tel:0687303456" class="btn-ghost-light">06 87 30 34 56</a>
-      </div>
-    </div>
-  </section>
+    )}
+
+    {/* ════════════ CARROUSEL 3 IMAGES ════════════ */}
+    {s._type === 'sectionCarrousel3Images' && (
+      <section class={`section pb-carr ${bgClass[s.fond]||''}`}>
+        <div class="container">
+          {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
+          <div class="carr3-track-wrap">
+            <div class="carr3-track" data-ratio={s.ratio||'4/3'}>
+              {s.images?.map((img: any) => (
+                <div class="carr3-slide">
+                  <img
+                    src={`${img.url}?w=600&fit=crop`}
+                    alt={img.alt||''}
+                    loading="lazy"
+                    style={`aspect-ratio:${s.ratio||'4/3'};object-fit:cover;width:100%;border-radius:4px`}
+                  />
+                  {img.legende && <p class="carr3-legende">{img.legende}</p>}
+                </div>
+              ))}
+            </div>
+            {s.images?.length > 3 && (
+              <div class="carr3-nav">
+                <button class="carr3-btn carr3-btn--prev" aria-label="Précédent">‹</button>
+                <button class="carr3-btn carr3-btn--next" aria-label="Suivant">›</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    )}
+    </>
+
+  ))}
+
+  {/* ── Fallback pages génériques (type page / voyage sans pagebuilder) ── */}
+  {!doc.pagebuilder && (
+    <>
+      <section class="pb-hero" style="min-height:52vh">
+        <div class="pb-hero__bg" style={doc.image
+          ? `background:linear-gradient(to top,rgba(7,24,31,.9),rgba(13,43,62,.4)),url(${urlFor(doc.image).width(1600).url()});background-size:cover;background-position:center`
+          : 'background:var(--color-ocean)'}></div>
+        <div class="pb-hero__content container">
+          {doc.pays && <p class="pb-eyebrow">{doc.pays}</p>}
+          <h1 class="pb-hero__h1">{doc.title}</h1>
+          {doc.periode && <p class="pb-hero__sub">{doc.periode}{doc.especes ? ` · ${doc.especes}` : ''}</p>}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container" style="max-width:760px">
+          <div class="prose" set:html={blocks(doc.description || doc.contenu || [])} />
+          {doc.prix && <p style="margin-top:1.5rem;color:var(--color-ocean-main);font-weight:600">À partir de {doc.prix}</p>}
+        </div>
+      </section>
+
+      <section class="section section--dark pb-cta">
+        <div class="container pb-cta__inner">
+          <div>
+            <h2 style="color:white">Réservez votre sortie</h2>
+            <p class="pb-cta__sub">Disponibilités sur demande — réponse sous 24h.</p>
+          </div>
+          <div class="pb-cta__btns">
+            <a href="/contact"        class="btn-prim">Me contacter</a>
+            <a href="tel:0687303456"  class="btn-ghost-light">06 87 30 34 56</a>
+          </div>
+        </div>
+      </section>
+    </>
+  )}
 
 </BaseLayout>
 
 <style>
-  /* ── HERO ── */
-  .ph {
-    position: relative;
-    min-height: 72vh;
-    display: flex;
-    align-items: flex-end;
-    padding-bottom: 4rem;
-    color: white;
-  }
-  .ph__bg {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-color: var(--color-ocean);
-  }
-  .ph__content {
-    position: relative;
-    z-index: 1;
-    padding-top: var(--header-height);
-  }
-  .ph__eyebrow {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--color-ocean-light);
-    margin-bottom: 0.8rem;
-    font-weight: 500;
-  }
-  .ph__h1 {
-    color: white;
-    margin-bottom: 1rem;
-    max-width: 720px;
-  }
-  .ph__sub {
-    color: rgba(255,255,255,0.75);
-    max-width: 560px;
-    line-height: 1.65;
-    margin-bottom: 2rem;
-    font-size: 1.05rem;
-  }
-  .ph__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+/* ── HERO ── */
+.pb-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 4rem;
+  color: white;
+}
+.pb-hero__bg {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-ocean);
+}
+.pb-hero__content {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--header-height);
+}
+.pb-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-ocean-light);
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+.pb-hero__h1 {
+  color: white;
+  margin-bottom: 1rem;
+  max-width: 720px;
+}
+.pb-hero__sub {
+  color: rgba(255,255,255,0.75);
+  max-width: 580px;
+  line-height: 1.65;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+}
+.pb-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
 
-  /* boutons hero */
-  .btn-prim {
-    background: var(--color-ocean-main);
-    color: white;
-    padding: 0.75rem 1.8rem;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-  }
-  .btn-prim:hover { background: #144b72; }
-  .btn-ghost {
-    border: 1.5px solid rgba(255,255,255,0.4);
-    color: white;
-    padding: 0.75rem 1.8rem;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: border-color 0.2s;
-  }
-  .btn-ghost:hover { border-color: white; }
-  .btn-mat {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    border: 1.5px solid rgba(126,200,227,0.5);
-    color: var(--color-ocean-light);
-    padding: 0.75rem 1.4rem;
-    border-radius: 4px;
-    font-size: 0.88rem;
-    font-weight: 500;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .btn-mat:hover { border-color: var(--color-ocean-light); color: white; }
+/* ── Boutons ── */
+.btn-prim {
+  background: var(--color-ocean-main);
+  color: white;
+  padding: 0.75rem 1.8rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.btn-prim:hover { background: #144b72; }
+.btn-ghost {
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: white;
+  padding: 0.75rem 1.8rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+.btn-ghost:hover { border-color: white; }
+.btn-ghost-light {
+  border: 1.5px solid rgba(255,255,255,0.35);
+  color: white;
+  padding: 0.75rem 1.8rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+.btn-ghost-light:hover { border-color: white; }
+.btn-mat {
+  display: flex; align-items: center; gap: 0.4rem;
+  border: 1.5px solid rgba(126,200,227,0.5);
+  color: var(--color-ocean-light);
+  padding: 0.75rem 1.4rem;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-mat:hover { border-color: var(--color-ocean-light); color: white; }
 
-  /* ── INTRO + INFO CARD ── */
-  .pi__grid {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 3rem;
-    align-items: start;
-  }
+/* ── INTRO + INFO CARD ── */
+.pb-intro__grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 3rem;
+  align-items: start;
+}
+.info-card {
+  background: var(--color-sand);
+  border: 1px solid #e0dfd9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: sticky;
+  top: calc(var(--header-height) + 2rem);
+}
+.info-lbl {
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+  margin-top: 1rem;
+}
+.info-lbl:first-child { margin-top: 0; }
+.info-val {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
 
-  .prose :global(p) {
-    color: var(--color-text-muted);
-    line-height: 1.8;
-    margin-bottom: 1.25rem;
-    font-size: 1.025rem;
-  }
-  .prose :global(h2) {
-    font-family: var(--font-serif);
-    font-size: clamp(1.3rem, 2.5vw, 1.7rem);
-    color: var(--color-text);
-    margin: 2rem 0 0.75rem;
-  }
-  .prose :global(h3) {
-    font-family: var(--font-serif);
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
-    color: var(--color-text);
-    margin: 1.5rem 0 0.5rem;
-  }
-  .prose :global(a) {
-    color: var(--color-ocean-main);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-  .prose :global(figure) { margin: 1.5rem 0; }
-  .prose :global(figure img) { border-radius: 6px; width: 100%; }
-  .prose :global(blockquote) {
-    border-left: 3px solid var(--color-ocean-light);
-    padding-left: 1.2rem;
-    margin: 1.5rem 0;
-    font-style: italic;
-    color: var(--color-text-muted);
-  }
+/* ── PROSE (Portable Text) ── */
+.prose :global(.pb-p) {
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+}
+.prose :global(.pb-h2) {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  color: var(--color-text);
+  margin: 2rem 0 0.75rem;
+}
+.prose :global(.pb-h3) {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--color-text);
+  margin: 1.5rem 0 0.5rem;
+}
+.prose :global(.pb-blockquote) {
+  border-left: 3px solid var(--color-ocean-light);
+  padding-left: 1.2rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+.prose :global(a) { color: var(--color-ocean-main); text-decoration: underline; text-underline-offset: 2px; }
+.prose :global(figure) { margin: 1.5rem 0; }
+.prose :global(figure img) { border-radius: 6px; width: 100%; }
 
-  .info-card {
-    background: var(--color-sand);
-    border: 1px solid #e0dfd9;
-    border-radius: 8px;
-    padding: 1.5rem;
-    position: sticky;
-    top: calc(var(--header-height) + 2rem);
-  }
-  .info-card__label {
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-ocean-main);
-    font-weight: 600;
-    margin-bottom: 0.2rem;
-    margin-top: 1rem;
-  }
-  .info-card__label:first-child { margin-top: 0; }
-  .info-card__val {
-    font-size: 0.9rem;
-    color: var(--color-text);
-    line-height: 1.5;
-  }
+/* ── CARDS (sous-prestations) ── */
+.pb-cards { background: var(--color-ocean); }
+.pb-section-titre {
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+.section--dark .pb-section-titre { color: white; }
+.sous-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.wf-card {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 260px;
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+}
+.wf-card--wide { grid-column: 1 / -1; }
+.wf-card-bg {
+  position: absolute; inset: 0;
+  background: var(--color-ocean) center / cover no-repeat;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.wf-card:hover .wf-card-bg { transform: scale(1.04); }
+.wf-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,24,31,.85) 0%, transparent 65%);
+  transition: opacity 0.3s;
+}
+.wf-card:hover .wf-overlay { opacity: 0.7; }
+.wf-body {
+  position: relative; z-index: 1;
+  padding: 1.5rem 1.8rem;
+  display: flex; flex-direction: column; gap: 0.4rem;
+}
+.wf-sub {
+  font-size: 0.72rem; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ocean-light); font-weight: 500;
+}
+.wf-label {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 500; line-height: 1.25;
+}
 
-  /* ── SOUS-PRESTATIONS ── */
-  .sous-section { background: var(--color-ocean); }
-  .sous-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    min-height: 520px;
-  }
-  .wf-card {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    min-height: 260px;
-    overflow: hidden;
-    text-decoration: none;
-    color: white;
-  }
-  .wf-card--wide { grid-column: 1 / -1; }
-  .wf-card-bg {
-    position: absolute;
-    inset: 0;
-    background: var(--color-ocean) center / cover no-repeat;
-    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
-  }
-  .wf-card:hover .wf-card-bg { transform: scale(1.04); }
-  .wf-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(7,24,31,.85) 0%, transparent 65%);
-    transition: opacity 0.3s;
-  }
-  .wf-card:hover .wf-overlay { opacity: 0.7; }
-  .wf-body {
-    position: relative;
-    z-index: 1;
-    padding: 1.5rem 1.8rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-  .wf-sub {
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-ocean-light);
-    font-weight: 500;
-  }
-  .wf-label {
-    font-family: var(--font-serif);
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    font-weight: 500;
-    line-height: 1.25;
-  }
+/* ── TEXTE + IMAGE ── */
+.pb-ti__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+.pb-ti__grid[data-pos="left"] .pb-ti__fig { order: -1; }
+.pb-ti__fig img { border-radius: 6px; width: 100%; }
 
-  /* ── GALERIE ── */
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-  .gallery-img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    border-radius: 4px;
-  }
+/* ── GALERIE ── */
+.galerie-grid {
+  display: grid;
+  gap: 1rem;
+}
+.galerie-img {
+  width: 100%; aspect-ratio: 4/3;
+  object-fit: cover; border-radius: 4px;
+}
 
-  /* ── VIDÉO ── */
-  .video-wrap {
-    position: relative;
-    padding-bottom: 56.25%;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .video-wrap iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
+/* ── VIDÉO ── */
+.video-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  border-radius: 6px; overflow: hidden;
+  margin-top: 1.5rem;
+}
+.video-wrap iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; border: none;
+}
 
-  /* ── CTA FINAL ── */
-  .pf-cta__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-  .pf-cta h2 { color: white; margin-bottom: 0.4rem; }
-  .pf-cta p  { color: rgba(255,255,255,0.7); }
-  .pf-cta__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .btn-ghost-light {
-    border: 1.5px solid rgba(255,255,255,0.35);
-    color: white;
-    padding: 0.75rem 1.8rem;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: border-color 0.2s;
-  }
-  .btn-ghost-light:hover { border-color: white; }
+/* ── STATS ── */
+.pb-stats { padding: 3.5rem 0; }
+.pb-stats__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  text-align: center;
+}
+.section--dark .pb-stats { background: var(--color-ocean); }
+.pb-stat { display: flex; flex-direction: column; gap: 0.3rem; min-width: 140px; }
+.pb-stat__num {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--color-ocean-light);
+  font-weight: 500;
+  line-height: 1;
+}
+.pb-stat__lbl {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    .pi__grid { grid-template-columns: 1fr; }
-    .info-card { position: static; order: -1; }
-    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 600px) {
-    .ph { min-height: 60vh; }
-    .sous-grid { grid-template-columns: 1fr; }
-    .wf-card--wide { grid-column: auto; }
-    .gallery-grid { grid-template-columns: 1fr; }
-    .pf-cta__inner { flex-direction: column; text-align: center; }
-    .pf-cta__btns { justify-content: center; }
-  }
+/* ── CTA ── */
+.section--dark.pb-cta { background: var(--color-ocean); }
+.pb-cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem; flex-wrap: wrap;
+}
+.pb-cta__h2 { margin-bottom: 0.4rem; }
+.pb-cta__sub { color: rgba(255,255,255,0.7); margin-top: 0.3rem; }
+.section--sand .pb-cta__sub,
+.section--mist .pb-cta__sub { color: var(--color-text-muted); }
+.pb-cta__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* ── BANNIÈRE ── */
+.pb-banniere { padding: 0.9rem 0; }
+.pb-banniere--ocean  { background: var(--color-ocean-main); color: white; }
+.pb-banniere--sand   { background: var(--color-sand); color: var(--color-text); }
+.pb-banniere--accent { background: var(--color-ocean-light); color: var(--color-ocean); }
+.pb-banniere__inner {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+}
+a.pb-banniere__inner:hover { text-decoration: underline; }
+
+/* ── CARROUSEL 3 IMAGES ── */
+.carr3-track-wrap { position: relative; }
+.carr3-track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  overflow: hidden;
+}
+.carr3-slide img { display: block; border-radius: 4px; }
+.carr3-legende {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: 0.4rem;
+}
+.carr3-nav {
+  display: flex; justify-content: center; gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+.carr3-btn {
+  background: var(--color-ocean-main);
+  color: white; border: none; cursor: pointer;
+  width: 42px; height: 42px; border-radius: 50%;
+  font-size: 1.4rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.carr3-btn:hover { background: var(--color-ocean); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .pb-intro__grid { grid-template-columns: 1fr; }
+  .info-card { position: static; order: -1; }
+  .pb-ti__grid  { grid-template-columns: 1fr; }
+  .pb-ti__grid[data-pos="left"] .pb-ti__fig { order: 0; }
+  .galerie-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 640px) {
+  .pb-hero { min-height: 60vh; }
+  .sous-grid { grid-template-columns: 1fr; }
+  .wf-card--wide { grid-column: auto; }
+  .carr3-track { grid-template-columns: 1fr; overflow: visible; }
+  .pb-cta__inner { flex-direction: column; text-align: center; }
+  .pb-cta__btns  { justify-content: center; }
+}
 </style>
+
+<script>
+// ── CARROUSEL 3 IMAGES ────────────────────────────────────────────────────────
+document.querySelectorAll('.carr3-track-wrap').forEach(wrap => {
+  const track  = wrap.querySelector('.carr3-track')
+  const slides = wrap.querySelectorAll('.carr3-slide')
+  const total  = slides.length
+  if (total <= 3) return
+
+  let pos = 0 // index du premier slide visible
+
+  function show(start) {
+    pos = ((start % total) + total) % total
+    slides.forEach((sl, i) => {
+      const visible = i >= pos && i < pos + 3
+      sl.style.display = visible ? '' : 'none'
+    })
+  }
+
+  show(0)
+
+  wrap.querySelector('.carr3-btn--prev')?.addEventListener('click', () => show(pos - 3))
+  wrap.querySelector('.carr3-btn--next')?.addEventListener('click', () => show(pos + 3))
+})
+</script>
