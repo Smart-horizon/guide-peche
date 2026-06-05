@@ -76,11 +76,22 @@ const materielSection = {
   })),
 }
 
+// ── Stats dynamiques : nombre et note moyenne de TOUS les témoignages Sanity
+const allTemoStats = await client.fetch(`*[_type == "temoignage"] { note }`)
+const temoCount    = allTemoStats.length
+const temoAvgRaw   = temoCount > 0
+  ? allTemoStats.reduce((sum: number, t: any) => sum + (t.note ?? 5), 0) / temoCount
+  : 5
+const temoAvgNote  = temoAvgRaw.toFixed(1)
+const temoLabel    = temoCount > 0
+  ? `${temoCount} témoignage${temoCount > 1 ? 's' : ''}`
+  : '26 témoignages'
+
 // ── Section Témoignages (meta)
 const temoSection = {
   eyebrow:  hp?.temo?.eyebrow  ?? "Ce qu'ils disent",
-  score:    hp?.temo?.score    ?? '5.0',
-  nombre:   hp?.temo?.nombre   ?? '26 témoignages',
+  score:    hp?.temo?.score?.trim()  || temoAvgNote,
+  nombre:   hp?.temo?.nombre?.trim() || temoLabel,
   pitch:    hp?.temo?.pitch    ?? 'Des pêcheurs de toute la France font confiance à Jean-Baptiste depuis 2004.',
   ctaTexte: hp?.temo?.ctaTexte ?? 'Lire tous les témoignages',
   ctaLien:  hp?.temo?.ctaLien  ?? '/temoignages',

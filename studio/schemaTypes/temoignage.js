@@ -9,6 +9,13 @@ export default {
   fields: [
     orderRankField({ type: 'temoignage' }),
     {
+      name: 'afficherAccueil',
+      title: "Afficher sur la page d'accueil",
+      type: 'boolean',
+      description: "Cocher pour inclure ce témoignage dans la section « Ce qu'ils disent » de la page d'accueil.",
+      initialValue: false,
+    },
+    {
       name: 'nom',
       title: 'Nom du client',
       type: 'string',
@@ -75,11 +82,13 @@ export default {
       title: 'nom',
       subtitle: 'prestation',
       note: 'note',
+      afficherAccueil: 'afficherAccueil',
     },
-    prepare({ title, subtitle, note }) {
+    prepare({ title, subtitle, note, afficherAccueil }) {
       const stars = note ? '⭐'.repeat(note) : ''
+      const badge = afficherAccueil ? '🏠 ' : ''
       return {
-        title: title,
+        title: badge + title,
         subtitle: `${subtitle || 'Prestation non précisée'} ${stars}`,
       }
     },

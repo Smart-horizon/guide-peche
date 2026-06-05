@@ -12,7 +12,7 @@ const videos = [
     id: 'oPICIIxRAOs',
     title: "Montage d'une mouche à bar",
     species: 'Bar',
-    desc: "Streamer côtier monté sur hameçon simple — imitation de sand-eel efficace sur les estuaires et les pointes rocheuses de Bretagne. Un must-have de ma boîte à mouches bar."
+    desc: "Streamer côtier monté sur hameçon simple, imitation de sand-eel efficace sur les estuaires et les pointes rocheuses de Bretagne. Un must-have de ma boîte à mouches bar."
   },
   {
     id: 'lmozx1gYlrE',
@@ -24,7 +24,7 @@ const videos = [
     id: 'OIY4fU5CCJY',
     title: 'Montage Blob Tequila',
     species: 'Réservoir',
-    desc: "Le Blob Tequila est une valeur sûre pour la truite de réservoir — couleur vive, matière pulsante, irrésistible en nage lente. Montage rapide et redoutablement efficace."
+    desc: "Le Blob Tequila est une valeur sûre pour la truite de réservoir : couleur vive, matière pulsante, irrésistible en nage lente. Montage rapide et redoutablement efficace."
   },
   {
     id: 't0f7sUPtd4k',
@@ -36,13 +36,13 @@ const videos = [
     id: '_bkGYL2fT2E',
     title: 'Montage Shipman Buzzer',
     species: 'Réservoir',
-    desc: "Imitation de chironome en surface — le Shipman Buzzer se pêche en nymphe suspendue dans le film. Un montage discret et très technique pour les éclosions de printemps."
+    desc: "Imitation de chironome en surface, le Shipman Buzzer se pêche en nymphe suspendue dans le film. Un montage discret et très technique pour les éclosions de printemps."
   },
   {
     id: 'kfSsPhmB1NM',
     title: 'Montage Chironome',
     species: 'Truite',
-    desc: "Nymphe de chironome en thorax, montée sur hameçon courbe. L'imitation la plus réaliste pour tromper les truites en réservoir lors des éclosions — à pêcher en nage lente sous un fil."
+    desc: "Nymphe de chironome en thorax, montée sur hameçon courbe. L'imitation la plus réaliste pour tromper les truites en réservoir lors des éclosions, à pêcher en nage lente sous un fil."
   },
   {
     id: 'YgRwUQWw5Qo',
@@ -65,7 +65,7 @@ const flyImages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
     <div class="prest-hero__content container">
       <p class="prest-eyebrow">Saumon · Truite · Bar · Alose · Réservoir</p>
       <h1>Mes mouches de pêche</h1>
-      <p class="prest-sub">Je monte toutes mes mouches personnellement — pour la France et l'étranger. Patterns testés saison après saison sur mes rivières et estuaires de Bretagne.</p>
+      <p class="prest-sub">Je monte toutes mes mouches personnellement, pour la France et l'étranger. Patterns testés saison après saison sur mes rivières et estuaires de Bretagne.</p>
       <div class="prest-hero__cta">
         <a href="/contact" class="btn-prim">Réserver une sortie</a>
         <a href="/materiel-jeanbaptistevidal" class="btn-ghost">Tout le matériel</a>
@@ -79,9 +79,9 @@ const flyImages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
       <div class="prest-intro__body">
         <h2>L'art du montage</h2>
         <p>Ah les mouches ! C'est bien sûr grâce à elles que nous arrivons à leurrer et attraper nos poissons. Que ferions-nous sans elles ?</p>
-        <p>Pour toutes mes pêches, que ce soit en France ou à l'étranger, je monte toutes mes mouches personnellement. Lors de mes guidages, mes clients utiliseront leurs propres mouches, mais surtout mes sélections en fonction de l'espèce, de l'endroit et de la saison — des patterns testés sur mes coins de pêche depuis de nombreuses années.</p>
+        <p>Pour toutes mes pêches, que ce soit en France ou à l'étranger, je monte toutes mes mouches personnellement. Lors de mes guidages, mes clients utiliseront leurs propres mouches, mais surtout mes sélections en fonction de l'espèce, de l'endroit et de la saison, des patterns testés sur mes coins de pêche depuis de nombreuses années.</p>
         <p>Voici une sélection de mes mouches à saumons, truites, brochets et aloses. Je mettrai la liste à jour en y ajoutant mes nouveaux modèles au fur et à mesure.</p>
-        <p class="prest-intro__credit">Droits photos réservés — ENJOYFISHING · Jean-Baptiste Vidal · Erwan Balanca</p>
+        <p class="prest-intro__credit">Droits photos réservés, ENJOYFISHING · Jean-Baptiste Vidal · Erwan Balanca</p>
       </div>
       <aside class="prest-intro__aside">
         <div class="prest-card-info">
@@ -202,12 +202,12 @@ const flyImages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
   function stopAutoplay  () { if (timer) { clearInterval(timer); timer = null } }
   function restartAutoplay () { stopAutoplay(); setTimeout(startAutoplay, 6000) }
 
-  function slideW () {
-    return (carousel.offsetWidth - 6) / 3  // 3 slides visibles, 2 gaps de 3px
-  }
+  function slideW () { return (slides[0] as HTMLElement).offsetWidth }
+  function visibleN () { return window.innerWidth <= 640 ? 1 : window.innerWidth <= 900 ? 2 : 3 }
   function calcOffset (idx: number) {
-    const w = slideW()
-    return Math.max(0, Math.min((total - 3) * (w + 3), (idx - 1) * (w + 3)))
+    const w = slideW(), n = visibleN(), g = 3
+    const raw = n < 3 ? idx * (w + g) : (idx - 1) * (w + g)
+    return Math.max(0, Math.min(Math.max(0, (total - n) * (w + g)), raw))
   }
 
   function go (idx: number) {

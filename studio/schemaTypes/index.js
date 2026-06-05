@@ -6,10 +6,12 @@ import article from './article'
 import parametres from './parametres'
 import accueil from './accueil'
 import sectionAccueil from './sectionAccueil'
+import pageTemoignages from './pageTemoignages'
 
 export const schemaTypes = [
   accueil,
   sectionAccueil,
+  pageTemoignages,
   parametres,
   prestation,
   voyage,

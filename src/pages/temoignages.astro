@@ -1,412 +1,190 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { stegaClient } from '../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 
 const seoTitle = "Témoignages & Avis — Jean-Baptiste Vidal, Guide de Pêche à la Mouche"
 const seoDescription = "Témoignages et avis de stagiaires et clients de Jean-Baptiste Vidal, moniteur-guide de pêche à la mouche en Bretagne-Sud. Bar, saumon, alose, Spey Cast, truite et voyages."
 
-// ── Témoignages depuis Sanity (ajoutés par JBV dans le Studio) ──
-const sanityTemoignages = await stegaClient.fetch(
-  `*[_type == "temoignage"] | order(date desc) { nom, date, note, prestation, texte }`
+// ── Textes éditables depuis Sanity (singleton pageTemoignages) ──────────────
+const pt = await stegaClient.fetch(`*[_id == "pageTemoignages"][0]`) ?? {}
+
+// Fallbacks vers les valeurs originales si le champ Sanity est vide
+const hero = {
+  eyebrow:  pt.heroEyebrow?.trim()  || '21 ans de guidage',
+  titre:    pt.heroTitre?.trim()    || 'Témoignages & Avis',
+  intro:    pt.heroIntro?.trim()    || "Sur cette page vous pourrez trouver certains témoignages de personnes qui m'ont fait confiance et qui ont participé à une journée de pêche en France ou été guidé par mes soins lors d'un voyage à l'étranger :",
+}
+const bar = {
+  onglet:   pt.barOnglet?.trim()    || 'Bar à la mouche',
+  titre:    pt.barTitre?.trim()     || 'Bar à la mouche',
+  sousTitre:pt.barSousTitre?.trim() || 'Pêche du bar en Bretagne-Sud, bar à vue, en bateau, en estuaire',
+  ctaTexte: pt.barCtaTexte?.trim()  || 'Découvrir la pêche du bar à la mouche →',
+  ctaUrl:   pt.barCtaUrl?.trim()    || '/peche-du-bar-a-la-mouche',
+}
+const saumon = {
+  onglet:   pt.saumonOnglet?.trim()    || 'Saumon & Spey Cast',
+  titre:    pt.saumonTitre?.trim()     || 'Saumon, Alose & Spey Cast',
+  sousTitre:pt.saumonSousTitre?.trim() || 'Guidage migrateurs sur les rivières bretonnes : Ellé, Scorff, Aulne, Aven, Elorn',
+  ctaTexte: pt.saumonCtaTexte?.trim()  || 'Découvrir le Spey Cast →',
+  ctaUrl:   pt.saumonCtaUrl?.trim()    || '/stage-spey-cast-et-cours-de-lancer',
+}
+const truite = {
+  onglet:   pt.truiteOnglet?.trim()    || 'Truite & Initiation',
+  titre:    pt.truiteTitre?.trim()     || 'Truite & Initiation',
+  sousTitre:pt.truiteSousTitre?.trim() || 'Initiation, perfectionnement truite en rivière : Scorff, Ellé, Isole',
+  ctaTexte: pt.truiteCtaTexte?.trim()  || 'Découvrir la pêche en eau douce →',
+  ctaUrl:   pt.truiteCtaUrl?.trim()    || '/peche-a-la-mouche-en-bretagne',
+}
+const voyages = {
+  onglet:   pt.voyagesOnglet?.trim()    || 'Voyages',
+  titre:    pt.voyagesTitre?.trim()     || 'Voyages internationaux',
+  sousTitre:pt.voyagesSousTitre?.trim() || 'Argentine · Bolivie · Cuba · Venezuela · Mexique',
+  ctaTexte: pt.voyagesCtaTexte?.trim()  || 'Découvrir les voyages →',
+  ctaUrl:   pt.voyagesCtaUrl?.trim()    || '/voyages-peche-mouche',
+}
+const cta = {
+  titre:    pt.ctaTitre?.trim()     || 'Prêt à vivre votre expérience ?',
+  texte:    pt.ctaTexte?.trim()     || 'Rejoignez les centaines de pêcheurs qui ont fait confiance à Jean-Baptiste depuis 2004.',
+  btn1Texte:pt.ctaBtn1Texte?.trim() || 'Réserver une sortie',
+  btn1Url:  pt.ctaBtn1Url?.trim()   || '/contact',
+  btn2Texte:pt.ctaBtn2Texte?.trim() || 'Voir les prestations',
+  btn2Url:  pt.ctaBtn2Url?.trim()   || '/stage-peche-mouche',
+}
+
+// ── Témoignages depuis Sanity, ordonnés par orderRank ──────────────────────
+// On utilise stegaClient pour activer le Visual Editing (clic → Studio).
+// Les comparaisons sur prestation utilisent stegaClean() pour retirer les
+// caractères invisibles stega avant de comparer les chaînes.
+const allTemos = await stegaClient.fetch(
+  `*[_type == "temoignage"] | order(orderRank asc) { _id, nom, note, prestation, texte }`
 )
 
-/* ──────────────────────────────────────────────
-   DONNÉES ISSUES DE scraped/contenu.json — NE PAS INVENTER
-   Page d'origine : /temoignages-avis-jeanbaptiste-vidal
-   Photos téléchargées depuis Wix CDN (positions extraites du DOM)
-   ────────────────────────────────────────────── */
-
-const intro = "Sur cette page vous pourrez trouver certains témoignages de personnes qui m'ont fait confiance et qui ont participé à une journée de pêche en France ou été guidé par mes soins lors d'un voyage à l'étranger :"
-
-/* ── BAR À LA MOUCHE ── */
-const temoignagesBar = [
-  {
-    nom: "Malcolm",
-    type: "Stage de pêche au bar à vue, Bretagne-Sud",
-    photos: [
-      { src: '/images/temo-malcolm-1.jpg', alt: 'Malcolm avec un beau bar — pêche à vue en Bretagne-Sud' },
-      { src: '/images/temo-malcolm-2.png', alt: 'Malcolm en action — lancer fly fishing bar à la mouche' },
-      { src: '/images/temo-malcolm-3.png', alt: 'Malcolm avec un bar capturé en pêche à vue' },
-    ],
-    texte: `Well, my day started with some apprehension as sight fishing with crab patterns was something I had never done nor considered doing before. I am a streamer/clouser pattern fisher and not used to short distance casting.
-
-Jean has a wealth of experience accompanied by patience as I am sure I tested his level of patience. Jean briefly showed me what I was to do when spotting a bass and how to read the bass's typical movements.
-
-It wasn't long after we started to search out some feeding bass when I had my first cast at a feeding bass. I cast the crab fly slightly away from the bass (my heart was pumping) and the bass moved towards the fly, watched it, tweaked the line, moving the fly 5mm....which induced the catch. Sadly my instinct was to grip down on the line causing to snap the tippet and loosing the fly at the same time. First lesson "DONT STOP THE FISH", simply lift and set the hook, the number let the fish run....the drag will do the rest.
-
-I had a lot more opportunities to cast at feeding bass, stalking the weeded over growth. Despite not getting all the hookups I could have had, I learned through Jean where I was going wrong and how to spot bass. The skills Jean teaches you is worth all the time you saved up and time spend travelling to meet Jean, including time spent under his guidance.
-
-5 ⭐⭐⭐⭐⭐ is not enough rating for the experience you will get. Book your trip, you won't regret it! Tight-lines! Many thanks Jean Baptiste.`,
-  },
-  {
-    nom: "Vincent",
-    type: "1 journée en bateau et 2 journées au bar à vue, Bretagne-Sud",
-    photos: [
-      { src: '/images/temo-vincent-1.png', alt: 'Vincent avec un bar capturé à la mouche en Bretagne' },
-      { src: '/images/temo-vincent-2.png', alt: 'Vincent — bar à la mouche en bord de côte bretonne' },
-    ],
-    texte: `3 jours de pêche avec Jean-Baptiste sur la côte Bretonne.
-
-Jean-Baptiste est un guide passionné qui partage sa connaissance des lieux et des techniques de pêche du Bar afin de nous faire profiter de moments exceptionnels.
-
-La pêche en bateau m'a permis de prendre mon premier Bar à la mouche dans un cadre magnifique, mais les deux journées de pêche à vue... que dire ! Je conseille à tout le monde d'essayer de prendre ces gros bars que Jean Baptiste connaît par cœur, de ressentir ces montées d'adrénaline, ce stress à la vue de Bars énormes postés devant vous à quelques mètres.
-
-Encore plus heureux que moi du doublé que je réalise alors que je n'ai eu qu'à suivre ses conseils avisés.
-
-Encore merci à toi, j'ai passé 3 jours de pêches magnifiques qui valent bien certaines destinations lointaines et qui n'appellent qu'à recommencer.`,
-  },
-  {
-    nom: "Marc",
-    type: "Découverte de la pêche du bar à la mouche (à vue du bord et en bateau)",
-    photos: [
-      { src: '/images/temo-marc-1.jpg', alt: 'Marc avec un bar capturé en bateau — pêche mouche Bretagne' },
-    ],
-    texte: `Deux jours avec Jean Baptiste : première journée pêche au bar à vue et 2ème journée de pêche au Bar en bateau.
-
-Jean Baptiste connaît le poisson par cœur, ses habitudes, les sites qui vont bien. Super matos. Super conseils. Très agréable et efficace. Grande expérience du guidage.
-
-Je suis satisfait à 100%. Je recommande et je reviendrai !`,
-  },
-]
-
-/* ── SAUMON, ALOSE & SPEY CAST ── */
-const temoignagesSaumon = [
-  {
-    nom: "Diego",
-    type: "Stage de pêche au saumon et Spey Cast en Bretagne-Sud",
-    photos: [
-      { src: '/images/temo-diego-1.png', alt: 'Diego guidé par Jean-Baptiste — saumon à la mouche en Bretagne' },
-      { src: '/images/temo-diego-2.png', alt: 'Rivière bretonne — session saumon et Spey Cast avec JBV' },
-    ],
-    texte: `Certains apprentissages sont plus difficiles que d'autres, surtout quand l'esprit est déjà pollué par l'illusion du savoir. Il m'a fallu désapprendre pour réapprendre.
-
-5 jours de stage intensif de techniques et tactiques de pêche au saumon à la mouche en Bretagne avec mon guide Jean-Baptiste Vidal. Le site est proprement magnifique et les rivières sont brunes et mystérieuses.
-
-À la pêche au saumon à la mouche et en Speycast, j'ai pu faire cette expérience avec un professionnel, Jean-Baptiste Vidal, juste avant un nouveau confinement.
-
-Mouches, lancers, dérives, angles, axes de posé et animation, rien ne manquait au programme ! Je salue le guide mais surtout le professeur dont la pédagogie et la patience auront été déterminantes.
-
-Je ne peux que recommander Jean-Baptiste qui est à ce jour pour moi, le meilleur guide de pêche à la mouche que je connaisse. J'ai plus appris en quelques jours à peine qu'en 5 années !`,
-  },
-  {
-    nom: "Patrice",
-    type: "Pêche du saumon en Bretagne-Sud",
-    photos: [
-      { src: '/images/temo-patrice-1.jpg', alt: 'Patrice et Jean-Baptiste avec un beau saumon — rivière bretonne' },
-    ],
-    texte: `Je tiens à remercier Jean-Baptiste pour son accompagnement et sa grande patience (!), après un total d'environ 10 jours de formation et de guidage au saumon, il a su m'amener aux bons endroits. Nous étions vraiment tout près cet été avec cette casse sur le Castillon et cette prise au mois d'Octobre, c'était tout simplement magique et quel sentiment intense que de pouvoir relâcher ce magnifique poisson, à jamais gravé dans ma mémoire et comme je tenais à ce que cela se fasse avec Jean-Baptiste, tout était simplement parfait !
-
-Un grand merci à toi, Jean-Baptiste !`,
-  },
-  {
-    nom: "Patrice, 58 ans — Normandie",
-    type: "Stage de Spey Cast et pêche des migrateurs",
-    photos: [
-      { src: '/images/temo-patrice58-1.jpg', alt: 'Patrice en Spey Cast sur rivière bretonne' },
-      { src: '/images/temo-patrice58-3.jpg', alt: 'Patrice — stage de pêche des migrateurs en Bretagne' },
-    ],
-    texte: `N'ayant plus pratiqué la pêche à la mouche depuis plus de 20 ans et à la suite d'un accident, ayant des difficultés à pêcher à une main, je me suis dit qu'il serait temps de sauter le pas et de m'initier au lancer à deux mains, avec l'objectif de pêcher à la mouche les poissons de ma Normandie, saumons et truites de mer, et aussi de profiter pleinement de ce que peut offrir le Gave d'Oloron.
-
-Dès le premier contact au salon des pêches à la mouche de Carhaix en Février avec Jean-Baptiste, que je connaissais un peu grâce à ses excellents articles dans "Pêche Mouche", j'ai pu apprécier à la fois son humilité et son grand professionnalisme.
-
-Rendez-vous fut donc pris pour 3 demi-journées de formation Spey-Cast et 3 demi-journées d'applications avec l'Alose et peut-être le Saumon. Merci pour ta patience, Jean-Baptiste, ce n'était pas gagné !
-
-Le deuxième jour je prenais mes premières grandes aloses à la canne à deux mains et le troisième jour je me sentais assez à l'aise pour aller tenter le Saumon sur l'Ellé. Non seulement Jean-Baptiste a eu la patience et la pédagogie nécessaires pour comprendre mes blocages et me permettre de maîtriser suffisamment le lancer à deux mains, mais le mieux dans tout ça, c'est qu'il m'a redonné furieusement envie de pêcher à la mouche !
-
-Un grand Merci et à très bientôt.`,
-  },
-  {
-    nom: "Patrick et Alain",
-    type: "Venus de Belgique pour pêcher les migrateurs à la mouche",
-    photos: [
-      { src: '/images/temo-patrick-1.jpg', alt: 'Patrick — migrateurs à la mouche sur rivières bretonnes', style: 'object-fit:contain' },
-    ],
-    texte: `Jean-Baptiste, nous sommes rentrés et j'ai bien reçu tes jolies photos. Je garde un excellent souvenir de notre rencontre et n'hésiterai pas à les publier et les commenter.
-
-Je tiens simplement à te remercier pour l'excellent guidage dont tu as fait preuve lors de notre séjour en Bretagne. Des conseils multiples et précis et d'une efficacité redoutable. Quant à mon lancer "saumon" il s'est considérablement amélioré. C'est sans appréhension que dès à présent je pourrai affronter les endroits les plus difficiles pour le Speycast.
-
-Pour illustrer la qualité de notre guide : conditions de pêche très difficiles — plein soleil, vent d'est et eaux basses. Pas un poisson ne bouge. La seule alose prise sur ce spot ce jour-là est celle-ci !
-
-Je te souhaite une bonne continuation dans ton entreprise.`,
-  },
-  {
-    nom: "Mathieu et Philippe",
-    type: "Venus spécialement pour rechercher le saumon à la mouche",
-    photos: [
-      { src: '/images/temo-mathieu-1.png', alt: 'Philippe avec un saumon capturé — guidage JBV Bretagne' },
-      { src: '/images/temo-mathieu-2.png', alt: 'Mathieu — saumon à la mouche en rivière bretonne' },
-      { src: '/images/temo-mathieu-3.png', alt: 'Mathieu et Philippe — séjour saumon avec Jean-Baptiste Vidal' },
-    ],
-    texte: `Passionnés de pêche, nous avons décidé mon pote Mathieu et moi d'aller pêcher en Bretagne, région totalement inconnue pour moi. Ayant peu de temps, nous avons fait le choix de prendre un guide, mais pas n'importe quel guide — on nous avait très fortement conseillé de réserver avec Jean-Baptiste Vidal, et je vous avoue que je ne l'ai pas regretté !
-
-Notre séjour s'est déroulé sur deux jours. Matériels, mouches, nourriture... tout y était. Jean Baptiste nous a conseillé de faire une journée truite puis une journée Saumon.
-
-Le premier jour nous a permis de prendre quelques truites et surtout de découvrir les belles rivières bretonnes. Le deuxième jour a été extraordinaire : les conseils de Jean-Baptiste sur la maîtrise de la canne à deux mains et du choix de la mouche ont été prometteurs. C'est clair, sans Jean Baptiste, je n'aurai jamais fait un saumon de 79 cm pour 11/12 livres !
-
-Encore mille merci à Jean Baptiste et à la Bretagne.`,
-  },
-  {
-    nom: "Antoine",
-    type: "Pêche du saumon à la mouche sur l'Elorn",
-    photos: [
-      { src: '/images/temo-antoine-1.jpg', alt: 'Antoine — guidage saumon sur l\'Elorn avec Jean-Baptiste Vidal' },
-    ],
-    texte: `L'Elorn est une magnifique rivière à saumons mais comme beaucoup de rivières bretonnes la pêche du saumon par son approche me semblait différente de ce que l'on peut pratiquer à l'étranger.
-
-Cette magnifique journée m'a permis de comprendre comment prospecter différents types de pools plus ou moins profonds, calmes ou rapides. Comment lancer et présenter la mouche, comment animer ou pas la mouche, bref tout ce qui me manquait pour aborder ce type de rivière.
-
-Après avoir mangé d'excellentes crêpes bretonne, nous avons passé une après-midi de folie puisque sous les conseils de Jean Baptiste j'ai raté/décroché 5 saumons jusqu'au dernier qui prend la mouche à un mètre de mes pieds en fin de journée sur le dernier spot.
-
-Nous nous souviendrons de cette après-midi et vivement l'année prochaine pour de nouvelles émotions !`,
-  },
-  {
-    nom: "Jérôme Veyret",
-    type: "Alose & Spey Cast",
-    photos: [
-      { src: '/images/temo-jeromev-1.jpg', alt: 'Jérôme Veyret — alose à la mouche avec JBV sur l\'Aulne' },
-      { src: '/images/temo-jeromev-2.jpg', alt: 'Jérôme Veyret — Spey Cast et pêche de l\'alose en Bretagne' },
-    ],
-    texte: `Après avoir lu ses articles dans Pêche Mouche et parcouru de fond en comble son site internet / blog, l'envie de pêcher l'alose ne me lâchait plus. Rendez-vous fut pris pour 2 jours mi mai 2016 — à priori les conditions étaient loin d'être optimales : remontées d'aloses trois fois inférieures à celles de l'année 2015 à la même époque sur l'Aulne.
-
-Mazette, ça s'annonçait plutôt corsé, mais Jean Baptiste connaît son sujet et selon lui un spot pourrait bien donner sur l'Aulne. Immédiatement sur place on constate qu'elles sont bel et bien là, maintenant y a plus qu'à...
-
-Grâce à ses conseils, ses mouches, ses astuces de présentation, rapidement je prends "contact" avec ces aloses. JB en profite pour m'initier aux lancers double spey, reverse C, etc...
-
-2 jours dont je repartirai enchanté, avec un nombre de captures au delà de mes espérances initiales. Un bilan très positif avec un guide qui allie rigueur, sérieux tout en étant fort sympathique.
-
-Merci à toi Jean Baptiste et à une prochaine fois !`,
-  },
-  {
-    nom: "Yann Le Prevost",
-    type: "Saumon · Alose · Spey Cast",
-    photos: [
-      { src: '/images/temo-yann-2.png', alt: 'Yann Le Prevost — Spey Cast sur les rivières bretonnes' },
-      { src: '/images/temo-yann-1.jpg', alt: 'Yann Le Prevost — saumon et alose avec Jean-Baptiste Vidal' },
-    ],
-    texte: `Salut JB. Pour raison professionnelle, la saison s'est terminée hier pour moi. Encore une journée forte en émotion mais pas de saumon au sec. Ces deux dernières semaines, j'ai piqué environ 6 saumons mais ils se sont tous décrochés avant de les sortir.
-
-Sinon au bilan c'est plutôt positif et tu y es pour beaucoup. J'ai pu apprendre le Spey Cast qui a changé foncièrement ma façon de pêcher. Tu m'as donné les clés pour appréhender les postes à saumon, les bonnes présentations et quelques coins magiques. Et surtout, gros point positif, tu m'as fait découvrir l'Alose qui m'a régalé pendant presque 2 mois.
-
-Un grand merci du coup pour ce stage qui m'a fait sauter quelques années de galère solitaire et un deuxième grand merci pour ta disponibilité et tes conseils après le stage. Je reprendrai une journée ou deux l'année prochaine pour progresser encore et enfin sortir un fish. Bonne fin de saison pour toi et à bientôt sur Quimperlé !`,
-  },
-  {
-    nom: "Guy Bonel",
-    type: "Pêche du saumon sur les plus belles rivières du Sud Bretagne",
-    photos: [
-      { src: '/images/temo-guy-1.jpg', alt: 'Guy Bonel — saumon à la mouche sur les rivières du Finistère' },
-      { src: '/images/temo-guy-2.jpg', alt: 'Guy Bonel guidé par Jean-Baptiste Vidal — rivières bretonnes' },
-    ],
-    texte: `Venir sur ton blog, Jean Baptiste, me retrempe dans ces douces journées de septembre sur les rivières du Finistère que je découvrais alors, en ta compagnie.
-
-Quelques dizaines d'années à pêcher la truite à la mouche m'ont permis d'accréditer et de valider l'hypothèse qu'un guide de pêche est INDISPENSABLE et fait économiser des heures de recherche et d'errance (mais pas que !), que l'on peut opportunément et plaisamment consacrer à une recherche efficace du poisson !
-
-Et j'aspire à retrouver ce garçon d'une disponibilité hors du commun, connaissant à fond ses domaines technique et géographique, toujours prêt à partager sans aucune réserve ses connaissances, son savoir.
-
-J'ai appris beaucoup de toi et j'admire ton respect du poisson, de ce qui l'entoure et du pêcheur (même lorsque je fus maladroit....). J'apprécie ce contact, direct et franc, à la fois professionnel, humain et bienveillant, que tu maintiens en et hors guidage !
-
-Bon vent à toi, sur tous tes chemins !`,
-  },
-  {
-    nom: "Michael Arraitz",
-    type: "Spey Cast et pêche des migrateurs sur les meilleures rivières de Bretagne",
-    photos: [
-      { src: '/images/temo-michael-1.jpg', alt: 'Michael Arraitz — Spey Cast et migrateurs avec JBV en Bretagne' },
-      { src: '/images/temo-michael-2.jpg', alt: 'Michael Arraitz — session migrateurs sur rivière bretonne' },
-    ],
-    texte: `Passionné de pêche à la mouche depuis quelques années, je découvre Jean Baptiste Vidal avec ses articles de grande qualité dans "Pêche Mouche".
-
-Je prends contact avec lui au printemps pour un premier séjour pour la pêche de l'Alose avec des conseils sur la technique du roulé et single Spey.
-
-Je découvre alors un homme passionné, passionnant avec de vrais sens de la communication et du partage. Que dire de sa connaissance technique, elle est remarquable.
-
-Pêche de l'alose sur l'Aulne avec des poissons mordeurs et de beaux combattants. Puis un séjour pour la découverte du saumon (accompagné d'un de mes fils) sur l'Ellé avec quelques beaux ratés ! Deuxième séjour sur l'Aven et le Scorff, sur des eaux basses et limpides. Jean Baptiste me fait prendre avec bonheur deux jolis poissons dans de magnifiques circonstances.
-
-Lequel du pêcheur ou du guide était le plus heureux ? Probablement moi, tout de même !
-
-Merci Jean Baptiste, ton terrain de jeu est somptueux. Ta passion est magnifique et contagieuse.`,
-  },
-  {
-    nom: "Jean-Daniel Pilotto",
-    type: "Pêche du saumon atlantique sur les meilleures rivières de Bretagne",
-    photos: [
-      { src: '/images/temo-jeandaniel-1.jpg', alt: 'Jean-Daniel Pilotto — saumon atlantique en Bretagne avec JBV' },
-      { src: '/images/temo-jeandaniel-2.jpg', alt: 'Jean-Daniel Pilotto — guidage saumon sur l\'Ellé ou le Scorff' },
-    ],
-    texte: `Prendre un saumon à la mouche en France ! Il s'agissait pour moi d'un pari hasardeux jusqu'au jour où les articles de Jean-Baptiste Vidal dans Pêche Mouche m'ont convaincu du contraire.
-
-Rendez-vous pris pour quatre journées de guidage sur les plus belles rivières bretonnes. Première impression : plutôt dépaysant pour un pêcheur habitué à pratiquer sur les grandes rivières écossaises et espagnoles !
-
-La Bretagne offre une pêche technique avec des conditions d'eaux basses mais des poissons bien présents et de réelles chances de succès. C'est grâce à la parfaite maîtrise de son sujet que Jean-Baptiste a finalement gagné son pari : me faire prendre mon premier saumon français.
-
-Finalement que du bonheur lors de cette semaine partagée avec mon guide dont j'ai apprécié la compétence ainsi que les qualités professionnelles et humaines hors du commun. Une belle rencontre qui me fera revenir pêcher sur les rives de l'Ellé, du Scorff ou de l'Aven.`,
-  },
-  {
-    nom: "Mr et Mme Woestelandt",
-    type: "Spey Cast & Pêche du saumon, de la truite et de l'alose",
-    photos: [
-      { src: '/images/temo-woestelandt-1.jpg', alt: 'Mr et Mme Woestelandt — Spey Cast et saumon sur rivières bretonnes' },
-    ],
-    texte: `Nous tenons à remercier Jean-Baptiste pour la gentillesse et la patience qu'il a eu à notre égard. Guide passionné que nous recommandons.
-
-Il nous a fait découvrir les rivières bretonnes tout particulièrement l'Ellé, l'Aulne et le Jet. Bien que les saumons, aloses et truites n'étaient au rendez-vous (cause forte chaleur), nous avons passé un agréable séjour riche d'enseignements techniques.
-
-Marie-Christine et Jean-Claude Woestelandt`,
-  },
-  {
-    nom: "Yann Le Prevost",
-    type: "Spey Cast & Pêche du saumon sur l'Ellé",
-    photos: [
-      { src: '/images/temo-yann2-1.jpg', alt: 'Yann Le Prevost — Spey Cast et saumon sur l\'Ellé avec JBV' },
-    ],
-    texte: `J'ai fait appel à Jean-Baptiste pour apprendre à pêcher le saumon à la mouche. J'ai donc appris les bases de l'utilisation des cannes à deux mains et du Spey Cast. À l'écoute et patient, il dispense ses conseils avec une grande pédagogie. Il connaît bien la rivière et ses occupants et sait vous amener au bon endroit au bon moment.
-
-Enfin, sa gentillesse et son entrain ont transformé ces deux jours d'apprentissage en une super partie de pêche avec un copain. J'envisage déjà de refaire appel à lui l'année prochaine pour un guidage Alose !`,
-  },
-  {
-    nom: "Pierre Sabourin",
-    type: "Pêche du saumon en Bretagne",
-    photos: [
-      { src: '/images/temo-pierre-1.jpg', alt: 'Pierre Sabourin — saumon à la mouche en Bretagne avec JBV' },
-    ],
-    texte: `Après trois séjours cette année en Bretagne avec J.B. j'ai beaucoup apprécié son excellente maîtrise des lancers les plus acrobatiques. Sa connaissance de la rivière et son œil de Lynx ; son attention soutenue à toutes les maladresses des pêcheurs occasionnels qui ont besoin de ses services ; son adaptation instantanée à l'état de l'eau, tout en passant d'une rivière à l'autre avec aisance (Aulne, Elorn, Ellé).
-
-Projets 2015 avec lui sans hésiter.`,
-  },
-  {
-    nom: "Cédric Goh — Rennes",
-    type: "Pêche du saumon en Bretagne et stage Spey Cast",
-    photos: [
-      { src: '/images/temo-cedric-1.jpg', alt: 'Cédric Goh — initiation saumon et Spey Cast avec Jean-Baptiste Vidal' },
-    ],
-    texte: `Jean-Baptiste m'a permis de m'initier à la pêche au saumon à la mouche très simplement et amicalement. Il a réussi à m'apprendre les bases des lancers à deux mains ainsi que les tactiques de pêches. Il connaît parfaitement bien les secteurs qu'il propose et j'ai vraiment apprécié qu'il m'ait envoyé par la suite les indications pour les retrouver plus tard de mon côté.
-
-Toujours de bon conseil et nous prend en photo pour de merveilleux souvenirs. Je le recommande vivement !`,
-  },
-]
-
-/* ── TRUITE & INITIATION ── */
-const temoignagesTruite = [
-  {
-    nom: "Christophe",
-    type: "Perfectionnement pêche de la truite en rivière (noyée, nymphe, sèche)",
-    photos: [
-      { src: '/images/temo-christophe-1.png', alt: 'Christophe relâchant une truite sur le Scorff — guidage JBV' },
-    ],
-    texte: `Superbe session de guidage, pendant 2 jours 1/2, sur le Scorff et l'Isole, avec Jean-Baptiste Vidal.
-
-Comme souhaité, j'ai découvert la pêche en noyée et en nymphe, et progressé sur la pêche en sèche. Je pense qu'il me faudra quelques années pour prendre, sans ses conseils, autant de truites que mercredi.
-
-À celles et ceux qui cherchent un guide, n'hésitez pas à le contacter, il connaît son domaine et les rivières où il guide.
-
-Bonne continuation Jean-Baptiste, merci pour tous les conseils prodigués, et la découverte de l'Isole. Je reviendrai pour progresser encore, dès que mon revers et le lancé roulé ne seront plus hasardeux.`,
-  },
-  {
-    nom: "Christian",
-    type: "Perfectionnement à la pêche à la mouche",
-    photos: [
-      { src: '/images/temo-christian-2.jpg', alt: 'Christian — beau fario capturé en rivière bretonne' },
-      { src: '/images/temo-christian-1.jpg', alt: 'Christian — perfectionnement pêche à la mouche avec JBV' },
-    ],
-    texte: `Enfin la date attendue du 12 juillet avec le ZIDANE de la pêche... après une mauvaise bronchite en début de vacances, cette journée ensoleillée est pleine de promesses, car le débutant que je suis n'a pas encore sorti une belle "TOTOCHE" de l'eau (hé oui, je suis débutant depuis quelques années déjà, mais c'est comme ça quand on va à la pêche une fois par an...).
-
-Mes sorties sur le Scorff dont la couleur de l'eau a été troublée suite aux grosses pluies de la semaine n'ont pas été très satisfaisantes.
-
-Jean Baptiste me propose une merveille de petite rivière, aux eaux cristallines... La rivière est limpide et l'activité visible avec des gobages réguliers... c'est mon jour !
-
-Effectivement après 6 truites dans le même pool et autant de ratés, je sens que ça tire plus fort... et nous mettons au sec un superbe fario de 29 cm, mon record (aussitôt remis à l'eau...).
-
-Voilà une journée qui sauve mes vacances. Merci ZIZOU, (je veux dire Jean Baptiste...) et à l'année prochaine... "CHAMPION DU MONDE !!!!!"`,
-  },
-  {
-    nom: "Jérome",
-    type: "Initiation pêche à la mouche — 2 jours sur le Scorff et l'Ellé",
-    photos: [
-      { src: '/images/temo-jerome-1.jpg', alt: 'Jérome — initiation pêche à la mouche sur le Scorff et l\'Ellé' },
-      { src: '/images/temo-jerome-2.jpg', alt: 'Jérome en action — lancer mouche sous la guidance de JBV' },
-    ],
-    texte: `Merci pour ce moment (2 jours) de plaisirs à remonter le Scorff et l'Ellé avec toi et à apprendre les rudiments de la technique.
-
-Nous avons quand même sorti quelques truites et tacons ! Avec le beau temps de la Bretagne, un super guide et un super spot de pêche, j'ai passé un moment exquis.
-
-À l'année prochaine sans doute et je vais de suite me commander du matériel.`,
-  },
-  {
-    nom: "Christian et Chris Ferrier",
-    type: "Initiation pêche à la mouche — séjour père-fils 4 jours",
-    photos: [
-      { src: '/images/temo-christianchris-1.jpg', alt: 'Christian et Chris Ferrier — initiation père-fils pêche à la mouche' },
-    ],
-    texte: `Nous rentrons mon fils Chris (12 ans) et moi d'un séjour de 4 jours avec Enjoy Fishing pour apprendre les rudiments et le perfectionnement de la pêche à la mouche que ce soit pour la truite et/ou le saumon.
-
-Nous sommes plus qu'enchantés de ce séjour, et je ne peux que vous recommander, que vous soyez novice ou expérimenté, de venir comme nous avec Monsieur Jean-Baptiste Vidal pêcher dans ces superbes rivières de Bretagne.
-
-Professionnel de cette activité de loisirs, il vous fera découvrir dans les moindres détails l'envie et le goût de pêcher sous ses multiples conseils. Extrêmement sérieux et attentif, simple, agréable, convivial avec de l'expérience en France et à l'étranger à revendre, c'est vraiment l'idéal de profiter d'un séjour de pêche à la mouche en sa compagnie.
-
-Encore merci Jean Baptiste et sans doute à une prochaine fois. Très cordialement. Christian et Chris Ferrier`,
-  },
-  {
-    nom: "Fiona et Romain",
-    type: "Découverte de la Pêche à la mouche",
-    photos: [
-      { src: '/images/temo-antoine-2.jpg', alt: 'Fiona et Romain — journée découverte pêche à la mouche en rivière bretonne' },
-      { src: '/images/temo-fiona-1.jpg', alt: 'Fiona et Romain — découverte de la pêche à la mouche avec JBV' },
-    ],
-    texte: `Ce fut un formidable moment que cette journée initiation pêche à la mouche !
-
-Nous nous étions offert cette petite séance dans le but d'acquérir les bases de la technique et de découvrir les rivières du Finistère... Objectifs atteints Jean Baptiste !
-
-Ce fut un vrai plaisir d'apprendre avec toi. Pas de stress, de la rigolade et surtout un excellent prof qui ne se contente pas de l'apprentissage brut du lancer mais fait découvrir l'art qu'est véritablement la pêche à la mouche.
-
-On regardera les rivières du Finistère avec un autre œil, et Romain est bien parti pour persévérer pour un jour atteindre ton niveau (on ne sait jamais ;)
-
-Au plaisir de se revoir les pieds dans l'eau, bonne continuation Jean Baptiste !`,
-  },
-]
-
-/* ── VOYAGES INTERNATIONAUX ── */
-const temoignagesVoyages = [
-  {
-    nom: "Mary-Ann",
-    type: "Pêche du dorado en Argentine et en Bolivie",
-    photos: [
-      { src: '/images/temo-maryann-1.jpg', alt: 'Mary-Ann — dorado en Argentine avec Jean-Baptiste Vidal, Pira Lodge' },
-    ],
-    texte: `My husband and I first fished with JBV in Argentina. He guided us for our first experience with the Golden Dorado at Pira Lodge and its estuaries. Fishing is his PASSION!
-
-It was amazing to see a Frenchman, who didn't know any Spanish, guide us with ease. His English was impeccable as was his guiding skills. He knew exactly where to find the Dorados. It was up to us to NOT hook them. But we did! We had a great experience with JB.
-
-When we fished Dorados in Bolivia several years later, we were pleasantly surprised to see JB guiding there! Once again he brought us to fish that we caught! And he spoke fluent Spanish!!!
-
-JB is an amazing guy and guide. His passion for fishing is a blessing for him and his clients!`,
-  },
-  {
-    nom: "Jean-Pierre",
-    type: "Perfectionnement lancer mouche en mer — double traction, lancer grande distance soie de 12",
-    photos: [
-      { src: '/images/temo-jeanpierre-1.jpg', alt: 'Jean-Pierre — pêche à la mouche en mer, grande distance' },
-    ],
-    texte: `Très heureux de la journée passée en ta compagnie où tu as parfaitement identifié mes lacunes et t'en remercie vivement. Il me reste à travailler les 3 points essentiels que tu as caractérisés. Je suis du genre opiniâtre, tu peux compter sur moi pour y remédier.
-
-J'ai apprécié ton professionnalisme et ta grande maîtrise du sujet mouche indépendamment de ton contact agréable. Je n'hésiterai pas à te recommander, cela va sans dire...`,
-  },
-  {
-    nom: "Cary Pugh",
-    type: "Pêche du dorado en Bolivie — Automne 2011",
-    photos: [
-      { src: '/images/temo-cary-1.jpg', alt: 'Cary Pugh — dorado à la mouche en Bolivie avec JBV, Tsimane Lodge' },
-    ],
-    texte: `Jean Baptiste is an excellent fisherman of course but what makes him an excellent guide is his ability to understand the goals and skills of his clients and put his clients in a position to succeed in light of those. He is willing to teach if you want to learn and also is willing to step back and let you experiment as well.
-
-We didn't need to catch fish to have fun — his personality and enthusiasm ensured a good time — but the fish were awesome too! I'd fish anywhere if he could guide me.`,
-  },
-]
+// ── Photos associées (chemins locaux public/images/) ───────────────────────
+// Les photos ne sont pas encore dans Sanity — elles sont servies depuis /public/images
+const photoMap: Record<string, { src: string; alt: string; style?: string }[]> = {
+  'temo-malcolm': [
+    { src: '/images/temo-malcolm-1.jpg', alt: 'Malcolm avec un beau bar — pêche à vue en Bretagne-Sud' },
+    { src: '/images/temo-malcolm-2.png', alt: 'Malcolm en action — lancer fly fishing bar à la mouche' },
+    { src: '/images/temo-malcolm-3.png', alt: 'Malcolm avec un bar capturé en pêche à vue' },
+  ],
+  'temo-vincent': [
+    { src: '/images/temo-vincent-1.png', alt: 'Vincent avec un bar capturé à la mouche en Bretagne' },
+    { src: '/images/temo-vincent-2.png', alt: 'Vincent — bar à la mouche en bord de côte bretonne' },
+  ],
+  'temo-marc': [
+    { src: '/images/temo-marc-1.jpg', alt: 'Marc avec un bar capturé en bateau — pêche mouche Bretagne' },
+  ],
+  'temo-diego': [
+    { src: '/images/temo-diego-1.png', alt: 'Diego guidé par Jean-Baptiste — saumon à la mouche en Bretagne' },
+    { src: '/images/temo-diego-2.png', alt: 'Rivière bretonne — session saumon et Spey Cast avec JBV' },
+  ],
+  'temo-patrice': [
+    { src: '/images/temo-patrice-1.jpg', alt: 'Patrice et Jean-Baptiste avec un beau saumon — rivière bretonne' },
+  ],
+  'temo-patrice58': [
+    { src: '/images/temo-patrice58-1.jpg', alt: 'Patrice en Spey Cast sur rivière bretonne' },
+    { src: '/images/temo-patrice58-3.jpg', alt: 'Patrice — stage de pêche des migrateurs en Bretagne' },
+  ],
+  'temo-patrick-alain': [
+    { src: '/images/temo-patrick-1.jpg', alt: 'Patrick — migrateurs à la mouche sur rivières bretonnes', style: 'object-fit:contain' },
+  ],
+  'temo-mathieu-philippe': [
+    { src: '/images/temo-mathieu-1.png', alt: 'Philippe avec un saumon capturé — guidage JBV Bretagne' },
+    { src: '/images/temo-mathieu-2.png', alt: 'Mathieu — saumon à la mouche en rivière bretonne' },
+    { src: '/images/temo-mathieu-3.png', alt: 'Mathieu et Philippe — séjour saumon avec Jean-Baptiste Vidal' },
+  ],
+  'temo-antoine': [
+    { src: '/images/temo-antoine-1.jpg', alt: "Antoine — guidage saumon sur l'Elorn avec Jean-Baptiste Vidal" },
+  ],
+  'temo-jerome-veyret': [
+    { src: '/images/temo-jeromev-1.jpg', alt: "Jérôme Veyret — alose à la mouche avec JBV sur l'Aulne" },
+    { src: '/images/temo-jeromev-2.jpg', alt: "Jérôme Veyret — Spey Cast et pêche de l'alose en Bretagne" },
+  ],
+  'temo-yann-leprevost': [
+    { src: '/images/temo-yann-2.png', alt: 'Yann Le Prevost — Spey Cast sur les rivières bretonnes' },
+    { src: '/images/temo-yann-1.jpg', alt: 'Yann Le Prevost — saumon et alose avec Jean-Baptiste Vidal' },
+  ],
+  'temo-guy-bonel': [
+    { src: '/images/temo-guy-1.jpg', alt: 'Guy Bonel — saumon à la mouche sur les rivières du Finistère' },
+    { src: '/images/temo-guy-2.jpg', alt: 'Guy Bonel guidé par Jean-Baptiste Vidal — rivières bretonnes' },
+  ],
+  'temo-michael-arraitz': [
+    { src: '/images/temo-michael-1.jpg', alt: 'Michael Arraitz — Spey Cast et migrateurs avec JBV en Bretagne' },
+    { src: '/images/temo-michael-2.jpg', alt: 'Michael Arraitz — session migrateurs sur rivière bretonne' },
+  ],
+  'temo-jean-daniel-pilotto': [
+    { src: '/images/temo-jeandaniel-1.jpg', alt: 'Jean-Daniel Pilotto — saumon atlantique en Bretagne avec JBV' },
+    { src: '/images/temo-jeandaniel-2.jpg', alt: "Jean-Daniel Pilotto — guidage saumon sur l'Ellé ou le Scorff" },
+  ],
+  'temo-woestelandt': [
+    { src: '/images/temo-woestelandt-1.jpg', alt: 'Mr et Mme Woestelandt — Spey Cast et saumon sur rivières bretonnes' },
+  ],
+  'temo-yann-leprevost-2': [
+    { src: '/images/temo-yann2-1.jpg', alt: "Yann Le Prevost — Spey Cast et saumon sur l'Ellé avec JBV" },
+  ],
+  'temo-pierre-sabourin': [
+    { src: '/images/temo-pierre-1.jpg', alt: 'Pierre Sabourin — saumon à la mouche en Bretagne avec JBV' },
+  ],
+  'temo-cedric-goh': [
+    { src: '/images/temo-cedric-1.jpg', alt: 'Cédric Goh — initiation saumon et Spey Cast avec Jean-Baptiste Vidal' },
+  ],
+  'temo-christophe': [
+    { src: '/images/temo-christophe-1.png', alt: 'Christophe relâchant une truite sur le Scorff — guidage JBV' },
+  ],
+  'temo-christian': [
+    { src: '/images/temo-christian-2.jpg', alt: 'Christian — beau fario capturé en rivière bretonne' },
+    { src: '/images/temo-christian-1.jpg', alt: 'Christian — perfectionnement pêche à la mouche avec JBV' },
+  ],
+  'temo-jerome': [
+    { src: '/images/temo-jerome-1.jpg', alt: "Jérome — initiation pêche à la mouche sur le Scorff et l'Ellé" },
+    { src: '/images/temo-jerome-2.jpg', alt: 'Jérome en action — lancer mouche sous la guidance de JBV' },
+  ],
+  'temo-christian-chris-ferrier': [
+    { src: '/images/temo-christianchris-1.jpg', alt: 'Christian et Chris Ferrier — initiation père-fils pêche à la mouche' },
+  ],
+  'temo-fiona-romain': [
+    { src: '/images/temo-antoine-2.jpg', alt: 'Fiona et Romain — journée découverte pêche à la mouche en rivière bretonne' },
+    { src: '/images/temo-fiona-1.jpg', alt: 'Fiona et Romain — découverte de la pêche à la mouche avec JBV' },
+  ],
+  'temo-mary-ann': [
+    { src: '/images/temo-maryann-1.jpg', alt: 'Mary-Ann — dorado en Argentine avec Jean-Baptiste Vidal, Pira Lodge' },
+  ],
+  'temo-jean-pierre': [
+    { src: '/images/temo-jeanpierre-1.jpg', alt: 'Jean-Pierre — pêche à la mouche en mer, grande distance' },
+  ],
+  'temo-cary-pugh': [
+    { src: '/images/temo-cary-1.jpg', alt: 'Cary Pugh — dorado à la mouche en Bolivie avec JBV, Tsimane Lodge' },
+  ],
+}
+
+// ── Regroupement par catégorie ──────────────────────────────────────────────
+// stegaClean() retire les caractères stega invisibles avant toute comparaison
+const temoBar     = allTemos.filter((t: any) => stegaClean(t.prestation) === 'Bar à la mouche')
+const temoSaumon  = allTemos.filter((t: any) =>
+  ['Saumon', 'Alose', 'Spey Cast'].includes(stegaClean(t.prestation))
+)
+const temoTruite  = allTemos.filter((t: any) =>
+  ['Truite en rivière', 'Initiation pêche à la mouche', 'Brochet', 'Masterclass'].includes(stegaClean(t.prestation))
+)
+const temoVoyages = allTemos.filter((t: any) => stegaClean(t.prestation) === 'Voyage')
+
+// Témoignages ajoutés dans Sanity sans catégorie connue (futur)
+const temoAutres  = allTemos.filter((t: any) =>
+  !['Bar à la mouche', 'Saumon', 'Alose', 'Spey Cast',
+    'Truite en rivière', 'Initiation pêche à la mouche', 'Brochet', 'Masterclass', 'Voyage']
+    .includes(stegaClean(t.prestation))
+)
 
 const sections = [
-  { id: 'bar',     label: 'Bar à la mouche', emoji: '🎣', count: temoignagesBar.length },
-  { id: 'saumon',  label: 'Saumon & Spey Cast', emoji: '🐟', count: temoignagesSaumon.length },
-  { id: 'truite',  label: 'Truite & Initiation', emoji: '🏞️', count: temoignagesTruite.length },
-  { id: 'voyages', label: 'Voyages', emoji: '✈️', count: temoignagesVoyages.length },
+  { id: 'bar',     label: bar.onglet,     count: temoBar.length },
+  { id: 'saumon',  label: saumon.onglet,  count: temoSaumon.length },
+  { id: 'truite',  label: truite.onglet,  count: temoTruite.length },
+  { id: 'voyages', label: voyages.onglet, count: temoVoyages.length },
 ]
+
+// Seuil à partir duquel on affiche "Lire la suite" (~3 lignes = ~250 chars)
+const EXTRAIT_MAX = 260
 ---
 
 <BaseLayout title={seoTitle} description={seoDescription}>
@@ -414,9 +192,9 @@ const sections = [
   <!-- ══════════════════════════ HERO ══════════════════════════ -->
   <section class="temo-hero">
     <div class="container">
-      <p class="temo-hero__eyebrow">21 ans de guidage</p>
-      <h1>Témoignages & Avis</h1>
-      <p class="temo-hero__intro">{intro}</p>
+      <p class="temo-hero__eyebrow">{hero.eyebrow}</p>
+      <h1>{hero.titre}</h1>
+      <p class="temo-hero__intro">{hero.intro}</p>
     </div>
   </section>
 
@@ -434,87 +212,55 @@ const sections = [
     </ul>
   </nav>
 
-  <!-- ══════════════════════════ SANITY — RÉCENTS ══════════════ -->
-  {sanityTemoignages.length > 0 && (
-    <section class="section section--white temo-section" id="recents">
-      <div class="container">
-        <div class="temo-section__header">
-          <div>
-            <p class="sanity-eyebrow">✦ Nouveaux témoignages</p>
-            <h2>Récemment ajoutés</h2>
-            <p class="temo-section__sub">Témoignages ajoutés directement par Jean-Baptiste depuis le Studio.</p>
-          </div>
-        </div>
-        <div class="temo-grid">
-          {sanityTemoignages.map((t: any) => (
-            <article class="temo-card">
-              <div class="temo-card__header">
-                <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
-                <div>
-                  <strong class="temo-card__name">{t.nom}</strong>
-                  {t.prestation && <span class="temo-card__type">{t.prestation}</span>}
-                  {t.date && <span class="temo-card__type">{new Date(t.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long' })}</span>}
-                </div>
-              </div>
-              <blockquote class="temo-card__quote">
-                {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
-              </blockquote>
-              {t.note && (
-                <div class="temo-card__stars" aria-label={`${t.note} étoiles`}>
-                  {'★'.repeat(t.note)}{'☆'.repeat(5 - t.note)}
-                </div>
-              )}
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
-
   <!-- ══════════════════════════ BAR ══════════════════════════ -->
   <section class="temo-section section section--sand" id="bar">
     <div class="container">
       <div class="temo-section__header">
         <div>
-          <h2>Bar à la mouche</h2>
-          <p class="temo-section__sub">Pêche du bar en Bretagne-Sud — bar à vue, en bateau, en estuaire</p>
+          <h2>{bar.titre}</h2>
+          <p class="temo-section__sub">{bar.sousTitre}</p>
         </div>
       </div>
       <div class="temo-grid">
-        {temoignagesBar.map(t => (
-          <article class="temo-card">
-            {t.photos && t.photos.length > 0 && (
-              <div class="carousel" data-count={t.photos.length}>
-                <div class="carousel__track">
-                  {t.photos.map(p => (
-                    <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
-                  ))}
+        {temoBar.map((t: any) => {
+          const photos = photoMap[t._id] ?? []
+          const long = t.texte.length > EXTRAIT_MAX
+          return (
+            <article class="temo-card">
+              {photos.length > 0 && (
+                <div class="carousel" data-count={photos.length}>
+                  <div class="carousel__track">
+                    {photos.map(p => (
+                      <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
+                    ))}
+                  </div>
+                  <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
+                  <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
+                  <div class="carousel__dots">
+                    {photos.map((_: any, i: number) => (
+                      <span class={i === 0 ? 'dot dot--active' : 'dot'} />
+                    ))}
+                  </div>
                 </div>
-                <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
-                <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
-                <div class="carousel__dots">
-                  {t.photos.map((_, i) => (
-                    <span class={i === 0 ? 'dot dot--active' : 'dot'} />
-                  ))}
+              )}
+              <div class="temo-card__header">
+                <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
+                <div>
+                  <strong class="temo-card__name">{t.nom}</strong>
+                  {t.prestation && <span class="temo-card__type">{t.prestation}</span>}
                 </div>
               </div>
-            )}
-            <div class="temo-card__header">
-              <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
-              <div>
-                <strong class="temo-card__name">{t.nom}</strong>
-                <span class="temo-card__type">{t.type}</span>
-              </div>
-            </div>
-            <blockquote class="temo-card__quote">
-              {t.texte.split('\n\n').map(p => <p>{p}</p>)}
-            </blockquote>
-            <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
-          </article>
-        ))}
+              <blockquote class:list={['temo-card__quote', { 'clamped': long }]}>
+                {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
+              </blockquote>
+              {long && <button class="quote-toggle" type="button">Lire la suite</button>}
+              <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
+            </article>
+          )
+        })}
       </div>
       <div class="temo-section__cta">
-        <a href="/peche-du-bar-a-la-mouche" class="btn-link">Découvrir la pêche du bar à la mouche →</a>
+        <a href={bar.ctaUrl} class="btn-link">{bar.ctaTexte}</a>
       </div>
     </div>
   </section>
@@ -524,45 +270,50 @@ const sections = [
     <div class="container">
       <div class="temo-section__header">
         <div>
-          <h2>Saumon, Alose & Spey Cast</h2>
-          <p class="temo-section__sub">Guidage migrateurs sur les rivières bretonnes — Ellé, Scorff, Aulne, Aven, Elorn</p>
+          <h2>{saumon.titre}</h2>
+          <p class="temo-section__sub">{saumon.sousTitre}</p>
         </div>
       </div>
       <div class="temo-grid">
-        {temoignagesSaumon.map(t => (
-          <article class="temo-card">
-            {t.photos && t.photos.length > 0 && (
-              <div class="carousel" data-count={t.photos.length}>
-                <div class="carousel__track">
-                  {t.photos.map(p => (
-                    <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
-                  ))}
+        {temoSaumon.map((t: any) => {
+          const photos = photoMap[t._id] ?? []
+          const long = t.texte.length > EXTRAIT_MAX
+          return (
+            <article class="temo-card">
+              {photos.length > 0 && (
+                <div class="carousel" data-count={photos.length}>
+                  <div class="carousel__track">
+                    {photos.map(p => (
+                      <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
+                    ))}
+                  </div>
+                  <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
+                  <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
+                  <div class="carousel__dots">
+                    {photos.map((_: any, i: number) => (
+                      <span class={i === 0 ? 'dot dot--active' : 'dot'} />
+                    ))}
+                  </div>
                 </div>
-                <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
-                <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
-                <div class="carousel__dots">
-                  {t.photos.map((_, i) => (
-                    <span class={i === 0 ? 'dot dot--active' : 'dot'} />
-                  ))}
+              )}
+              <div class="temo-card__header">
+                <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
+                <div>
+                  <strong class="temo-card__name">{t.nom}</strong>
+                  {t.prestation && <span class="temo-card__type">{t.prestation}</span>}
                 </div>
               </div>
-            )}
-            <div class="temo-card__header">
-              <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
-              <div>
-                <strong class="temo-card__name">{t.nom}</strong>
-                <span class="temo-card__type">{t.type}</span>
-              </div>
-            </div>
-            <blockquote class="temo-card__quote">
-              {t.texte.split('\n\n').map(p => <p>{p}</p>)}
-            </blockquote>
-            <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
-          </article>
-        ))}
+              <blockquote class:list={['temo-card__quote', { 'clamped': long }]}>
+                {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
+              </blockquote>
+              {long && <button class="quote-toggle" type="button">Lire la suite</button>}
+              <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
+            </article>
+          )
+        })}
       </div>
       <div class="temo-section__cta">
-        <a href="/stage-spey-cast-et-cours-de-lancer" class="btn-link">Découvrir le Spey Cast →</a>
+        <a href={saumon.ctaUrl} class="btn-link">{saumon.ctaTexte}</a>
       </div>
     </div>
   </section>
@@ -572,45 +323,50 @@ const sections = [
     <div class="container">
       <div class="temo-section__header">
         <div>
-          <h2>Truite & Initiation</h2>
-          <p class="temo-section__sub">Initiation, perfectionnement truite en rivière — Scorff, Ellé, Isole</p>
+          <h2>{truite.titre}</h2>
+          <p class="temo-section__sub">{truite.sousTitre}</p>
         </div>
       </div>
       <div class="temo-grid">
-        {temoignagesTruite.map(t => (
-          <article class="temo-card">
-            {t.photos && t.photos.length > 0 && (
-              <div class="carousel" data-count={t.photos.length}>
-                <div class="carousel__track">
-                  {t.photos.map(p => (
-                    <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
-                  ))}
+        {temoTruite.map((t: any) => {
+          const photos = photoMap[t._id] ?? []
+          const long = t.texte.length > EXTRAIT_MAX
+          return (
+            <article class="temo-card">
+              {photos.length > 0 && (
+                <div class="carousel" data-count={photos.length}>
+                  <div class="carousel__track">
+                    {photos.map(p => (
+                      <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
+                    ))}
+                  </div>
+                  <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
+                  <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
+                  <div class="carousel__dots">
+                    {photos.map((_: any, i: number) => (
+                      <span class={i === 0 ? 'dot dot--active' : 'dot'} />
+                    ))}
+                  </div>
                 </div>
-                <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
-                <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
-                <div class="carousel__dots">
-                  {t.photos.map((_, i) => (
-                    <span class={i === 0 ? 'dot dot--active' : 'dot'} />
-                  ))}
+              )}
+              <div class="temo-card__header">
+                <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
+                <div>
+                  <strong class="temo-card__name">{t.nom}</strong>
+                  {t.prestation && <span class="temo-card__type">{t.prestation}</span>}
                 </div>
               </div>
-            )}
-            <div class="temo-card__header">
-              <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
-              <div>
-                <strong class="temo-card__name">{t.nom}</strong>
-                <span class="temo-card__type">{t.type}</span>
-              </div>
-            </div>
-            <blockquote class="temo-card__quote">
-              {t.texte.split('\n\n').map(p => <p>{p}</p>)}
-            </blockquote>
-            <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
-          </article>
-        ))}
+              <blockquote class:list={['temo-card__quote', { 'clamped': long }]}>
+                {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
+              </blockquote>
+              {long && <button class="quote-toggle" type="button">Lire la suite</button>}
+              <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
+            </article>
+          )
+        })}
       </div>
       <div class="temo-section__cta">
-        <a href="/peche-a-la-mouche-en-bretagne" class="btn-link">Découvrir la pêche en eau douce →</a>
+        <a href={truite.ctaUrl} class="btn-link">{truite.ctaTexte}</a>
       </div>
     </div>
   </section>
@@ -620,57 +376,99 @@ const sections = [
     <div class="container">
       <div class="temo-section__header temo-section__header--light">
         <div>
-          <h2>Voyages internationaux</h2>
-          <p class="temo-section__sub temo-section__sub--light">Argentine · Bolivie · Cuba · Venezuela · Mexique</p>
+          <h2>{voyages.titre}</h2>
+          <p class="temo-section__sub temo-section__sub--light">{voyages.sousTitre}</p>
         </div>
       </div>
       <div class="temo-grid">
-        {temoignagesVoyages.map(t => (
-          <article class="temo-card temo-card--dark">
-            {t.photos && t.photos.length > 0 && (
-              <div class="carousel" data-count={t.photos.length}>
-                <div class="carousel__track">
-                  {t.photos.map(p => (
-                    <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
-                  ))}
+        {temoVoyages.map((t: any) => {
+          const photos = photoMap[t._id] ?? []
+          const long = t.texte.length > EXTRAIT_MAX
+          return (
+            <article class="temo-card temo-card--dark">
+              {photos.length > 0 && (
+                <div class="carousel" data-count={photos.length}>
+                  <div class="carousel__track">
+                    {photos.map(p => (
+                      <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
+                    ))}
+                  </div>
+                  <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
+                  <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
+                  <div class="carousel__dots">
+                    {photos.map((_: any, i: number) => (
+                      <span class={i === 0 ? 'dot dot--active' : 'dot'} />
+                    ))}
+                  </div>
                 </div>
-                <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
-                <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
-                <div class="carousel__dots">
-                  {t.photos.map((_, i) => (
-                    <span class={i === 0 ? 'dot dot--active' : 'dot'} />
-                  ))}
+              )}
+              <div class="temo-card__header">
+                <div class="temo-card__avatar temo-card__avatar--light">{t.nom.charAt(0)}</div>
+                <div>
+                  <strong class="temo-card__name">{t.nom}</strong>
+                  {t.prestation && <span class="temo-card__type temo-card__type--light">{t.prestation}</span>}
                 </div>
               </div>
-            )}
-            <div class="temo-card__header">
-              <div class="temo-card__avatar temo-card__avatar--light">{t.nom.charAt(0)}</div>
-              <div>
-                <strong class="temo-card__name">{t.nom}</strong>
-                <span class="temo-card__type temo-card__type--light">{t.type}</span>
-              </div>
-            </div>
-            <blockquote class="temo-card__quote temo-card__quote--light">
-              {t.texte.split('\n\n').map(p => <p>{p}</p>)}
-            </blockquote>
-            <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
-          </article>
-        ))}
+              <blockquote class:list={['temo-card__quote temo-card__quote--light', { 'clamped': long }]}>
+                {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
+              </blockquote>
+              {long && <button class="quote-toggle quote-toggle--light" type="button">Lire la suite</button>}
+              <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
+            </article>
+          )
+        })}
       </div>
       <div class="temo-section__cta">
-        <a href="/voyages-peche-mouche" class="btn-link btn-link--light">Découvrir les voyages →</a>
+        <a href={voyages.ctaUrl} class="btn-link btn-link--light">{voyages.ctaTexte}</a>
       </div>
     </div>
   </section>
 
+  <!-- ══════════════ AUTRES (nouveaux témoignages sans catégorie) ══════════ -->
+  {temoAutres.length > 0 && (
+    <section class="temo-section section section--mist">
+      <div class="container">
+        <div class="temo-section__header">
+          <div>
+            <p class="temo-eyebrow">✦ Nouveaux témoignages</p>
+            <h2>Récemment ajoutés</h2>
+          </div>
+        </div>
+        <div class="temo-grid">
+          {temoAutres.map((t: any) => {
+            const long = t.texte.length > EXTRAIT_MAX
+            return (
+              <article class="temo-card">
+                <div class="temo-card__header">
+                  <div class="temo-card__avatar">{t.nom.charAt(0)}</div>
+                  <div>
+                    <strong class="temo-card__name">{t.nom}</strong>
+                    {t.prestation && <span class="temo-card__type">{t.prestation}</span>}
+                  </div>
+                </div>
+                <blockquote class:list={['temo-card__quote', { 'clamped': long }]}>
+                  {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
+                </blockquote>
+                {long && <button class="quote-toggle" type="button">Lire la suite</button>}
+                <div class="temo-card__stars" aria-label={`${t.note || 5} étoiles`}>
+                  {'★'.repeat(t.note || 5)}{'☆'.repeat(5 - (t.note || 5))}
+                </div>
+              </article>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- ══════════════════════════ CTA RÉSERVATION ══════════════ -->
   <section class="temo-cta section">
     <div class="container">
-      <h2>Prêt à vivre votre expérience ?</h2>
-      <p>Rejoignez les centaines de pêcheurs qui ont fait confiance à Jean-Baptiste depuis 2004.</p>
+      <h2>{cta.titre}</h2>
+      <p>{cta.texte}</p>
       <div class="temo-cta__btns">
-        <a href="/contact" class="btn-primary">Réserver une sortie</a>
-        <a href="/stage-peche-mouche" class="btn-secondary">Voir les prestations</a>
+        <a href={cta.btn1Url} class="btn-primary">{cta.btn1Texte}</a>
+        <a href={cta.btn2Url} class="btn-secondary">{cta.btn2Texte}</a>
       </div>
     </div>
   </section>
@@ -678,16 +476,6 @@ const sections = [
 </BaseLayout>
 
 <style>
-  /* ── SANITY EYEBROW ── */
-  .sanity-eyebrow {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--color-ocean-main);
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-  }
-
   /* ── HERO ── */
   .temo-hero {
     background: var(--color-ocean);
@@ -714,7 +502,7 @@ const sections = [
     line-height: 1.7;
   }
 
-  /* ── NAV — même style que categories-strip accueil ── */
+  /* ── NAV ── */
   .temo-nav {
     background: var(--color-ocean);
     position: sticky;
@@ -736,7 +524,6 @@ const sections = [
   }
   .temo-nav__list li:last-child { border-right: none; }
 
-  /* Bloc coulissant pleine hauteur — même rendu que le hover */
   .temo-nav__slider {
     position: absolute;
     top: 0;
@@ -771,6 +558,16 @@ const sections = [
   }
   .temo-nav__label { letter-spacing: inherit; }
 
+  /* ── EYEBROW nouveaux ── */
+  .temo-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
   /* ── SECTION HEADERS ── */
   .temo-section__header {
     display: flex;
@@ -779,14 +576,12 @@ const sections = [
     margin-bottom: 3rem;
   }
   .temo-section__header--light { color: white; }
-.temo-section__sub {
+  .temo-section__sub {
     color: var(--color-text-muted);
     margin-top: 0.3rem;
     font-size: 1rem;
   }
-  .temo-section__sub--light {
-    color: rgba(255,255,255,0.6);
-  }
+  .temo-section__sub--light { color: rgba(255,255,255,0.6); }
   .temo-section__header--light h2 { color: white; }
 
   /* ── GRID ── */
@@ -923,11 +718,11 @@ const sections = [
   }
   .temo-card__type--light { color: rgba(255,255,255,0.5); }
 
+  /* ── QUOTE + TRONCATURE ── */
   .temo-card__quote {
     font-size: 0.9rem;
     color: var(--color-text);
     line-height: 1.72;
-    flex: 1;
     border-left: 3px solid var(--color-ocean-light);
     padding: 0 1.2rem 0 1rem;
     margin: 0 0.2rem 0 1.2rem;
@@ -937,21 +732,46 @@ const sections = [
     color: rgba(255,255,255,0.85);
     border-left-color: var(--color-ocean-light);
   }
-  .temo-card__quote p + p {
-    margin-top: 0.65em;
+  .temo-card__quote p + p { margin-top: 0.65em; }
+
+  /* État tronqué — ~3 lignes */
+  .temo-card__quote.clamped {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
   }
+
+  /* Bouton "Lire la suite" */
+  .quote-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-ocean-main);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 0.35rem 1.4rem 0 2.2rem;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-align: left;
+    line-height: 1;
+  }
+  .quote-toggle:hover { color: var(--color-ocean); }
+  .quote-toggle--light {
+    color: var(--color-ocean-light);
+  }
+  .quote-toggle--light:hover { color: white; }
 
   .temo-card__stars {
     font-size: 0.88rem;
     color: #f59e0b;
     letter-spacing: 0.05em;
     padding: 0.8rem 1.4rem 1.2rem;
+    margin-top: auto;
   }
 
   /* ── CTA SECTION ── */
-  .temo-section__cta {
-    text-align: center;
-  }
+  .temo-section__cta { text-align: center; }
   .btn-link {
     color: var(--color-ocean-main);
     font-weight: 500;
@@ -960,27 +780,19 @@ const sections = [
     padding-bottom: 2px;
     transition: color 0.2s, border-color 0.2s;
   }
-  .btn-link:hover {
-    color: var(--color-ocean);
-    border-color: var(--color-ocean);
-  }
+  .btn-link:hover { color: var(--color-ocean); border-color: var(--color-ocean); }
   .btn-link--light {
     color: var(--color-ocean-light);
     border-bottom-color: rgba(126,200,227,0.4);
   }
-  .btn-link--light:hover {
-    color: white;
-    border-color: white;
-  }
+  .btn-link--light:hover { color: white; border-color: white; }
 
   /* ── FINAL CTA ── */
   .temo-cta {
     text-align: center;
     background: var(--color-sand);
   }
-  .temo-cta h2 {
-    margin-bottom: 0.8rem;
-  }
+  .temo-cta h2 { margin-bottom: 0.8rem; }
   .temo-cta p {
     color: var(--color-text-muted);
     margin-bottom: 2rem;
@@ -1014,10 +826,7 @@ const sections = [
     font-size: 0.95rem;
     transition: background 0.2s, color 0.2s;
   }
-  .btn-secondary:hover {
-    background: var(--color-ocean-main);
-    color: white;
-  }
+  .btn-secondary:hover { background: var(--color-ocean-main); color: white; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
@@ -1025,19 +834,43 @@ const sections = [
   }
   @media (max-width: 640px) {
     .temo-hero { padding: 5rem 0 3rem; }
-    .temo-nav__link { padding: 0.85rem 1rem; font-size: 0.82rem; }
     .temo-section__header { flex-direction: column; gap: 0.5rem; }
-
     .carousel { aspect-ratio: 4/3; }
+  }
+
+  /* Nav 2×2 sur mobile */
+  @media (max-width: 580px) {
+    .temo-nav__list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow-x: visible;
+    }
+    .temo-nav__list li {
+      flex: unset;
+      min-width: unset;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .temo-nav__list li:nth-child(2n) { border-right: none; }
+    .temo-nav__list li:nth-last-child(-n+2) { border-bottom: none; }
+    .temo-nav__link {
+      padding: 0.75rem 0.6rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.3;
+    }
   }
 </style>
 
 <script>
+  // ── CARROUSELS ────────────────────────────────────────────────────────────
   document.querySelectorAll('.carousel').forEach(carousel => {
-    const track    = carousel.querySelector('.carousel__track');
-    const imgs     = carousel.querySelectorAll('img');
-    const dots     = carousel.querySelectorAll('.dot');
-    const count    = imgs.length;
+    const track = carousel.querySelector('.carousel__track');
+    const imgs  = carousel.querySelectorAll('img');
+    const dots  = carousel.querySelectorAll('.dot');
+    const count = imgs.length;
     if (count <= 1) return;
 
     let current = 0;
@@ -1045,17 +878,14 @@ const sections = [
     function goto(n) {
       current = ((n % count) + count) % count;
       track.style.transform = `translateX(-${current * 100}%)`;
-      dots.forEach((d, i) => {
-        d.classList.toggle('dot--active', i === current);
-      });
+      dots.forEach((d, i) => d.classList.toggle('dot--active', i === current));
     }
 
     carousel.querySelector('.carousel__btn--prev')
-      .addEventListener('click', (e) => { e.stopPropagation(); goto(current - 1); });
+      .addEventListener('click', e => { e.stopPropagation(); goto(current - 1); });
     carousel.querySelector('.carousel__btn--next')
-      .addEventListener('click', (e) => { e.stopPropagation(); goto(current + 1); });
+      .addEventListener('click', e => { e.stopPropagation(); goto(current + 1); });
 
-    // Swipe tactile
     let startX = 0;
     carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
     carousel.addEventListener('touchend', e => {
@@ -1064,7 +894,16 @@ const sections = [
     }, { passive: true });
   });
 
-  // ── SCROLL SPY + TRAIT GLISSANT ──
+  // ── LIRE LA SUITE ─────────────────────────────────────────────────────────
+  document.querySelectorAll('.quote-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const quote = btn.previousElementSibling;
+      const isClamped = quote.classList.toggle('clamped');
+      btn.textContent = isClamped ? 'Lire la suite' : 'Lire moins';
+    });
+  });
+
+  // ── SCROLL SPY + TRAIT GLISSANT ──────────────────────────────────────────
   (() => {
     const sectionIds = ['bar', 'saumon', 'truite', 'voyages'];
     const navLinks   = {};
@@ -1076,7 +915,6 @@ const sections = [
       if (id) navLinks[id] = link;
     });
 
-    // Positionne physiquement le slider sous le lien actif
     function moveSlider(link, instant) {
       if (!slider || !listEl || !link) return;
       if (instant) slider.style.transition = 'none';
@@ -1085,7 +923,6 @@ const sections = [
       slider.style.left  = (linkRect.left - listRect.left + listEl.scrollLeft) + 'px';
       slider.style.width = linkRect.width + 'px';
       if (instant) {
-        // re-enable transition au prochain frame
         requestAnimationFrame(() => {
           slider.style.transition = 'left 0.38s cubic-bezier(0.4,0,0.2,1), width 0.38s cubic-bezier(0.4,0,0.2,1)';
         });
@@ -1097,10 +934,7 @@ const sections = [
         link.classList.toggle('temo-nav__link--active', key === id);
       });
       moveSlider(navLinks[id], instant);
-      // Scroll mobile : amène la pill active dans le champ de vision
-      if (navLinks[id]) {
-        navLinks[id].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-      }
+      if (navLinks[id]) navLinks[id].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
     }
 
     function update(instant = false) {
@@ -1113,7 +947,6 @@ const sections = [
       setActive(active, instant);
     }
 
-    // Scroll throttlé
     let ticking = false;
     window.addEventListener('scroll', () => {
       if (!ticking) {
@@ -1122,10 +955,8 @@ const sections = [
       }
     }, { passive: true });
 
-    // Resize : repositionne sans animation (les pills peuvent changer de taille)
     window.addEventListener('resize', () => update(true), { passive: true });
 
-    // Clic pill → smooth scroll avec offset header + nav
     document.querySelectorAll('.temo-nav__link').forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
@@ -1141,7 +972,6 @@ const sections = [
       });
     });
 
-    // État initial (sans animation pour éviter le glissement depuis 0)
     requestAnimationFrame(() => update(true));
   })();
 </script>

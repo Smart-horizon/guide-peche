@@ -6,7 +6,7 @@ const seoDescription = "Découvrez Jean-Baptiste Vidal, moniteur-guide de pêche
 
 const diplomes = [
   { annee: '1999', label: 'BTS Gestion et Protection de la Nature' },
-  { annee: '2004', label: 'BP JEPS « Pêche de Loisir » — Moniteur-Guide de Pêche' },
+  { annee: '2004', label: 'BP JEPS « Pêche de Loisir », Moniteur-Guide de Pêche' },
   { annee: '2004', label: 'UCC « Pêche de loisir en milieu maritime »' },
   { annee: '2004', label: 'Brevet de Surveillant de Baignade' },
   { annee: '2004', label: 'Attestation aux Premiers Secours' },
@@ -260,7 +260,7 @@ const carouselImages = [
         <h2>Un professionnel à votre service</h2>
         <p>
           On ne choisit pas de faire le métier de guide de pêche sur un coup de tête.
-          C'est une vocation, une passion que l'on souhaite partager — une envie de transmettre
+          C'est une vocation, une passion que l'on souhaite partager, une envie de transmettre
           ses connaissances, son savoir-faire, sa technique, mais aussi sa sensibilité
           pour les milieux aquatiques et l'environnement.
         </p>
@@ -271,7 +271,7 @@ const carouselImages = [
           avant d'obtenir le BP JEPS « Pêche de Loisir » en 2004.
         </p>
         <p>
-          Dès 2005, je pars guider en Islande — une première expérience internationale qui
+          Dès 2005, je pars guider en Islande, une première expérience internationale qui
           ouvre la porte à une longue carrière de guide et manager de lodge dans plusieurs pays :
           Argentine, Russie, Bolivie, Irlande…
         </p>
@@ -281,7 +281,7 @@ const carouselImages = [
         </p>
         <div class="bio-certs">
           <img src="/images/jbv-portrait.jpg" alt="Jean-Baptiste Vidal, moniteur-guide de pêche à la mouche" class="cert-portrait" loading="lazy" />
-          <p class="cert-caption">Fiche officielle — Fédération Française des Moniteurs-Guides de Pêche</p>
+          <p class="cert-caption">Fiche officielle, Fédération Française des Moniteurs-Guides de Pêche</p>
         </div>
       </div>
       <div class="bio-photo">
@@ -303,7 +303,7 @@ const carouselImages = [
         <p class="eyebrow">Expérience</p>
         <h2>Un parcours de guide international</h2>
         <p class="section-sub">
-          De l'Islande à la Terre de Feu, de la Russie à la Bolivie — des années de guidage
+          De l'Islande à la Terre de Feu, de la Russie à la Bolivie : des années de guidage
           aux quatre coins du monde avant de poser les cannes en Bretagne.
         </p>
       </div>
@@ -326,7 +326,7 @@ const carouselImages = [
         </div>
         <div class="tl-stat-sep tl-stat-sep--hide-sm"></div>
         <blockquote class="tl-stat-quote">
-          « Chaque destination m'a appris quelque chose d'unique — une lecture de l'eau, une technique. »
+          « Chaque destination m'a appris quelque chose d'unique, une lecture de l'eau, une technique. »
         </blockquote>
       </div>
 
@@ -443,7 +443,7 @@ const carouselImages = [
           </li>
           <li>
             <span class="qualif-annee">Presse</span>
-            <span class="qualif-label">Journaliste halieutique — magazine <em>Pêche Mouche</em> (depuis 2011)</span>
+            <span class="qualif-label">Journaliste halieutique, magazine <em>Pêche Mouche</em> (depuis 2011)</span>
           </li>
           <li>
             <span class="qualif-annee">Sponsors</span>
@@ -487,7 +487,7 @@ const carouselImages = [
         <div class="dest-col">
           <h3 class="dest-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18" aria-hidden="true"><path d="M2 12c2-4 6-4 10 0s8 4 10 0"/><path d="M2 17c2-4 6-4 10 0s8 4 10 0"/><path d="M2 7c2-4 6-4 10 0s8 4 10 0"/></svg>
-            Saltwater — Mer
+            Saltwater · Mer
           </h3>
           <ul class="dest-list">
             {destinationsMer.map(d => <li>{d}</li>)}
@@ -523,7 +523,7 @@ const carouselImages = [
         </p>
         <p>
           Bar en estuaire et en bateau (Carolina Skiff), truite en rivière et en lac,
-          alose, brochet, stages Spey Cast et Masterclass — une offre complète,
+          alose, brochet, stages Spey Cast et Masterclass, une offre complète,
           adaptée à tous les niveaux.
         </p>
         <div class="bretagne-ctas">
@@ -1210,11 +1210,21 @@ const carouselImages = [
     function restartAutoplay () { stopAutoplay(); setTimeout(startAutoplay, 6000) }
 
     function slideW () {
-      return (carousel.offsetWidth - 6) / 3  // 3 slides, 2 gaps de 3px
+      // Mesure la vraie largeur rendue — gère tous les breakpoints (1 / 2 / 3 slides)
+      return (slides[0] as HTMLElement).offsetWidth
+    }
+    function visibleN () {
+      return window.innerWidth <= 640 ? 1 : window.innerWidth <= 900 ? 2 : 3
     }
     function calcOffset (idx: number) {
       const w = slideW()
-      return Math.max(0, Math.min((total - 3) * (w + 3), (idx - 1) * (w + 3)))
+      const g = 3          // gap CSS en px
+      const n = visibleN()
+      // n=1 ou n=2 : avancer d'un slide à la fois
+      // n=3 : mode centré — affiche [idx-1, idx, idx+1]
+      const raw = n < 3 ? idx * (w + g) : (idx - 1) * (w + g)
+      const maxOff = Math.max(0, (total - n) * (w + g))
+      return Math.max(0, Math.min(maxOff, raw))
     }
 
     function go (idx: number) {

@@ -109,14 +109,33 @@ const customStructure = (S, context) =>
 
       S.divider(),
 
-      // ⭐ Témoignages (avec drag & drop)
-      orderableDocumentListDeskItem({
-        type: 'temoignage',
-        title: '⭐ Témoignages',
-        icon: () => '⭐',
-        S,
-        context,
-      }),
+      // ⭐ Témoignages (avec drag & drop) + textes de la page
+      S.listItem()
+        .title('⭐ Témoignages')
+        .child(
+          S.list()
+            .title('Témoignages')
+            .items([
+              // Textes de la page /temoignages
+              S.listItem()
+                .title('✏️ Textes de la page')
+                .child(
+                  S.document()
+                    .schemaType('pageTemoignages')
+                    .documentId('pageTemoignages')
+                    .title('Page Témoignages — textes')
+                ),
+              S.divider(),
+              // Liste des témoignages (drag & drop)
+              orderableDocumentListDeskItem({
+                type: 'temoignage',
+                title: '📋 Liste des témoignages',
+                icon: () => '⭐',
+                S,
+                context,
+              }),
+            ])
+        ),
 
       S.divider(),
 
@@ -163,7 +182,45 @@ export default defineConfig({
     presentationTool({
       name: 'preview',
       title: '👁️ Aperçu du site',
-      previewUrl: 'http://localhost:4321',
+      previewUrl: 'https://guide-peche.smart-horizon.workers.dev',
+      resolve: {
+        locations: {
+          // Chaque témoignage → page /temoignages
+          temoignage: () => ({
+            locations: [{ title: 'Page Témoignages', href: '/temoignages' }],
+          }),
+          // Textes de la page → page /temoignages
+          pageTemoignages: () => ({
+            locations: [{ title: 'Page Témoignages', href: '/temoignages' }],
+          }),
+          // Accueil → page d'accueil
+          accueil: () => ({
+            locations: [{ title: "Page d'accueil", href: '/' }],
+          }),
+          // Paramètres → page d'accueil (impact global)
+          parametres: () => ({
+            locations: [{ title: "Page d'accueil", href: '/' }],
+          }),
+          // Prestations → page de la prestation
+          prestation: (doc) => ({
+            locations: doc?.slug?.current
+              ? [{ title: doc.title || 'Prestation', href: `/${doc.slug.current}` }]
+              : [],
+          }),
+          // Voyages → page du voyage
+          voyage: (doc) => ({
+            locations: doc?.slug?.current
+              ? [{ title: doc.title || 'Voyage', href: `/${doc.slug.current}` }]
+              : [],
+          }),
+          // Articles → page de l'article
+          article: (doc) => ({
+            locations: doc?.slug?.current
+              ? [{ title: doc.title || 'Article', href: `/blog/${doc.slug.current}` }]
+              : [],
+          }),
+        },
+      },
     }),
     visionTool(),
   ],

@@ -24,9 +24,9 @@ const nonInclus = [
 const supplements = [
   { label: "Assortiment migrateur saumon (obligatoire)", prix: "50 €",      note: "Fourni sur demande" },
   { label: "Permis journalier réservoir",                prix: "15 – 23 €", note: "Etang Neuf (22) · Parc Ar Bihan (56)" },
-  { label: "Supplément carburant — 50 km A+R",           prix: "20 €",      note: "Guidage hors secteur géographique" },
-  { label: "Supplément carburant — 100 km A+R",          prix: "30 €",      note: "" },
-  { label: "Supplément carburant — 150 km A+R",          prix: "40 €",      note: "" },
+  { label: "Supplément carburant (50 km A+R)",            prix: "20 €",      note: "Guidage hors secteur géographique" },
+  { label: "Supplément carburant (100 km A+R)",           prix: "30 €",      note: "" },
+  { label: "Supplément carburant (150 km A+R)",           prix: "40 €",      note: "" },
 ]
 ---
 
@@ -37,7 +37,7 @@ const supplements = [
     <div class="container tarif-hero__inner">
       <p class="hero-eyebrow">Bretagne-Sud · 2026</p>
       <h1>Tarifs des stages<br/>&amp; guidages</h1>
-      <p class="hero-sub">Enseignements et guidages pour pêcheurs débutants, confirmés et experts — eau douce, bar, migrateurs, technique.</p>
+      <p class="hero-sub">Enseignements et guidages pour pêcheurs débutants, confirmés et experts : eau douce, bar, migrateurs, technique.</p>
       <div class="hero-actions">
         <a href="/contact" class="btn-prim">Demander un renseignement</a>
         <a href="tel:0687303456" class="btn-ghost">06 87 30 34 56</a>
@@ -69,7 +69,7 @@ const supplements = [
         <p class="intro-card__title">Niveaux</p>
         <p class="intro-card__val">Débutants · Confirmés · Experts</p>
         <p class="intro-card__title">Zone</p>
-        <p class="intro-card__val">Bretagne-Sud — Finistère · Morbihan</p>
+        <p class="intro-card__val">Bretagne-Sud, Finistère · Morbihan</p>
         <p class="intro-card__title">Contact</p>
         <p class="intro-card__val">06 87 30 34 56</p>
       </div>
@@ -99,11 +99,11 @@ const supplements = [
         </div>
         <div class="ts-prices">
           <div class="ts-price">
-            <span class="ts-price__val">280 €</span>
+            <span class="ts-price__val">320 €</span>
             <span class="ts-price__lbl">1 pers.</span>
           </div>
           <div class="ts-price">
-            <span class="ts-price__val">180 €</span>
+            <span class="ts-price__val">225 €</span>
             <span class="ts-price__lbl">2 pers.</span>
           </div>
         </div>
@@ -115,11 +115,11 @@ const supplements = [
         </div>
         <div class="ts-prices">
           <div class="ts-price">
-            <span class="ts-price__val">300 €</span>
+            <span class="ts-price__val">320 €</span>
             <span class="ts-price__lbl">1 pers.</span>
           </div>
           <div class="ts-price">
-            <span class="ts-price__val">200 €</span>
+            <span class="ts-price__val">225 €</span>
             <span class="ts-price__lbl">2 pers.</span>
           </div>
         </div>
@@ -156,6 +156,22 @@ const supplements = [
           </div>
         </div>
       </div>
+      <div class="ts-row">
+        <div class="ts-row__info">
+          <a href="/peche-du-bar-a-la-mouche-coaching" class="ts-row__name">Coaching bar à la mouche</a>
+          <span class="ts-row__format">Journée · Sur vos spots · Sur votre bateau</span>
+        </div>
+        <div class="ts-prices">
+          <div class="ts-price">
+            <span class="ts-price__val">320 €</span>
+            <span class="ts-price__lbl">1 pers.</span>
+          </div>
+          <div class="ts-price">
+            <span class="ts-price__val">225 €</span>
+            <span class="ts-price__lbl">2 pers.</span>
+          </div>
+        </div>
+      </div>
     </div>
 
   </section>
@@ -169,7 +185,7 @@ const supplements = [
       <p class="ts-eyebrow">Rivières · Réservoirs</p>
       <h2 class="ts-title">Eau douce<br/>&amp; migrateurs</h2>
       <div class="ts-divider"></div>
-      <p class="ts-desc">Truite, alose, brochet et saumon — les rivières bretonnes et leurs secrets.</p>
+      <p class="ts-desc">Truite, alose, brochet et saumon : les rivières bretonnes et leurs secrets.</p>
       <a href="/peche-a-la-mouche-en-bretagne" class="ts-more">Découvrir les prestations →</a>
     </div>
 
@@ -240,7 +256,7 @@ const supplements = [
 
       <div class="ts-row">
         <div class="ts-row__info">
-          <a href="/peche-du-brochet-a-la-mouche" class="ts-row__name">Brochet — du bord</a>
+          <a href="/peche-du-brochet-a-la-mouche" class="ts-row__name">Brochet, du bord</a>
           <span class="ts-row__format">1 journée</span>
         </div>
         <div class="ts-prices">
@@ -257,7 +273,7 @@ const supplements = [
 
       <div class="ts-row">
         <div class="ts-row__info">
-          <a href="/peche-du-brochet-a-la-mouche" class="ts-row__name">Brochet — en bateau</a>
+          <a href="/peche-du-brochet-a-la-mouche" class="ts-row__name">Brochet, en bateau</a>
           <span class="ts-row__format">1 journée</span>
         </div>
         <div class="ts-prices">
@@ -299,7 +315,7 @@ const supplements = [
       <div class="ts-matrix">
         <div class="ts-matrix__title">
           <a href="/peche-de-l-alose-a-la-mouche" class="ts-matrix__title-link">Grande alose (alosa alosa)</a>
-          <span>— tarif selon le format de sortie</span>
+          <span>tarif selon le format de sortie</span>
         </div>
         <div class="ts-matrix__head ts-matrix--alose">
           <span></span>
@@ -340,7 +356,7 @@ const supplements = [
       <p class="ts-eyebrow">Technique · Perfectionnement</p>
       <h2 class="ts-title">Stages<br/>&amp; technique</h2>
       <div class="ts-divider"></div>
-      <p class="ts-desc">Cours de lancer, Spey Cast, Masterclass — progressez avec des exercices ciblés.</p>
+      <p class="ts-desc">Cours de lancer, Spey Cast, Masterclass : progressez avec des exercices ciblés.</p>
       <a href="/stage-spey-cast-et-cours-de-lancer" class="ts-more">Découvrir les stages →</a>
     </div>
 
@@ -373,7 +389,7 @@ const supplements = [
           <span class="ts-row__format">Format sur mesure</span>
         </div>
         <div class="ts-prices ts-prices--contact">
-          <span class="ts-contact-price">Nous contacter</span>
+          <a href="/contact" class="ts-contact-price ts-contact-price--link">Nous contacter</a>
         </div>
       </div>
 
@@ -383,7 +399,7 @@ const supplements = [
           <span class="ts-row__format">Format sur mesure</span>
         </div>
         <div class="ts-prices ts-prices--contact">
-          <span class="ts-contact-price">Nous contacter</span>
+          <a href="/contact" class="ts-contact-price ts-contact-price--link">Nous contacter</a>
         </div>
       </div>
 
@@ -470,7 +486,7 @@ const supplements = [
     <div class="container prest-cta__inner">
       <div>
         <h2 class="h2-light">Réservez votre stage</h2>
-        <p>Disponibilités et informations complémentaires sur demande — réponse sous 24h.</p>
+        <p>Disponibilités et informations complémentaires sur demande, réponse sous 24h.</p>
       </div>
       <div class="prest-cta__btns">
         <a href="/contact" class="btn-prim">Me contacter</a>
@@ -710,6 +726,15 @@ span.ts-row__name { color: var(--color-text, #1a1a1f); font-weight: 500; }
 .ts-contact-price {
   font-size: 0.78rem; color: #aaa; font-style: italic;
   padding: 0.5rem 1rem;
+  text-decoration: none;
+}
+.ts-contact-price--link {
+  color: var(--color-ocean-main); font-style: normal; font-weight: 500;
+  border: 1.5px solid var(--color-ocean-main); border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+.ts-contact-price--link:hover {
+  background: var(--color-ocean-main); color: white;
   background: rgba(0,0,0,0.03);
   border-radius: 6px;
   letter-spacing: 0.02em;

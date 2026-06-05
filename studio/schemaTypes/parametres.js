@@ -35,6 +35,13 @@ export default {
       group: 'contact',
       description: 'Ex: Bretagne-Sud, entre Quimper et Quimperlé',
     },
+    {
+      name: 'formspreeId',
+      title: 'Formspree — ID du formulaire de contact',
+      type: 'string',
+      group: 'contact',
+      description: "ID Formspree (ex : xlekvqad). S'inscrire sur formspree.io → New Form → copier l'ID dans l'URL.",
+    },
     // ── Réseaux sociaux ──
     {
       name: 'facebook',

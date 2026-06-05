@@ -14,7 +14,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     <div class="mat-hero__content container">
       <p class="mat-eyebrow">Matériel · Brochet · Prédateur</p>
       <h1>Matériel de pêche à la mouche<br /><span class="mat-hero__sub">pour le brochet</span></h1>
-      <p class="mat-lead">Cannes puissance 9–10, soies prédateurs et grosses mouches volumineuses — le choix de Jean-Baptiste pour chasser le grand brochet en lac et en étang.</p>
+      <p class="mat-lead">Cannes puissance 9–10, soies prédateurs et grosses mouches volumineuses : le choix de Jean-Baptiste pour chasser le grand brochet en lac et en étang.</p>
       <div class="mat-hero__cta">
         <a href="/peche-du-brochet-a-la-mouche" class="btn-prim">Pêche du brochet</a>
         <a href="/materiel-jeanbaptistevidal" class="btn-ghost">← Tout le matériel</a>
@@ -33,7 +33,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
         <div class="mat-card">
           <span class="mat-card__tag">Canne</span>
-          <h3>La canne — puissance 9 à 10</h3>
+          <h3>La canne, puissance 9 à 10</h3>
           <p>Une <strong>puissance 9 à 10</strong> est indispensable pour lancer les grosses mouches volumineuses utilisées pour le brochet. La <strong>SAGE Payload</strong> est spécialement conçue pour les grosses mouches, avec une action en boucle ouverte qui soulage considérablement les lancers en journée.</p>
           <p>La <strong>SAGE Maverick</strong> est une excellente alternative, puissante et polyvalente, efficace aussi bien pour le brochet que pour le bar.</p>
           <a href="https://www.ardentflyfishing.com/fr/p/28552-canne-a-mouche-sage-payload-89-soie-9.html"
@@ -45,7 +45,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
         <div class="mat-card">
           <span class="mat-card__tag">Soie</span>
-          <h3>La soie — fuseau décentré</h3>
+          <h3>La soie, fuseau décentré</h3>
           <p>Des soies à <strong>fuseau décentré</strong> pour lancer de grosses mouches sans effort. La <strong>Rio Elite Predator</strong> est le choix premium : tête courte idéale en espace restreint sur le bateau, profil optimisé contre le vent.</p>
           <p>Prévoir <strong>trois densités</strong> : flottante (surface), intermédiaire (la plus utilisée) et plongeante rapide (automne/hiver en profondeur).</p>
           <a href="https://www.ardentflyfishing.com/fr/p/29497-soie-rio-elite-predator-wf-f.html"
@@ -58,7 +58,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
         <div class="mat-card">
           <span class="mat-card__tag">Bas de ligne · Avançon</span>
           <h3>Le bas de ligne</h3>
-          <p>Le bas de ligne doit rester le plus simple possible : <strong>un ou deux brins maximum</strong>. Un avançon en <strong>acier ou titane</strong> est indispensable — sans lui, la coupure par les dents du brochet est inévitable.</p>
+          <p>Le bas de ligne doit rester le plus simple possible : <strong>un ou deux brins maximum</strong>. Un avançon en <strong>acier ou titane</strong> est indispensable, sans lui, la coupure par les dents du brochet est inévitable.</p>
           <p>Rio propose une excellente gamme d'avançons en acier tressé multi-brin, souples et discrets. Pour les petits sujets uniquement, un <strong>fluorocarbone 60°+</strong> peut suffire.</p>
         </div>
 
@@ -86,7 +86,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
         <div class="mat-card mat-card--fly">
           <span class="mat-card__tag">Surface</span>
           <h3>Mouches de surface</h3>
-          <p><strong>Gurglers, poppers, sliders</strong> — les prises en surface sont les plus spectaculaires. Idéal en bordure dans les herbiers et sous les frondaisons, printemps et début d'été.</p>
+          <p><strong>Gurglers, poppers, sliders</strong> : les prises en surface sont les plus spectaculaires. Idéal en bordure dans les herbiers et sous les frondaisons, printemps et début d'été.</p>
         </div>
         <div class="mat-card mat-card--fly">
           <span class="mat-card__tag">Streamers imitatifs</span>
@@ -96,7 +96,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
         <div class="mat-card mat-card--fly">
           <span class="mat-card__tag">Streamers attractants</span>
           <h3>Streamers attractants</h3>
-          <p>Couleurs vives — <strong>chartreuse, orange, rouge/blanc</strong> — pour les eaux colorées ou turbides. Deceiver et Clouser géants pour les grands plans d'eau.</p>
+          <p>Couleurs vives (<strong>chartreuse, orange, rouge/blanc</strong>) pour les eaux colorées ou turbides. Deceiver et Clouser géants pour les grands plans d'eau.</p>
         </div>
       </div>
     </div>
@@ -141,7 +141,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     <div class="container prest-cta-final__inner">
       <div>
         <h2>Sortie brochet à la mouche</h2>
-        <p>Guidage spécialisé brochet — disponibilités et tarifs sur demande.</p>
+        <p>Guidage spécialisé brochet, disponibilités et tarifs sur demande.</p>
       </div>
       <div class="prest-cta-final__btns">
         <a href="/contact" class="btn-prim">Me contacter</a>
@@ -164,10 +164,12 @@ import BaseLayout from '../layouts/BaseLayout.astro'
   const total = track.querySelectorAll('.voy-carousel__slide').length
   let current = 0, timer = null
 
-  function slideW() { return (carousel.offsetWidth - 6) / 3 }
+  function slideW() { return track.querySelector('.voy-carousel__slide').offsetWidth }
+  function visibleN() { return window.innerWidth <= 640 ? 1 : window.innerWidth <= 900 ? 2 : 3 }
   function calcOffset(idx) {
-    const w = slideW()
-    return Math.max(0, Math.min((total - 3) * (w + 3), (idx - 1) * (w + 3)))
+    const w = slideW(), n = visibleN(), g = 3
+    const raw = n < 3 ? idx * (w + g) : (idx - 1) * (w + g)
+    return Math.max(0, Math.min(Math.max(0, (total - n) * (w + g)), raw))
   }
 
   function go(idx) {

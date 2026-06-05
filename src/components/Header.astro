@@ -3,33 +3,37 @@ const navLinks = [
   { label: 'Accueil', href: '/' },
   { label: 'Le guide', href: '/jean-baptiste-vidal-moniteur-guide-de-peche' },
   {
-    label: 'Prestations',
-    href: '/stage-peche-mouche',
-    activePrefix: '/stage-peche-mouche',
+    label: 'Eau douce',
+    href: '/peche-a-la-mouche-en-bretagne',
+    activePrefix: '/peche-a-la-mouche-en-bretagne',
     children: [
-      { label: 'Toutes les prestations', href: '/stage-peche-mouche' },
-      { label: 'Bar à la mouche', href: '/peche-du-bar-a-la-mouche' },
-      { label: 'Rivières & eau douce', href: '/peche-a-la-mouche-en-bretagne' },
-      { label: 'Masterclass', href: '/masterclass' },
-      { label: 'Spey Cast & lancer', href: '/stage-spey-cast-et-cours-de-lancer' },
-      { label: 'Bon cadeau', href: '/bon-cadeau-peche-mouche' },
-      { label: 'Tarifs', href: '/tarifs' },
-      { label: 'Disponibilités 2026', href: '/disponibilites-guidages' },
+      { label: "Stage d'initiation", href: '/initiation-peche-a-la-mouche' },
+      { label: 'Perfectionnement truite', href: '/peche-de-la-truite-a-la-mouche-en-bretagne' },
+      { label: 'Réservoir', href: '/peche-de-la-truite-en-reservoir' },
+      { label: 'Alose', href: '/peche-de-l-alose-a-la-mouche' },
+      { label: 'Brochet', href: '/peche-du-brochet-a-la-mouche' },
     ],
   },
   {
-    label: 'Matériel & univers',
-    href: '/materiel-jeanbaptistevidal',
-    activePrefix: '/materiel',
+    label: 'Mer',
+    href: '/peche-du-bar-a-la-mouche',
+    activePrefix: '/peche-du-bar',
     children: [
-      { label: 'Tout le matériel', href: '/materiel-jeanbaptistevidal' },
-      { label: 'Migrateurs', href: '/materiel-mouche-migrateur' },
-      { label: 'Truite', href: '/materiel-mouche-truite' },
-      { label: 'Bar', href: '/materiel-mouche-bar' },
-      { label: 'Réservoir', href: '/materiel-mouche-reservoir' },
-      { label: 'Brochet', href: '/materiel-mouche-brochet' },
-      { label: 'Pêche exotique', href: '/materiel-mouche-peche-exotique' },
-      { label: 'Mes mouches', href: '/mouches-de-peche-jeanbaptiste-vidal' },
+      { label: 'Initiation bar', href: '/initiation-peche-du-bar-a-la-mouche' },
+      { label: 'Perfectionnement bar', href: '/peche-du-bar-perfectionnement' },
+      { label: 'Bar à vue en estuaire', href: '/peche-du-bar-a-vue-a-la-mouche' },
+      { label: 'Bar en bateau', href: '/peche-mouche-bar-bateau-bretagne' },
+      { label: 'Coaching bar', href: '/peche-du-bar-a-la-mouche-coaching' },
+      { label: 'Le bateau', href: '/bateau-bar-a-la-mouche' },
+    ],
+  },
+  {
+    label: 'MasterClass',
+    href: '/masterclass',
+    activePrefix: '/master-class',
+    children: [
+      { label: 'Nymphe au fil', href: '/master-class-nymphe-au-fil' },
+      { label: 'Réservoir', href: '/master-class-peche-en-reservoir' },
     ],
   },
   {
@@ -45,17 +49,28 @@ const navLinks = [
       { label: 'Mexique', href: '/voyage-peche-mouche-mexique' },
     ],
   },
-  { label: 'Blog', href: '/blog' },
   {
     label: 'Divers',
     href: '/partenaires-jeanbaptistevidal',
     children: [
       { label: 'Partenaires', href: '/partenaires-jeanbaptistevidal' },
-      { label: 'Vidéos', href: '/videos-jeanbaptiste-vidal-moniteur-guide-de-peche' },
       { label: 'Revue de presse', href: '/revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche' },
+      { label: 'Vidéos', href: '/videos-jeanbaptiste-vidal-moniteur-guide-de-peche' },
+      { label: 'Mon matériel', href: '/materiel-jeanbaptistevidal' },
+      { label: 'Mes mouches', href: '/mouches-de-peche-jeanbaptiste-vidal' },
     ],
   },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Blog', href: '/blog' },
+  {
+    label: 'Contact',
+    href: '/contact',
+    children: [
+      { label: 'Contact', href: '/contact' },
+      { label: 'Bon cadeau', href: '/bon-cadeau-peche-mouche' },
+      { label: 'Tarifs', href: '/tarifs' },
+      { label: 'Calendrier des disponibilités', href: '/disponibilites-guidages' },
+    ],
+  },
 ]
 
 const { pathname } = Astro.url
@@ -64,10 +79,19 @@ const { pathname } = Astro.url
 <header class="site-header" id="site-header">
   <div class="header-inner">
     <a href="/" class="logo" aria-label="Jean-Baptiste Vidal — Accueil">
+      <img src="/images/logo.svg" alt="Enjoy Fishing" class="logo-img" />
       <span class="logo-text">
         <span class="logo-name">Jean-Baptiste Vidal</span>
-        <span class="logo-tagline">Guide de pêche à la mouche · Bretagne</span>
+        <span class="logo-tagline">Guide de pêche à la mouche</span>
+        <span class="logo-tagline">Bretagne</span>
       </span>
+    </a>
+
+    <!-- Titre centré — visible uniquement en mode hamburger (≤1024px) -->
+    <a href="/" class="header-title" aria-hidden="true" tabindex="-1">
+      <span class="ht-name">Jean-Baptiste Vidal</span>
+      <span class="ht-tagline">Guide de pêche à la mouche</span>
+      <span class="ht-tagline">Bretagne</span>
     </a>
 
     <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">
@@ -123,7 +147,7 @@ const { pathname } = Astro.url
   // Mobile: toggle dropdown on click
   nav?.querySelectorAll('.has-dropdown > .nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 1024) {
         e.preventDefault()
         link.closest('.has-dropdown')?.classList.toggle('dropdown-open')
       }
@@ -138,6 +162,7 @@ const { pathname } = Astro.url
     z-index: 100;
     transition: background 0.3s ease, box-shadow 0.3s ease;
     background: transparent;
+    overflow: visible;
   }
   .site-header.scrolled {
     background: var(--color-ocean);
@@ -145,26 +170,30 @@ const { pathname } = Astro.url
   }
 
   .header-inner {
-    max-width: 1200px;
+    position: relative;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 0 2rem;
-    height: 72px;
+    padding: 0 3rem;
+    height: 124px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow: visible;
   }
 
   /* Logo */
   .logo {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 0.75rem;
     text-decoration: none;
     color: white;
   }
+  .logo-img { height: 156px; width: auto; display: block; object-fit: contain; }
   .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
-  .logo-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; letter-spacing: 0.02em; }
-  .logo-tagline { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; }
+  .logo-name { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+  .logo-tagline { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; white-space: nowrap; }
 
   /* Nav — direct child ul only, so .dropdown sub-ul is not affected */
   .site-nav > ul {
@@ -237,7 +266,7 @@ const { pathname } = Astro.url
   }
 
   /* Desktop uniquement — hover, pas focus-within */
-  @media (min-width: 769px) {
+  @media (min-width: 1025px) {
     .has-dropdown:hover .dropdown { display: flex; }
     .has-dropdown:hover .chevron { transform: rotate(180deg); }
   }
@@ -281,14 +310,74 @@ const { pathname } = Astro.url
     transition: transform 0.2s, opacity 0.2s;
   }
 
-  /* Responsive */
-  @media (max-width: 768px) {
+  /* ── Réduction progressive — desktop intermédiaire ── */
+
+  /* 1400px : taglines disparaissent, logo réduit, nav légèrement plus compact */
+  @media (max-width: 1400px) {
+    .logo-tagline { display: none; }
+    .logo-img { height: 120px; }
+    .nav-link { padding: 0.5rem 0.65rem; font-size: 0.73rem; }
+  }
+
+  /* 1300px : nom du logo disparaît, logo encore réduit */
+  @media (max-width: 1300px) {
+    .logo-name { display: none; }
+    .logo-img { height: 90px; }
+  }
+
+  /* 1150px : nav ultra-compact pour tenir dans l'espace restant */
+  @media (max-width: 1150px) {
+    .nav-link { padding: 0.4rem 0.5rem; font-size: 0.7rem; }
+  }
+
+  /* header-title — caché sur desktop, flex item centré sur mobile */
+  .header-title {
+    display: none;
+  }
+
+  /* ── Mobile / tablette : hamburger à 1024px ── */
+  @media (max-width: 1024px) {
+    .header-inner { padding: 0 1.5rem; }
+
     .nav-toggle { display: flex; }
+    .logo-img { height: 72px; }
+
+    /* Titre centré : prend tout l'espace libre entre logo et hamburger */
+    .header-title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      min-width: 0; /* CRUCIAL : permet au flex item de rétrécir sous min-content */
+      text-align: center;
+      color: white;
+      text-decoration: none;
+      padding: 0 0.5rem;
+      overflow: hidden;
+    }
+    .ht-name {
+      font-family: var(--font-serif);
+      font-size: clamp(0.7rem, 2.4vw, 0.9rem); /* ~0.7rem à 375px, 0.9rem dès 480px */
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ht-tagline {
+      font-size: clamp(0.5rem, 1.5vw, 0.58rem);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     .site-nav {
       display: none;
       position: absolute;
-      top: 72px; left: 0; right: 0;
+      top: 124px; left: 0; right: 0;
       background: var(--color-ocean);
       padding: 1rem 0 1.5rem;
       border-top: 1px solid rgba(255,255,255,0.1);
@@ -333,4 +422,5 @@ const { pathname } = Astro.url
       margin-bottom: 0;
     }
   }
+
 </style>

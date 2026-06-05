@@ -1,5 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { client } from '../lib/sanity.js'
+
+const params = await client.fetch(
+  `*[_id == "siteParametres"][0]{ formspreeId, email, telephone }`
+)
+
+const formspreeId   = params?.formspreeId  || null
+const formAction    = formspreeId
+  ? `https://formspree.io/f/${formspreeId}`
+  : null
+const contactEmail  = params?.email    || 'enjoy.fishing@hotmail.fr'
+const contactPhone  = params?.telephone || '06 87 30 34 56'
 ---
 
 <BaseLayout
@@ -26,9 +38,10 @@ import BaseLayout from '../layouts/BaseLayout.astro'
           Je vous répondrai dans les plus brefs délais.
         </p>
 
+        {formAction ? (
         <form
           id="contact-form"
-          action="https://formspree.io/f/REMPLACER_PAR_VOTRE_ID"
+          action={formAction}
           method="POST"
           class="form"
           novalidate
@@ -53,14 +66,30 @@ import BaseLayout from '../layouts/BaseLayout.astro'
             <label for="sujet">Sujet *</label>
             <select id="sujet" name="sujet" required>
               <option value="" disabled selected>Choisissez une prestation</option>
-              <option value="Pêche du bar à la mouche">Pêche du bar à la mouche</option>
-              <option value="Initiation pêche en eau douce">Initiation pêche en eau douce</option>
-              <option value="Stage pêche à la mouche">Stage pêche à la mouche</option>
-              <option value="Masterclass">Masterclass</option>
-              <option value="Spey Cast">Spey Cast / Cours de lancer</option>
-              <option value="Bon cadeau">Bon cadeau</option>
-              <option value="Voyage de pêche">Voyage de pêche</option>
-              <option value="Renseignements généraux">Renseignements généraux</option>
+              <optgroup label="— Eau douce">
+                <option value="Stage d'initiation à la mouche">Stage d'initiation à la mouche</option>
+                <option value="Pêche de la truite">Pêche de la truite</option>
+                <option value="Pêche du brochet">Pêche du brochet</option>
+                <option value="Pêche de l'alose">Pêche de l'alose</option>
+              </optgroup>
+              <optgroup label="— Bar (mer)">
+                <option value="Initiation bar à la mouche">Initiation bar à la mouche</option>
+                <option value="Perfectionnement bar">Perfectionnement bar</option>
+                <option value="Bar à vue en estuaire">Bar à vue en estuaire</option>
+                <option value="Bar en bateau">Bar en bateau</option>
+                <option value="Coaching bar">Coaching bar</option>
+              </optgroup>
+              <optgroup label="— Voyages">
+                <option value="Voyage Argentine — Rio Grande">Argentine — Rio Grande</option>
+                <option value="Voyage Cuba — Cayo Cruz">Cuba — Cayo Cruz</option>
+                <option value="Voyage Cuba — Santa Maria">Cuba — Santa Maria</option>
+                <option value="Voyage Venezuela — Los Roques">Venezuela — Los Roques</option>
+                <option value="Voyage Mexique">Mexique</option>
+              </optgroup>
+              <optgroup label="— Autres">
+                <option value="Bon cadeau">Bon cadeau</option>
+                <option value="Renseignements généraux">Renseignements généraux</option>
+              </optgroup>
             </select>
           </div>
 
@@ -78,6 +107,20 @@ import BaseLayout from '../layouts/BaseLayout.astro'
             Une erreur est survenue. Merci de réessayer ou de nous contacter par téléphone.
           </p>
         </form>
+        ) : (
+        <div class="form-fallback">
+          <p>Le formulaire en ligne sera disponible très prochainement.</p>
+          <p>En attendant, contactez Jean-Baptiste directement :</p>
+          <ul class="fallback-links">
+            <li>
+              <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+            </li>
+            <li>
+              <a href={`tel:+33${contactPhone.replace(/\s/g,'').slice(1)}`}>{contactPhone}</a>
+            </li>
+          </ul>
+        </div>
+        )}
       </div>
 
       <!-- Infos contact -->
@@ -97,7 +140,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>Bretagne-Sud — entre Quimper et Quimperlé</span>
+              <span>Bretagne-Sud, entre Quimper et Quimperlé</span>
             </li>
           </ul>
 
@@ -109,7 +152,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
           <div class="info-certif">
             <strong>Certifications</strong>
             <ul>
-              <li>BP JEPS « Pêche de Loisir » — 2005</li>
+              <li>BP JEPS « Pêche de Loisir » (2005)</li>
               <li>UCC « Pêche de loisir en milieu maritime »</li>
               <li>Carte pro n° 02913ED0228</li>
               <li>SIRET 789 636 313</li>
@@ -379,6 +422,32 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     font-size: 0.82rem;
     color: var(--color-text-muted);
   }
+
+  /* Fallback formulaire non configuré */
+  .form-fallback {
+    background: var(--color-sand);
+    border: 1px solid #e0ddd8;
+    border-radius: 3px;
+    padding: 2rem 2.5rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+  .form-fallback p { margin-bottom: 0.5rem; }
+  .fallback-links {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .fallback-links a {
+    color: var(--color-ocean-main);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .fallback-links a:hover { text-decoration: underline; }
 
   /* Responsive */
   @media (max-width: 900px) {

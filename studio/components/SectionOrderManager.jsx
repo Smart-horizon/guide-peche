@@ -107,12 +107,12 @@ const MAIN_SECTIONS = [
   {
     id: 'temo', emoji: '⭐', label: 'Témoignages', defaultPos: 6,
     fields: [
-      { path: 'temo.eyebrow',  label: 'Texte au-dessus',             type: 'text'     },
-      { path: 'temo.score',    label: 'Note globale (ex : 5.0)',      type: 'text'     },
-      { path: 'temo.nombre',   label: 'Nombre (ex : 26 témoignages)', type: 'text'    },
-      { path: 'temo.pitch',    label: 'Texte de confiance',          type: 'textarea' },
-      { path: 'temo.ctaTexte', label: 'Bouton — texte',              type: 'text'     },
-      { path: 'temo.ctaLien',  label: 'Bouton — lien',               type: 'text'     },
+      { path: 'temo.eyebrow',  label: 'Texte au-dessus',     type: 'text'      },
+      { path: 'temo.score',    label: 'Note globale',         type: 'auto-text', autoKey: 'score'  },
+      { path: 'temo.nombre',   label: 'Nombre de témoignages', type: 'auto-text', autoKey: 'nombre' },
+      { path: 'temo.pitch',    label: 'Texte de confiance',   type: 'textarea'  },
+      { path: 'temo.ctaTexte', label: 'Bouton — texte',       type: 'text'      },
+      { path: 'temo.ctaLien',  label: 'Bouton — lien',        type: 'text'      },
     ],
   },
 ]
@@ -258,6 +258,7 @@ function ConfigPanel({
   onPatchMain, onImageUploadMain,
   onPatchLibre, onImageUploadLibre,
   uploading, saving,
+  autoValues,
 }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -294,6 +295,44 @@ function ConfigPanel({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 520 }}>
 
           {fields.map(f => {
+            // ── Champ avec badge auto/personnalisé ─────────────────────────
+            if (f.type === 'auto-text') {
+              const currentVal = getByPath(doc, f.path)
+              const autoVal    = autoValues?.[f.autoKey]
+              const isCustom   = Boolean(currentVal?.trim?.())
+              return (
+                <div key={f.path}>
+                  <div style={{
+                    display: 'inline-block', marginBottom: 8,
+                    fontSize: 10, fontWeight: 600, padding: '2px 9px', borderRadius: 4,
+                    background: isCustom ? 'rgba(245,166,35,0.12)' : 'rgba(46,160,67,0.12)',
+                    color:      isCustom ? '#b77800'               : '#1a7f37',
+                    border:    `1px solid ${isCustom ? 'rgba(245,166,35,0.3)' : 'rgba(46,160,67,0.3)'}`,
+                  }}>
+                    {isCustom
+                      ? `✏️ Personnalisé · auto : ${autoVal ?? '…'}`
+                      : `🤖 Automatique · valeur : ${autoVal ?? '…'}`}
+                  </div>
+                  <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#888', marginBottom: 6 }}>
+                    {f.label}
+                  </div>
+                  <TextInput
+                    key={f.path + '|' + currentVal}
+                    fontSize={1}
+                    defaultValue={currentVal ?? ''}
+                    placeholder={autoVal ? `Auto : ${autoVal}` : ''}
+                    onBlur={e => onPatchMain(f.path, e.target.value)}
+                    style={{ width: '100%' }}
+                  />
+                  {isCustom && (
+                    <div style={{ fontSize: 11, color: '#999', marginTop: 5 }}>
+                      💡 Effacez ce champ pour revenir à la valeur automatique.
+                    </div>
+                  )}
+                </div>
+              )
+            }
+
             if (isLibre) {
               if (f.type === 'image') {
                 return (
@@ -390,6 +429,20 @@ export function SectionOrderManager({ document: sanityDoc }) {
   const [showPicker,    setShowPicker]    = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [confirmHide,   setConfirmHide]   = useState(null)
+  const [temoStats,     setTemoStats]     = useState(null)
+
+  // Fetch stats pour les badges auto/personnalisé des champs temo.score et temo.nombre
+  useEffect(() => {
+    client.fetch(`*[_type == "temoignage"]{ note }`)
+      .then(temos => {
+        const count = temos.length
+        const avg   = count > 0
+          ? (temos.reduce((s, t) => s + (t.note ?? 5), 0) / count).toFixed(1)
+          : '5.0'
+        setTemoStats({ score: avg, nombre: `${count} témoignage${count !== 1 ? 's' : ''}` })
+      })
+      .catch(() => {})
+  }, [client])
 
   useEffect(() => {
     const sub = client.listen('*[_type == "sectionAccueil"] | order(position asc)')
@@ -699,6 +752,7 @@ export function SectionOrderManager({ document: sanityDoc }) {
             onImageUploadLibre={uploadLibreImage}
             uploading={uploading}
             saving={saving}
+            autoValues={temoStats}
           />
         ) : (
           <div style={{ height: '100%', minHeight: 400, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, opacity: 0.3, pointerEvents: 'none' }}>

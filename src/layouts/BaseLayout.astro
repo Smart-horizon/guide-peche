@@ -2,6 +2,12 @@
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import { VisualEditing } from '@sanity/astro/visual-editing'
+import { client } from '../lib/sanity.js'
+
+// SEO globaux depuis Sanity — fallbacks si le document n'existe pas encore
+const siteParams = await client.fetch(
+  `*[_id == "siteParametres"][0]{ siteTitle, siteDescription }`
+)
 
 interface Props {
   title?: string
@@ -10,8 +16,8 @@ interface Props {
 }
 
 const {
-  title = 'Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne',
-  description = 'Moniteur-Guide diplômé, Jean-Baptiste Vidal vous accompagne pour la pêche à la mouche sur les plus belles rivières de Bretagne.',
+  title = siteParams?.siteTitle || 'Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne',
+  description = siteParams?.siteDescription || 'Moniteur-Guide diplômé, Jean-Baptiste Vidal vous accompagne pour la pêche à la mouche sur les plus belles rivières de Bretagne.',
   image = '/og-default.jpg',
 } = Astro.props
 
@@ -54,8 +60,9 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
       <slot />
     </main>
     <Footer />
-    <!-- Visual Editing — uniquement en mode développement local -->
-    <VisualEditing enabled={import.meta.env.DEV} />
+    <!-- Visual Editing — actif en prod aussi pour l'aperçu Studio -->
+    <!-- N'a aucun effet sur les visiteurs normaux (JS inactif hors iframe Studio) -->
+    <VisualEditing enabled={true} />
   </body>
 </html>
 

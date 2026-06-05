@@ -1,3 +1,5 @@
+import { ScoreInput, NombreInput } from '../components/TemoAutoInput.jsx'
+
 export default {
   name: 'accueil',
   title: "Page d'accueil",
@@ -590,15 +592,17 @@ export default {
         },
         {
           name: 'score',
-          title: 'Note globale (ex: 5.0)',
+          title: 'Note globale',
           type: 'string',
-          initialValue: '5.0',
+          description: 'Laissez vide pour afficher la moyenne calculée automatiquement. Remplissez pour personnaliser (ex: "4.9+").',
+          components: { input: ScoreInput },
         },
         {
           name: 'nombre',
-          title: 'Nombre affiché (ex: 26 témoignages)',
+          title: 'Nombre de témoignages',
           type: 'string',
-          initialValue: '26 témoignages',
+          description: 'Laissez vide pour afficher le total calculé automatiquement. Remplissez pour personnaliser (ex: "26 avis vérifiés").',
+          components: { input: NombreInput },
         },
         {
           name: 'pitch',
