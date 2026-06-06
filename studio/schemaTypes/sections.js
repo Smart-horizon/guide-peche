@@ -624,15 +624,15 @@ export const sectionCarrousel3Images = {
       type: 'string',
       options: {
         list: [
-          { title: 'Paysage 4:3',  value: '4/3'  },
-          { title: 'Carré 1:1',    value: '1/1'  },
-          { title: 'Portrait 3:4', value: '3/4'  },
+          { title: 'Cinéma 3:2 (recommandé)', value: '3/2' },
+          { title: 'Paysage 4:3',             value: '4/3' },
+          { title: 'Carré 1:1',               value: '1/1' },
         ],
         layout: 'radio',
       },
-      initialValue: '4/3',
+      initialValue: '3/2',
     },
-    fondField('white'),
+    fondField('dark'),
   ],
   preview: {
     select: { titre: 'titre', images: 'images' },
