@@ -199,16 +199,16 @@ export default defineConfig({
           parametres: () => ({
             locations: [{ title: "Page d'accueil", href: '/' }],
           }),
-          // Prestations → /preview/{slug} (SSR live preview)
+          // Prestations → page live (Visual Editing overlays actifs)
           prestation: (doc) => ({
             locations: doc?.slug?.current
-              ? [{ title: doc.title || 'Prestation', href: `/preview/${doc.slug.current}` }]
+              ? [{ title: doc.title || 'Prestation', href: `/${doc.slug.current}` }]
               : [],
           }),
-          // Voyages → /preview/{slug} (SSR live preview)
+          // Voyages → page live
           voyage: (doc) => ({
             locations: doc?.slug?.current
-              ? [{ title: doc.title || 'Voyage', href: `/preview/${doc.slug.current}` }]
+              ? [{ title: doc.title || 'Voyage', href: `/${doc.slug.current}` }]
               : [],
           }),
           // Articles → page statique (pas de route preview pour le blog)
