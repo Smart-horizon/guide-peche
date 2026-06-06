@@ -49,7 +49,6 @@ const fondField = (initialValue = 'white') => ({
     list: [
       { title: '⬜ Blanc',         value: 'white' },
       { title: '🟫 Beige (sable)', value: 'sand'  },
-      { title: '🩶 Gris clair',    value: 'mist'  },
       { title: '🟦 Bleu nuit',     value: 'dark'  },
     ],
     layout: 'radio',
