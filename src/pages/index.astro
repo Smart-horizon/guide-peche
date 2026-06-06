@@ -8,7 +8,7 @@ const builder = imageUrlBuilder(stegaClient)
 const urlFor = (source) => builder.image(source)
 
 // ── Contenu de la page d'accueil (éditable depuis Sanity Studio)
-const hp = await stegaClient.fetch(`*[_type == "accueil" && _id == "accueil"][0]`)
+const hp = await stegaClient.fetch(`*[_type == "accueil" && _id == "accueil"][0]{ _id, ... }`)
 
 // ── Section Hero
 const hero = {

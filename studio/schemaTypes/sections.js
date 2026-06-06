@@ -163,6 +163,33 @@ export const sectionIntro = {
       name: 'duree', title: 'Durée',
       type: 'string', description: 'Ex : Journée complète (8h)',
     },
+    {
+      name: 'lignesSupp',
+      title: 'Infos supplémentaires (libres)',
+      type: 'array',
+      description: 'Ajoutez autant de lignes que souhaité — ex : Matériel · Waders recommandés · Participants · 2 pers. max…',
+      of: [
+        {
+          type: 'object',
+          name: 'ligneInfo',
+          title: 'Ligne',
+          fields: [
+            {
+              name: 'label',  title: 'Étiquette',
+              type: 'string', description: 'Ex : Matériel · Participants · Lieu · Espèces',
+            },
+            {
+              name: 'valeur', title: 'Valeur',
+              type: 'string', description: 'Ex : Waders recommandés · 2 pers. max · Rivière Odet',
+            },
+          ],
+          preview: {
+            select: { title: 'label', subtitle: 'valeur' },
+            prepare: ({ title, subtitle }) => ({ title: title || '(sans étiquette)', subtitle }),
+          },
+        },
+      ],
+    },
     fondField('white'),
   ],
   preview: {
@@ -170,6 +197,58 @@ export const sectionIntro = {
     prepare: ({ t, f }) => ({
       title: '📋 Intro + Info card',
       subtitle: [t, f].filter(Boolean).join(' · ') || 'Texte d\'introduction',
+    }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 2b — TITRE DE SECTION
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionTitre = {
+  name: 'sectionTitre',
+  title: '🏷️ Titre de section',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow',
+      title: 'Texte au-dessus du titre (eyebrow)',
+      type: 'string',
+      description: 'Petite ligne en majuscules · Ex : "Ce que je propose" · "Équipement · Ressources"',
+    },
+    {
+      name: 'titre',
+      title: 'Titre (H2)',
+      type: 'string',
+      validation: Rule => Rule.required().error('Le titre est obligatoire'),
+      description: 'Ex : "Stages & guidages" · "Matériel & univers"',
+    },
+    {
+      name: 'sousTitre',
+      title: 'Sous-titre (optionnel)',
+      type: 'text',
+      rows: 2,
+      description: 'Courte phrase sous le titre — laissez vide si non souhaité',
+    },
+    {
+      name: 'alignement',
+      title: 'Alignement du texte',
+      type: 'string',
+      options: {
+        list: [
+          { title: '⬛ Centré (défaut)', value: 'center' },
+          { title: '⬅️ Aligné à gauche', value: 'left'   },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'center',
+    },
+    fondField('white'),
+  ],
+  preview: {
+    select: { eyebrow: 'eyebrow', titre: 'titre' },
+    prepare: ({ eyebrow, titre }) => ({
+      title: `🏷️ Titre — ${titre || '(sans titre)'}`,
+      subtitle: eyebrow || '',
     }),
   },
 }
@@ -549,6 +628,7 @@ export const sectionCarrousel3Images = {
 export const allSectionTypes = [
   sectionHero,
   sectionIntro,
+  sectionTitre,
   sectionCards,
   sectionTexte,
   sectionTexteImage,

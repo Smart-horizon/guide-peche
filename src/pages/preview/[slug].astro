@@ -1,33 +1,48 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro'
-import MatierielBtn from '../components/MatierielBtn.astro'
-import { client, stegaClient } from '../lib/sanity.js'
+// ── Route SSR — brouillons Sanity (preview live) ─────────────────────────────
+// Cette page n'est PAS pré-rendue : chaque requête va chercher les données
+// fraîches dans Sanity (perspective: 'previewDrafts'), ce qui permet de voir
+// les changements AVANT de publier, sans déclencher de rebuild.
+// Elle est utilisée exclusivement par le Presentation Tool du Studio.
+export const prerender = false
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import MatierielBtn from '../../components/MatierielBtn.astro'
+import { createClient } from '@sanity/client'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
-const builder = imageUrlBuilder(stegaClient)
+// En Cloudflare Workers, les secrets wrangler ne sont accessibles qu'au runtime
+// via Astro.locals.runtime.env — import.meta.env.SANITY_TOKEN est vide (build time).
+const runtimeEnv = (Astro.locals as any).runtime?.env ?? {}
+const token = runtimeEnv.SANITY_TOKEN ?? import.meta.env.SANITY_TOKEN
+
+const previewClient = createClient({
+  projectId:   'uievv97s',
+  dataset:     'production',
+  useCdn:      false,
+  apiVersion:  '2024-01-01',
+  perspective: 'previewDrafts',
+  token,
+  stega: {
+    enabled:   true,
+    studioUrl: 'https://jbvidal.sanity.studio',
+  },
+})
+
+const builder = imageUrlBuilder(previewClient)
 const urlFor  = (source: any) => builder.image(source)
 
-// ── Routes statiques (client non-stega — juste des slugs) ────────────────────
-export async function getStaticPaths() {
-  const [pages, prestations, voyages] = await Promise.all([
-    client.fetch(`*[_type == "page"       && defined(slug.current)]{ "slug": slug.current }`),
-    client.fetch(`*[_type == "prestation" && defined(slug.current)]{ "slug": slug.current }`),
-    client.fetch(`*[_type == "voyage"     && defined(slug.current)]{ "slug": slug.current }`),
-  ])
-  return [
-    ...pages      .filter(d => d.slug && d.slug !== '/').map(d => ({ params: { slug: d.slug }, props: { docType: 'page'        } })),
-    ...prestations.filter(d => d.slug && d.slug !== '/').map(d => ({ params: { slug: d.slug }, props: { docType: 'prestation'  } })),
-    ...voyages    .filter(d => d.slug && d.slug !== '/').map(d => ({ params: { slug: d.slug }, props: { docType: 'voyage'      } })),
-  ]
-}
-
 const { slug } = Astro.params
-const { docType } = Astro.props
 
-// ── Fetch du document (stegaClient — active les overlays Visual Editing) ─────
-// Une requête directe par type (sans coalesce) : stega obtient un chemin propre,
-// ce qui garantit que Visual Editing navigue vers le bon champ dans Studio.
+// ── Détermination du type de document (SSR : pas de getStaticPaths) ──────────
+const docType: string | null = await previewClient.fetch(
+  `*[slug.current == $slug && _type in ["prestation","voyage","page"]][0]._type`,
+  { slug }
+)
+if (!docType) return Astro.redirect('/404')
+
+// ── Requêtes GROQ par type (identiques à [slug].astro) ───────────────────────
 const QUERIES: Record<string, string> = {
   prestation: `*[_type == "prestation" && slug.current == $slug][0]{
     _id, _type, title, categorie,
@@ -50,8 +65,7 @@ const QUERIES: Record<string, string> = {
   }`,
 }
 
-const doc = await stegaClient.fetch(QUERIES[docType], { slug })
-
+const doc = await previewClient.fetch(QUERIES[docType], { slug })
 if (!doc) return Astro.redirect('/404')
 
 // ── SEO ───────────────────────────────────────────────────────────────────────
@@ -98,15 +112,13 @@ const bgClass: Record<string,string> = {
   sand:  'section--sand',
   mist:  'section--mist',
   dark:  'section--dark',
-  ocean: 'section--ocean', // CTA style "Bleu océan"
+  ocean: 'section--ocean',
 }
-// stegaClean sur un fond (champ enum)
 const bg = (fond: string) => bgClass[stegaClean(fond) ?? ''] ?? ''
 
 // ── YouTube ID ────────────────────────────────────────────────────────────────
 const ytId = (url: string) => url?.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)?.[1] ?? null
 
-// ── Helpers hero (évite les TypeScript génériques dans le JSX) ──────────────
 const heroHeight = (h: string) => {
   const v = stegaClean(h)
   return v === 'medium' ? '52vh' : v === 'compact' ? '36vh' : '72vh'
@@ -119,13 +131,17 @@ const heroBg = (image: any) => {
 }
 ---
 
-<BaseLayout title={`${pageTitle} — Jean-Baptiste Vidal`} description={pageDesc} image={ogImg}>
+<BaseLayout title={`[PREVIEW] ${pageTitle} — Jean-Baptiste Vidal`} description={pageDesc} image={ogImg}>
+
+  {/* ── Bandeau preview ── */}
+  <div style="position:fixed;top:0;left:0;right:0;z-index:9998;background:#1B5E8A;color:white;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.08em;padding:0.35rem;font-family:DM Sans,sans-serif">
+    MODE PRÉVISUALISATION — brouillons Sanity · Les visiteurs ne voient pas cette page
+  </div>
 
   {/* ── PAGE BUILDER ── */}
   {doc.pagebuilder?.map((s: any) => (
 
     <>
-    {/* ════════════ HERO ════════════ */}
     {s._type === 'sectionHero' && (
       <section class="pb-hero" style={`min-height:${heroHeight(s.hauteur)}`}>
         <div class="pb-hero__bg" style={heroBg(s.image)}></div>
@@ -144,7 +160,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ INTRO + INFO CARD ════════════ */}
     {s._type === 'sectionIntro' && (
       <section class={`section pb-intro ${bg(s.fond)||''}`}>
         <div class="container pb-intro__grid">
@@ -169,7 +184,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ CARDS ════════════ */}
     {s._type === 'sectionCards' && (
       <section class="pb-cards">
         {s.titre && <div class="container" style="padding-top:3rem"><h2 class="pb-section-titre">{s.titre}</h2></div>}
@@ -195,7 +209,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ TEXTE ════════════ */}
     {s._type === 'sectionTexte' && (
       <section class={`section pb-texte ${bg(s.fond)||''}`}>
         <div class="container" style={`max-width:${s.largeur==='wide'?'960px':s.largeur==='full'?'var(--max-width)':'760px'}`}>
@@ -204,7 +217,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ TEXTE + IMAGE ════════════ */}
     {s._type === 'sectionTexteImage' && (
       <section class={`section pb-ti ${bg(s.fond)||''}`}>
         <div class="container pb-ti__grid" data-pos={stegaClean(s.imagePosition)||'right'}>
@@ -218,7 +230,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ GALERIE ════════════ */}
     {s._type === 'sectionGalerie' && (
       <section class={`section pb-galerie ${bg(s.fond)||'section--mist'}`}>
         <div class="container">
@@ -232,7 +243,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ VIDÉO ════════════ */}
     {s._type === 'sectionVideo' && ytId(s.url) && (
       <section class={`section pb-video ${bg(s.fond)||'section--sand'}`}>
         <div class="container" style="max-width:860px">
@@ -249,7 +259,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ STATS ════════════ */}
     {s._type === 'sectionStats' && (
       <section class={`section pb-stats ${bg(s.fond)||'section--dark'}`}>
         <div class="container pb-stats__grid">
@@ -263,7 +272,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ CTA FINAL ════════════ */}
     {s._type === 'sectionCta' && (
       <section class={`section pb-cta ${bg(s.style)||'section--dark'}`}>
         <div class="container pb-cta__inner">
@@ -279,7 +287,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ TITRE DE SECTION ════════════ */}
     {s._type === 'sectionTitre' && (
       <section class={`pb-st ${bg(s.fond)||''}`}>
         <div class={`container pb-st__inner${stegaClean(s.alignement)==='left' ? ' pb-st__inner--left' : ''}`}>
@@ -290,7 +297,6 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ BANNIÈRE ════════════ */}
     {s._type === 'sectionBanniere' && (
       <div class={`pb-banniere pb-banniere--${stegaClean(s.style)||'ocean'}`}>
         {s.lien
@@ -300,7 +306,6 @@ const heroBg = (image: any) => {
       </div>
     )}
 
-    {/* ════════════ CARROUSEL 3 IMAGES ════════════ */}
     {s._type === 'sectionCarrousel3Images' && (
       <section class={`section pb-carr ${bg(s.fond)||''}`}>
         <div class="container">
@@ -333,7 +338,7 @@ const heroBg = (image: any) => {
 
   ))}
 
-  {/* ── Fallback pages génériques (type page / voyage sans pagebuilder) ── */}
+  {/* ── Fallback pages génériques ── */}
   {!doc.pagebuilder && (
     <>
       <section class="pb-hero" style="min-height:52vh">
@@ -346,14 +351,12 @@ const heroBg = (image: any) => {
           {doc.periode && <p class="pb-hero__sub">{doc.periode}{doc.especes ? ` · ${doc.especes}` : ''}</p>}
         </div>
       </section>
-
       <section class="section">
         <div class="container" style="max-width:760px">
           <div class="prose" set:html={blocks(doc.description || doc.contenu || [])} />
           {doc.prix && <p style="margin-top:1.5rem;color:var(--color-ocean-main);font-weight:600">À partir de {doc.prix}</p>}
         </div>
       </section>
-
       <section class="section section--dark pb-cta">
         <div class="container pb-cta__inner">
           <div>
@@ -372,414 +375,148 @@ const heroBg = (image: any) => {
 </BaseLayout>
 
 <style>
-/* ── HERO ── */
-.pb-hero {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 4rem;
-  color: white;
-}
-.pb-hero__bg {
-  position: absolute;
-  inset: 0;
-  background-color: var(--color-ocean);
-}
-.pb-hero__content {
-  position: relative;
-  z-index: 1;
-  padding-top: var(--header-height);
-}
-.pb-eyebrow {
-  font-size: 0.72rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--color-ocean-light);
-  margin-bottom: 0.8rem;
-  font-weight: 500;
-}
-.pb-hero__h1 {
-  color: white;
-  margin-bottom: 1rem;
-  max-width: 720px;
-}
-.pb-hero__sub {
-  color: rgba(255,255,255,0.75);
-  max-width: 580px;
-  line-height: 1.65;
-  margin-bottom: 2rem;
-  font-size: 1.05rem;
-}
-.pb-hero__cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+/* Décalage du contenu pour le bandeau preview fixe */
+main > *:first-child { padding-top: calc(var(--header-height) + 1.8rem) !important; }
 
-/* ── Boutons ── */
-.btn-prim {
-  background: var(--color-ocean-main);
-  color: white;
-  padding: 0.75rem 1.8rem;
-  border-radius: 4px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: background 0.2s;
-}
-.btn-prim:hover { background: #144b72; }
-.btn-ghost {
-  border: 1.5px solid rgba(255,255,255,0.4);
-  color: white;
-  padding: 0.75rem 1.8rem;
-  border-radius: 4px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
-}
-.btn-ghost:hover { border-color: white; }
-.btn-ghost-light {
-  border: 1.5px solid rgba(255,255,255,0.35);
-  color: white;
-  padding: 0.75rem 1.8rem;
-  border-radius: 4px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
-}
-.btn-ghost-light:hover { border-color: white; }
-.btn-mat {
-  display: flex; align-items: center; gap: 0.4rem;
-  border: 1.5px solid rgba(126,200,227,0.5);
-  color: var(--color-ocean-light);
-  padding: 0.75rem 1.4rem;
-  border-radius: 4px;
-  font-size: 0.88rem;
-  font-weight: 500;
-  transition: border-color 0.2s, color 0.2s;
-}
-.btn-mat:hover { border-color: var(--color-ocean-light); color: white; }
+/* ── HERO ── */
+.pb-hero { position:relative;display:flex;align-items:flex-end;padding-bottom:4rem;color:white; }
+.pb-hero__bg { position:absolute;inset:0;background-color:var(--color-ocean); }
+.pb-hero__content { position:relative;z-index:1;padding-top:var(--header-height); }
+.pb-eyebrow { font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--color-ocean-light);margin-bottom:0.8rem;font-weight:500; }
+.pb-hero__h1 { color:white;margin-bottom:1rem;max-width:720px; }
+.pb-hero__sub { color:rgba(255,255,255,0.75);max-width:580px;line-height:1.65;margin-bottom:2rem;font-size:1.05rem; }
+.pb-hero__cta { display:flex;gap:1rem;flex-wrap:wrap; }
+.btn-prim { background:var(--color-ocean-main);color:white;padding:0.75rem 1.8rem;border-radius:4px;font-weight:500;font-size:0.95rem;transition:background 0.2s; }
+.btn-prim:hover { background:#144b72; }
+.btn-ghost { border:1.5px solid rgba(255,255,255,0.4);color:white;padding:0.75rem 1.8rem;border-radius:4px;font-weight:500;font-size:0.95rem;transition:border-color 0.2s; }
+.btn-ghost:hover { border-color:white; }
+.btn-ghost-light { border:1.5px solid rgba(255,255,255,0.35);color:white;padding:0.75rem 1.8rem;border-radius:4px;font-weight:500;font-size:0.95rem;transition:border-color 0.2s; }
+.btn-ghost-light:hover { border-color:white; }
+.btn-mat { display:flex;align-items:center;gap:0.4rem;border:1.5px solid rgba(126,200,227,0.5);color:var(--color-ocean-light);padding:0.75rem 1.4rem;border-radius:4px;font-size:0.88rem;font-weight:500;transition:border-color 0.2s,color 0.2s; }
+.btn-mat:hover { border-color:var(--color-ocean-light);color:white; }
 
 /* ── TITRE DE SECTION ── */
-.pb-st {
-  padding: 3.5rem 0 1.5rem;
-}
-.pb-st__inner {
-  text-align: center;
-  max-width: 760px;
-  margin: 0 auto;
-}
-.pb-st__inner--left {
-  text-align: left;
-  max-width: var(--max-width);
-}
-.pb-st__eyebrow {
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-ocean-main);
-  font-weight: 500;
-  margin-bottom: 0.6rem;
-}
-.section--dark .pb-st__eyebrow { color: var(--color-ocean-light); }
-.pb-st__h2 {
-  color: var(--color-text);
-  margin-bottom: 0;
-}
-.section--dark .pb-st__h2 { color: white; }
-.pb-st__sub {
-  color: var(--color-text-muted);
-  max-width: 600px;
-  margin: 0.9rem auto 0;
-  line-height: 1.7;
-  font-size: 1rem;
-}
-.pb-st__inner--left .pb-st__sub { margin-left: 0; }
-.section--dark .pb-st__sub { color: rgba(255,255,255,0.7); }
+.pb-st { padding:3.5rem 0 1.5rem; }
+.pb-st__inner { text-align:center;max-width:760px;margin:0 auto; }
+.pb-st__inner--left { text-align:left;max-width:var(--max-width); }
+.pb-st__eyebrow { font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-ocean-main);font-weight:500;margin-bottom:0.6rem; }
+.section--dark .pb-st__eyebrow { color:var(--color-ocean-light); }
+.pb-st__h2 { color:var(--color-text);margin-bottom:0; }
+.section--dark .pb-st__h2 { color:white; }
+.pb-st__sub { color:var(--color-text-muted);max-width:600px;margin:0.9rem auto 0;line-height:1.7;font-size:1rem; }
+.pb-st__inner--left .pb-st__sub { margin-left:0; }
+.section--dark .pb-st__sub { color:rgba(255,255,255,0.7); }
 
 /* ── INTRO + INFO CARD ── */
-.pb-intro__grid {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 4rem;
-  align-items: start;
-}
-.info-card {
-  background: var(--color-sand);
-  border-radius: 6px;
-  padding: 1.6rem;
-  border-left: 3px solid var(--color-ocean-main);
-  position: sticky;
-  top: calc(var(--header-height) + 2rem);
-}
-.info-lbl {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-ocean-main);
-  font-weight: 600;
-  margin-top: 1.2rem;
-}
-.info-lbl:first-child { margin-top: 0; }
-.info-val {
-  font-size: 0.92rem;
-  color: var(--color-text);
-  line-height: 1.55;
-}
+.pb-intro__grid { display:grid;grid-template-columns:1fr 300px;gap:4rem;align-items:start; }
+.info-card { background:var(--color-sand);border-radius:6px;padding:1.6rem;border-left:3px solid var(--color-ocean-main);position:sticky;top:calc(var(--header-height) + 2rem); }
+.info-lbl { font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--color-ocean-main);font-weight:600;margin-top:1.2rem; }
+.info-lbl:first-child { margin-top:0; }
+.info-val { font-size:0.92rem;color:var(--color-text);line-height:1.55; }
 
-/* ── PROSE (Portable Text) ── */
-.prose :global(.pb-p) {
-  color: var(--color-text);
-  line-height: 1.8;
-  margin-bottom: 1.2rem;
-  font-size: 1rem;
-}
-.prose :global(.pb-h2) {
-  font-family: var(--font-serif);
-  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-  color: var(--color-text);
-  margin: 2rem 0 0.75rem;
-}
-.prose :global(.pb-h3) {
-  font-family: var(--font-serif);
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  color: var(--color-text);
-  margin: 1.5rem 0 0.5rem;
-}
-.prose :global(.pb-blockquote) {
-  border-left: 3px solid var(--color-ocean-light);
-  padding-left: 1.2rem;
-  margin: 1.5rem 0;
-  font-style: italic;
-  color: var(--color-text-muted);
-}
-.prose :global(a) { color: var(--color-ocean-main); text-decoration: underline; text-underline-offset: 2px; }
-.prose :global(figure) { margin: 1.5rem 0; }
-.prose :global(figure img) { border-radius: 6px; width: 100%; }
+/* ── PROSE ── */
+.prose :global(.pb-p) { color:var(--color-text);line-height:1.8;margin-bottom:1.2rem;font-size:1rem; }
+.prose :global(.pb-h2) { font-family:var(--font-serif);font-size:clamp(1.3rem,2.5vw,1.8rem);color:var(--color-text);margin:2rem 0 0.75rem; }
+.prose :global(.pb-h3) { font-family:var(--font-serif);font-size:clamp(1.1rem,2vw,1.4rem);color:var(--color-text);margin:1.5rem 0 0.5rem; }
+.prose :global(.pb-blockquote) { border-left:3px solid var(--color-ocean-light);padding-left:1.2rem;margin:1.5rem 0;font-style:italic;color:var(--color-text-muted); }
+.prose :global(a) { color:var(--color-ocean-main);text-decoration:underline;text-underline-offset:2px; }
+.prose :global(figure) { margin:1.5rem 0; }
+.prose :global(figure img) { border-radius:6px;width:100%; }
 
-/* ── CARDS (sous-prestations) ── */
-/* Pas de background sur la section = gap blanc entre les cartes (comme l'original) */
-.pb-cards { overflow: hidden; }
-.pb-section-titre {
-  margin-bottom: 2rem;
-  color: var(--color-text);
-}
-.section--dark .pb-section-titre { color: white; }
-.sous-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-}
-/* Hauteurs : les cartes normales = 380px, la wide (dernière) = 500px */
-.wf-card {
-  position: relative;
-  display: block;
-  height: 380px;
-  overflow: hidden;
-  text-decoration: none;
-  color: white;
-  background: var(--color-ocean);
-}
-.wf-card--wide {
-  grid-column: 1 / -1;
-  height: 500px;
-}
-.wf-card-bg {
-  position: absolute; inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: transform 0.6s ease;
-}
-.wf-card:hover .wf-card-bg { transform: scale(1.06); }
-.wf-card::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: rgba(7,24,31,0.25);
-  transition: background 0.35s ease;
-}
-.wf-card:hover::after { background: rgba(7,24,31,0.1); }
-.wf-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(7,24,31,.75) 0%, transparent 55%);
-  z-index: 1;
-}
-.wf-body {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 1.5rem 1.75rem 1.75rem;
-  z-index: 2;
-  display: flex; flex-direction: column; gap: 0.2rem;
-}
-.wf-sub {
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-ocean-light);
-  font-weight: 500;
-}
-.wf-label {
-  font-family: var(--font-serif);
-  font-size: 1.45rem;
-  font-weight: 500;
-  line-height: 1.2;
-  color: white;
-}
+/* ── CARDS ── */
+.pb-cards { overflow:hidden; }
+.pb-section-titre { margin-bottom:2rem;color:var(--color-text); }
+.section--dark .pb-section-titre { color:white; }
+.sous-grid { display:grid;grid-template-columns:1fr 1fr;gap:4px; }
+.wf-card { position:relative;display:block;height:380px;overflow:hidden;text-decoration:none;color:white;background:var(--color-ocean); }
+.wf-card--wide { grid-column:1/-1;height:500px; }
+.wf-card-bg { position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;transition:transform 0.6s ease; }
+.wf-card:hover .wf-card-bg { transform:scale(1.06); }
+.wf-card::after { content:'';position:absolute;inset:0;background:rgba(7,24,31,0.25);transition:background 0.35s ease; }
+.wf-card:hover::after { background:rgba(7,24,31,0.1); }
+.wf-overlay { position:absolute;inset:0;background:linear-gradient(to top,rgba(7,24,31,.75) 0%,transparent 55%);z-index:1; }
+.wf-body { position:absolute;bottom:0;left:0;right:0;padding:1.5rem 1.75rem 1.75rem;z-index:2;display:flex;flex-direction:column;gap:0.2rem; }
+.wf-sub { font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--color-ocean-light);font-weight:500; }
+.wf-label { font-family:var(--font-serif);font-size:1.45rem;font-weight:500;line-height:1.2;color:white; }
 
 /* ── TEXTE + IMAGE ── */
-.pb-ti__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-}
-.pb-ti__grid[data-pos="left"] .pb-ti__fig { order: -1; }
-.pb-ti__fig img { border-radius: 6px; width: 100%; }
+.pb-ti__grid { display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center; }
+.pb-ti__grid[data-pos="left"] .pb-ti__fig { order:-1; }
+.pb-ti__fig img { border-radius:6px;width:100%; }
 
 /* ── GALERIE ── */
-.galerie-grid {
-  display: grid;
-  gap: 1rem;
-}
-.galerie-img {
-  width: 100%; aspect-ratio: 4/3;
-  object-fit: cover; border-radius: 4px;
-}
+.galerie-grid { display:grid;gap:1rem; }
+.galerie-img { width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px; }
 
 /* ── VIDÉO ── */
-.video-wrap {
-  position: relative;
-  padding-bottom: 56.25%;
-  border-radius: 6px; overflow: hidden;
-  margin-top: 1.5rem;
-}
-.video-wrap iframe {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; border: none;
-}
+.video-wrap { position:relative;padding-bottom:56.25%;border-radius:6px;overflow:hidden;margin-top:1.5rem; }
+.video-wrap iframe { position:absolute;inset:0;width:100%;height:100%;border:none; }
 
 /* ── STATS ── */
-.pb-stats { padding: 3.5rem 0; }
-.pb-stats__grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-  text-align: center;
-}
-.section--dark .pb-stats { background: var(--color-ocean); }
-.pb-stat { display: flex; flex-direction: column; gap: 0.3rem; min-width: 140px; }
-.pb-stat__num {
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 3rem);
-  color: var(--color-ocean-main);   /* fond clair : bleu océan */
-  font-weight: 500;
-  line-height: 1;
-}
-.pb-stat__lbl {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);   /* fond clair : gris lisible */
-}
-/* Fond gris clair : mêmes couleurs que les infocards */
-.section--mist .pb-stat__num { color: var(--color-ocean-main); }
-.section--mist .pb-stat__lbl { color: var(--color-text); }
-/* Sur fond sombre : couleurs inversées */
-.section--dark .pb-stat__num { color: var(--color-ocean-light); }
-.section--dark .pb-stat__lbl { color: rgba(255,255,255,0.65); }
+.pb-stats { padding:3.5rem 0; }
+.pb-stats__grid { display:flex;flex-wrap:wrap;gap:2rem;justify-content:center;text-align:center; }
+.pb-stat { display:flex;flex-direction:column;gap:0.3rem;min-width:140px; }
+.pb-stat__num { font-family:var(--font-serif);font-size:clamp(2rem,4vw,3rem);color:var(--color-ocean-main);font-weight:500;line-height:1; }
+.pb-stat__lbl { font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-muted); }
+.section--mist .pb-stat__num { color:var(--color-ocean-main); }
+.section--mist .pb-stat__lbl { color:var(--color-text); }
+.section--dark .pb-stat__num { color:var(--color-ocean-light); }
+.section--dark .pb-stat__lbl { color:rgba(255,255,255,0.65); }
 
 /* ── CTA ── */
-.section--dark.pb-cta { background: var(--color-ocean); }
-.pb-cta__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem; flex-wrap: wrap;
-}
-.pb-cta__h2 { margin-bottom: 0.4rem; }
-.pb-cta__sub { color: rgba(255,255,255,0.7); margin-top: 0.3rem; }
-/* Fonds clairs → texte sombre lisible */
-.section--sand .pb-cta__sub,
-.section--mist .pb-cta__sub,
-.section--white .pb-cta__sub { color: var(--color-text-muted); }
-.pb-cta__btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.section--dark.pb-cta { background:var(--color-ocean); }
+.pb-cta__inner { display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap; }
+.pb-cta__h2 { margin-bottom:0.4rem; }
+.pb-cta__sub { color:rgba(255,255,255,0.7);margin-top:0.3rem; }
+.section--sand .pb-cta__sub,.section--mist .pb-cta__sub,.section--white .pb-cta__sub { color:var(--color-text-muted); }
+.pb-cta__btns { display:flex;gap:1rem;flex-wrap:wrap; }
 
 /* ── BANNIÈRE ── */
-.pb-banniere { padding: 0.9rem 0; }
-.pb-banniere--ocean  { background: var(--color-ocean-main); color: white; }
-.pb-banniere--sand   { background: var(--color-sand); color: var(--color-text); }
-.pb-banniere--accent { background: var(--color-ocean-light); color: var(--color-ocean); }
-.pb-banniere__inner {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-align: center;
-}
-a.pb-banniere__inner:hover { text-decoration: underline; }
+.pb-banniere { padding:0.9rem 0; }
+.pb-banniere--ocean  { background:var(--color-ocean-main);color:white; }
+.pb-banniere--sand   { background:var(--color-sand);color:var(--color-text); }
+.pb-banniere--accent { background:var(--color-ocean-light);color:var(--color-ocean); }
+.pb-banniere__inner { display:block;font-size:0.9rem;font-weight:500;text-align:center; }
+a.pb-banniere__inner:hover { text-decoration:underline; }
 
-/* ── CARROUSEL 3 IMAGES ── */
-.carr3-track-wrap { position: relative; }
-.carr3-track {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  overflow: hidden;
-}
-.carr3-slide img { display: block; border-radius: 4px; }
-.carr3-legende {
-  font-size: 0.78rem;
-  color: var(--color-text-muted);
-  text-align: center;
-  margin-top: 0.4rem;
-}
-.carr3-nav {
-  display: flex; justify-content: center; gap: 0.75rem;
-  margin-top: 1.25rem;
-}
-.carr3-btn {
-  background: var(--color-ocean-main);
-  color: white; border: none; cursor: pointer;
-  width: 42px; height: 42px; border-radius: 50%;
-  font-size: 1.4rem; line-height: 1;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
-}
-.carr3-btn:hover { background: var(--color-ocean); }
+/* ── CARROUSEL ── */
+.carr3-track-wrap { position:relative; }
+.carr3-track { display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;overflow:hidden; }
+.carr3-slide img { display:block;border-radius:4px; }
+.carr3-legende { font-size:0.78rem;color:var(--color-text-muted);text-align:center;margin-top:0.4rem; }
+.carr3-nav { display:flex;justify-content:center;gap:0.75rem;margin-top:1.25rem; }
+.carr3-btn { background:var(--color-ocean-main);color:white;border:none;cursor:pointer;width:42px;height:42px;border-radius:50%;font-size:1.4rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:background 0.2s; }
+.carr3-btn:hover { background:var(--color-ocean); }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  .pb-intro__grid { grid-template-columns: 1fr; }
-  .info-card { position: static; order: -1; }
-  .pb-ti__grid  { grid-template-columns: 1fr; }
-  .pb-ti__grid[data-pos="left"] .pb-ti__fig { order: 0; }
-  .galerie-grid { grid-template-columns: repeat(2, 1fr) !important; }
+@media (max-width:900px) {
+  .pb-intro__grid { grid-template-columns:1fr; }
+  .info-card { position:static;order:-1; }
+  .pb-ti__grid { grid-template-columns:1fr; }
+  .pb-ti__grid[data-pos="left"] .pb-ti__fig { order:0; }
+  .galerie-grid { grid-template-columns:repeat(2,1fr) !important; }
 }
-@media (max-width: 640px) {
-  .pb-hero { min-height: 60vh; }
-  .sous-grid { grid-template-columns: 1fr; }
-  .wf-card--wide { grid-column: auto; }
-  .carr3-track { grid-template-columns: 1fr; overflow: visible; }
-  .pb-cta__inner { flex-direction: column; text-align: center; }
-  .pb-cta__btns  { justify-content: center; }
+@media (max-width:640px) {
+  .pb-hero { min-height:60vh; }
+  .sous-grid { grid-template-columns:1fr; }
+  .wf-card--wide { grid-column:auto; }
+  .carr3-track { grid-template-columns:1fr;overflow:visible; }
+  .pb-cta__inner { flex-direction:column;text-align:center; }
+  .pb-cta__btns  { justify-content:center; }
 }
 </style>
 
 <script>
-// ── CARROUSEL 3 IMAGES ────────────────────────────────────────────────────────
 document.querySelectorAll('.carr3-track-wrap').forEach(wrap => {
-  const track  = wrap.querySelector('.carr3-track')
   const slides = wrap.querySelectorAll('.carr3-slide')
   const total  = slides.length
   if (total <= 3) return
-
-  let pos = 0 // index du premier slide visible
-
+  let pos = 0
   function show(start) {
     pos = ((start % total) + total) % total
-    slides.forEach((sl, i) => {
-      const visible = i >= pos && i < pos + 3
-      sl.style.display = visible ? '' : 'none'
-    })
+    slides.forEach((sl, i) => { sl.style.display = (i >= pos && i < pos + 3) ? '' : 'none' })
   }
-
   show(0)
-
   wrap.querySelector('.carr3-btn--prev')?.addEventListener('click', () => show(pos - 3))
   wrap.querySelector('.carr3-btn--next')?.addEventListener('click', () => show(pos + 3))
 })

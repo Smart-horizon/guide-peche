@@ -7,7 +7,7 @@ const seoTitle = "Témoignages & Avis — Jean-Baptiste Vidal, Guide de Pêche �
 const seoDescription = "Témoignages et avis de stagiaires et clients de Jean-Baptiste Vidal, moniteur-guide de pêche à la mouche en Bretagne-Sud. Bar, saumon, alose, Spey Cast, truite et voyages."
 
 // ── Textes éditables depuis Sanity (singleton pageTemoignages) ──────────────
-const pt = await stegaClient.fetch(`*[_id == "pageTemoignages"][0]`) ?? {}
+const pt = await stegaClient.fetch(`*[_id == "pageTemoignages"][0]{ _id, ... }`) ?? {}
 
 // Fallbacks vers les valeurs originales si le champ Sanity est vide
 const hero = {

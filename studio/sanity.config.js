@@ -182,38 +182,36 @@ export default defineConfig({
     presentationTool({
       name: 'preview',
       title: '👁️ Aperçu du site',
+      // /preview/* = route SSR qui affiche les BROUILLONS en temps réel
       previewUrl: 'https://guide-peche.smart-horizon.workers.dev',
       resolve: {
         locations: {
-          // Chaque témoignage → page /temoignages
+          // Témoignages → page publiée (pas de preview SSR pour cette page statique)
           temoignage: () => ({
             locations: [{ title: 'Page Témoignages', href: '/temoignages' }],
           }),
-          // Textes de la page → page /temoignages
           pageTemoignages: () => ({
             locations: [{ title: 'Page Témoignages', href: '/temoignages' }],
           }),
-          // Accueil → page d'accueil
           accueil: () => ({
             locations: [{ title: "Page d'accueil", href: '/' }],
           }),
-          // Paramètres → page d'accueil (impact global)
           parametres: () => ({
             locations: [{ title: "Page d'accueil", href: '/' }],
           }),
-          // Prestations → page de la prestation
+          // Prestations → /preview/{slug} (SSR live preview)
           prestation: (doc) => ({
             locations: doc?.slug?.current
-              ? [{ title: doc.title || 'Prestation', href: `/${doc.slug.current}` }]
+              ? [{ title: doc.title || 'Prestation', href: `/preview/${doc.slug.current}` }]
               : [],
           }),
-          // Voyages → page du voyage
+          // Voyages → /preview/{slug} (SSR live preview)
           voyage: (doc) => ({
             locations: doc?.slug?.current
-              ? [{ title: doc.title || 'Voyage', href: `/${doc.slug.current}` }]
+              ? [{ title: doc.title || 'Voyage', href: `/preview/${doc.slug.current}` }]
               : [],
           }),
-          // Articles → page de l'article
+          // Articles → page statique (pas de route preview pour le blog)
           article: (doc) => ({
             locations: doc?.slug?.current
               ? [{ title: doc.title || 'Article', href: `/blog/${doc.slug.current}` }]

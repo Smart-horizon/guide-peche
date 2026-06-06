@@ -41,6 +41,7 @@ export default function VisualEditingPreview() {
   return (
     <VisualEditing
       history={history}
+      // La route /preview/* est SSR : recharger suffit pour voir les brouillons à jour
       refresh={() => new Promise(resolve => { window.location.reload(); resolve() })}
     />
   )

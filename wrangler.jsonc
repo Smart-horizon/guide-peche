@@ -3,6 +3,12 @@
   "name": "guide-peche",
   "compatibility_date": "2026-06-02",
   "assets": {
-    "directory": "./dist"
-  }
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  // KV namespace SESSION créé lors du premier déploiement SSR (requis par @astrojs/cloudflare).
+  // L'ID ici empêche wrangler de tenter de re-créer le namespace à chaque deploy.
+  "kv_namespaces": [
+    { "binding": "SESSION", "id": "5548c0fa1ff24798912a7c3e31be529c" }
+  ]
 }
