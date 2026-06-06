@@ -15,15 +15,18 @@ import imageUrlBuilder from '@sanity/image-url'
 // En Cloudflare Workers, les secrets wrangler ne sont accessibles qu'au runtime
 // via Astro.locals.runtime.env — import.meta.env.SANITY_TOKEN est vide (build time).
 const runtimeEnv = (Astro.locals as any).runtime?.env ?? {}
-const token = runtimeEnv.SANITY_TOKEN ?? import.meta.env.SANITY_TOKEN
+const token: string | undefined = runtimeEnv.SANITY_TOKEN ?? import.meta.env.SANITY_TOKEN
+
+// Perspective drafts uniquement si on a un token valide
+const perspective = token ? 'previewDrafts' : 'published'
 
 const previewClient = createClient({
   projectId:   'uievv97s',
   dataset:     'production',
   useCdn:      false,
   apiVersion:  '2024-01-01',
-  perspective: 'previewDrafts',
-  token,
+  perspective: perspective as any,
+  ...(token ? { token } : {}),
   stega: {
     enabled:   true,
     studioUrl: 'https://jbvidal.sanity.studio',
@@ -35,14 +38,23 @@ const urlFor  = (source: any) => builder.image(source)
 
 const { slug } = Astro.params
 
-// ── Détermination du type de document (SSR : pas de getStaticPaths) ──────────
-const docType: string | null = await previewClient.fetch(
-  `*[slug.current == $slug && _type in ["prestation","voyage","page"]][0]._type`,
-  { slug }
-)
+// ── Détermination du type de document ────────────────────────────────────────
+let docType: string | null = null
+let doc: any = null
+
+try {
+  docType = await previewClient.fetch(
+    `*[slug.current == $slug && _type in ["prestation","voyage","page"]][0]._type`,
+    { slug }
+  )
+} catch (e) {
+  console.error('[preview] fetch docType error:', e)
+  return Astro.redirect('/404')
+}
+
 if (!docType) return Astro.redirect('/404')
 
-// ── Requêtes GROQ par type (identiques à [slug].astro) ───────────────────────
+// ── Requêtes GROQ par type ────────────────────────────────────────────────────
 const QUERIES: Record<string, string> = {
   prestation: `*[_type == "prestation" && slug.current == $slug][0]{
     _id, _type, title, categorie,
@@ -65,7 +77,13 @@ const QUERIES: Record<string, string> = {
   }`,
 }
 
-const doc = await previewClient.fetch(QUERIES[docType], { slug })
+try {
+  doc = await previewClient.fetch(QUERIES[docType], { slug })
+} catch (e) {
+  console.error('[preview] fetch doc error:', e)
+  return Astro.redirect('/404')
+}
+
 if (!doc) return Astro.redirect('/404')
 
 // ── SEO ───────────────────────────────────────────────────────────────────────
