@@ -425,23 +425,43 @@ export const sectionGalerie = {
 // ─────────────────────────────────────────────────────────────────────────────
 export const sectionVideo = {
   name: 'sectionVideo',
-  title: '▶️ Vidéo YouTube / Vimeo',
+  title: '▶️ Vidéo + texte',
   type: 'object',
   fields: [
     {
-      name: 'url', title: 'URL de la vidéo', type: 'url',
+      name: 'url', title: 'URL de la vidéo (YouTube)', type: 'url',
       description: 'Ex : https://www.youtube.com/watch?v=xxxxx',
       validation: Rule => Rule.required(),
     },
     {
-      name: 'titre', title: 'Titre au-dessus de la vidéo (optionnel)', type: 'string',
+      name: 'eyebrow', title: 'Libellé (texte au-dessus du titre)', type: 'string',
+      description: 'Ex : "Bar à vue" — affiché en petites majuscules colorées',
     },
-    fondField('sand'),
+    {
+      name: 'titre', title: 'Titre', type: 'string',
+    },
+    {
+      name: 'description', title: 'Description', type: 'text', rows: 3,
+    },
+    {
+      name: 'videoPosition',
+      title: 'Position de la vidéo',
+      type: 'string',
+      options: {
+        list: [
+          { title: '◀ Vidéo à gauche', value: 'left' },
+          { title: '▶ Vidéo à droite', value: 'right' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'left',
+    },
+    fondField('white'),
   ],
   preview: {
     select: { titre: 'titre', url: 'url' },
     prepare: ({ titre, url }) => ({
-      title: `▶️ Vidéo — ${titre || url || ''}`,
+      title: `▶️ ${titre || url || 'Vidéo'}`,
     }),
   },
 }

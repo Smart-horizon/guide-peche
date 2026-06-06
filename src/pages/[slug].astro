@@ -234,16 +234,22 @@ const heroBg = (image: any) => {
 
     {/* ════════════ VIDÉO ════════════ */}
     {s._type === 'sectionVideo' && ytId(s.url) && (
-      <section class={`section pb-video ${bg(s.fond)||'section--sand'}`}>
-        <div class="container" style="max-width:860px">
-          {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
-          <div class="video-wrap">
-            <iframe
-              src={`https://www.youtube.com/embed/${ytId(s.url)}`}
-              title={s.titre || pageTitle}
-              allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
-              allowfullscreen
-            ></iframe>
+      <section class={`section pb-video2 ${bg(s.fond)||''}`}>
+        <div class={`container pb-video2__grid${stegaClean(s.videoPosition)==='right' ? ' pb-video2__grid--rev' : ''}`}>
+          <div class="pb-video2__player">
+            <div class="video-wrap">
+              <iframe
+                src={`https://www.youtube.com/embed/${ytId(s.url)}`}
+                title={s.titre || pageTitle}
+                allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+          <div class="pb-video2__text">
+            {s.eyebrow && <p class="pb-video2__eyebrow">{s.eyebrow}</p>}
+            {s.titre   && <h2 class="pb-video2__titre">{s.titre}</h2>}
+            {s.description && <p class="pb-video2__desc">{s.description}</p>}
           </div>
         </div>
       </section>
@@ -641,16 +647,52 @@ const heroBg = (image: any) => {
   object-fit: cover; border-radius: 4px;
 }
 
-/* ── VIDÉO ── */
+/* ── VIDÉO (layout texte + vidéo) ── */
+.pb-video2__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+.pb-video2__grid--rev .pb-video2__player { order: 2; }
+.pb-video2__grid--rev .pb-video2__text   { order: 1; }
 .video-wrap {
   position: relative;
   padding-bottom: 56.25%;
-  border-radius: 6px; overflow: hidden;
-  margin-top: 1.5rem;
+  border-radius: 8px; overflow: hidden;
 }
 .video-wrap iframe {
   position: absolute; inset: 0;
   width: 100%; height: 100%; border: none;
+}
+.pb-video2__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.pb-video2__titre {
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.section--dark .pb-video2__titre { color: white; }
+.section--dark .pb-video2__eyebrow { color: var(--color-ocean-light); }
+.pb-video2__desc {
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  font-size: 1rem;
+}
+.section--dark .pb-video2__desc { color: rgba(255,255,255,0.7); }
+@media (max-width: 860px) {
+  .pb-video2__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .pb-video2__grid--rev .pb-video2__player { order: 1; }
+  .pb-video2__grid--rev .pb-video2__text   { order: 2; }
 }
 
 /* ── STATS ── */
