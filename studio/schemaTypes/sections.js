@@ -956,37 +956,62 @@ export const sectionProgrammeTexte = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SECTION 14 — PROGRAMME SANS IMAGE STYLE 2 (cartes numérotées)
+// SECTION 14 — GRILLE DE CARTES
 // ─────────────────────────────────────────────────────────────────────────────
 export const sectionProgrammeCartes = {
   name: 'sectionProgrammeCartes',
-  title: '🗓️ Programme / Étapes sans image style 2',
+  title: '🃏 Grille de cartes',
   type: 'object',
   fields: [
     {
-      name: 'eyebrow', title: 'Libellé (au-dessus du titre)', type: 'string',
-      description: 'Ex : "Programme"',
+      name: 'eyebrow', title: 'Libellé au-dessus du titre', type: 'string',
+      description: 'Ex : "Équipement" ou "Bonefish · Tarpon · Permit"',
     },
     {
       name: 'titre', title: 'Titre de la section', type: 'string',
-      description: 'Ex : "Une journée de pêche de la truite"',
+    },
+    // ── Image header optionnelle ──────────────────────────────────────────────
+    {
+      name: 'image', title: 'Image (optionnel)',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
+      description: 'Si renseignée, s\'affiche à côté du titre et de l\'intro',
+    },
+    {
+      name: 'imagePosition', title: 'Position de l\'image',
+      type: 'string',
+      options: {
+        list: [
+          { title: '⬅️ Image à gauche', value: 'left'  },
+          { title: '➡️ Image à droite', value: 'right' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'left',
     },
     {
       name: 'intro', title: 'Introduction (optionnel)', type: 'text', rows: 2,
     },
+    // ── Cartes ────────────────────────────────────────────────────────────────
     {
-      name: 'items', title: 'Étapes / Cartes',
+      name: 'items', title: 'Cartes',
       type: 'array',
-      description: 'Les numéros (01, 02…) sont générés automatiquement. 3 ou 6 cartes recommandées.',
+      description: '2, 3 ou 4 cartes recommandées selon le nombre de colonnes.',
       validation: Rule => Rule.min(1),
       of: [{
         type: 'object',
         name: 'carte',
         fields: [
           {
-            name: 'titre', title: 'Titre de l\'étape',
+            name: 'titre', title: 'Titre',
             type: 'string',
             validation: Rule => Rule.required(),
+          },
+          {
+            name: 'sousTitre', title: 'Sous-titre (optionnel)',
+            type: 'string',
+            description: 'Ex : "ESPÈCE STAR · TOP 3 MONDIAL" ou "NOVEMBRE → AVRIL"',
           },
           {
             name: 'description', title: 'Description',
@@ -994,7 +1019,8 @@ export const sectionProgrammeCartes = {
           },
         ],
         preview: {
-          select: { title: 'titre', subtitle: 'description' },
+          select: { title: 'titre', subtitle: 'sousTitre' },
+          prepare: ({ title, subtitle }) => ({ title, subtitle: subtitle || '' }),
         },
       }],
     },
@@ -1005,18 +1031,37 @@ export const sectionProgrammeCartes = {
         list: [
           { title: '2 colonnes', value: '2' },
           { title: '3 colonnes (recommandé)', value: '3' },
+          { title: '4 colonnes', value: '4' },
         ],
         layout: 'radio',
       },
       initialValue: '3',
     },
+    // ── Note de bas de section ────────────────────────────────────────────────
+    {
+      name: 'note', title: 'Note de bas de section (optionnel)',
+      type: 'string',
+      description: 'Texte en italique sous les cartes — ex : "Nos séjours sont planifiés en janvier/février"',
+    },
+    // ── Bouton optionnel ──────────────────────────────────────────────────────
+    {
+      name: 'btnTexte', title: 'Bouton — texte (optionnel)',
+      type: 'string',
+      description: 'Ex : "Télécharger la fiche matériel (PDF)"',
+    },
+    {
+      name: 'btnLien', title: 'Bouton — URL (optionnel)',
+      type: 'string',
+      description: 'URL ou chemin — ex : "/fiche-materiel-los-roques.pdf"',
+    },
     fondField('sand'),
   ],
   preview: {
-    select: { titre: 'titre', items: 'items' },
-    prepare: ({ titre, items }) => ({
-      title: `🗓️ Programme cartes — ${titre || ''}`,
+    select: { titre: 'titre', items: 'items', media: 'image' },
+    prepare: ({ titre, items, media }) => ({
+      title:    `🃏 Grille de cartes — ${titre || ''}`,
       subtitle: `${items?.length || 0} carte(s)`,
+      media,
     }),
   },
 }
