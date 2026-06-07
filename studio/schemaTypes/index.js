@@ -13,7 +13,7 @@ import {
   sectionTexteImage, sectionGalerie, sectionVideo, sectionStats,
   sectionCta, sectionBanniere, sectionCarrousel3Images,
   sectionProgramme, sectionProgrammeTexte, sectionProgrammeCartes,
-  sectionSelection,
+  sectionSelection, sectionCards2,
 } from './sections.js'
 
 export const schemaTypes = [
@@ -45,4 +45,5 @@ export const schemaTypes = [
   sectionProgrammeTexte,
   sectionProgrammeCartes,
   sectionSelection,
+  sectionCards2,
 ]

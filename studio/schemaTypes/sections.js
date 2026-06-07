@@ -215,6 +215,31 @@ export const sectionIntro = {
         },
       }],
     },
+    {
+      name: 'intervenant',
+      title: 'Intervenant / Expert invité (optionnel)',
+      type: 'object',
+      description: 'Bloc profil affiché dans l\'intro — ex : co-intervenant masterclass',
+      fields: [
+        {
+          name: 'avatar', title: 'Initiales (2 lettres max)',
+          type: 'string',
+          description: 'Ex : "GJ" pour Grégoire Juglaret',
+        },
+        {
+          name: 'nom', title: 'Nom complet', type: 'string',
+        },
+        {
+          name: 'titre', title: 'Titre / rôle',
+          type: 'string',
+          description: 'Ex : "Champion du Monde 2025 · Champion de France réservoir"',
+        },
+        {
+          name: 'bio', title: 'Présentation',
+          type: 'text', rows: 3,
+        },
+      ],
+    },
     fondField('white'),
   ],
   preview: {
@@ -283,7 +308,7 @@ export const sectionTitre = {
 // ─────────────────────────────────────────────────────────────────────────────
 export const sectionCards = {
   name: 'sectionCards',
-  title: '🃏 Grille de cartes',
+  title: '🃏 Grille de cartes — style n°1',
   type: 'object',
   fields: [
     {
@@ -329,6 +354,81 @@ export const sectionCards = {
     select: { titre: 'titre', cards: 'cards' },
     prepare: ({ titre, cards }) => ({
       title: `🃏 Grille de cartes — ${titre || ''}`,
+      subtitle: `${cards?.length || 0} carte(s)`,
+    }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 3b — GRILLE DE CARTES STYLE N°2 (colonnes configurables, sans wide)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionCards2 = {
+  name: 'sectionCards2',
+  title: '🃏 Grille de cartes — style n°2',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Libellé au-dessus du titre (optionnel)',
+      type: 'string',
+      description: 'Ex : "Bar à la mouche · Bretagne-Sud"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section (optionnel)', type: 'string',
+    },
+    {
+      name: 'colonnes', title: 'Nombre de colonnes',
+      type: 'string',
+      options: {
+        list: [
+          { title: '2 colonnes', value: '2' },
+          { title: '3 colonnes', value: '3' },
+          { title: '4 colonnes (recommandé)', value: '4' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: '4',
+    },
+    {
+      name: 'cards',
+      title: 'Cartes',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'card',
+          title: 'Carte',
+          fields: [
+            { name: 'titre',     title: 'Titre',               type: 'string' },
+            { name: 'sousTitre', title: 'Sous-titre / accroche', type: 'string' },
+            { name: 'lien',      title: 'URL cible',            type: 'string' },
+            { name: 'image',     title: 'Photo de fond',        type: 'image', options: { hotspot: true } },
+            {
+              name: 'positionPhoto',
+              title: 'Position de la photo',
+              type: 'string',
+              options: {
+                list: [
+                  { title: '⬛ Centre (défaut)', value: 'center center' },
+                  { title: '⬆️ Haut',            value: 'center 20%'   },
+                  { title: '⬇️ Bas',             value: 'center bottom'},
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'center center',
+            },
+          ],
+          preview: {
+            select: { title: 'titre', subtitle: 'lien', media: 'image' },
+          },
+        },
+      ],
+    },
+    fondField('white'),
+  ],
+  preview: {
+    select: { titre: 'titre', cards: 'cards' },
+    prepare: ({ titre, cards }) => ({
+      title: `🃏 Grille de cartes n°2 — ${titre || ''}`,
       subtitle: `${cards?.length || 0} carte(s)`,
     }),
   },
@@ -1037,6 +1137,7 @@ export const allSectionTypes = [
   sectionIntro,
   sectionTitre,
   sectionCards,
+  sectionCards2,
   sectionTexte,
   sectionTexteImage,
   sectionGalerie,

@@ -169,6 +169,22 @@ const heroBg = (image: any) => {
       <section class={`section pb-intro ${bg(s.fond)||''}`}>
         <div class="container pb-intro__grid">
           <div class="prose" set:html={blocks(s.texte)} />
+          {s.intervenant?.nom && (
+            <div class="expert-card">
+              {s.intervenant.avatar && (
+                <div class="expert-card__avatar">{s.intervenant.avatar}</div>
+              )}
+              <div>
+                <strong class="expert-card__name">{s.intervenant.nom}</strong>
+                {s.intervenant.titre && (
+                  <span class="expert-card__title">{s.intervenant.titre}</span>
+                )}
+                {s.intervenant.bio && (
+                  <p class="expert-card__bio">{s.intervenant.bio}</p>
+                )}
+              </div>
+            </div>
+          )}
           {s.showInfoCard !== false && (
             <aside>
               <div class="info-card">
@@ -205,6 +221,35 @@ const heroBg = (image: any) => {
               : null
             return (
               <a href={c.lien||'#'} class:list={['wf-card', isOdd&&isLast&&'wf-card--wide']}>
+                <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl});background-position:${stegaClean(c.positionPhoto)||'center center'}` : ''}></div>
+                <div class="wf-overlay"></div>
+                <div class="wf-body">
+                  {c.sousTitre && <span class="wf-sub">{c.sousTitre}</span>}
+                  <strong class="wf-label">{c.titre}</strong>
+                </div>
+              </a>
+            )
+          })}
+        </div>
+      </section>
+    )}
+
+    {/* ════════════ CARDS STYLE 2 ════════════ */}
+    {s._type === 'sectionCards2' && (
+      <section class={`pb-cards2 ${bg(s.fond)||''}`}>
+        {(s.eyebrow || s.titre) && (
+          <div class="container pb-cards2__header">
+            {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+            {s.titre   && <h2 class="pb-section-titre">{s.titre}</h2>}
+          </div>
+        )}
+        <div class="pb-cards2__grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||4},1fr)`}>
+          {s.cards?.map((c: any) => {
+            const cardImgUrl = c.image?.asset
+              ? urlFor(c.image).width(800).height(600).fit('crop').url()
+              : null
+            return (
+              <a href={c.lien||'#'} class="wf-card">
                 <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl});background-position:${stegaClean(c.positionPhoto)||'center center'}` : ''}></div>
                 <div class="wf-overlay"></div>
                 <div class="wf-body">
@@ -732,6 +777,39 @@ const heroBg = (image: any) => {
 .prose :global(.pb-list--bullet) { list-style-type: disc; }
 .prose :global(.pb-list--number) { list-style-type: decimal; }
 .section--dark .prose :global(.pb-list li) { color: rgba(255,255,255,0.82); }
+
+/* ── EXPERT CARD (intervenant) ── */
+.expert-card {
+  display: flex; gap: 1rem; align-items: flex-start;
+  background: var(--color-sand); border-radius: 4px;
+  padding: 1.2rem; margin-top: 1.5rem;
+}
+.expert-card__avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--color-ocean); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 700; flex-shrink: 0;
+}
+.expert-card__name { font-size: 1rem; font-weight: 600; color: var(--color-text); display: block; }
+.expert-card__title { font-size: 0.75rem; color: var(--color-ocean-main); display: block; margin: 0.2rem 0 0.5rem; line-height: 1.5; }
+.expert-card__bio { font-size: 0.85rem; line-height: 1.65; color: var(--color-text-muted); margin: 0; }
+
+/* ── CARDS STYLE 2 ── */
+.pb-cards2 { overflow: hidden; }
+.pb-cards2__header { padding-top: 3rem; padding-bottom: 1.5rem; }
+.pb-cards2__grid {
+  display: grid;
+  grid-template-rows: 320px;
+  gap: 4px;
+}
+.pb-cards2__grid .wf-card { height: 320px; }
+@media (max-width: 900px) {
+  .pb-cards2__grid { grid-template-columns: 1fr 1fr !important; grid-template-rows: 240px 240px; }
+}
+@media (max-width: 480px) {
+  .pb-cards2__grid { grid-template-columns: 1fr !important; grid-template-rows: none; }
+  .pb-cards2__grid .wf-card { height: 220px; }
+}
 
 /* ── CARDS (sous-prestations) ── */
 /* Pas de background sur la section = gap blanc entre les cartes (comme l'original) */
