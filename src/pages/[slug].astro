@@ -37,6 +37,7 @@ const QUERIES: Record<string, string> = {
       photos[]{ asset->{ _id, url } },
       images[]{ asset->{ _id, url } },
       cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+      etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
     },
     seoTitle, seoDescription, ogImage
   }`,
@@ -65,31 +66,51 @@ const ogImg        = doc.ogImage
     : undefined
 
 // ── Rendu Portable Text ───────────────────────────────────────────────────────
+function spanHtml(b: any): string {
+  return (b.children || []).map((span: any) => {
+    let t = (span.text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    if (span.marks?.includes('strong')) t = `<strong>${t}</strong>`
+    if (span.marks?.includes('em'))     t = `<em>${t}</em>`
+    const linkKey = (span.marks || []).find((m: any) => m?.length > 5)
+    if (linkKey) {
+      const href = b.markDefs?.find((d: any) => d._key === linkKey)?.href
+      if (href) t = `<a href="${href}">${t}</a>`
+    }
+    return t
+  }).join('')
+}
+
 function blocks(content: any[]): string {
   if (!content?.length) return ''
-  return content.map((b: any) => {
+  let out = '', i = 0
+  while (i < content.length) {
+    const b = content[i]
+    // Non-block (image, etc.)
     if (b._type !== 'block') {
       if (b._type === 'image' && b.asset) {
         const u = urlFor(b).width(900).url()
-        return `<figure><img src="${u}" alt="${b.alt || ''}" loading="lazy"/></figure>`
+        out += `<figure><img src="${u}" alt="${b.alt || ''}" loading="lazy"/></figure>`
       }
-      return ''
+      i++; continue
     }
-    const html = (b.children || []).map((span: any) => {
-      let t = (span.text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      if (span.marks?.includes('strong')) t = `<strong>${t}</strong>`
-      if (span.marks?.includes('em'))     t = `<em>${t}</em>`
-      const linkKey = (span.marks || []).find((m: any) => m?.length > 5)
-      if (linkKey) {
-        const href = b.markDefs?.find((d: any) => d._key === linkKey)?.href
-        if (href) t = `<a href="${href}">${t}</a>`
+    // Listes (puces ou numérotées) — regroupe les items consécutifs du même type
+    if (b.listItem) {
+      const tag = b.listItem === 'number' ? 'ol' : 'ul'
+      out += `<${tag} class="pb-list pb-list--${b.listItem}">`
+      while (i < content.length && content[i]._type === 'block' && content[i].listItem === b.listItem) {
+        out += `<li>${spanHtml(content[i])}</li>`
+        i++
       }
-      return t
-    }).join('')
+      out += `</${tag}>`
+      continue
+    }
+    // Bloc normal
     const tag: Record<string,string> = { h2:'h2', h3:'h3', blockquote:'blockquote', normal:'p' }
     const el = tag[b.style] || 'p'
-    return `<${el} class="pb-${el}">${html}</${el}>`
-  }).join('')
+    out += `<${el} class="pb-${el}">${spanHtml(b)}</${el}>`
+    i++
+  }
+  return out
 }
 
 // ── Fond de section ───────────────────────────────────────────────────────────
@@ -590,6 +611,15 @@ const heroBg = (image: any) => {
 .prose :global(a) { color: var(--color-ocean-main); text-decoration: underline; text-underline-offset: 2px; }
 .prose :global(figure) { margin: 1.5rem 0; }
 .prose :global(figure img) { border-radius: 6px; width: 100%; }
+.prose :global(.pb-list) {
+  padding-left: 1.4rem; margin-bottom: 1rem;
+}
+.prose :global(.pb-list li) {
+  line-height: 1.75; margin-bottom: 0.35rem;
+  color: var(--color-text);
+}
+.prose :global(.pb-list--bullet) { list-style-type: disc; }
+.prose :global(.pb-list--number) { list-style-type: decimal; }
 
 /* ── CARDS (sous-prestations) ── */
 /* Pas de background sur la section = gap blanc entre les cartes (comme l'original) */
