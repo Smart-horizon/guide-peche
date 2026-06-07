@@ -348,6 +348,26 @@ const heroBg = (image: any) => {
       </section>
     )}
 
+    {/* ════════════ PROGRAMME CARTES (style 2) ════════════ */}
+    {s._type === 'sectionProgrammeCartes' && (
+      <section class={`section pb-prog-cart ${bg(s.fond)||'section--sand'}`}>
+        <div class="container">
+          {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+          {s.titre   && <h2 class="pb-prog__h2">{s.titre}</h2>}
+          {s.intro   && <p class="pb-prog__intro">{s.intro}</p>}
+          <div class="pb-prog-cart__grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||3},1fr)`}>
+            {s.items?.map((item: any, i: number) => (
+              <div class="pb-prog-cart__card">
+                <span class="pb-prog-cart__num">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="pb-prog-cart__h3">{item.titre}</h3>
+                {item.description && <p class="pb-prog-cart__desc">{item.description}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
     {/* ════════════ CTA FINAL ════════════ */}
     {s._type === 'sectionCta' && (
       <section class={`section pb-cta ${bg(s.style)||'section--dark'}`}>
@@ -893,6 +913,46 @@ const heroBg = (image: any) => {
 }
 @media (max-width: 560px) {
   .pb-prog__body { padding: 1.75rem 1.5rem; }
+}
+
+/* ── PROGRAMME CARTES style 2 ── */
+.pb-prog-cart__grid {
+  display: grid;
+  gap: 2rem;
+}
+.pb-prog-cart__card {
+  background: white;
+  border-radius: 6px;
+  padding: 1.8rem;
+  border-top: 3px solid var(--color-ocean-main);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.pb-prog-cart__num {
+  display: block;
+  font-size: 2rem;
+  font-family: var(--font-serif);
+  color: var(--color-ocean-light);
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+.pb-prog-cart__h3 {
+  font-size: 1rem;
+  color: var(--color-ocean);
+  margin-bottom: 0.7rem;
+}
+.pb-prog-cart__desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  margin: 0;
+  white-space: pre-line;
+}
+@media (max-width: 768px) {
+  .pb-prog-cart__grid { grid-template-columns: repeat(2,1fr) !important; gap: 1.2rem; }
+}
+@media (max-width: 480px) {
+  .pb-prog-cart__grid { grid-template-columns: 1fr !important; }
 }
 
 /* ── PROGRAMME SANS IMAGE ── */

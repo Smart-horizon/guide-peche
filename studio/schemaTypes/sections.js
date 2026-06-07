@@ -737,7 +737,7 @@ export const sectionProgramme = {
 // ─────────────────────────────────────────────────────────────────────────────
 export const sectionProgrammeTexte = {
   name: 'sectionProgrammeTexte',
-  title: '🗓️ Programme / Étapes sans image',
+  title: '🗓️ Programme / Étapes sans image style 1',
   type: 'object',
   fields: [
     {
@@ -829,6 +829,72 @@ export const sectionProgrammeTexte = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 14 — PROGRAMME SANS IMAGE STYLE 2 (cartes numérotées)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionProgrammeCartes = {
+  name: 'sectionProgrammeCartes',
+  title: '🗓️ Programme / Étapes sans image style 2',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Libellé (au-dessus du titre)', type: 'string',
+      description: 'Ex : "Programme"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section', type: 'string',
+      description: 'Ex : "Une journée de pêche de la truite"',
+    },
+    {
+      name: 'intro', title: 'Introduction (optionnel)', type: 'text', rows: 2,
+    },
+    {
+      name: 'items', title: 'Étapes / Cartes',
+      type: 'array',
+      description: 'Les numéros (01, 02…) sont générés automatiquement. 3 ou 6 cartes recommandées.',
+      validation: Rule => Rule.min(1),
+      of: [{
+        type: 'object',
+        name: 'carte',
+        fields: [
+          {
+            name: 'titre', title: 'Titre de l\'étape',
+            type: 'string',
+            validation: Rule => Rule.required(),
+          },
+          {
+            name: 'description', title: 'Description',
+            type: 'text', rows: 3,
+          },
+        ],
+        preview: {
+          select: { title: 'titre', subtitle: 'description' },
+        },
+      }],
+    },
+    {
+      name: 'colonnes', title: 'Nombre de colonnes',
+      type: 'string',
+      options: {
+        list: [
+          { title: '2 colonnes', value: '2' },
+          { title: '3 colonnes (recommandé)', value: '3' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: '3',
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { titre: 'titre', items: 'items' },
+    prepare: ({ titre, items }) => ({
+      title: `🗓️ Programme cartes — ${titre || ''}`,
+      subtitle: `${items?.length || 0} carte(s)`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -845,4 +911,5 @@ export const allSectionTypes = [
   sectionCarrousel3Images,
   sectionProgramme,
   sectionProgrammeTexte,
+  sectionProgrammeCartes,
 ]
