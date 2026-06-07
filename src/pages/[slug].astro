@@ -1013,6 +1013,28 @@ const heroBg = (image: any) => {
   color: var(--color-ocean-main); font-weight: 700;
 }
 .pb-sel__info-val { font-size: 0.84rem; color: var(--color-text); font-weight: 500; line-height: 1.4; }
+/* ── Fond bleu nuit ── */
+.section--dark .pb-sel__block {
+  box-shadow: 0 2px 24px rgba(0,0,0,0.4);
+}
+.section--dark .pb-sel__body,
+.section--dark .pb-sel__body--sand {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.section--dark .pb-sel__tag   { color: var(--color-ocean-light); }
+.section--dark .pb-sel__h3    { color: white; }
+.section--dark .pb-sel__text :global(p) { color: rgba(255,255,255,0.72); }
+.section--dark .pb-sel__pills li {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+.section--dark .pb-sel__infos {
+  border-top-color: rgba(255,255,255,0.1);
+}
+.section--dark .pb-sel__info-lbl { color: var(--color-ocean-light); }
+.section--dark .pb-sel__info-val { color: rgba(255,255,255,0.85); }
+
 @media (max-width: 900px) {
   .pb-sel__block { grid-template-columns: 1fr; }
   .pb-sel__block--rev .pb-sel__img,
