@@ -652,6 +652,86 @@ export const sectionCarrousel3Images = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 12 — PROGRAMME / ÉTAPES
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionProgramme = {
+  name: 'sectionProgramme',
+  title: '🗓️ Programme / Étapes',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Libellé (au-dessus du titre)',
+      type: 'string',
+      description: 'Ex : "Programme"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section',
+      type: 'string',
+      description: 'Ex : "Ce que vous allez travailler"',
+    },
+    {
+      name: 'intro', title: 'Texte d\'introduction (optionnel)',
+      type: 'text', rows: 3,
+    },
+    {
+      name: 'etapes', title: 'Étapes du programme',
+      type: 'array',
+      description: 'Chaque étape = une photo + un titre + un texte. L\'image alterne automatiquement gauche/droite.',
+      validation: Rule => Rule.min(1).error('Au moins une étape requise'),
+      of: [
+        {
+          type: 'object',
+          name: 'etape',
+          fields: [
+            {
+              name: 'titre', title: 'Titre de l\'étape',
+              type: 'string',
+              validation: Rule => Rule.required(),
+            },
+            {
+              name: 'tag', title: 'Mots-clés / thèmes (optionnel)',
+              type: 'string',
+              description: 'Ex : "Double traction · Roulé · Distance"',
+            },
+            {
+              name: 'texte', title: 'Description',
+              type: 'array',
+              of: [{
+                type: 'block',
+                styles: [{ title: 'Normal', value: 'normal' }],
+                marks: {
+                  decorators: [
+                    { title: 'Gras',    value: 'strong' },
+                    { title: 'Italique', value: 'em' },
+                  ],
+                },
+              }],
+            },
+            {
+              name: 'image', title: 'Photo',
+              type: 'image',
+              options: { hotspot: true },
+              fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
+            },
+          ],
+          preview: {
+            select: { title: 'titre', subtitle: 'tag', media: 'image' },
+          },
+        },
+      ],
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { titre: 'titre', etapes: 'etapes' },
+    prepare: ({ titre, etapes }) => ({
+      title: `🗓️ Programme — ${titre || ''}`,
+      subtitle: `${etapes?.length || 0} étape(s)`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -666,4 +746,5 @@ export const allSectionTypes = [
   sectionCta,
   sectionBanniere,
   sectionCarrousel3Images,
+  sectionProgramme,
 ]
