@@ -657,7 +657,7 @@ export const sectionCarrousel3Images = {
 // ─────────────────────────────────────────────────────────────────────────────
 export const sectionProgramme = {
   name: 'sectionProgramme',
-  title: '🗓️ Programme / Étapes avec image',
+  title: '🗓️ Programme / Étapes avec images',
   type: 'object',
   fields: [
     {
