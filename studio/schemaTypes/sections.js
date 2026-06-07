@@ -1131,6 +1131,161 @@ export const sectionSelection = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 18 — BILAN DE SÉJOUR
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionBilan = {
+  name: 'sectionBilan',
+  title: '📓 Bilan de séjour',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Mention au-dessus du titre',
+      type: 'string',
+      description: 'Ex : "Récit de séjour · Mars 2015"',
+    },
+    {
+      name: 'titre', title: 'Titre du bilan', type: 'string',
+      validation: Rule => Rule.required(),
+      description: 'Ex : "Une semaine à Cayo Cruz"',
+    },
+    {
+      name: 'contexte', title: 'Contexte court (dates, groupe, conditions)',
+      type: 'string',
+      description: 'Ex : "28 fév — 7 mars 2015 · 6 pêcheurs · Conditions variables"',
+    },
+    richText('texte', 'Récit du séjour'),
+    {
+      name: 'resultats', title: 'Résultats clés',
+      type: 'array',
+      description: 'Chiffres ou faits marquants — ex : "Permits capturés → 3"',
+      of: [{
+        type: 'object',
+        name: 'resultat',
+        fields: [
+          { name: 'label',  title: 'Label',  type: 'string', description: 'Ex : "Permits capturés"' },
+          { name: 'valeur', title: 'Valeur', type: 'string', description: 'Ex : "3"' },
+        ],
+        preview: { select: { title: 'label', subtitle: 'valeur' } },
+      }],
+    },
+    {
+      name: 'image', title: 'Photo du séjour (optionnel)',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { titre: 'titre', contexte: 'contexte', media: 'image' },
+    prepare: ({ titre, contexte, media }) => ({
+      title:    `📓 Bilan — ${titre || ''}`,
+      subtitle: contexte || '',
+      media,
+    }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 19 — DATES DES SÉJOURS (HOSTED TRIPS)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionDates = {
+  name: 'sectionDates',
+  title: '📅 Dates des séjours',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Mention au-dessus du titre',
+      type: 'string',
+      description: 'Ex : "Hosted Trips 2026"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section', type: 'string',
+      validation: Rule => Rule.required(),
+    },
+    {
+      name: 'intro', title: 'Texte d\'introduction (optionnel)', type: 'string',
+    },
+    {
+      name: 'sejours', title: 'Séjours disponibles',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'sejour',
+        fields: [
+          {
+            name: 'dates', title: 'Dates', type: 'string',
+            validation: Rule => Rule.required(),
+            description: 'Ex : "23 — 31 janvier 2026"',
+          },
+          {
+            name: 'destination', title: 'Destination (si différente de la page)',
+            type: 'string',
+            description: 'Ex : "Los Roques, Venezuela" — laisser vide si identique',
+          },
+          {
+            name: 'description', title: 'Description courte', type: 'string',
+            description: 'Ex : "JB Vidal présent 3 jours + guide local 3 jours"',
+          },
+          {
+            name: 'prix', title: 'Prix indicatif', type: 'string',
+            description: 'Ex : "À partir de 2 800 €" — laisser vide si sur devis',
+          },
+          {
+            name: 'placesTotal', title: 'Nombre de places au total', type: 'number',
+            description: 'Ex : 4',
+          },
+          {
+            name: 'placesDispo', title: 'Places encore disponibles', type: 'number',
+            description: 'Mettre 0 pour afficher "Complet"',
+          },
+          {
+            name: 'statut', title: 'Statut',
+            type: 'string',
+            options: {
+              list: [
+                { title: '🟢 Disponible',       value: 'disponible'     },
+                { title: '🟡 Quelques places',   value: 'peu-de-places'  },
+                { title: '🔴 Complet',           value: 'complet'        },
+                { title: '⏳ Liste d\'attente',  value: 'liste-attente'  },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'disponible',
+          },
+        ],
+        preview: {
+          select: { dates: 'dates', dest: 'destination', statut: 'statut', dispo: 'placesDispo' },
+          prepare: ({ dates, dest, statut, dispo }) => {
+            const icons = { disponible: '🟢', 'peu-de-places': '🟡', complet: '🔴', 'liste-attente': '⏳' }
+            return {
+              title:    `${icons[statut] || ''} ${dates || ''}`,
+              subtitle: [dest, dispo != null ? `${dispo} place(s) dispo` : ''].filter(Boolean).join(' · '),
+            }
+          },
+        },
+      }],
+    },
+    {
+      name: 'btnTexte', title: 'Bouton — texte', type: 'string',
+      initialValue: 'Me contacter pour réserver',
+    },
+    {
+      name: 'btnLien', title: 'Bouton — URL', type: 'string',
+      initialValue: '/contact',
+    },
+    fondField('dark'),
+  ],
+  preview: {
+    select: { titre: 'titre', sejours: 'sejours' },
+    prepare: ({ titre, sejours }) => ({
+      title:    `📅 Dates — ${titre || ''}`,
+      subtitle: `${sejours?.length || 0} séjour(s)`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -1150,4 +1305,6 @@ export const allSectionTypes = [
   sectionProgrammeTexte,
   sectionProgrammeCartes,
   sectionSelection,
+  sectionBilan,
+  sectionDates,
 ]

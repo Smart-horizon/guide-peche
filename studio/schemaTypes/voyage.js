@@ -1,14 +1,17 @@
+import { allSectionTypes } from './sections.js'
+
 export default {
   name: 'voyage',
   title: 'Voyages',
   type: 'document',
   icon: () => '✈️',
   groups: [
-    { name: 'contenu', title: '📝 Contenu' },
-    { name: 'infos', title: '🗺️ Infos pratiques' },
-    { name: 'seo', title: '🔍 SEO' },
+    { name: 'page',    title: '🏗️ Page Builder' },
+    { name: 'contenu', title: '📝 Infos de base' },
+    { name: 'seo',     title: '🔍 SEO' },
   ],
   fields: [
+    // ── Identité ────────────────────────────────────────────────────────────
     {
       name: 'title',
       title: 'Titre du voyage',
@@ -34,59 +37,80 @@ export default {
     },
     {
       name: 'image',
-      title: 'Photo principale',
+      title: 'Photo principale (carte des voyages)',
       type: 'image',
       group: 'contenu',
       options: { hotspot: true },
-    },
-    {
-      name: 'description',
-      title: 'Description',
-      type: 'array',
-      group: 'contenu',
-      of: [{ type: 'block' }],
-    },
-    {
-      name: 'periode',
-      title: 'Période',
-      type: 'string',
-      group: 'infos',
-      description: 'Ex: Novembre à mars',
-    },
-    {
-      name: 'prix',
-      title: 'Prix indicatif',
-      type: 'string',
-      group: 'infos',
-      description: 'Ex: À partir de 3 500 € / personne',
+      description: 'Utilisée dans les grilles de destinations sur d\'autres pages',
     },
     {
       name: 'especes',
       title: 'Espèces ciblées',
       type: 'string',
-      group: 'infos',
-      description: 'Ex: Truite de mer, Dorado, Bonefish',
+      group: 'contenu',
+      description: 'Ex: Truite de mer · Bonefish · Permit · Tarpon',
     },
     {
+      name: 'periode',
+      title: 'Période idéale',
+      type: 'string',
+      group: 'contenu',
+      description: 'Ex: Janvier à mars',
+    },
+    {
+      name: 'prix',
+      title: 'Prix indicatif',
+      type: 'string',
+      group: 'contenu',
+      description: 'Ex: À partir de 3 500 € / personne',
+    },
+
+    // ── Page Builder ─────────────────────────────────────────────────────────
+    {
+      name: 'pagebuilder',
+      title: 'Sections de la page',
+      description: '✋ Glissez-déposez pour réorganiser · Cliquez "+" pour ajouter une section',
+      type: 'array',
+      group: 'page',
+      of: allSectionTypes.map(s => ({ type: s.name })),
+    },
+
+    // ── SEO ──────────────────────────────────────────────────────────────────
+    {
       name: 'seoTitle',
-      title: 'Titre SEO',
+      title: 'Titre SEO (balise <title>)',
       type: 'string',
       group: 'seo',
+      description: 'Laissez vide pour utiliser le titre du Hero',
       validation: Rule => Rule.max(65).warning('Idéalement moins de 65 caractères'),
     },
     {
       name: 'seoDescription',
-      title: 'Description SEO',
+      title: 'Description SEO (meta description)',
       type: 'text',
       rows: 3,
       group: 'seo',
       validation: Rule => Rule.max(160).warning('Idéalement moins de 160 caractères'),
     },
+    {
+      name: 'ogImage',
+      title: 'Image de partage (Open Graph)',
+      type: 'image',
+      group: 'seo',
+      options: { hotspot: true },
+      description: 'Image affichée sur Facebook, WhatsApp, etc. (1200×630px recommandé)',
+    },
   ],
+
   preview: {
-    select: { title: 'title', subtitle: 'pays', media: 'image' },
-    prepare({ title, subtitle, media }) {
-      return { title, subtitle: subtitle ? `✈️ ${subtitle}` : '', media }
+    select: { title: 'title', subtitle: 'pays', sections: 'pagebuilder', media: 'image' },
+    prepare({ title, subtitle, sections, media }) {
+      const nb = sections?.length ?? 0
+      return {
+        title,
+        subtitle: `✈️ ${subtitle ?? ''} · ${nb} section${nb > 1 ? 's' : ''}`,
+        media,
+      }
     },
   },
 }
