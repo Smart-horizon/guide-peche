@@ -10,7 +10,8 @@ import pageTemoignages from './pageTemoignages'
 import {
   sectionHero, sectionIntro, sectionTitre, sectionCards, sectionTexte,
   sectionTexteImage, sectionGalerie, sectionVideo, sectionStats,
-  sectionCta, sectionBanniere, sectionCarrousel3Images, sectionProgramme,
+  sectionCta, sectionBanniere, sectionCarrousel3Images,
+  sectionProgramme, sectionProgrammeTexte,
 } from './sections.js'
 
 export const schemaTypes = [
@@ -38,4 +39,5 @@ export const schemaTypes = [
   sectionBanniere,
   sectionCarrousel3Images,
   sectionProgramme,
+  sectionProgrammeTexte,
 ]

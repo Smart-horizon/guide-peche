@@ -657,7 +657,7 @@ export const sectionCarrousel3Images = {
 // ─────────────────────────────────────────────────────────────────────────────
 export const sectionProgramme = {
   name: 'sectionProgramme',
-  title: '🗓️ Programme / Étapes',
+  title: '🗓️ Programme / Étapes avec image',
   type: 'object',
   fields: [
     {
@@ -732,6 +732,103 @@ export const sectionProgramme = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 13 — PROGRAMME SANS IMAGE (grille de cartes texte)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionProgrammeTexte = {
+  name: 'sectionProgrammeTexte',
+  title: '🗓️ Programme / Étapes sans image',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Libellé (au-dessus du titre)', type: 'string',
+      description: 'Ex : "Programme"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section', type: 'string',
+      description: 'Ex : "Programme du stage"',
+    },
+    {
+      name: 'intro', title: 'Introduction (optionnel)', type: 'text', rows: 2,
+    },
+    {
+      name: 'colonnes', title: 'Colonnes / Blocs',
+      type: 'array',
+      description: 'Chaque bloc = une carte avec un label et une liste. 2 ou 4 colonnes recommandées.',
+      validation: Rule => Rule.min(1).error('Au moins une colonne requise'),
+      of: [{
+        type: 'object',
+        name: 'colonne',
+        fields: [
+          {
+            name: 'label', title: 'Titre du bloc',
+            type: 'string',
+            description: 'Ex : "Journée 1", "Techniques enseignées", "Inclus / Non inclus"',
+            validation: Rule => Rule.required(),
+          },
+          {
+            name: 'style', title: 'Style de la liste',
+            type: 'string',
+            options: {
+              list: [
+                { title: '— Tirets (standard)',     value: 'normal' },
+                { title: '✓ / ✗  Inclus / Exclus', value: 'check'  },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'normal',
+          },
+          {
+            name: 'items', title: 'Éléments',
+            type: 'array',
+            validation: Rule => Rule.min(1).error('Au moins un élément requis'),
+            of: [{
+              type: 'object',
+              name: 'item',
+              fields: [
+                {
+                  name: 'texte', title: 'Texte',
+                  type: 'string',
+                  validation: Rule => Rule.required(),
+                },
+                {
+                  name: 'inclus',
+                  title: '✓ Inclus (décocher pour ✗ Non inclus)',
+                  type: 'boolean',
+                  description: 'Uniquement utilisé si le style du bloc est "Inclus / Exclus"',
+                  initialValue: true,
+                },
+              ],
+              preview: {
+                select: { title: 'texte', inclus: 'inclus' },
+                prepare: ({ title, inclus }) => ({
+                  title,
+                  subtitle: inclus === false ? '✗' : '✓',
+                }),
+              },
+            }],
+          },
+        ],
+        preview: {
+          select: { label: 'label', items: 'items' },
+          prepare: ({ label, items }) => ({
+            title: label || '(sans titre)',
+            subtitle: `${items?.length || 0} élément(s)`,
+          }),
+        },
+      }],
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { titre: 'titre', colonnes: 'colonnes' },
+    prepare: ({ titre, colonnes }) => ({
+      title: `🗓️ Programme sans image — ${titre || ''}`,
+      subtitle: `${colonnes?.length || 0} colonne(s)`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -747,4 +844,5 @@ export const allSectionTypes = [
   sectionBanniere,
   sectionCarrousel3Images,
   sectionProgramme,
+  sectionProgrammeTexte,
 ]

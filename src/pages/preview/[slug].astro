@@ -342,6 +342,33 @@ const heroBg = (image: any) => {
       </section>
     )}
 
+    {s._type === 'sectionProgrammeTexte' && (
+      <section class={`section pb-prog-txt ${bg(s.fond)||'section--sand'}`}>
+        <div class="container">
+          {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+          {s.titre   && <h2 class="pb-prog__h2">{s.titre}</h2>}
+          {s.intro   && <p class="pb-prog__intro">{s.intro}</p>}
+          <div class="pb-prog-txt__grid">
+            {s.colonnes?.map((col: any) => {
+              const isCheck = stegaClean(col.style) === 'check'
+              return (
+                <div class="pb-prog-txt__card">
+                  {col.label && <div class="pb-prog-txt__label">{col.label}</div>}
+                  <ul class:list={['pb-prog-txt__list', isCheck && 'pb-prog-txt__list--check']}>
+                    {col.items?.map((item: any) => (
+                      <li class:list={[isCheck && (item.inclus !== false ? 'ok' : 'no')]}>
+                        {item.texte}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+    )}
+
     {s._type === 'sectionCta' && (
       <section class={`section pb-cta ${bg(s.style)||'section--dark'}`}>
         <div class="container pb-cta__inner">
@@ -578,6 +605,18 @@ main > *:first-child { padding-top: calc(var(--header-height) + 1.8rem) !importa
   .pb-prog__body { padding:2rem; }
 }
 @media (max-width:560px) { .pb-prog__body { padding:1.75rem 1.5rem; } }
+
+/* ── PROGRAMME SANS IMAGE ── */
+.pb-prog-txt__grid { display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem; }
+.pb-prog-txt__card { background:white;border-radius:6px;padding:1.5rem;box-shadow:0 2px 12px rgba(27,94,138,0.07); }
+.pb-prog-txt__label { font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--color-ocean-main);font-weight:600;margin-bottom:1rem; }
+.pb-prog-txt__list { list-style:none;padding:0;margin:0; }
+.pb-prog-txt__list li { font-size:0.88rem;line-height:1.65;color:var(--color-text);padding:0.35rem 0 0.35rem 1.3rem;border-bottom:1px solid #f0eff0;position:relative; }
+.pb-prog-txt__list li::before { content:'—';position:absolute;left:0;color:var(--color-ocean-light);font-size:0.75rem; }
+.pb-prog-txt__list li:last-child { border-bottom:none; }
+.pb-prog-txt__list--check li.ok::before { content:'✓';color:#22c55e; }
+.pb-prog-txt__list--check li.no::before { content:'✗';color:#ef4444; }
+@media (max-width:768px) { .pb-prog-txt__grid { grid-template-columns:1fr; } }
 
 /* ── CTA ── */
 .section--dark.pb-cta { background:var(--color-ocean); }
