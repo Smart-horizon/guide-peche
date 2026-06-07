@@ -1,4 +1,5 @@
 import page from './page'
+import navigation from './navigation'
 import prestation from './prestation'
 import voyage from './voyage'
 import temoignage from './temoignage'
@@ -17,6 +18,7 @@ import {
 
 export const schemaTypes = [
   // Documents
+  navigation,
   accueil,
   sectionAccueil,
   pageTemoignages,

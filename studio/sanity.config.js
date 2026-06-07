@@ -60,6 +60,16 @@ const customStructure = (S, context) =>
             ])
         }),
 
+      // 🧭 Menu de navigation (singleton)
+      S.listItem()
+        .title('🧭 Menu de navigation')
+        .child(
+          S.document()
+            .schemaType('navigation')
+            .documentId('navigation')
+            .title('Menu de navigation')
+        ),
+
       // ⚙️ Paramètres du site (singleton)
       S.listItem()
         .title('⚙️ Paramètres du site')

@@ -1,5 +1,8 @@
 ---
-const navLinks = [
+import { client } from '../lib/sanity.js'
+
+// ── Fallback hardcodé — utilisé si le document "navigation" n'existe pas encore dans Sanity
+const NAV_FALLBACK = [
   { label: 'Accueil', href: '/' },
   { label: 'Le guide', href: '/jean-baptiste-vidal-moniteur-guide-de-peche' },
   {
@@ -72,6 +75,17 @@ const navLinks = [
     ],
   },
 ]
+
+// ── Fetch Sanity — si le document n'existe pas encore, on utilise le fallback
+let navLinks = NAV_FALLBACK
+try {
+  const nav = await client.fetch(
+    `*[_type == "navigation" && _id == "navigation"][0]{ items }`
+  )
+  if (nav?.items?.length) navLinks = nav.items
+} catch (e) {
+  // Sanity non disponible au build → fallback silencieux
+}
 
 const { pathname } = Astro.url
 ---
