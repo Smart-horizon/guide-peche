@@ -179,7 +179,7 @@ async function cards2(d) {
 
 async function galerie(imgs) {
   const photos = (await Promise.all(imgs.map(async i => await img(i)))).filter(Boolean)
-  return { _type: 'sectionGalerie', _key: key('gal'), photos, fond: 'dark', colonnes: 3 }
+  return { _type: 'sectionGalerie', _key: key('gal'), photos, fond: 'dark', colonnes: '3' }
 }
 
 async function carrousel(imgs, titre = '') {
