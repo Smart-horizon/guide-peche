@@ -189,6 +189,32 @@ export const sectionIntro = {
         },
       ],
     },
+    {
+      name: 'boutons',
+      title: 'Boutons de l\'info card',
+      type: 'array',
+      description: 'Boutons bleus affichés en bas de l\'encart — ex : "Vérifier les disponibilités → /contact"',
+      of: [{
+        type: 'object',
+        name: 'bouton',
+        fields: [
+          {
+            name: 'texte', title: 'Texte du bouton',
+            type: 'string',
+            validation: Rule => Rule.required(),
+          },
+          {
+            name: 'lien', title: 'URL de destination',
+            type: 'string',
+            description: 'Ex : /contact · /tarifs · /disponibilites-guidages · tel:0687303456',
+            validation: Rule => Rule.required(),
+          },
+        ],
+        preview: {
+          select: { title: 'texte', subtitle: 'lien' },
+        },
+      }],
+    },
     fondField('white'),
   ],
   preview: {
