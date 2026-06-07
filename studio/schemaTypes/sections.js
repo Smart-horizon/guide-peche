@@ -467,23 +467,32 @@ export const sectionVideo = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SECTION 8 — STATS / CHIFFRES CLÉS
+// SECTION 8 — INFOS CLÉS BANDEAU
 // ─────────────────────────────────────────────────────────────────────────────
 export const sectionStats = {
   name: 'sectionStats',
-  title: '📊 Chiffres clés',
+  title: '📋 Infos clés — Bandeau',
   type: 'object',
   fields: [
     {
-      name: 'stats', title: 'Chiffres',
+      name: 'stats', title: 'Infos',
       type: 'array',
+      description: 'Chaque info = un titre en serif + un sous-titre en petites majuscules. 2 à 5 items recommandés.',
       of: [
         {
           type: 'object',
           name: 'stat',
           fields: [
-            { name: 'nombre', title: 'Chiffre / valeur', type: 'string', description: 'Ex : 21 ans · 12+ · 300+' },
-            { name: 'label',  title: 'Libellé',           type: 'string', description: 'Ex : de guidage' },
+            {
+              name: 'nombre', title: 'Titre principal',
+              type: 'string',
+              description: 'Ex : "Printemps – Automne", "Places limitées", "17 ans"',
+            },
+            {
+              name: 'label', title: 'Sous-titre (petites majuscules)',
+              type: 'string',
+              description: 'Ex : "SAISON SELON CONDITIONS", "DISPONIBILITÉS RÉDUITES"',
+            },
           ],
           preview: {
             select: { title: 'nombre', subtitle: 'label' },
@@ -496,7 +505,7 @@ export const sectionStats = {
   preview: {
     select: { stats: 'stats' },
     prepare: ({ stats }) => ({
-      title: `📊 Chiffres clés — ${stats?.length || 0} stat(s)`,
+      title: `📋 Infos clés — ${stats?.length || 0} item(s)`,
     }),
   },
 }
