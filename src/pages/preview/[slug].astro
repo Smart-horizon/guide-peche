@@ -64,7 +64,6 @@ const QUERIES: Record<string, string> = {
       photos[]{ asset->{ _id, url } },
       images[]{ asset->{ _id, url } },
       cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
-      etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
     },
     seoTitle, seoDescription, ogImage
   }`,
