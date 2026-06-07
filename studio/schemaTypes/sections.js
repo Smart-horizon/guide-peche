@@ -895,6 +895,116 @@ export const sectionProgrammeCartes = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 15 — SÉLECTION (image + texte alternés)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionSelection = {
+  name: 'sectionSelection',
+  title: '🗂️ Sélection (image + texte alternés)',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Libellé (au-dessus du titre)', type: 'string',
+      description: 'Ex : "Les plans d\'eau", "Sélection de rivières"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section', type: 'string',
+    },
+    {
+      name: 'intro', title: 'Introduction (optionnel)', type: 'text', rows: 2,
+    },
+    {
+      name: 'styleCorps',
+      title: 'Fond du bloc texte',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🟫 Beige (sable) — style réservoir', value: 'sand'  },
+          { title: '⬜ Blanc — style rivières',           value: 'white' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'sand',
+    },
+    {
+      name: 'items', title: 'Éléments de la sélection',
+      type: 'array',
+      description: 'L\'image alterne automatiquement gauche / droite.',
+      validation: Rule => Rule.min(1),
+      of: [{
+        type: 'object',
+        name: 'selectionItem',
+        fields: [
+          {
+            name: 'tag', title: 'Libellé / région',
+            type: 'string',
+            description: 'Ex : "Finistère (29)", "Côtes-d\'Armor (22)"',
+          },
+          {
+            name: 'titre', title: 'Titre (h3)',
+            type: 'string',
+            validation: Rule => Rule.required(),
+          },
+          {
+            name: 'texte', title: 'Description',
+            type: 'array',
+            of: [{
+              type: 'block',
+              styles: [{ title: 'Normal', value: 'normal' }],
+              marks: {
+                decorators: [
+                  { title: 'Gras',    value: 'strong' },
+                  { title: 'Italique', value: 'em' },
+                ],
+              },
+            }],
+          },
+          {
+            name: 'image', title: 'Photo',
+            type: 'image',
+            options: { hotspot: true },
+            fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
+            validation: Rule => Rule.required(),
+          },
+          {
+            name: 'pills', title: 'Tags / techniques (optionnel)',
+            type: 'array',
+            of: [{ type: 'string' }],
+            description: 'Petites pastilles en bas — ex : "Sèche", "Nymphe au fil", "Streamer"',
+          },
+          {
+            name: 'infos', title: 'Infos clés (optionnel)',
+            type: 'array',
+            of: [{
+              type: 'object',
+              name: 'infoItem',
+              fields: [
+                { name: 'label',  title: 'Label',  type: 'string' },
+                { name: 'valeur', title: 'Valeur', type: 'string' },
+              ],
+              preview: {
+                select: { title: 'label', subtitle: 'valeur' },
+              },
+            }],
+            description: 'Grille d\'infos clés en bas — ex : "Surface → 9 hectares"',
+          },
+        ],
+        preview: {
+          select: { title: 'titre', subtitle: 'tag', media: 'image' },
+        },
+      }],
+    },
+    fondField('white'),
+  ],
+  preview: {
+    select: { titre: 'titre', items: 'items' },
+    prepare: ({ titre, items }) => ({
+      title: `🗂️ Sélection — ${titre || ''}`,
+      subtitle: `${items?.length || 0} élément(s)`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -912,4 +1022,5 @@ export const allSectionTypes = [
   sectionProgramme,
   sectionProgrammeTexte,
   sectionProgrammeCartes,
+  sectionSelection,
 ]

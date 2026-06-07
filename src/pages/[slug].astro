@@ -368,6 +368,53 @@ const heroBg = (image: any) => {
       </section>
     )}
 
+    {/* ════════════ SÉLECTION ════════════ */}
+    {s._type === 'sectionSelection' && (
+      <section class={`section pb-sel ${bg(s.fond)||'section--white'}`}>
+        <div class="container">
+          {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+          {s.titre   && <h2 class="pb-prog__h2">{s.titre}</h2>}
+          {s.intro   && <p class="pb-prog__intro">{s.intro}</p>}
+          <div class="pb-sel__list">
+            {s.items?.map((item: any, i: number) => {
+              const imgUrl = item.image?.asset
+                ? urlFor(item.image).width(900).height(700).fit('crop').url()
+                : null
+              const isReverse = i % 2 === 1
+              const bodySand  = stegaClean(s.styleCorps) !== 'white'
+              return (
+                <div class:list={['pb-sel__block', isReverse && 'pb-sel__block--rev']}>
+                  <div class="pb-sel__img">
+                    {imgUrl && <img src={imgUrl} alt={item.image?.alt || item.titre || ''} loading="lazy" />}
+                  </div>
+                  <div class:list={['pb-sel__body', bodySand && 'pb-sel__body--sand']}>
+                    {item.tag && <p class="pb-sel__tag">{item.tag}</p>}
+                    <h3 class="pb-sel__h3">{item.titre}</h3>
+                    <div class="pb-sel__text prose" set:html={blocks(item.texte)} />
+                    {item.pills?.length > 0 && (
+                      <ul class="pb-sel__pills">
+                        {item.pills.map((p: string) => <li>{p}</li>)}
+                      </ul>
+                    )}
+                    {item.infos?.length > 0 && (
+                      <div class="pb-sel__infos">
+                        {item.infos.map((inf: any) => (
+                          <div class="pb-sel__info-item">
+                            <span class="pb-sel__info-lbl">{inf.label}</span>
+                            <span class="pb-sel__info-val">{inf.valeur}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+    )}
+
     {/* ════════════ CTA FINAL ════════════ */}
     {s._type === 'sectionCta' && (
       <section class={`section pb-cta ${bg(s.style)||'section--dark'}`}>
@@ -913,6 +960,69 @@ const heroBg = (image: any) => {
 }
 @media (max-width: 560px) {
   .pb-prog__body { padding: 1.75rem 1.5rem; }
+}
+
+/* ── SÉLECTION ── */
+.pb-sel__list { display: flex; flex-direction: column; gap: 3rem; margin-top: 2rem; }
+.pb-sel__block {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-radius: 8px; overflow: hidden;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+.pb-sel__block--rev .pb-sel__img  { order: 2; }
+.pb-sel__block--rev .pb-sel__body { order: 1; }
+.pb-sel__img { overflow: hidden; min-height: 400px; }
+.pb-sel__img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.5s ease;
+}
+.pb-sel__block:hover .pb-sel__img img { transform: scale(1.04); }
+.pb-sel__body {
+  padding: 2.5rem 3rem; background: white;
+  display: flex; flex-direction: column;
+}
+.pb-sel__body--sand { background: var(--color-sand); }
+.pb-sel__tag {
+  font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--color-ocean-main); font-weight: 600; margin-bottom: 0.4rem;
+}
+.pb-sel__h3 {
+  font-size: 1.35rem; margin-bottom: 1rem; color: var(--color-ocean); line-height: 1.25;
+}
+.pb-sel__text :global(p) {
+  font-size: 0.88rem; line-height: 1.8; color: var(--color-text-muted); margin-bottom: 0.8rem;
+}
+.pb-sel__text :global(p:last-child) { margin-bottom: 0; }
+/* Pills (tags techniques) */
+.pb-sel__pills {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+  list-style: none; padding: 0; margin-top: 1.25rem;
+}
+.pb-sel__pills li {
+  font-size: 0.72rem; background: rgba(27,94,138,0.08); color: var(--color-ocean);
+  padding: 0.3rem 0.75rem; border-radius: 2px; font-weight: 500; letter-spacing: 0.05em;
+}
+/* Infos clés grid */
+.pb-sel__infos {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem;
+  margin-top: 1.5rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1.5rem;
+}
+.pb-sel__info-item { display: flex; flex-direction: column; gap: 0.15rem; }
+.pb-sel__info-lbl {
+  font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--color-ocean-main); font-weight: 700;
+}
+.pb-sel__info-val { font-size: 0.84rem; color: var(--color-text); font-weight: 500; line-height: 1.4; }
+@media (max-width: 900px) {
+  .pb-sel__block { grid-template-columns: 1fr; }
+  .pb-sel__block--rev .pb-sel__img,
+  .pb-sel__block--rev .pb-sel__body { order: unset; }
+  .pb-sel__img { min-height: 260px; }
+  .pb-sel__body { padding: 2rem; }
+}
+@media (max-width: 560px) {
+  .pb-sel__infos { grid-template-columns: 1fr; }
+  .pb-sel__body { padding: 1.5rem; }
 }
 
 /* ── PROGRAMME CARTES style 2 ── */
