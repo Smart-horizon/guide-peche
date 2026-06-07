@@ -788,7 +788,7 @@ export const sectionProgrammeTexte = {
               fields: [
                 {
                   name: 'texte', title: 'Texte',
-                  type: 'string',
+                  type: 'text', rows: 2,
                   validation: Rule => Rule.required(),
                 },
                 {
