@@ -233,7 +233,7 @@ async function buildLosRoques() {
         sousTitre: 'Parc national des Caraïbes, 3ème destination mondiale pour le bonefish. Bonefish, tarpon, permit et plus de 12 espèces capturables à la mouche.',
         btnTexte:  'Réserver un séjour',
       }),
-      image: await lr(0, 'Los Roques Venezuela — pêche à la mouche'),
+      image: await img('/images/E16.avif', 'Los Roques Venezuela — pêche à la mouche'),
     },
 
     // ── 2. STATS ─────────────────────────────────────────────────────────────
@@ -272,7 +272,7 @@ J'emmène des groupes sur place lors de séjours encadrés en janvier et févrie
 La situation géographique proche de l'équateur garantit un ensoleillement presque toute l'année. Les cyclones y sont rares, les alizés fréquents. Le parc national interdit la pêche commerciale intensive, ce qui explique des densités de poissons rarement vues ailleurs dans les Caraïbes.
 
 Depuis Gran Roque, les bateaux partent chaque matin vers de nouveaux secteurs. Des dizaines de kilomètres de flats sont explorés chaque jour, souvent sans croiser d'autres pêcheurs.`,
-      img:      '/scraped/_los-roques-venezuela_1.png',
+      img:      '/images/E2.avif',
       alt:      'Archipel de Los Roques — flats et mangroves',
       position: 'right',
       fond:     'white',
@@ -283,7 +283,7 @@ Depuis Gran Roque, les bateaux partent chaque matin vers de nouveaux secteurs. D
       eyebrow:  'BONEFISH · TARPON · PERMIT · CARANGUES · +',
       titre:    'Une destination multi-espèces unique',
       intro:    'En plus de la bonne densité de gros bonefish, vous pourrez capturer à la mouche une douzaine d\'espèces de poissons, dont bien entendu le tarpon et le permit. Notre guide est également spécialisé dans la recherche des poissons perroquets et balistes (trigger fish).',
-      img:      '/scraped/_los-roques-venezuela_2.png',
+      img:      '/images/E6.avif',
       alt:      'Bonefish capturé sur les flats de Los Roques',
       colonnes: '3',
       fond:     'dark',
@@ -311,8 +311,8 @@ Depuis Gran Roque, les bateaux partent chaque matin vers de nouveaux secteurs. D
       eyebrow:  'MÉTÉO & CONDITIONS',
       titre:    'Pêchable toute l\'année',
       intro:    'Il est possible de pêcher à Los Roques toute l\'année grâce à sa situation géographique, proche de l\'équateur. Les cyclones y sont rares, les alizés fréquents.',
-      img:      '/scraped/_los-roques-venezuela_3.png',
-      alt:      'Pêche à la mouche à Los Roques',
+      img:      '/images/E4.avif',
+      alt:      'Pêche à la mouche à Los Roques — saison',
       colonnes: '2',
       fond:     'dark',
       note:     'Nos séjours accompagnés sont planifiés en Janvier/Février 2026, conditions optimales pour une session multi-espèces avec de belles chances sur le tarpon.',
@@ -340,13 +340,13 @@ Depuis Gran Roque, les bateaux partent chaque matin vers de nouveaux secteurs. D
           titre: 'Jour 1 — Vol Paris → Caracas',
           tag:   'Départ',
           texte: `Départ de Paris en fin d'après-midi ou en soirée. Vol direct ou avec une escale selon les options disponibles. Arrivée à Caracas en soirée, nuit à l'hôtel (non inclus si arrivée tardive — transfert organisé).`,
-          img:   '/scraped/_los-roques-venezuela_4.png',
+          img:   '/images/E7.avif',
         },
         {
           titre: 'Jour 2 — Vol Los Roques · Installation · Première pêche',
           tag:   'Arrivée',
           texte: `Vol tôt le matin vers Los Roques (40 minutes). Installation à la posada à Gran Roque. Revue du matériel, briefing sur les espèces et les techniques avec Jean-Baptiste. Première demi-journée de pêche possible selon les conditions et l'heure d'arrivée.`,
-          img:   '/scraped/_los-roques-venezuela_5.png',
+          img:   '/images/E8.avif',
         },
         {
           titre: 'Jours 3 à 8 — Pêche guidée',
@@ -429,14 +429,15 @@ Jean-Baptiste est présent les 3 premières journées pour guider et coacher. Un
 
     // ── 10. GALERIE ──────────────────────────────────────────────────────────
     await galerie([
-      '/scraped/_los-roques-venezuela_6.png',
-      '/scraped/_los-roques-venezuela_7.png',
-      '/scraped/_los-roques-venezuela_8.png',
-      '/scraped/_los-roques-venezuela_9.png',
-      '/scraped/_los-roques-venezuela_10.png',
-      '/scraped/_los-roques-venezuela_11.png',
-      '/scraped/_los-roques-venezuela_12.png',
-      '/scraped/_los-roques-venezuela_13.png',
+      '/images/E7.avif',  '/images/E8.avif',  '/images/E9.avif',
+      '/images/E10.avif', '/images/E11.avif', '/images/E12.avif',
+      '/images/E13.avif', '/images/E14.avif', '/images/E15.avif',
+      '/images/E17.avif', '/images/E18.avif', '/images/E19.avif',
+      '/images/E20.avif', '/images/E21.avif', '/images/E22.avif',
+      '/images/E23.avif', '/images/E24.avif', '/images/E25.avif',
+      '/images/E26.avif', '/images/E27.avif', '/images/E28.avif',
+      '/images/E29.avif', '/images/E30.avif', '/images/E31.avif',
+      '/images/E32.avif',
     ]),
 
     // ── 11. DATES HOSTED TRIPS ───────────────────────────────────────────────
