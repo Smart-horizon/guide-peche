@@ -101,7 +101,7 @@ async function grilleCartes(d) {
   return {
     _type: 'sectionProgrammeCartes', _key: key('progc'),
     eyebrow: d.eyebrow || '', titre: d.titre || '', intro: d.intro || '',
-    styleMisePage: d.style || null,
+    ...(d.style ? { styleMisePage: d.style } : {}),
     image: d.img ? await img(d.img, d.alt || d.titre || '') : null,
     colonnes: d.colonnes || '3',
     note: d.note || null, btnTexte: d.btnTexte || null, btnLien: d.btnLien || null,
