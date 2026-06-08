@@ -34,9 +34,11 @@ const QUERIES: Record<string, string> = {
     pagebuilder[]{
       ...,
       image{ asset->{ _id, url, metadata{ dimensions } } },
+      btnFichier{ asset->{ _id, url } },
       photos[]{ asset->{ _id, url } },
       images[]{ asset->{ _id, url } },
       cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+      etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
     },
     seoTitle, seoDescription, ogImage
   }`,
@@ -45,6 +47,7 @@ const QUERIES: Record<string, string> = {
     pagebuilder[]{
       ...,
       image{ asset->{ _id, url, metadata{ dimensions } } },
+      btnFichier{ asset->{ _id, url } },
       photos[]{ asset->{ _id, url } },
       images[]{ asset->{ _id, url } },
       cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
@@ -445,10 +448,10 @@ const heroBg = (image: any) => {
             </div>
             {/* Note de bas de section */}
             {s.note && <p class="pb-prog-cart__note">{s.note}</p>}
-            {/* Bouton optionnel */}
-            {s.btnTexte && s.btnLien && (
+            {/* Bouton optionnel — fichier PDF Sanity ou URL externe */}
+            {s.btnTexte && (s.btnFichier?.asset?.url || s.btnLien) && (
               <div class="pb-prog-cart__btn-wrap">
-                <a href={s.btnLien} class="btn-download">
+                <a href={s.btnFichier?.asset?.url || s.btnLien} class="btn-download" download={!!s.btnFichier?.asset?.url}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   {s.btnTexte}
                 </a>
@@ -548,8 +551,8 @@ const heroBg = (image: any) => {
           <div class="pb-dates__grid">
             {s.sejours?.map((sej: any) => {
               const statut = stegaClean(sej.statut) || 'disponible'
-              const icons: Record<string,string> = { disponible: '🟢', 'peu-de-places': '🟡', complet: '🔴', 'liste-attente': '⏳' }
-              const labels: Record<string,string> = { disponible: 'Disponible', 'peu-de-places': 'Quelques places', complet: 'Complet', 'liste-attente': "Liste d'attente" }
+              const icons = { disponible: '🟢', 'peu-de-places': '🟡', complet: '🔴', 'liste-attente': '⏳' } as const
+              const labels = { disponible: 'Disponible', 'peu-de-places': 'Quelques places', complet: 'Complet', 'liste-attente': "Liste d'attente" } as const
               return (
                 <div class="pb-dates__card">
                   <div class="pb-dates__card-header">

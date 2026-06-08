@@ -1050,9 +1050,15 @@ export const sectionProgrammeCartes = {
       description: 'Ex : "Télécharger la fiche matériel (PDF)"',
     },
     {
-      name: 'btnLien', title: 'Bouton — URL (optionnel)',
+      name: 'btnFichier', title: 'Bouton — fichier PDF (optionnel)',
+      type: 'file',
+      options: { accept: '.pdf' },
+      description: '⬆️ Glissez-déposez votre PDF ici — prioritaire sur l\'URL ci-dessous',
+    },
+    {
+      name: 'btnLien', title: 'Bouton — URL externe (optionnel)',
       type: 'string',
-      description: 'URL ou chemin — ex : "/fiche-materiel-los-roques.pdf"',
+      description: 'Utilisé seulement si aucun fichier n\'est uploadé ci-dessus',
     },
     fondField('sand'),
   ],
