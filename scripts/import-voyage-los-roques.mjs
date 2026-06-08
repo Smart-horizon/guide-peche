@@ -486,16 +486,27 @@ async function main() {
   const pb = await buildLosRoques()
   console.log(`\n📄 Import : los-roques-venezuela (${pb.length} sections)`)
 
-  const id = 'voyage-los-roques-venezuela'
-  await client.patch(id).set({
+  const id      = 'voyage-los-roques-venezuela'
+  const draftId = `drafts.${id}`
+  const data    = {
     pagebuilder: pb,
     especes:  'Bonefish · Tarpon · Permit · Carangues',
     periode:  'Toute l\'année — séjours Jan. & Fév.',
     prix:     'Sur devis',
-  }).commit()
+  }
 
-  console.log('  ✅ Pagebuilder mis à jour')
-  console.log('\n✅ Import terminé.')
+  // Patch le document publié
+  await client.patch(id).set(data).commit()
+  console.log('  ✅ Document publié mis à jour')
+
+  // Supprime le brouillon obsolète s'il existe, pour éviter les conflits Studio
+  const draftExists = await client.fetch(`*[_id == $id][0]._id`, { id: draftId })
+  if (draftExists) {
+    await client.delete(draftId)
+    console.log('  🗑️  Brouillon obsolète supprimé')
+  }
+
+  console.log('\n✅ Import terminé. Le document est publié et propre.')
 }
 
 main().catch(err => {
