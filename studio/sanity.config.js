@@ -215,13 +215,10 @@ export default defineConfig({
               ? [{ title: doc.title || 'Prestation', href: `/${doc.slug.current}` }]
               : [],
           }),
-          // Voyages → /preview/* (SSR, supporte les brouillons)
+          // Voyages → page publiée (statique)
           voyage: (doc) => ({
             locations: doc?.slug?.current
-              ? [
-                  { title: '👁️ Aperçu brouillon', href: `/preview/${doc.slug.current}` },
-                  { title: '🌐 Page publiée',      href: `/${doc.slug.current}` },
-                ]
+              ? [{ title: doc.title || 'Voyage', href: `/${doc.slug.current}` }]
               : [],
           }),
           // Articles → page statique (pas de route preview pour le blog)
