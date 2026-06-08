@@ -89,10 +89,10 @@ function intro(d) {
 async function texteImage(d) {
   return {
     _type: 'sectionTexteImage', _key: key('ti'),
-    eyebrow: d.eyebrow || '', titre: d.titre || '',
+    ...(d.eyebrow ? { eyebrow: d.eyebrow } : {}),
+    ...(d.titre   ? { titre:   d.titre   } : {}),
     texte: blocks(d.texte),
-    image: d.img ? await img(d.img, d.alt || '') : null,
-    imagePosition: d.position || 'right',
+    ...(d.img ? { image: await img(d.img, d.alt || ''), imagePosition: d.position || 'right' } : {}),
     fond: d.fond || 'white',
   }
 }
@@ -102,9 +102,11 @@ async function grilleCartes(d) {
     _type: 'sectionProgrammeCartes', _key: key('progc'),
     eyebrow: d.eyebrow || '', titre: d.titre || '', intro: d.intro || '',
     ...(d.style ? { styleMisePage: d.style } : {}),
-    image: d.img ? await img(d.img, d.alt || d.titre || '') : null,
+    ...(d.img ? { image: await img(d.img, d.alt || d.titre || '') } : {}),
     colonnes: d.colonnes || '3',
-    note: d.note || null, btnTexte: d.btnTexte || null, btnLien: d.btnLien || null,
+    ...(d.note    ? { note:     d.note    } : {}),
+    ...(d.btnTexte ? { btnTexte: d.btnTexte } : {}),
+    ...(d.btnLien  ? { btnLien:  d.btnLien  } : {}),
     fond: d.fond || 'sand',
     items: (d.items || []).map(item => ({
       _type: 'carte', _key: key('carte'),
