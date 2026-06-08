@@ -471,9 +471,19 @@ export const sectionTexteImage = {
   title: '📰 Texte + Image',
   type: 'object',
   fields: [
+    {
+      name: 'eyebrow', title: 'Libellé au-dessus du titre (optionnel)',
+      type: 'string',
+      description: 'Ex : "Gran Roque" ou "L\'Archipel"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section (optionnel)',
+      type: 'string',
+      description: 'Si vide, le titre sera dans le texte riche ci-dessous',
+    },
     richText('texte', 'Texte'),
     {
-      name: 'image', title: 'Image', type: 'image',
+      name: 'image', title: 'Image (optionnel)', type: 'image',
       options: { hotspot: true },
       fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
     },
@@ -492,9 +502,9 @@ export const sectionTexteImage = {
     fondField('white'),
   ],
   preview: {
-    select: { pos: 'imagePosition', media: 'image' },
-    prepare: ({ pos, media }) => ({
-      title: `📰 Texte + Image (image ${pos === 'left' ? 'à gauche' : 'à droite'})`,
+    select: { titre: 'titre', eyebrow: 'eyebrow', pos: 'imagePosition', media: 'image' },
+    prepare: ({ titre, eyebrow, pos, media }) => ({
+      title: `📰 ${titre || eyebrow || 'Texte + Image'} (image ${pos === 'left' ? 'à gauche' : 'à droite'})`,
       media,
     }),
   },
