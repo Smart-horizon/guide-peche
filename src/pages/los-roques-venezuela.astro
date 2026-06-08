@@ -12,7 +12,6 @@ const doc = await stegaClient.fetch(`
       photos[]{ asset->{ _id, url } },
       etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
       items[],
-      colonnes[]{ ..., items[] },
       sejours[],
     },
     seoTitle, seoDescription, ogImage

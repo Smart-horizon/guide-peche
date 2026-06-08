@@ -52,7 +52,7 @@ const QUERIES: Record<string, string> = {
       images[]{ asset->{ _id, url } },
       cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
       etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
-      items[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+      items[],
     },
     seoTitle, seoDescription, ogImage
   }`,

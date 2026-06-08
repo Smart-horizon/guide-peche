@@ -104,7 +104,7 @@ async function grilleCartes(d) {
     styleMisePage: d.style || null,
     image: d.img ? await img(d.img, d.alt || d.titre || '') : null,
     colonnes: d.colonnes || '3',
-    note: d.note || '', btnTexte: d.btnTexte || '', btnLien: d.btnLien || '',
+    note: d.note || null, btnTexte: d.btnTexte || null, btnLien: d.btnLien || null,
     fond: d.fond || 'sand',
     items: (d.items || []).map(item => ({
       _type: 'carte', _key: key('carte'),
