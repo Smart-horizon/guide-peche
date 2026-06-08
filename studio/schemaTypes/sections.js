@@ -1352,6 +1352,64 @@ export const sectionDates = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 20 — CHOIX (lodges, options)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionChoix = {
+  name: 'sectionChoix',
+  title: '🏠 Choix (lodges, options)',
+  type: 'object',
+  fields: [
+    { name: 'eyebrow', title: 'Mention au-dessus du titre', type: 'string' },
+    { name: 'titre', title: 'Titre de la section', type: 'string', validation: Rule => Rule.required() },
+    { name: 'intro', title: 'Texte introductif', type: 'text', rows: 3 },
+    fondField('sand'),
+    {
+      name: 'options',
+      title: 'Options / Choix',
+      type: 'array',
+      description: '2 options recommandées (Villa Maria & Kau Tapen, etc.)',
+      of: [{
+        type: 'object',
+        name: 'option',
+        title: 'Option',
+        fields: [
+          { name: 'numero', title: 'Numéro (ex: "01")', type: 'string' },
+          { name: 'titre', title: 'Nom du lodge / option', type: 'string', validation: Rule => Rule.required() },
+          { name: 'tag', title: 'Sous-titre court (emplacement, spécificité)', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text', rows: 4 },
+          {
+            name: 'image', title: 'Photo du lodge',
+            type: 'image', options: { hotspot: true },
+            fields: [{ name: 'alt', type: 'string', title: 'Description' }],
+          },
+        ],
+        preview: {
+          select: { title: 'titre', subtitle: 'tag', media: 'image' },
+          prepare: ({ title, subtitle, media }) => ({ title: title || 'Option', subtitle, media }),
+        },
+      }],
+    },
+    {
+      name: 'galerie',
+      title: 'Galerie photos (optionnel — sous les choix)',
+      type: 'array',
+      description: '2 à 4 photos de l\'hébergement (intérieur, salle à manger...)',
+      of: [{
+        type: 'image', options: { hotspot: true },
+        fields: [{ name: 'alt', type: 'string', title: 'Description' }],
+      }],
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', opts: 'options' },
+    prepare: ({ titre, opts }) => ({
+      title: `🏠 Choix — ${titre || ''}`,
+      subtitle: `${opts?.length || 0} option(s)`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -1373,4 +1431,5 @@ export const allSectionTypes = [
   sectionSelection,
   sectionBilan,
   sectionDates,
+  sectionChoix,
 ]

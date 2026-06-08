@@ -1,5 +1,61 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { stegaClient } from '../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
+import imageUrlBuilder from '@sanity/image-url'
+
+// Fetch all voyage documents — cards are stega-encoded → visual editing overlays
+const voyages = (await stegaClient.fetch(`
+  *[_type == "voyage"]{
+    _id,
+    title,
+    slug,
+    pays,
+    periode,
+    especes,
+    "displayTitle": coalesce(
+      pagebuilder[_type == "sectionHero"][0].titre,
+      title
+    ),
+    "tagline": coalesce(
+      pagebuilder[_type == "sectionHero"][0].sousTitre,
+      especes
+    ),
+    "region": pagebuilder[_type == "sectionHero"][0].eyebrow,
+    "heroImage": pagebuilder[_type == "sectionHero"][0].image.asset->{ _id, url }
+  }
+`)) as any[]
+
+const builder = imageUrlBuilder(stegaClient)
+const urlFor = (source: any) => builder.image(source)
+
+// Ordre d'affichage des cartes secondaires
+const ORDRE = [
+  'voyage-peche-argentine-rio-grande-truite-de-mer',
+  'peche-mouche-cuba-cayo-cruz',
+  'peche-mouche-cuba-cayo-santa-maria',
+  'voyage-peche-mouche-mexique',
+]
+
+// Los Roques = grande carte featured
+const featured = voyages.find((v: any) => stegaClean(v.slug?.current) === 'los-roques-venezuela')
+const rest = voyages
+  .filter((v: any) => stegaClean(v.slug?.current) !== 'los-roques-venezuela')
+  .sort((a: any, b: any) => {
+    const ai = ORDRE.indexOf(stegaClean(a.slug?.current) ?? '')
+    const bi = ORDRE.indexOf(stegaClean(b.slug?.current) ?? '')
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi)
+  })
+
+function cardImg(v: any, w: number, h: number): string | null {
+  return v.heroImage?._id ? urlFor(v.heroImage).width(w).height(h).fit('crop').url() : null
+}
+
+// Étiquette région : strip "Voyage · " prefix
+function region(v: any): string {
+  const raw = stegaClean(v.region) || stegaClean(v.pays) || ''
+  return raw.replace(/^Voyage\s*[·•]\s*/i, '')
+}
 ---
 
 <BaseLayout
@@ -32,7 +88,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
       </div>
       <div class="voy-intro__stats">
         <div class="voy-stat">
-          <span class="voy-stat__num">5</span>
+          <span class="voy-stat__num">{voyages.length || 5}</span>
           <span class="voy-stat__label">destinations</span>
         </div>
         <div class="voy-stat">
@@ -47,7 +103,37 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     </div>
   </section>
 
-  <!-- GRILLE VOYAGES — Wild Fly style -->
+  <!-- POURQUOI VOYAGER AVEC JB -->
+  <section class="section voy-pourquoi">
+    <div class="container">
+      <p class="eyebrow" style="text-align:center">Hosted trips</p>
+      <h2 style="text-align:center;margin-bottom:3rem">Pourquoi partir avec Jean-Baptiste ?</h2>
+      <div class="voy-pourquoi__grid">
+        <div class="voy-pourquoi__item">
+          <div class="voy-pourquoi__icon">🎯</div>
+          <h3>Destinations testées en avant-première</h3>
+          <p>Jean-Baptiste effectue systématiquement un voyage de reconnaissance avant de proposer une destination. Vous arrivez sur des terrains connus, avec un guide qui a déjà pêché là-bas.</p>
+        </div>
+        <div class="voy-pourquoi__item">
+          <div class="voy-pourquoi__icon">🤝</div>
+          <h3>Réseau international</h3>
+          <p>Des partenariats établis de longue date avec Nervous Waters (Argentine), Avalon Fishing (Cuba Cruz), Fly Fish The Run (Cuba Santa Maria) et DHD Laika (Venezuela, Mexique).</p>
+        </div>
+        <div class="voy-pourquoi__item">
+          <div class="voy-pourquoi__icon">🎣</div>
+          <h3>Guidage en plus du guide local</h3>
+          <p>Jean-Baptiste est présent sur l'eau avec vous, en plus du guide local. Coaching technique, lecture de l'eau, adaptation des mouches — pour maximiser vos chances de capture.</p>
+        </div>
+        <div class="voy-pourquoi__item">
+          <div class="voy-pourquoi__icon">🌎</div>
+          <h3>Tout géré pour vous</h3>
+          <p>Organisation complète : vols internes, transferts, hébergement, guides, logistique sur place. Vous n'avez qu'à préparer vos cannes et partir l'esprit libre.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRILLE VOYAGES — données Sanity, overlays visual editing -->
   <section class="voy-grid-section">
     <div class="container voy-grid-header">
       <p class="eyebrow">Destinations</p>
@@ -56,60 +142,44 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
     <div class="wildfly-grid">
 
-      <!-- GRANDE CARTE : Argentine -->
-      <a href="/voyage-peche-argentine-rio-grande-truite-de-mer" class="wf-card wf-card--large">
-        <div class="wf-card-bg" style="background-image: url('/images/B5.avif')"></div>
-        <div class="wf-overlay"></div>
-        <div class="wf-body">
-          <span class="wf-sub">Terre de Feu · Argentine</span>
-          <strong class="wf-label">Rio Grande</strong>
-          <span class="wf-tagline">La meilleure rivière du monde pour la truite de mer</span>
-        </div>
-      </a>
+      {/* Grande carte : Los Roques (featured) */}
+      {featured && (
+        <a href={`/${stegaClean(featured.slug?.current)}`} class="wf-card wf-card--large">
+          {cardImg(featured, 1400, 900) ? (
+            <div class="wf-card-bg" style={`background-image:url('${cardImg(featured, 1400, 900)}')`}></div>
+          ) : (
+            <div class="wf-card-bg"></div>
+          )}
+          <div class="wf-overlay"></div>
+          <div class="wf-body">
+            <span class="wf-sub">{region(featured)}</span>
+            <strong class="wf-label">{featured.displayTitle || featured.title}</strong>
+            <span class="wf-tagline">{featured.tagline || featured.especes}</span>
+            {stegaClean(featured.periode) && <span class="wf-saison">{featured.periode}</span>}
+          </div>
+        </a>
+      )}
 
-      <!-- Los Roques -->
-      <a href="/los-roques-venezuela" class="wf-card">
-        <div class="wf-card-bg" style="background-image: url('/images/E16.avif')"></div>
-        <div class="wf-overlay"></div>
-        <div class="wf-body">
-          <span class="wf-sub">Venezuela · Caraïbes</span>
-          <strong class="wf-label">Los Roques</strong>
-          <span class="wf-tagline">Top 3 mondial bonefish</span>
-        </div>
-      </a>
-
-      <!-- Cuba Cruz -->
-      <a href="/peche-mouche-cuba-cayo-cruz" class="wf-card">
-        <div class="wf-card-bg" style="background-image: url('/images/C18.avif')"></div>
-        <div class="wf-overlay"></div>
-        <div class="wf-body">
-          <span class="wf-sub">Cuba · Côte Nord</span>
-          <strong class="wf-label">Cayo Cruz</strong>
-          <span class="wf-tagline">La meilleure destination permit de Cuba</span>
-        </div>
-      </a>
-
-      <!-- Cuba Santa Maria -->
-      <a href="/peche-mouche-cuba-cayo-santa-maria" class="wf-card">
-        <div class="wf-card-bg" style="background-image: url('/images/D17.avif')"></div>
-        <div class="wf-overlay"></div>
-        <div class="wf-body">
-          <span class="wf-sub">Cuba · Côte Sud</span>
-          <strong class="wf-label">Cayo Santa Maria</strong>
-          <span class="wf-tagline">Les Jardins du Roi, destination tarpon</span>
-        </div>
-      </a>
-
-      <!-- Mexique -->
-      <a href="/voyage-peche-mouche-mexique" class="wf-card">
-        <div class="wf-card-bg" style="background-image: url('/images/F1.avif')"></div>
-        <div class="wf-overlay"></div>
-        <div class="wf-body">
-          <span class="wf-sub">Mexique · Quintana Roo</span>
-          <strong class="wf-label">Xcalak</strong>
-          <span class="wf-tagline">La fièvre du permit</span>
-        </div>
-      </a>
+      {/* Cartes secondaires */}
+      {rest.map((v: any) => {
+        const img = cardImg(v, 900, 640)
+        return (
+          <a href={`/${stegaClean(v.slug?.current)}`} class="wf-card">
+            {img ? (
+              <div class="wf-card-bg" style={`background-image:url('${img}')`}></div>
+            ) : (
+              <div class="wf-card-bg"></div>
+            )}
+            <div class="wf-overlay"></div>
+            <div class="wf-body">
+              <span class="wf-sub">{region(v)}</span>
+              <strong class="wf-label">{v.displayTitle || v.title}</strong>
+              <span class="wf-tagline">{v.tagline || v.especes}</span>
+              {stegaClean(v.periode) && <span class="wf-saison">{v.periode}</span>}
+            </div>
+          </a>
+        )
+      })}
 
     </div>
   </section>
@@ -190,15 +260,9 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     text-decoration: none;
     transition: background 0.2s, border-color 0.2s;
   }
-  .btn--primary {
-    background: var(--color-ocean-main);
-    color: white;
-  }
+  .btn--primary { background: var(--color-ocean-main); color: white; }
   .btn--primary:hover { background: #144b72; }
-  .btn--ghost {
-    border: 1.5px solid rgba(255,255,255,0.4);
-    color: white;
-  }
+  .btn--ghost { border: 1.5px solid rgba(255,255,255,0.4); color: white; }
   .btn--ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
   /* ── INTRO ── */
@@ -220,11 +284,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
   .voy-intro__text h2 { margin-bottom: 1.2rem; }
   .voy-intro__text p { line-height: 1.8; color: var(--color-text); margin-bottom: 1rem; }
   .voy-intro__text p:last-child { margin-bottom: 0; }
-  .voy-intro__stats {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+  .voy-intro__stats { display: flex; flex-direction: column; gap: 1.5rem; }
   .voy-stat {
     text-align: center;
     padding: 1.25rem 1rem;
@@ -249,12 +309,37 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     opacity: 0.65;
   }
 
+  /* ── POURQUOI ── */
+  .voy-pourquoi { background: #fff; }
+  .voy-pourquoi__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .voy-pourquoi__item {
+    padding: 1.75rem;
+    background: var(--color-sand);
+    border-radius: 8px;
+    border-top: 3px solid var(--color-ocean-main);
+  }
+  .voy-pourquoi__icon { font-size: 1.8rem; margin-bottom: 1rem; }
+  .voy-pourquoi__item h3 {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--color-ocean);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+  .voy-pourquoi__item p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
   /* ── GRILLE VOYAGES ── */
   .voy-grid-section { background: #fff; }
-  .voy-grid-header {
-    text-align: center;
-    padding: 4rem 2rem 2.5rem;
-  }
+  .voy-grid-header { text-align: center; padding: 4rem 2rem 2.5rem; }
   .voy-grid-header .eyebrow {
     font-size: 0.68rem;
     letter-spacing: 0.18em;
@@ -264,27 +349,14 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     margin-bottom: 0.75rem;
   }
 
-  /* Wild Fly Grid — même structure que la homepage */
   .wildfly-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 480px 320px;
     gap: 4px;
   }
-
-  /* Grande carte : Argentine, col 1-2, row 1 */
-  .wf-card--large {
-    grid-column: 1 / 3;
-    grid-row: 1;
-  }
-
-  /* Los Roques : col 3, row 1 */
-  .wf-card:nth-child(2) {
-    grid-column: 3;
-    grid-row: 1;
-  }
-
-  /* Row 2 — 3 petites */
+  .wf-card--large { grid-column: 1 / 3; grid-row: 1; }
+  .wf-card:nth-child(2) { grid-column: 3; grid-row: 1; }
   .wf-card:nth-child(3) { grid-column: 1; grid-row: 2; }
   .wf-card:nth-child(4) { grid-column: 2; grid-row: 2; }
   .wf-card:nth-child(5) { grid-column: 3; grid-row: 2; }
@@ -322,8 +394,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
   }
   .wf-body {
     position: absolute;
-    bottom: 0;
-    left: 0; right: 0;
+    bottom: 0; left: 0; right: 0;
     padding: 1.5rem 1.75rem 1.75rem;
     z-index: 2;
     display: flex;
@@ -352,6 +423,18 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     margin-top: 0.1rem;
   }
   .wf-card--large .wf-tagline { font-size: 0.9rem; }
+  .wf-saison {
+    display: inline-block;
+    margin-top: 0.6rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    border: 1px solid rgba(126,200,227,.35);
+    border-radius: 2px;
+    padding: 0.15rem 0.55rem;
+    align-self: flex-start;
+  }
 
   /* ── CTA FINAL ── */
   .prest-cta-final__inner {
@@ -389,6 +472,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
+    .voy-pourquoi__grid { grid-template-columns: repeat(2, 1fr); }
     .wildfly-grid {
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 300px 260px 260px;
@@ -402,8 +486,8 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     .voy-intro__stats { flex-direction: row; }
     .voy-stat { flex: 1; }
   }
-
   @media (max-width: 560px) {
+    .voy-pourquoi__grid { grid-template-columns: 1fr; }
     .wildfly-grid {
       grid-template-columns: 1fr;
       grid-template-rows: repeat(5, 260px);
@@ -412,10 +496,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
     .wf-card:nth-child(2),
     .wf-card:nth-child(3),
     .wf-card:nth-child(4),
-    .wf-card:nth-child(5) {
-      grid-column: 1;
-      grid-row: auto;
-    }
+    .wf-card:nth-child(5) { grid-column: 1; grid-row: auto; }
     .wf-card--large .wf-label { font-size: 1.6rem; }
     .voy-overview-hero { min-height: 85vh; padding-bottom: 3.5rem; }
     .voy-intro__stats { flex-direction: column; }

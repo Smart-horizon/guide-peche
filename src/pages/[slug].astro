@@ -52,7 +52,17 @@ const QUERIES: Record<string, string> = {
       images[]{ asset->{ _id, url } },
       cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
       etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+      'options': options[]{
+        ...,
+        image{ asset->{ _id, url, metadata{ dimensions } } },
+      },
+      'galerie': galerie[]{
+        asset->{ _id, url, metadata{ dimensions } }
+      },
       items[],
+      sejours[],
+      stats[],
+      lignesInfo[],
     },
     seoTitle, seoDescription, ogImage
   }`,
@@ -1473,6 +1483,20 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   .pb-prog-cart__header[data-pos="right"] .pb-prog-cart__header-text { order: unset; }
 }
 /* Fond dark pour les cartes */
+/* Fond blanc et sable → bordure visible pour que la carte ne se fonde pas */
+.section--white .pb-prog-cart__card,
+.section--sand  .pb-prog-cart__card {
+  background: #fff;
+  border: 1px solid #b8cdd8;
+  border-top: 3px solid var(--color-ocean-main);
+  box-shadow: 0 2px 12px rgba(0,0,0,.07);
+}
+.section--white .pb-prog-cart__h3,
+.section--sand  .pb-prog-cart__h3  { color: var(--color-ocean); }
+.section--white .pb-prog-cart__desc,
+.section--sand  .pb-prog-cart__desc { color: var(--color-text-muted); }
+
+/* Fond dark → semi-transparent, textes clairs */
 .section--dark .pb-prog-cart__card {
   background: rgba(255,255,255,0.07);
   border-top-color: var(--color-ocean-light);

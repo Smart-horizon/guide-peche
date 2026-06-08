@@ -46,19 +46,16 @@ function blocks(content: any[]): string {
 }
 
 // Détermine le variant de sectionProgrammeCartes
-// Priority: champ styleMisePage explicite → fallback auto pour rétrocompat
-function cartesVariant(s: any): 'photo-gauche' | 'photo-haut' | 'materiel' | 'generic' {
-  const style = stegaClean(s.styleMisePage)
-  const cols  = stegaClean(s.colonnes) || '3'
+// L'IMAGE détermine le style visuel ; les colonnes déterminent la grille
+// Avec image + 1/2 cols → photo-gauche (photo à gauche, cards à droite)
+// Avec image + 3+ cols  → photo-haut (photo en haut, grille en dessous)
+// Sans image (2/3/4)    → materiel (grille unifiée, style cards équipement)
+function cartesVariant(s: any): 'photo-gauche' | 'photo-haut' | 'materiel' {
+  const cols   = parseInt(stegaClean(s.colonnes) || '3')
   const hasImg = !!s.image?.asset
-  // Champ style explicite (fonctionne avec ou sans image)
-  if (style === 'photo-gauche') return 'photo-gauche'
-  if (style === 'photo-haut')   return 'photo-haut'
-  // Fallback auto pour données existantes sans styleMisePage
-  if (hasImg && cols === '2') return 'photo-gauche'
-  if (hasImg && cols === '3') return 'photo-haut'
-  if (cols === '4') return 'materiel'
-  return 'generic'
+  if (hasImg && cols <= 2) return 'photo-gauche'
+  if (hasImg)              return 'photo-haut'
+  return 'materiel'
 }
 
 // Carousel ID unique par galerie
@@ -151,7 +148,7 @@ let carouselCount = 0
   const variant = cartesVariant(s)
   const imgUrl  = s.image?.asset ? urlFor(s.image).width(600).height(520).fit('crop').url() : null
 
-  // ── Variante SAISONS (dark + image + 2 cols) ──────────────────────────
+  // ── Variante SAISONS (dark + image + 1/2 cols) ────────────────────────
   if (variant === 'photo-gauche') return (
     <section class={`section ${bg(s.fond) || 'section--dark'}`}>
       <div class={`container${imgUrl ? ' voy-saison-grid' : ''}`}>
@@ -163,7 +160,7 @@ let carouselCount = 0
         <div class="voy-saison-text">
           {s.eyebrow && <p class={bg(s.fond) === 'section--dark' ? 'eyebrow-light' : 'eyebrow'}>{s.eyebrow}</p>}
           <h2 class={bg(s.fond) === 'section--dark' ? 'light' : ''}>{s.titre}</h2>
-          {s.intro && <p>{s.intro}</p>}
+          {s.intro && (s.intro as string).split('\n\n').filter(Boolean).map((para: string) => <p>{para}</p>)}
           <div class={`voy-saison-cards voy-saison-cards--${stegaClean(s.colonnes)||'2'}`}>
             {s.items?.map((item: any) => (
               <div class="voy-saison-card">
@@ -174,6 +171,14 @@ let carouselCount = 0
             ))}
           </div>
           {s.note && <p class="voy-saison-note">{s.note}</p>}
+          {stegaClean(s.btnTexte) && (stegaClean(s.btnFichier?.asset?.url) || stegaClean(s.btnLien)) && (
+            <div class="voy-materiel-download">
+              <a href={stegaClean(s.btnFichier?.asset?.url) || stegaClean(s.btnLien)} class="btn-download" target="_blank" rel="noopener" download={!!s.btnFichier?.asset?.url}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                {stegaClean(s.btnTexte)}
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -213,14 +218,14 @@ let carouselCount = 0
     </section>
   )
 
-  // ── Variante MATÉRIEL (4 cols) ────────────────────────────────────────
+  // ── Variante MATÉRIEL (2/3/4 cols sans image) ────────────────────────
   if (variant === 'materiel') return (
     <section class={`section ${bg(s.fond) || 'section--white'}`}>
       <div class="container">
-        {s.eyebrow && <p class="eyebrow">{s.eyebrow}</p>}
-        {s.titre   && <h2>{s.titre}</h2>}
-        {s.intro   && <p class="section-intro">{s.intro}</p>}
-        <div class="voy-materiel-grid">
+        {s.eyebrow && <p class={bg(s.fond) === 'section--dark' ? 'eyebrow-light' : 'eyebrow'}>{s.eyebrow}</p>}
+        {s.titre   && <h2 class={bg(s.fond) === 'section--dark' ? 'light' : ''}>{s.titre}</h2>}
+        {s.intro   && <p class={`section-intro${bg(s.fond) === 'section--dark' ? ' section-intro--light' : ''}`}>{s.intro}</p>}
+        <div class={`voy-materiel-grid voy-materiel-grid--${stegaClean(s.colonnes)||'3'}`}>
           {s.items?.map((item: any) => (
             <div class="voy-materiel-card">
               <div class="voy-materiel-num">{item.titre}</div>
@@ -332,6 +337,53 @@ let carouselCount = 0
     </div>
   </section>
 )}
+
+{/* ═══════════════ CHOIX (LODGES) ═══════════════ */}
+{s._type === 'sectionChoix' && (() => {
+  return (
+    <section class={`section ${bg(s.fond) || 'section--sand'}`}>
+      <div class="container">
+        {s.eyebrow && <p class={bg(s.fond) === 'section--dark' ? 'eyebrow-light' : 'eyebrow'}>{s.eyebrow}</p>}
+        {s.titre   && <h2 class={bg(s.fond) === 'section--dark' ? 'light' : ''}>{s.titre}</h2>}
+        {s.intro   && <p class="section-intro">{s.intro}</p>}
+        {s.options?.length > 0 && (
+          <div class="voy-choix-grid">
+            {s.options.map((opt: any) => {
+              const imgUrl = opt.image?.asset ? urlFor(opt.image).width(700).height(480).fit('crop').url() : null
+              return (
+                <div class="voy-choix-item">
+                  {imgUrl && (
+                    <div class="voy-choix-img">
+                      <img src={imgUrl} alt={opt.image?.alt || opt.titre || ''} loading="lazy" />
+                    </div>
+                  )}
+                  <div class="voy-choix-body">
+                    {opt.numero && <div class="voy-choix-num">{opt.numero}</div>}
+                    {opt.titre  && <h3>{opt.titre}</h3>}
+                    {opt.tag    && <span class="voy-choix-tag">{opt.tag}</span>}
+                    {opt.description && <p>{opt.description}</p>}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+        {s.galerie?.length > 0 && (
+          <div class="voy-choix-gallery">
+            {s.galerie.map((img: any, i: number) => {
+              const gUrl = img.asset ? urlFor(img).width(800).height(560).fit('crop').url() : null
+              return gUrl ? (
+                <div class="voy-choix-gallery__item">
+                  <img src={gUrl} alt={img.alt || `Photo ${i+1}`} loading="lazy" />
+                </div>
+              ) : null
+            })}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+})()}
 
 {/* ═══════════════ INCLUS / NON INCLUS ═══════════════ */}
 {s._type === 'sectionProgrammeTexte' && (
@@ -499,13 +551,23 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 .voy-saison-img img { width:100%;height:100%;object-fit:cover;display:block; }
 .voy-saison-text h2 { margin:.4rem 0 1.5rem; }
 .voy-saison-text p { font-size:.9rem;line-height:1.8;color:rgba(255,255,255,.7);margin-bottom:1rem; }
+/* Carte saison — fond dark par défaut, overrides pour fonds clairs ci-dessous */
 .voy-saison-card { background:rgba(255,255,255,.08);border-radius:6px;padding:1.25rem;border-top:2px solid var(--color-ocean-light); }
 .voy-saison-card h3 { color:var(--color-ocean-light);font-size:.9rem;margin-bottom:.5rem;font-family:var(--font-serif); }
 .voy-saison-card p { font-size:.82rem;color:rgba(255,255,255,.65);line-height:1.6;margin:0; }
 .voy-saison-note { font-size:.85rem;color:rgba(255,255,255,.55);font-style:italic; }
+/* Fonds clairs → carte blanche avec bordure solide visible */
+.section--white .voy-saison-card,
+.section--sand  .voy-saison-card {
+  background: #fff;
+  border: 1px solid #b8cdd8;
+  border-top: 2px solid var(--color-ocean-main);
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+}
 
 /* ── Saison — colonnes dynamiques ── */
 .voy-saison-cards { display:grid;gap:1rem;margin:1.5rem 0; }
+.voy-saison-cards--1 { grid-template-columns:1fr; }
 .voy-saison-cards--2 { grid-template-columns:1fr 1fr; }
 .voy-saison-cards--3 { grid-template-columns:repeat(3,1fr); }
 .voy-saison-cards--4 { grid-template-columns:repeat(4,1fr); }
@@ -517,20 +579,51 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 .voy-fish-hero-img { width:100%;height:260px;object-fit:cover;border-radius:8px;display:block; }
 .voy-fish-intro p { font-size:.95rem;line-height:1.8;color:rgba(255,255,255,.7); }
 .voy-fish-trio { display:grid;grid-template-columns:repeat(3,1fr);gap:2rem; }
+/* Carte espèces — fond dark par défaut, overrides pour fonds clairs ci-dessous */
 .voy-fish-species { background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:1.75rem; }
+/* Fonds clairs → carte blanche avec bordure solide visible */
+.section--white .voy-fish-species,
+.section--sand  .voy-fish-species {
+  background: #fff;
+  border: 1px solid #b8cdd8;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+}
 .voy-fish-species h3 { color:var(--color-ocean-light);font-family:var(--font-serif);font-size:1.2rem;margin-bottom:.3rem; }
 .voy-fish-tag { font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.4);margin-bottom:.85rem; }
 .voy-fish-species p { font-size:.88rem;line-height:1.75;color:rgba(255,255,255,.65);margin:0; }
 
-/* ── Matériel ── */
-.voy-materiel-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2.5rem; }
-.voy-materiel-card { background:var(--color-sand);border-radius:6px;padding:1.5rem;border-top:3px solid var(--color-ocean-main); }
+/* ── Matériel (2 / 3 / 4 cols) ── */
+.voy-materiel-grid { display:grid;gap:1.5rem;margin-bottom:2.5rem; }
+.voy-materiel-grid--2 { grid-template-columns:repeat(2,1fr); }
+.voy-materiel-grid--3 { grid-template-columns:repeat(3,1fr); }
+.voy-materiel-grid--4 { grid-template-columns:repeat(4,1fr); }
+
+/* Carte matériel — visible sur TOUS les fonds clairs grâce à la bordure */
+.voy-materiel-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 1.5rem;
+  border: 1px solid #b8cdd8;
+  border-top: 3px solid var(--color-ocean-main);
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+}
 .voy-materiel-num { font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:var(--color-ocean-main);margin-bottom:.4rem; }
 .voy-materiel-card h3 { font-size:.9rem;color:var(--color-ocean);margin-bottom:.6rem; }
 .voy-materiel-card p { font-size:.82rem;line-height:1.65;color:var(--color-text-muted,#555);margin:0; }
-.voy-materiel-download { display:flex; }
+
+/* Fond dark → textes clairs, fond semi-transparent */
+.section--dark .voy-materiel-card { background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);border-top-color:var(--color-ocean-light);box-shadow:none; }
+.section--dark .voy-materiel-num { color:var(--color-ocean-light); }
+.section--dark .voy-materiel-card h3 { color:rgba(255,255,255,.9); }
+.section--dark .voy-materiel-card p { color:rgba(255,255,255,.65); }
+
+/* Bouton PDF */
+.voy-materiel-download { display:flex;margin-top:2.5rem; }
+.section-intro--light { color:rgba(255,255,255,.75); }
 .btn-download { display:inline-flex;align-items:center;gap:.6rem;background:var(--color-ocean-main);color:white;padding:.85rem 1.75rem;border-radius:4px;font-weight:500;font-size:.9rem;text-decoration:none;transition:background .2s; }
 .btn-download:hover { background:#144b72; }
+.section--dark .btn-download { background:white;color:var(--color-ocean-main); }
+.section--dark .btn-download:hover { background:rgba(255,255,255,.88); }
 
 /* ── Generic cards ── */
 .voy-generic-cards { display:grid;gap:1.5rem;margin-bottom:1.5rem; }
@@ -622,14 +715,7 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 .section--white .voy-saison-text p,
 .section--sand  .voy-saison-text p    { color: var(--color-text-muted,#555); }
 
-.section--white .voy-saison-card {
-  background: var(--color-sand);
-  border-top-color: var(--color-ocean-main);
-}
-.section--sand .voy-saison-card {
-  background: white;
-  border-top-color: var(--color-ocean-main);
-}
+/* (saison card overrides moved to base section above) */
 .section--white .voy-saison-card h3,
 .section--sand  .voy-saison-card h3  { color: var(--color-ocean); }
 .section--white .voy-saison-card p,
@@ -643,14 +729,7 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 .section--white .voy-fish-intro p,
 .section--sand  .voy-fish-intro p    { color: var(--color-text-muted,#555); }
 
-.section--white .voy-fish-species {
-  background: var(--color-sand);
-  border: 1px solid rgba(27,94,138,.12);
-}
-.section--sand .voy-fish-species {
-  background: white;
-  border: 1px solid rgba(27,94,138,.1);
-}
+/* (fish species overrides moved to base section above) */
 .section--white .voy-fish-species h3,
 .section--sand  .voy-fish-species h3 { color: var(--color-ocean); }
 .section--white .voy-fish-tag,
@@ -676,6 +755,27 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 .section--white .voy-prog-item { box-shadow: 0 1px 8px rgba(0,0,0,.06); }
 .section--sand  .voy-prog-item { background: white; }
 
+/* ── Choix (lodges) ── */
+.voy-choix-grid { display:grid;grid-template-columns:1fr 1fr;gap:2.5rem; }
+.voy-choix-item { border-radius:8px;overflow:hidden;background:white;box-shadow:0 2px 16px rgba(0,0,0,.08); }
+.section--dark .voy-choix-item { background:rgba(255,255,255,.07);box-shadow:none; }
+.voy-choix-img { height:240px;overflow:hidden; }
+.voy-choix-img img { width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease; }
+.voy-choix-item:hover .voy-choix-img img { transform:scale(1.04); }
+.voy-choix-body { padding:1.75rem; }
+.voy-choix-num { font-family:var(--font-serif);font-size:2.5rem;font-weight:700;line-height:1;color:var(--color-ocean-main);opacity:.18;margin-bottom:.5rem; }
+.voy-choix-item h3 { font-family:var(--font-serif);font-size:1.25rem;color:var(--color-ocean);margin-bottom:.3rem; }
+.section--dark .voy-choix-item h3 { color:var(--color-ocean-light); }
+.voy-choix-tag { font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--color-ocean-main);display:block;margin-bottom:.9rem; }
+.section--dark .voy-choix-tag { color:var(--color-ocean-light); }
+.voy-choix-body p { font-size:.88rem;line-height:1.75;color:var(--color-text-muted,#555);margin-bottom:.75rem; }
+.section--dark .voy-choix-body p { color:rgba(255,255,255,.65); }
+.voy-choix-gallery { display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:280px;gap:6px;margin-top:2rem;border-radius:8px;overflow:hidden; }
+.voy-choix-gallery__item { overflow:hidden; }
+.voy-choix-gallery__item:first-child { grid-column:1; }
+.voy-choix-gallery__item img { width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s; }
+.voy-choix-gallery__item:hover img { transform:scale(1.04); }
+
 /* ── Responsive ── */
 @media (max-width:960px) {
   .voy-stats { grid-template-columns:repeat(2,1fr); }
@@ -688,10 +788,12 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
   .voy-saison-img { position:static;height:280px; }
   .voy-fish-intro { grid-template-columns:1fr; }
   .voy-fish-trio { grid-template-columns:1fr;gap:1.5rem; }
-  .voy-materiel-grid { grid-template-columns:repeat(2,1fr); }
+  .voy-materiel-grid--3,.voy-materiel-grid--4 { grid-template-columns:repeat(2,1fr); }
   .voy-dates-grid { grid-template-columns:1fr; }
   .voy-inclus-grid { grid-template-columns:1fr;gap:3rem; }
   .voy-generic-cards--3,.voy-generic-cards--4 { grid-template-columns:repeat(2,1fr); }
+  .voy-choix-grid { grid-template-columns:1fr; }
+  .voy-choix-gallery { grid-template-columns:1fr 1fr;grid-template-rows:200px 200px; }
 }
 @media (max-width:900px) {
   .voy-carousel__slide { flex:0 0 calc((100% - 3px)/2);width:calc((100% - 3px)/2); }
@@ -699,8 +801,10 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 @media (max-width:640px) {
   .voy-carousel__slide { flex:0 0 100%;width:100%; }
   .voy-saison-cards { grid-template-columns:1fr; }
-  .voy-materiel-grid,.voy-generic-cards--2,.voy-generic-cards--3,.voy-generic-cards--4 { grid-template-columns:1fr; }
+  .voy-materiel-grid--2,.voy-materiel-grid--3,.voy-materiel-grid--4,.voy-generic-cards--2,.voy-generic-cards--3,.voy-generic-cards--4 { grid-template-columns:1fr; }
   .voy-cta-final__inner { flex-direction:column;align-items:flex-start; }
   .voy-pratique { flex-direction:column;gap:1rem; }
+  .voy-choix-gallery { grid-template-columns:1fr;grid-template-rows:auto; }
+  .voy-choix-gallery__item { height:220px; }
 }
 </style>
