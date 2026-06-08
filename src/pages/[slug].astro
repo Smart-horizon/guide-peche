@@ -41,9 +41,17 @@ const QUERIES: Record<string, string> = {
     seoTitle, seoDescription, ogImage
   }`,
   voyage: `*[_type == "voyage" && slug.current == $slug][0]{
-    _id, _type, title, pays, description, image,
-    periode, prix, especes,
-    seoTitle, seoDescription
+    _id, _type, title, pays, especes, periode, prix,
+    pagebuilder[]{
+      ...,
+      image{ asset->{ _id, url, metadata{ dimensions } } },
+      photos[]{ asset->{ _id, url } },
+      images[]{ asset->{ _id, url } },
+      cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+      etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+      items[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+    },
+    seoTitle, seoDescription, ogImage
   }`,
   page: `*[_type == "page" && slug.current == $slug][0]{
     _id, _type, title, contenu, image, seoTitle, seoDescription
@@ -277,9 +285,12 @@ const heroBg = (image: any) => {
       <section class={`section pb-ti ${bg(s.fond)||''}`}>
         <div class="container pb-ti__grid" data-pos={stegaClean(s.imagePosition)||'right'}>
           <div class="prose" set:html={blocks(s.texte)} />
-          {s.texteImageUrl && (
+          {(s.image?.asset || s.texteImageUrl) && (
             <figure class="pb-ti__fig">
-              <img src={`${s.texteImageUrl}?w=680&fit=crop`} alt={s.image?.alt || ''} loading="lazy" />
+              {s.image?.asset
+                ? <img src={urlFor(s.image).width(680).height(520).fit('crop').url()} alt={s.image?.alt || ''} loading="lazy" />
+                : <img src={`${s.texteImageUrl}?w=680&fit=crop`} alt={s.image?.alt || ''} loading="lazy" />
+              }
             </figure>
           )}
         </div>
@@ -396,25 +407,57 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ PROGRAMME CARTES (style 2) ════════════ */}
-    {s._type === 'sectionProgrammeCartes' && (
-      <section class={`section pb-prog-cart ${bg(s.fond)||'section--sand'}`}>
-        <div class="container">
-          {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
-          {s.titre   && <h2 class="pb-prog__h2">{s.titre}</h2>}
-          {s.intro   && <p class="pb-prog__intro">{s.intro}</p>}
-          <div class="pb-prog-cart__grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||3},1fr)`}>
-            {s.items?.map((item: any, i: number) => (
-              <div class="pb-prog-cart__card">
-                <span class="pb-prog-cart__num">{String(i + 1).padStart(2, '0')}</span>
-                <h3 class="pb-prog-cart__h3">{item.titre}</h3>
-                {item.description && <p class="pb-prog-cart__desc">{item.description}</p>}
+    {/* ════════════ GRILLE DE CARTES ════════════ */}
+    {s._type === 'sectionProgrammeCartes' && (() => {
+      const imgUrl = s.image?.asset ? urlFor(s.image).width(560).height(460).fit('crop').url() : null
+      return (
+        <section class={`section pb-prog-cart ${bg(s.fond)||'section--sand'}`}>
+          <div class="container">
+            {/* Header : image optionnelle + titre/intro côte à côte */}
+            {imgUrl ? (
+              <div class="pb-prog-cart__header" data-pos={stegaClean(s.imagePosition)||'left'}>
+                <figure class="pb-prog-cart__header-img">
+                  <img src={imgUrl} alt={s.image?.alt || s.titre || ''} loading="lazy" />
+                </figure>
+                <div class="pb-prog-cart__header-text">
+                  {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+                  {s.titre   && <h2 class="pb-prog__h2">{s.titre}</h2>}
+                  {s.intro   && <p class="pb-prog__intro">{s.intro}</p>}
+                </div>
               </div>
-            ))}
+            ) : (
+              <>
+                {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+                {s.titre   && <h2 class="pb-prog__h2">{s.titre}</h2>}
+                {s.intro   && <p class="pb-prog__intro">{s.intro}</p>}
+              </>
+            )}
+            {/* Grille de cartes */}
+            <div class="pb-prog-cart__grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||3},1fr)`}>
+              {s.items?.map((item: any, i: number) => (
+                <div class="pb-prog-cart__card">
+                  <span class="pb-prog-cart__num">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 class="pb-prog-cart__h3">{item.titre}</h3>
+                  {item.sousTitre && <p class="pb-prog-cart__sub">{item.sousTitre}</p>}
+                  {item.description && <p class="pb-prog-cart__desc">{item.description}</p>}
+                </div>
+              ))}
+            </div>
+            {/* Note de bas de section */}
+            {s.note && <p class="pb-prog-cart__note">{s.note}</p>}
+            {/* Bouton optionnel */}
+            {s.btnTexte && s.btnLien && (
+              <div class="pb-prog-cart__btn-wrap">
+                <a href={s.btnLien} class="btn-download">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  {s.btnTexte}
+                </a>
+              </div>
+            )}
           </div>
-        </div>
-      </section>
-    )}
+        </section>
+      )
+    })()}
 
     {/* ════════════ SÉLECTION ════════════ */}
     {s._type === 'sectionSelection' && (
@@ -459,6 +502,75 @@ const heroBg = (image: any) => {
               )
             })}
           </div>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════ BILAN DE SÉJOUR ════════════ */}
+    {s._type === 'sectionBilan' && (() => {
+      const imgUrl = s.image?.asset ? urlFor(s.image).width(680).height(520).fit('crop').url() : null
+      return (
+        <section class={`section pb-bilan ${bg(s.fond)||'section--sand'}`}>
+          <div class="container pb-bilan__inner">
+            <div class="pb-bilan__text">
+              {s.eyebrow  && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+              {s.titre    && <h2 class="pb-prog__h2">{s.titre}</h2>}
+              {s.contexte && <p class="pb-bilan__contexte">{s.contexte}</p>}
+              <div class="prose" set:html={blocks(s.texte)} />
+              {s.resultats?.length > 0 && (
+                <div class="pb-bilan__resultats">
+                  {s.resultats.map((r: any) => (
+                    <div class="pb-bilan__resultat">
+                      <span class="pb-bilan__res-val">{r.valeur}</span>
+                      <span class="pb-bilan__res-lbl">{r.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {imgUrl && (
+              <figure class="pb-bilan__img">
+                <img src={imgUrl} alt={s.image?.alt || s.titre || ''} loading="lazy" />
+              </figure>
+            )}
+          </div>
+        </section>
+      )
+    })()}
+
+    {/* ════════════ DATES DES SÉJOURS ════════════ */}
+    {s._type === 'sectionDates' && (
+      <section class={`section pb-dates ${bg(s.fond)||'section--dark'}`}>
+        <div class="container">
+          {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+          {s.titre   && <h2 class="pb-prog__h2" style="color:white">{s.titre}</h2>}
+          {s.intro   && <p class="pb-dates__intro">{s.intro}</p>}
+          <div class="pb-dates__grid">
+            {s.sejours?.map((sej: any) => {
+              const statut = stegaClean(sej.statut) || 'disponible'
+              const icons: Record<string,string> = { disponible: '🟢', 'peu-de-places': '🟡', complet: '🔴', 'liste-attente': '⏳' }
+              const labels: Record<string,string> = { disponible: 'Disponible', 'peu-de-places': 'Quelques places', complet: 'Complet', 'liste-attente': "Liste d'attente" }
+              return (
+                <div class="pb-dates__card">
+                  <div class="pb-dates__card-header">
+                    <span class="pb-dates__statut">{icons[statut]} {labels[statut]}</span>
+                    {sej.placesDispo != null && statut !== 'complet' && (
+                      <span class="pb-dates__places">{sej.placesDispo} place(s)</span>
+                    )}
+                  </div>
+                  <h3 class="pb-dates__h3">{sej.dates}</h3>
+                  {sej.destination  && <p class="pb-dates__dest">{sej.destination}</p>}
+                  {sej.description  && <p class="pb-dates__desc">{sej.description}</p>}
+                  {sej.prix         && <p class="pb-dates__prix">{sej.prix}</p>}
+                </div>
+              )
+            })}
+          </div>
+          {s.btnTexte && s.btnLien && (
+            <div class="pb-dates__cta">
+              <a href={s.btnLien} class="btn-prim">{s.btnTexte}</a>
+            </div>
+          )}
         </div>
       </section>
     )}
@@ -1310,6 +1422,140 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   color: rgba(255,255,255,.6); background: rgba(0,0,0,.35);
   padding: 0.2rem 0.55rem; border-radius: 2px; z-index: 10;
 }
+
+/* ── GRILLE DE CARTES — nouveaux champs ── */
+.pb-prog-cart__header {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 4rem;
+  align-items: start;
+  margin-bottom: 2.5rem;
+}
+.pb-prog-cart__header[data-pos="right"] .pb-prog-cart__header-img { order: 2; }
+.pb-prog-cart__header[data-pos="right"] .pb-prog-cart__header-text { order: 1; }
+.pb-prog-cart__header-img {
+  border-radius: 8px; overflow: hidden; height: 380px; margin: 0;
+}
+.pb-prog-cart__header-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pb-prog-cart__sub {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-ocean-main);
+  font-weight: 600;
+  margin: 0.15rem 0 0.6rem;
+}
+.section--dark .pb-prog-cart__sub { color: var(--color-ocean-light); }
+.pb-prog-cart__note {
+  font-size: 0.88rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  margin-top: 2rem;
+  max-width: 720px;
+  line-height: 1.7;
+}
+.section--dark .pb-prog-cart__note { color: rgba(255,255,255,0.55); }
+.pb-prog-cart__btn-wrap { margin-top: 2rem; }
+.btn-download {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--color-ocean-main); color: white;
+  padding: 0.85rem 1.75rem; border-radius: 4px; font-weight: 500; font-size: 0.9rem;
+  text-decoration: none; transition: background 0.2s;
+}
+.btn-download:hover { background: #144b72; }
+@media (max-width: 900px) {
+  .pb-prog-cart__header { grid-template-columns: 1fr; gap: 2rem; }
+  .pb-prog-cart__header-img { height: 260px; }
+  .pb-prog-cart__header[data-pos="right"] .pb-prog-cart__header-img,
+  .pb-prog-cart__header[data-pos="right"] .pb-prog-cart__header-text { order: unset; }
+}
+/* Fond dark pour les cartes */
+.section--dark .pb-prog-cart__card {
+  background: rgba(255,255,255,0.07);
+  border-top-color: var(--color-ocean-light);
+  box-shadow: none;
+}
+.section--dark .pb-prog-cart__num { color: var(--color-ocean-light); opacity: 0.6; }
+.section--dark .pb-prog-cart__h3  { color: var(--color-ocean-light); }
+.section--dark .pb-prog-cart__desc { color: rgba(255,255,255,0.65); }
+
+/* ── BILAN DE SÉJOUR ── */
+.pb-bilan__inner {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 4rem;
+  align-items: start;
+}
+.pb-bilan__contexte {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ocean-main);
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(27,94,138,0.08);
+  border-radius: 3px;
+  display: inline-block;
+}
+.pb-bilan__resultats {
+  display: flex; flex-wrap: wrap; gap: 1.5rem;
+  margin-top: 2rem; padding-top: 1.5rem;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+.pb-bilan__resultat { display: flex; flex-direction: column; gap: 0.15rem; }
+.pb-bilan__res-val {
+  font-family: var(--font-serif); font-size: 1.8rem;
+  color: var(--color-ocean-main); line-height: 1;
+}
+.pb-bilan__res-lbl {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+.pb-bilan__img {
+  margin: 0; border-radius: 8px; overflow: hidden;
+  position: sticky; top: calc(var(--header-height) + 2rem);
+}
+.pb-bilan__img img { width: 100%; height: 420px; object-fit: cover; display: block; }
+@media (max-width: 900px) {
+  .pb-bilan__inner { grid-template-columns: 1fr; }
+  .pb-bilan__img { position: static; }
+  .pb-bilan__img img { height: 280px; }
+}
+
+/* ── DATES DES SÉJOURS ── */
+.pb-dates__intro {
+  color: rgba(255,255,255,0.7); font-size: 1rem; line-height: 1.7;
+  max-width: 640px; margin-bottom: 2.5rem;
+}
+.pb-dates__grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem; margin-bottom: 2.5rem;
+}
+.pb-dates__card {
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 1.75rem;
+  border-left: 3px solid var(--color-ocean-light);
+  display: flex; flex-direction: column; gap: 0.6rem;
+}
+.pb-dates__card-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.pb-dates__statut { font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.85); }
+.pb-dates__places {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--color-ocean-light); font-weight: 500;
+}
+.pb-dates__h3 {
+  font-family: var(--font-serif); font-size: 1.35rem;
+  color: white; margin: 0; line-height: 1.2;
+}
+.pb-dates__dest { font-size: 0.8rem; color: var(--color-ocean-light); margin: 0; }
+.pb-dates__desc { font-size: 0.88rem; color: rgba(255,255,255,0.65); line-height: 1.6; margin: 0; }
+.pb-dates__prix {
+  font-size: 0.9rem; font-weight: 600; color: var(--color-ocean-light); margin: 0.25rem 0 0;
+}
+.pb-dates__cta { display: flex; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
