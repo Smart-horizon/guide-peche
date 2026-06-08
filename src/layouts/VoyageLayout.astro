@@ -161,8 +161,8 @@ let carouselCount = 0
           </div>
         )}
         <div class="voy-saison-text">
-          {s.eyebrow && <p class={imgUrl ? 'eyebrow-light' : 'eyebrow'}>{s.eyebrow}</p>}
-          <h2 class={imgUrl ? 'light' : ''}>{s.titre}</h2>
+          {s.eyebrow && <p class={bg(s.fond) === 'section--dark' ? 'eyebrow-light' : 'eyebrow'}>{s.eyebrow}</p>}
+          <h2 class={bg(s.fond) === 'section--dark' ? 'light' : ''}>{s.titre}</h2>
           {s.intro && <p>{s.intro}</p>}
           <div class={`voy-saison-cards voy-saison-cards--${stegaClean(s.colonnes)||'2'}`}>
             {s.items?.map((item: any) => (
@@ -596,6 +596,74 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 .prose p { line-height:1.8;color:var(--color-text-muted,#555);margin-bottom:1rem; }
 .prose h2 { font-family:var(--font-serif);color:var(--color-text);margin:.4rem 0 1.5rem; }
 .prose h3 { font-family:var(--font-serif);color:var(--color-ocean);margin:.4rem 0 1rem; }
+
+/* ══════════════════════════════════════════════════════════════
+   OVERRIDES FONDS CLAIRS (white / sand)
+   Les styles de base sont optimisés pour section--dark.
+   Ces règles les adaptent pour les fonds blancs et sable.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Textes généraux sur fonds clairs ── */
+.section--white h2, .section--sand h2 { color: var(--color-text); }
+.section--white p,  .section--sand p  { color: var(--color-text-muted,#555); }
+
+/* ── Style A — saison cards sur fonds clairs ── */
+.section--white .voy-saison-text p,
+.section--sand  .voy-saison-text p    { color: var(--color-text-muted,#555); }
+
+.section--white .voy-saison-card {
+  background: var(--color-sand);
+  border-top-color: var(--color-ocean-main);
+}
+.section--sand .voy-saison-card {
+  background: white;
+  border-top-color: var(--color-ocean-main);
+}
+.section--white .voy-saison-card h3,
+.section--sand  .voy-saison-card h3  { color: var(--color-ocean); }
+.section--white .voy-saison-card p,
+.section--sand  .voy-saison-card p   { color: var(--color-text-muted,#555); }
+.section--white .voy-saison-card__sub,
+.section--sand  .voy-saison-card__sub { color: var(--color-ocean-main); opacity:.65; }
+.section--white .voy-saison-note,
+.section--sand  .voy-saison-note     { color: var(--color-text-muted,#555); font-style:italic; }
+
+/* ── Style B — fish species cards sur fonds clairs ── */
+.section--white .voy-fish-intro p,
+.section--sand  .voy-fish-intro p    { color: var(--color-text-muted,#555); }
+
+.section--white .voy-fish-species {
+  background: var(--color-sand);
+  border: 1px solid rgba(27,94,138,.12);
+}
+.section--sand .voy-fish-species {
+  background: white;
+  border: 1px solid rgba(27,94,138,.1);
+}
+.section--white .voy-fish-species h3,
+.section--sand  .voy-fish-species h3 { color: var(--color-ocean); }
+.section--white .voy-fish-tag,
+.section--sand  .voy-fish-tag        { color: var(--color-ocean-main); opacity:.65; }
+.section--white .voy-fish-species p,
+.section--sand  .voy-fish-species p  { color: var(--color-text-muted,#555); }
+
+/* ── Cartes génériques sur fonds clairs ── */
+.section--white .voy-generic-card { background: var(--color-sand); box-shadow:none; }
+.section--sand  .voy-generic-card { background: white; }
+.section--white .voy-generic-card h3,
+.section--sand  .voy-generic-card h3 { color: var(--color-ocean); }
+.section--white .voy-generic-card p,
+.section--sand  .voy-generic-card p  { color: var(--color-text-muted,#555); }
+.section--white .voy-generic-card__sub { color: var(--color-ocean-main); }
+.section--sand  .voy-generic-card__sub { color: var(--color-ocean-main); }
+
+/* ── Dates sur fond clair ── */
+.section--white .voy-date-card { background: var(--color-sand); }
+.section--sand  .voy-date-card { background: white; }
+
+/* ── Programme sur fond clair ── */
+.section--white .voy-prog-item { box-shadow: 0 1px 8px rgba(0,0,0,.06); }
+.section--sand  .voy-prog-item { background: white; }
 
 /* ── Responsive ── */
 @media (max-width:960px) {
