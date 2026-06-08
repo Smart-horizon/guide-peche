@@ -101,8 +101,8 @@ async function grilleCartes(d) {
   return {
     _type: 'sectionProgrammeCartes', _key: key('progc'),
     eyebrow: d.eyebrow || '', titre: d.titre || '', intro: d.intro || '',
+    styleMisePage: d.style || null,
     image: d.img ? await img(d.img, d.alt || d.titre || '') : null,
-    imagePosition: d.imagePosition || 'left',
     colonnes: d.colonnes || '3',
     note: d.note || '', btnTexte: d.btnTexte || '', btnLien: d.btnLien || '',
     fond: d.fond || 'sand',
@@ -242,6 +242,7 @@ La particularité de Los Roques : les bonefish chassent souvent dans les bancs d
 
     // 6. SAISONS — Pêchable toute l'année
     await grilleCartes({
+      style:    'photo-gauche',
       eyebrow:  'MÉTÉO & CONDITIONS',
       titre:    `Pêchable toute l'année`,
       intro:    `Il est possible de pêcher à Los Roques toute l'année grâce à sa situation géographique, proche de l'équateur. Les cyclones y sont rares, les alizés fréquents.`,
@@ -273,6 +274,7 @@ Formule 1 guide pour 2 pêcheurs, ou single skiff sur demande.`,
 
     // 8. ESPÈCES — Multi-espèces unique
     await grilleCartes({
+      style:    'photo-haut',
       eyebrow:  'BONEFISH · TARPON · PERMIT · CARANGUES · +',
       titre:    'Une destination multi-espèces unique',
       intro:    `En plus de la bonne densité de gros bonefish, vous pourrez capturer à la mouche une douzaine d'espèces de poissons, dont bien entendu le tarpon et le permit. Notre guide est également spécialisé dans la recherche des poissons perroquets et balistes (trigger fish).`,

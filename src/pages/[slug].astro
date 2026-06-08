@@ -410,7 +410,7 @@ const heroBg = (image: any) => {
       </section>
     )}
 
-    {/* ════════════ GRILLE DE CARTES ════════════ */}
+    {/* ════════════ MISE EN PAGE D'INFO ════════════ */}
     {s._type === 'sectionProgrammeCartes' && (() => {
       const imgUrl = s.image?.asset ? urlFor(s.image).width(560).height(460).fit('crop').url() : null
       return (

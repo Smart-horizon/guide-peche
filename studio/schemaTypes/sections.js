@@ -970,7 +970,7 @@ export const sectionProgrammeTexte = {
 // ─────────────────────────────────────────────────────────────────────────────
 export const sectionProgrammeCartes = {
   name: 'sectionProgrammeCartes',
-  title: '🃏 Grille de cartes',
+  title: '📐 Mise en page d\'info',
   type: 'object',
   fields: [
     {
@@ -980,25 +980,27 @@ export const sectionProgrammeCartes = {
     {
       name: 'titre', title: 'Titre de la section', type: 'string',
     },
-    // ── Image header optionnelle ──────────────────────────────────────────────
+    // ── Style de mise en page ─────────────────────────────────────────────────
+    {
+      name: 'styleMisePage',
+      title: 'Style de mise en page',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🅰️ Style A — Grande photo à gauche, cartes à droite',    value: 'photo-gauche' },
+          { title: '🅱️ Style B — Photo + intro en haut, grille en dessous', value: 'photo-haut'   },
+        ],
+        layout: 'radio',
+      },
+      description: 'Actif uniquement si une image est renseignée ci-dessous. Sans image : grille simple.',
+    },
+    // ── Image ─────────────────────────────────────────────────────────────────
     {
       name: 'image', title: 'Image (optionnel)',
       type: 'image',
       options: { hotspot: true },
       fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
-      description: 'Si renseignée, s\'affiche à côté du titre et de l\'intro',
-    },
-    {
-      name: 'imagePosition', title: 'Position de l\'image',
-      type: 'string',
-      options: {
-        list: [
-          { title: '⬅️ Image à gauche', value: 'left'  },
-          { title: '➡️ Image à droite', value: 'right' },
-        ],
-        layout: 'radio',
-      },
-      initialValue: 'left',
+      description: 'Requise pour les styles A et B',
     },
     {
       name: 'intro', title: 'Introduction (optionnel)', type: 'text', rows: 2,
@@ -1073,12 +1075,15 @@ export const sectionProgrammeCartes = {
     fondField('sand'),
   ],
   preview: {
-    select: { titre: 'titre', items: 'items', media: 'image' },
-    prepare: ({ titre, items, media }) => ({
-      title:    `🃏 Grille de cartes — ${titre || ''}`,
-      subtitle: `${items?.length || 0} carte(s)`,
-      media,
-    }),
+    select: { titre: 'titre', items: 'items', media: 'image', style: 'styleMisePage' },
+    prepare: ({ titre, items, media, style }) => {
+      const styleLabel = style === 'photo-gauche' ? ' · Style A' : style === 'photo-haut' ? ' · Style B' : ''
+      return {
+        title:    `📐 Mise en page d'info — ${titre || ''}${styleLabel}`,
+        subtitle: `${items?.length || 0} carte(s)`,
+        media,
+      }
+    },
   },
 }
 

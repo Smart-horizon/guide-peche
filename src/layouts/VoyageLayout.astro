@@ -45,13 +45,18 @@ function blocks(content: any[]): string {
   }).join('')
 }
 
-// Détecte le style de rendu pour sectionProgrammeCartes
-function cartesVariant(s: any): 'saisons' | 'especes' | 'materiel' | 'generic' {
-  const fond = stegaClean(s.fond) || 'sand'
-  const cols = stegaClean(s.colonnes) || '3'
+// Détermine le variant de sectionProgrammeCartes
+// Priority: champ styleMisePage explicite → fallback auto pour rétrocompat
+function cartesVariant(s: any): 'photo-gauche' | 'photo-haut' | 'materiel' | 'generic' {
+  const style  = stegaClean(s.styleMisePage)
+  const cols   = stegaClean(s.colonnes) || '3'
   const hasImg = !!s.image?.asset
-  if (fond === 'dark' && hasImg && cols === '2') return 'saisons'
-  if (fond === 'dark' && hasImg && cols === '3') return 'especes'
+  // Champ style explicite (nouveau)
+  if (style === 'photo-gauche' && hasImg) return 'photo-gauche'
+  if (style === 'photo-haut'   && hasImg) return 'photo-haut'
+  // Fallback auto pour données existantes sans styleMisePage
+  if (hasImg && cols === '2') return 'photo-gauche'
+  if (hasImg && cols === '3') return 'photo-haut'
   if (cols === '4') return 'materiel'
   return 'generic'
 }
@@ -147,7 +152,7 @@ let carouselCount = 0
   const imgUrl  = s.image?.asset ? urlFor(s.image).width(600).height(520).fit('crop').url() : null
 
   // ── Variante SAISONS (dark + image + 2 cols) ──────────────────────────
-  if (variant === 'saisons') return (
+  if (variant === 'photo-gauche') return (
     <section class="section section--dark">
       <div class="container voy-saison-grid">
         <div class="voy-saison-img">
@@ -172,7 +177,7 @@ let carouselCount = 0
   )
 
   // ── Variante ESPÈCES (dark + image + 3 cols) ──────────────────────────
-  if (variant === 'especes') return (
+  if (variant === 'photo-haut') return (
     <section class="section section--dark">
       <div class="container">
         {s.eyebrow && <p class="eyebrow-light">{s.eyebrow}</p>}
