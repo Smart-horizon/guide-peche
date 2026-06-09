@@ -10,9 +10,19 @@ const doc = await stegaClient.fetch(`
       image{ asset->{ _id, url, metadata{ dimensions } } },
       btnFichier{ asset->{ _id, url } },
       photos[]{ asset->{ _id, url } },
+      options[]{
+        ...,
+        image{ asset->{ _id, url, metadata{ dimensions } } },
+      },
+      galerie[]{
+        ...,
+        asset->{ _id, url, metadata{ dimensions } }
+      },
       etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
       items[],
       sejours[],
+      stats[],
+      lignesInfo[],
     },
     seoTitle, seoDescription, ogImage
   }
