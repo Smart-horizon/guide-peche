@@ -107,7 +107,11 @@ let carouselCount = 0
 {s._type === 'sectionIntro' && (
   <section class={`section ${bg(s.fond) || 'section--white'}`}>
     <div class="container voy-intro">
-      <div class="voy-intro__text" set:html={blocks(s.texte)} />
+      <div class="voy-intro__text">
+        {s.eyebrow && <p class="eyebrow">{s.eyebrow}</p>}
+        {s.titre   && <h2 class="voy-intro__h2">{s.titre}</h2>}
+        <div set:html={blocks(s.texte)} />
+      </div>
       <aside class="voy-intro__card">
         {s.saison  && <><p class="card-label">Saison</p><p class="card-val">{s.saison}</p></>}
         {s.tarif   && <><p class="card-label">Tarifs</p><p class="card-val">{s.tarif}</p></>}
@@ -550,6 +554,7 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 
 /* ── Intro ── */
 .voy-intro { display:grid;grid-template-columns:1fr 280px;gap:5rem;align-items:start; }
+.voy-intro__h2 { margin:.4rem 0 1.5rem;color:var(--color-text); }
 .voy-intro__text h2 { margin:.4rem 0 1.5rem; }
 .voy-intro__text p { line-height:1.8;color:var(--color-text-muted,#555);margin-bottom:1.1rem; }
 .voy-intro__card { background:var(--color-sand);border-radius:6px;padding:1.75rem;border-left:3px solid var(--color-ocean-main);position:sticky;top:5rem; }
