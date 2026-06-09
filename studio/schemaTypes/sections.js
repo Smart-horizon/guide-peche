@@ -136,6 +136,18 @@ export const sectionIntro = {
   title: '📋 Intro + Info card',
   type: 'object',
   fields: [
+    {
+      name: 'eyebrow',
+      title: 'Libellé (au-dessus du titre)',
+      type: 'string',
+      description: 'Ex : "Bar à la mouche · Bretagne-Sud" — petite ligne en majuscules',
+    },
+    {
+      name: 'titre',
+      title: 'Titre de la section (H2)',
+      type: 'string',
+      description: 'Accroche principale de l\'introduction',
+    },
     richText('texte', 'Texte principal'),
     {
       name: 'showInfoCard', title: 'Afficher l\'encart d\'infos pratiques ?',

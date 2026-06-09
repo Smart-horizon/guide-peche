@@ -189,7 +189,11 @@ const heroBg = (image: any) => {
     {s._type === 'sectionIntro' && (
       <section class={`section pb-intro ${bg(s.fond)||''}`}>
         <div class="container pb-intro__grid">
-          <div class="prose" set:html={blocks(s.texte)} />
+          <div class="pb-intro__body">
+            {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+            {s.titre   && <h2 class="pb-intro__h2">{s.titre}</h2>}
+            <div class="prose" set:html={blocks(s.texte)} />
+          </div>
           {s.intervenant?.nom && (
             <div class="expert-card">
               {s.intervenant.avatar && (
@@ -826,6 +830,14 @@ const heroBg = (image: any) => {
   gap: 4rem;
   align-items: start;
 }
+.pb-intro__h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  color: var(--color-text);
+  margin: 0.3rem 0 1.4rem;
+  line-height: 1.2;
+}
+.section--dark .pb-intro__h2 { color: white; }
 .info-card {
   background: var(--color-sand);
   border-radius: 6px;
