@@ -49,12 +49,14 @@ function blocks(content: any[]): string {
 // L'IMAGE détermine le style visuel ; les colonnes déterminent la grille
 // Avec image + 1/2 cols → photo-gauche (photo à gauche, cards à droite)
 // Avec image + 3+ cols  → photo-haut (photo en haut, grille en dessous)
+// Sans image + 1 col    → texte-cartes (texte à gauche, cards empilées à droite)
 // Sans image (2/3/4)    → materiel (grille unifiée, style cards équipement)
-function cartesVariant(s: any): 'photo-gauche' | 'photo-haut' | 'materiel' {
+function cartesVariant(s: any): 'photo-gauche' | 'photo-haut' | 'texte-cartes' | 'materiel' {
   const cols   = parseInt(stegaClean(s.colonnes) || '3')
   const hasImg = !!s.image?.asset
   if (hasImg && cols <= 2) return 'photo-gauche'
   if (hasImg)              return 'photo-haut'
+  if (!hasImg && cols === 1) return 'texte-cartes'
   return 'materiel'
 }
 
@@ -243,6 +245,28 @@ let carouselCount = 0
           </div>
         )}
         {s.note && <p class="voy-saison-note" style="margin-top:2rem">{s.note}</p>}
+      </div>
+    </section>
+  )
+
+  // ── Variante TEXTE + CARTES (sans image, 1 col — texte gauche, cartes droite) ─
+  if (variant === 'texte-cartes') return (
+    <section class={`section ${bg(s.fond) || 'section--white'}`}>
+      <div class="container voy-texte-cartes">
+        <div class="voy-texte-cartes__left">
+          {s.eyebrow && <p class={bg(s.fond) === 'section--dark' ? 'eyebrow-light' : 'eyebrow'}>{s.eyebrow}</p>}
+          {s.titre   && <h2 class={bg(s.fond) === 'section--dark' ? 'light' : ''}>{s.titre}</h2>}
+          {s.intro   && (s.intro as string).split('\n\n').filter(Boolean).map((para: string) => <p>{para}</p>)}
+        </div>
+        <div class="voy-texte-cartes__right">
+          {s.items?.map((item: any) => (
+            <div class="voy-tc-card">
+              <h3>{item.titre}</h3>
+              {item.sousTitre  && <p class="voy-tc-card__sub">{item.sousTitre}</p>}
+              {item.description && <p class="voy-tc-card__desc">{item.description}</p>}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )
@@ -591,6 +615,20 @@ h2.light { color:white;margin:.4rem 0 1.5rem; }
 .voy-fish-species h3 { color:var(--color-ocean-light);font-family:var(--font-serif);font-size:1.2rem;margin-bottom:.3rem; }
 .voy-fish-tag { font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.4);margin-bottom:.85rem; }
 .voy-fish-species p { font-size:.88rem;line-height:1.75;color:rgba(255,255,255,.65);margin:0; }
+
+/* ── Texte + Cartes (sans image, 1 col — texte gauche, cartes droite) ── */
+.voy-texte-cartes { display:grid;grid-template-columns:1fr 280px;gap:5rem;align-items:start; }
+.voy-texte-cartes__left h2 { margin:.4rem 0 1.5rem; }
+.voy-texte-cartes__left p  { font-size:.9rem;line-height:1.8;color:var(--color-text-muted,#555);margin-bottom:1.1rem; }
+.section--dark .voy-texte-cartes__left p { color:rgba(255,255,255,.7); }
+.voy-texte-cartes__right { display:flex;flex-direction:column;gap:.75rem;padding-top:.35rem; }
+.voy-tc-card { padding:1.25rem 1.5rem;border-left:3px solid var(--color-ocean-main);background:var(--color-sand);border-radius:0 4px 4px 0; }
+.section--dark .voy-tc-card { background:rgba(255,255,255,.08);border-left-color:var(--color-ocean-light); }
+.voy-tc-card h3 { font-family:var(--font-sans);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--color-ocean-main);margin-bottom:.4rem; }
+.section--dark .voy-tc-card h3 { color:var(--color-ocean-light); }
+.voy-tc-card__sub { font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--color-ocean-main);opacity:.65;margin-bottom:.25rem; }
+.voy-tc-card__desc { font-size:.82rem;line-height:1.55;color:var(--color-text-muted,#555);margin:0; }
+.section--dark .voy-tc-card__desc { color:rgba(255,255,255,.6); }
 
 /* ── Matériel (2 / 3 / 4 cols) ── */
 .voy-materiel-grid { display:grid;gap:1.5rem;margin-bottom:2.5rem; }
