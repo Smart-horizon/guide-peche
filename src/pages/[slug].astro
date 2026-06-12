@@ -375,12 +375,16 @@ const heroBg = (image: any) => {
           <div class="pb-prog__rows">
             {s.etapes?.map((etape: any, i: number) => {
               const imgUrl = etape.image?.asset
-                ? urlFor(etape.image).width(900).height(700).fit('crop').crop('focalpoint').url()
+                ? urlFor(etape.image).width(1200).url()
                 : null
+              const hp = etape.image?.hotspot
+              const objPos = hp
+                ? `${Math.round(stegaClean(hp.x) * 100)}% ${Math.round(stegaClean(hp.y) * 100)}%`
+                : 'center center'
               return (
                 <div class:list={['pb-prog__row', i % 2 === 1 && 'pb-prog__row--rev']}>
                   <div class="pb-prog__img">
-                    {imgUrl && <img src={imgUrl} alt={etape.image?.alt || etape.titre || ''} loading="lazy" />}
+                    {imgUrl && <img src={imgUrl} alt={etape.image?.alt || etape.titre || ''} loading="lazy" style={`object-position:${objPos}`} />}
                   </div>
                   <div class="pb-prog__body">
                     <div class="pb-prog__num">{String(i + 1).padStart(2, '0')}</div>
