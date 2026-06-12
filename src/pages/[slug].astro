@@ -143,6 +143,13 @@ function blocks(content: any[]): string {
   return out
 }
 
+// ── Extrait l'ID d'une URL YouTube ───────────────────────────────────────────
+function ytId(url: string): string | null {
+  if (!url) return null
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|v\/|shorts\/))([a-zA-Z0-9_-]{11})/)
+  return m ? m[1] : null
+}
+
 // ── Fond de section ───────────────────────────────────────────────────────────
 const bgClass: Record<string,string> = {
   white: 'section--white',
@@ -179,7 +186,19 @@ const heroBg = (image: any) => {
     {/* ════════════ HERO ════════════ */}
     {s._type === 'sectionHero' && (
       <section class="pb-hero" style={`min-height:${heroHeight(s.hauteur)}`}>
-        {stegaClean(s.videoUrl) ? (
+        {ytId(stegaClean(s.videoYoutubeUrl) || '') ? (
+          <>
+            <div class="pb-hero__yt-wrapper">
+              <iframe
+                class="pb-hero__yt-iframe"
+                src={`https://www.youtube-nocookie.com/embed/${ytId(stegaClean(s.videoYoutubeUrl) || '')}?autoplay=1&mute=1&loop=1&playlist=${ytId(stegaClean(s.videoYoutubeUrl) || '')}&controls=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&disablekb=1`}
+                allow="autoplay; encrypted-media"
+                title="hero video"
+              />
+            </div>
+            <div class="pb-hero__overlay"></div>
+          </>
+        ) : stegaClean(s.videoUrl) ? (
           <>
             <video
               class="pb-hero__video"
@@ -891,6 +910,23 @@ const heroBg = (image: any) => {
   position: absolute;
   inset: 0;
   background-color: var(--color-ocean);
+}
+.pb-hero__yt-wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.pb-hero__yt-iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw;
+  min-width: 177.78vh;
+  min-height: 100vh;
+  transform: translate(-50%, -50%);
+  border: none;
 }
 .pb-hero__video {
   position: absolute;

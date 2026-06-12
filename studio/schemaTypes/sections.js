@@ -118,6 +118,12 @@ export const sectionHero = {
       description: 'Ex : "Matériel bar", "Matériel truite"…',
     },
     {
+      name: 'videoYoutubeUrl',
+      title: '▶️ Vidéo de fond — URL YouTube (optionnel)',
+      type: 'url',
+      description: 'Remplace la photo par une vidéo YouTube en fond. Ex : https://www.youtube.com/watch?v=iq9lzlg3__I — la vidéo sera muette et en boucle.',
+    },
+    {
       name: 'videoUrl',
       title: '🎬 Vidéo de fond — URL MP4 (optionnel)',
       type: 'url',
