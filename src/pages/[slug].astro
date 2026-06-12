@@ -311,7 +311,11 @@ const heroBg = (image: any) => {
     {s._type === 'sectionTexteImage' && (
       <section class={`section pb-ti ${bg(s.fond)||''}`}>
         <div class="container pb-ti__grid" data-pos={stegaClean(s.imagePosition)||'right'}>
-          <div class="prose" set:html={blocks(s.texte)} />
+          <div class="pb-ti__text">
+            {stegaClean(s.eyebrow) && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+            {stegaClean(s.titre) && <h2 class="pb-ti__h2">{s.titre}</h2>}
+            <div class="prose" set:html={blocks(s.texte)} />
+          </div>
           {(s.image?.asset || s.texteImageUrl) && (
             <figure class="pb-ti__fig">
               {s.image?.asset
@@ -1173,6 +1177,15 @@ const heroBg = (image: any) => {
 }
 .pb-ti__grid[data-pos="left"] .pb-ti__fig { order: -1; }
 .pb-ti__fig img { border-radius: 6px; width: 100%; }
+.pb-ti__h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  color: var(--color-text);
+  margin: 0.3rem 0 1.2rem;
+  line-height: 1.2;
+}
+.section--dark .pb-ti__h2,
+.section--ocean .pb-ti__h2 { color: white; }
 
 /* ── GALERIE ── */
 .galerie-grid {
