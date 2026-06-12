@@ -194,13 +194,17 @@ const heroBg = (image: any) => {
                   start: String(debut),
                   ...(fin != null ? { end: String(fin) } : {}),
                 })
-                // Script inline : reboucle sur le segment via IFrame API
+                // Script inline : reboucle sur le segment + force HD via IFrame API
                 const loopScript = `(function(){
                   function init(){
                     if(typeof YT==='undefined'||!YT.Player){setTimeout(init,150);return;}
-                    new YT.Player('yt-hero-player',{events:{onStateChange:function(e){
-                      if(e.data===0){e.target.seekTo(${debut},true);e.target.playVideo();}
-                    }}});
+                    new YT.Player('yt-hero-player',{events:{
+                      onReady:function(e){e.target.setPlaybackQuality('hd1080');},
+                      onStateChange:function(e){
+                        if(e.data===1)e.target.setPlaybackQuality('hd1080');
+                        if(e.data===0){e.target.seekTo(${debut},true);e.target.playVideo();}
+                      }
+                    }});
                   }
                   if(!document.getElementById('yt-api')){
                     var s=document.createElement('script');
