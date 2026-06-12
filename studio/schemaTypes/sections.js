@@ -535,6 +535,14 @@ export const sectionTexteImage = {
       },
       initialValue: 'right',
     },
+    {
+      name: 'distances',
+      title: 'Distances / étiquettes (optionnel)',
+      type: 'array',
+      description: 'Ex : "72 km de Brest", "222 km de Rennes" — affichées en chips sous le texte',
+      of: [{ type: 'string' }],
+      options: { layout: 'tags' },
+    },
     fondField('white'),
   ],
   preview: {

@@ -317,6 +317,13 @@ const heroBg = (image: any) => {
             {stegaClean(s.eyebrow) && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
             {stegaClean(s.titre) && <h2 class="pb-ti__h2">{s.titre}</h2>}
             <div class="prose" set:html={blocks(s.texte)} />
+            {s.distances?.length > 0 && (
+              <div class="pb-ti__chips">
+                {s.distances.map((d: string) => (
+                  <span class="pb-ti__chip">{d}</span>
+                ))}
+              </div>
+            )}
           </div>
           {(s.image?.asset || s.texteImageUrl) && (
             <figure class="pb-ti__fig">
@@ -1188,6 +1195,27 @@ const heroBg = (image: any) => {
 }
 .section--dark .pb-ti__h2,
 .section--ocean .pb-ti__h2 { color: white; }
+.pb-ti__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.6rem;
+}
+.pb-ti__chip {
+  display: inline-block;
+  padding: 0.3rem 0.85rem;
+  border: 1px solid #d0d5dc;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  white-space: nowrap;
+}
+.section--dark .pb-ti__chip,
+.section--ocean .pb-ti__chip {
+  border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.75);
+}
 
 /* ── GALERIE ── */
 .galerie-grid {
