@@ -1672,6 +1672,121 @@ export const sectionLienBlog = {
   },
 }
 
+// ── SECTIONS HOMEPAGE ─────────────────────────────────────────────────────────
+
+export const sectionPrestationsHP = {
+  name: 'sectionPrestationsHP',
+  title: 'Prestations (grille HP)',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Eyebrow', type: 'string',
+      description: 'Petit texte au-dessus du titre (ex: "Ce que je propose")',
+    },
+    {
+      name: 'titre', title: 'Titre de section', type: 'string',
+    },
+  ],
+  preview: {
+    select: { titre: 'titre' },
+    prepare: ({ titre }) => ({ title: `🎣 Prestations HP — ${titre || ''}` }),
+  },
+}
+
+export const sectionGuideHP = {
+  name: 'sectionGuideHP',
+  title: 'Le Guide (section HP)',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Eyebrow', type: 'string',
+      description: 'Ex: "Votre guide"',
+    },
+    {
+      name: 'nom', title: 'Nom du guide', type: 'string',
+    },
+    {
+      name: 'accroche', title: 'Accroche (sous-titre)', type: 'string',
+    },
+    {
+      name: 'bio', title: 'Bio courte', type: 'text', rows: 4,
+    },
+    {
+      name: 'photo', title: 'Photo du guide', type: 'image',
+      options: { hotspot: true },
+    },
+    {
+      name: 'boutonTexte', title: 'Texte du bouton', type: 'string',
+      description: 'Ex: "En savoir plus"',
+    },
+    {
+      name: 'boutonLien', title: 'Lien du bouton', type: 'string',
+      description: 'Ex: /jean-baptiste-vidal-moniteur-guide-de-peche',
+    },
+  ],
+  preview: {
+    select: { nom: 'nom' },
+    prepare: ({ nom }) => ({ title: `🧑‍✈️ Guide HP — ${nom || ''}` }),
+  },
+}
+
+export const sectionTemoignagesHP = {
+  name: 'sectionTemoignagesHP',
+  title: 'Témoignages (section HP)',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Eyebrow', type: 'string',
+      description: 'Ex: "Ils sont venus pêcher"',
+    },
+    {
+      name: 'pitch', title: 'Phrase d\'accroche', type: 'string',
+    },
+    {
+      name: 'ctaTexte', title: 'Texte du lien', type: 'string',
+      description: 'Ex: "Tous les avis →"',
+    },
+    {
+      name: 'ctaLien', title: 'URL du lien', type: 'string',
+      description: 'Ex: /temoignages',
+    },
+  ],
+  preview: {
+    select: { pitch: 'pitch' },
+    prepare: ({ pitch }) => ({ title: `⭐ Témoignages HP — ${pitch || ''}` }),
+  },
+}
+
+export const sectionBonCadeauHP = {
+  name: 'sectionBonCadeauHP',
+  title: 'Bon cadeau (section HP)',
+  type: 'object',
+  fields: [
+    {
+      name: 'titre', title: 'Titre', type: 'string',
+    },
+    {
+      name: 'texte', title: 'Texte', type: 'text', rows: 3,
+    },
+    {
+      name: 'btn1Texte', title: 'Bouton 1 — texte', type: 'string',
+    },
+    {
+      name: 'btn1Lien', title: 'Bouton 1 — lien', type: 'string',
+    },
+    {
+      name: 'btn2Texte', title: 'Bouton 2 — texte', type: 'string',
+    },
+    {
+      name: 'btn2Lien', title: 'Bouton 2 — lien', type: 'string',
+    },
+  ],
+  preview: {
+    select: { titre: 'titre' },
+    prepare: ({ titre }) => ({ title: `🎁 Bon cadeau HP — ${titre || ''}` }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -1697,4 +1812,8 @@ export const allSectionTypes = [
   sectionFriseChronologique,
   sectionListe,
   sectionLienBlog,
+  sectionPrestationsHP,
+  sectionGuideHP,
+  sectionTemoignagesHP,
+  sectionBonCadeauHP,
 ]
