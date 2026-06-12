@@ -117,6 +117,19 @@ export const sectionHero = {
       initialValue: 'Matériel',
       description: 'Ex : "Matériel bar", "Matériel truite"…',
     },
+    {
+      name: 'btnYoutubeLien',
+      title: 'Bouton YouTube — URL de la chaîne (optionnel)',
+      type: 'url',
+      description: 'Ex : https://www.youtube.com/@enjoyfishing — laisser vide pour ne pas afficher',
+    },
+    {
+      name: 'btnYoutubeTexte',
+      title: 'Bouton YouTube — libellé',
+      type: 'string',
+      initialValue: "S'abonner à ma chaîne",
+      description: 'Texte du bouton YouTube (affiché avec le logo YouTube)',
+    },
     // ── Stats hero (optionnel — remplace les boutons CTA) ──
     {
       name: 'statsHero',
