@@ -117,6 +117,26 @@ export const sectionHero = {
       initialValue: 'Matériel',
       description: 'Ex : "Matériel bar", "Matériel truite"…',
     },
+    // ── Stats hero (optionnel — remplace les boutons CTA) ──
+    {
+      name: 'statsHero',
+      title: '📊 Stats dans le hero (optionnel)',
+      type: 'array',
+      description: 'Si renseignées, remplacent les boutons CTA. Ex : 21 ans de guidage | 33 ans de pratique | 12+ pays',
+      of: [{
+        type: 'object',
+        name: 'statHero',
+        title: 'Statistique',
+        fields: [
+          { name: 'nombre', title: 'Valeur (ex : 21, 33 ans, 12+)', type: 'string', validation: R => R.required() },
+          { name: 'label',  title: 'Libellé (ex : "ans de guidage")', type: 'string', validation: R => R.required() },
+        ],
+        preview: {
+          select: { nombre: 'nombre', label: 'label' },
+          prepare: ({ nombre, label }) => ({ title: `${nombre} — ${label}` }),
+        },
+      }],
+    },
   ],
   preview: {
     select: { title: 'titre', subtitle: 'eyebrow', media: 'image' },
@@ -171,8 +191,8 @@ export const sectionIntro = {
       type: 'string', description: 'Ex : 300 € / journée · 180 € / demi-journée',
     },
     {
-      name: 'duree', title: 'Durée',
-      type: 'string', description: 'Ex : Journée complète (8h)',
+      name: 'duree', title: 'Horaires',
+      type: 'string', description: 'Ex : 9h30–18h · Soit 7 à 8h de guidage',
     },
     {
       name: 'lignesSupp',
@@ -192,6 +212,10 @@ export const sectionIntro = {
             {
               name: 'valeur', title: 'Valeur',
               type: 'string', description: 'Ex : Waders recommandés · 2 pers. max · Rivière Odet',
+            },
+            {
+              name: 'note', title: 'Note (italique, optionnel)',
+              type: 'string', description: 'Précision affichée en italique sous la valeur — ex : Permis journalier non inclus (15 à 23 €)',
             },
           ],
           preview: {
@@ -764,7 +788,7 @@ export const sectionCarrousel3Images = {
       name: 'images', title: 'Images',
       type: 'array',
       description: 'Ajoutez autant d\'images que souhaité — 3 s\'affichent à la fois',
-      validation: Rule => Rule.min(3).error('Minimum 3 images requises'),
+      validation: Rule => Rule.min(1).warning('Ajoutez au moins 3 images pour un rendu optimal'),
       of: [
         {
           type: 'image',
@@ -1422,6 +1446,178 @@ export const sectionChoix = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 21 — FRISE CHRONOLOGIQUE
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionFriseChronologique = {
+  name: 'sectionFriseChronologique',
+  title: '📅 Frise chronologique',
+  type: 'object',
+  fields: [
+    { name: 'eyebrow', title: 'Eyebrow (au-dessus du titre)', type: 'string' },
+    { name: 'titre', title: 'Titre de la section (H2)', type: 'string' },
+    { name: 'sousTitre', title: 'Sous-titre (phrase introductive)', type: 'text', rows: 2 },
+    fondField('sand'),
+    // Barre de stats (au-dessus de la frise)
+    {
+      name: 'statsBar',
+      title: '📊 Barre de stats (optionnel)',
+      type: 'array',
+      description: 'Chiffres clés affichés en bandeau au-dessus de la frise. Ex : 10+ pays | 8 lodges | 15 ans',
+      of: [{
+        type: 'object', name: 'statBar', title: 'Stat',
+        fields: [
+          { name: 'nombre', title: 'Valeur (ex : 10+, 8, 15 ans)', type: 'string', validation: R => R.required() },
+          { name: 'label',  title: 'Libellé (ex : "pays guidés")', type: 'string', validation: R => R.required() },
+        ],
+        preview: { select: { nombre: 'nombre', label: 'label' }, prepare: ({ nombre, label }) => ({ title: `${nombre} ${label}` }) },
+      }],
+    },
+    {
+      name: 'citation', title: 'Citation (dans la barre de stats)',
+      type: 'string',
+      description: 'Ex : « Chaque destination m\'a appris quelque chose d\'unique. »',
+    },
+    // Étapes de la frise
+    {
+      name: 'items', title: 'Étapes de la frise',
+      type: 'array',
+      validation: R => R.min(1).error('Au moins une étape requise'),
+      of: [{
+        type: 'object', name: 'friseItem', title: 'Étape',
+        fields: [
+          { name: 'periode', title: 'Période (ex : 2008–2013, Mars 2015)', type: 'string', validation: R => R.required() },
+          { name: 'lieu',    title: 'Lieu (ex : Argentine — Terre de Feu)', type: 'string', validation: R => R.required() },
+          { name: 'detail',  title: 'Détail de l\'expérience', type: 'text', rows: 2 },
+          {
+            name: 'photos', title: '📸 Photos (ouvre un mini-carrousel au survol)',
+            type: 'array',
+            description: 'Si présentes, le point de la frise devient cliquable et affiche les photos',
+            of: [{
+              type: 'image', options: { hotspot: true },
+              fields: [
+                { name: 'alt',     type: 'string', title: 'Description (SEO / accessibilité)' },
+                { name: 'caption', type: 'string', title: 'Légende (affichée sur la photo)' },
+              ],
+            }],
+          },
+          { name: 'lien',       title: 'Lien principal (optionnel)', type: 'string', description: 'URL interne ou externe' },
+          { name: 'lienLabel',  title: 'Libellé du lien principal',  type: 'string' },
+          { name: 'lien2',      title: 'Lien secondaire (optionnel)', type: 'string' },
+          { name: 'lienLabel2', title: 'Libellé du lien secondaire',  type: 'string' },
+        ],
+        preview: {
+          select: { periode: 'periode', lieu: 'lieu', photos: 'photos' },
+          prepare: ({ periode, lieu, photos }) => ({
+            title: `${periode} — ${lieu}`,
+            subtitle: photos?.length ? `📸 ${photos.length} photo(s)` : 'Aucune photo',
+          }),
+        },
+      }],
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', items: 'items' },
+    prepare: ({ titre, items }) => ({
+      title: `📅 Frise — ${titre || '(sans titre)'}`,
+      subtitle: `${items?.length || 0} étape(s)`,
+    }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 22 — LISTE (diplômes, qualifications, certifications)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionListe = {
+  name: 'sectionListe',
+  title: '📋 Liste (diplômes, qualifications...)',
+  type: 'object',
+  fields: [
+    { name: 'eyebrow', title: 'Eyebrow', type: 'string' },
+    { name: 'titre',   title: 'Titre (H2)', type: 'string' },
+    { name: 'intro',   title: 'Texte introductif', type: 'text', rows: 3 },
+    fondField('white'),
+    {
+      name: 'items', title: 'Éléments de la liste',
+      type: 'array',
+      validation: R => R.min(1),
+      of: [{
+        type: 'object', name: 'listeItem', title: 'Élément',
+        fields: [
+          {
+            name: 'annee', title: 'Étiquette (année, catégorie)',
+            type: 'string',
+            validation: R => R.required(),
+            description: 'Ex : 2004, Presse, Sponsors, 2001–',
+          },
+          {
+            name: 'label', title: 'Description',
+            type: 'string',
+            validation: R => R.required(),
+          },
+        ],
+        preview: {
+          select: { annee: 'annee', label: 'label' },
+          prepare: ({ annee, label }) => ({ title: `${annee} — ${label}` }),
+        },
+      }],
+    },
+    {
+      name: 'image', title: 'Photo (côté droit)',
+      type: 'image', options: { hotspot: true },
+      fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', items: 'items', media: 'image' },
+    prepare: ({ titre, items, media }) => ({
+      title: `📋 Liste — ${titre || '(sans titre)'}`,
+      subtitle: `${items?.length || 0} élément(s)`,
+      media,
+    }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — LIEN VERS ARTICLE DE BLOG
+export const sectionLienBlog = {
+  name: 'sectionLienBlog',
+  title: '📰 Lien vers article de blog',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Eyebrow', type: 'string',
+      description: 'Ex : Blog · Enjoy Fishing',
+      initialValue: 'Blog · Enjoy Fishing',
+    },
+    {
+      name: 'titre', title: "Titre de l'article", type: 'string',
+      validation: R => R.required(),
+    },
+    {
+      name: 'description', title: 'Description', type: 'text', rows: 3,
+      description: 'Courte présentation de l\'article (1–2 phrases)',
+    },
+    {
+      name: 'urlArticle', title: "URL de l'article", type: 'url',
+      validation: R => R.required(),
+      description: 'Lien complet vers enjoyfishing.fr ou tout autre blog',
+    },
+    {
+      name: 'labelBouton', title: 'Libellé du bouton', type: 'string',
+      description: 'Par défaut : "Lire l\'article →"',
+    },
+    fondField('white'),
+  ],
+  preview: {
+    select: { titre: 'titre', url: 'urlArticle' },
+    prepare: ({ titre, url }) => ({
+      title: `📰 ${titre || '(sans titre)'}`,
+      subtitle: url,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -1444,4 +1640,7 @@ export const allSectionTypes = [
   sectionBilan,
   sectionDates,
   sectionChoix,
+  sectionFriseChronologique,
+  sectionListe,
+  sectionLienBlog,
 ]
