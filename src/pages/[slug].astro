@@ -189,12 +189,26 @@ const heroBg = (image: any) => {
         {ytId(stegaClean(s.videoYoutubeUrl) || '') ? (
           <>
             <div class="pb-hero__yt-wrapper">
-              <iframe
-                class="pb-hero__yt-iframe"
-                src={`https://www.youtube-nocookie.com/embed/${ytId(stegaClean(s.videoYoutubeUrl) || '')}?autoplay=1&mute=1&loop=1&playlist=${ytId(stegaClean(s.videoYoutubeUrl) || '')}&controls=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&disablekb=1`}
-                allow="autoplay; encrypted-media"
-                title="hero video"
-              />
+              {(() => {
+                const vid   = ytId(stegaClean(s.videoYoutubeUrl) || '')!
+                const debut = s.videoYoutubeDebut ?? 0
+                const fin   = s.videoYoutubeFin
+                const params = new URLSearchParams({
+                  autoplay: '1', mute: '1', loop: '1', playlist: vid,
+                  controls: '0', rel: '0', iv_load_policy: '3',
+                  modestbranding: '1', playsinline: '1', disablekb: '1',
+                  start: String(debut),
+                  ...(fin != null ? { end: String(fin) } : {}),
+                })
+                return (
+                  <iframe
+                    class="pb-hero__yt-iframe"
+                    src={`https://www.youtube-nocookie.com/embed/${vid}?${params}`}
+                    allow="autoplay; encrypted-media"
+                    title="hero video"
+                  />
+                )
+              })()}
             </div>
             <div class="pb-hero__overlay"></div>
           </>

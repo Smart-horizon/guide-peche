@@ -124,6 +124,21 @@ export const sectionHero = {
       description: 'Remplace la photo par une vidéo YouTube en fond. Ex : https://www.youtube.com/watch?v=iq9lzlg3__I — la vidéo sera muette et en boucle.',
     },
     {
+      name: 'videoYoutubeDebut',
+      title: '⏱ Début de la boucle (secondes)',
+      type: 'number',
+      initialValue: 0,
+      description: 'Secondes depuis le début de la vidéo YouTube. Ex : 0 = depuis le début.',
+      hidden: ({ parent }) => !parent?.videoYoutubeUrl,
+    },
+    {
+      name: 'videoYoutubeFin',
+      title: '⏱ Fin de la boucle (secondes)',
+      type: 'number',
+      description: 'La vidéo reboucle à ce moment. Ex : 27 = boucle sur les 27 premières secondes. Laisser vide = vidéo entière.',
+      hidden: ({ parent }) => !parent?.videoYoutubeUrl,
+    },
+    {
       name: 'videoUrl',
       title: '🎬 Vidéo de fond — URL MP4 (optionnel)',
       type: 'url',
