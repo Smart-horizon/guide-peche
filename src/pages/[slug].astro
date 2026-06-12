@@ -200,8 +200,8 @@ const heroBg = (image: any) => {
       <section class={`section pb-intro ${bg(s.fond)||''}`}>
         <div class="container pb-intro__grid">
           <div class="pb-intro__body">
-            {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
-            {s.titre   && <h2 class="pb-intro__h2">{s.titre}</h2>}
+            {stegaClean(s.eyebrow) && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+            {stegaClean(s.titre)   && <h2 class="pb-intro__h2">{s.titre}</h2>}
             <div class="prose" set:html={blocks(s.texte)} />
           </div>
           {s.intervenant?.nom && (
@@ -978,7 +978,8 @@ const heroBg = (image: any) => {
   margin: 0.3rem 0 1.4rem;
   line-height: 1.2;
 }
-.section--dark .pb-intro__h2 { color: white; }
+.section--dark .pb-intro__h2,
+.section--ocean .pb-intro__h2 { color: white; }
 .info-card {
   background: var(--color-sand);
   border-radius: 6px;
@@ -1075,6 +1076,10 @@ const heroBg = (image: any) => {
 /* ── CARDS STYLE 2 ── */
 .pb-cards2 { overflow: hidden; }
 .pb-cards2__header { padding-top: 3rem; padding-bottom: 1.5rem; }
+.section--dark .pb-cards2__header .pb-eyebrow-sm,
+.section--ocean .pb-cards2__header .pb-eyebrow-sm { color: var(--color-ocean-light); }
+.section--dark .pb-cards2__header .pb-section-titre,
+.section--ocean .pb-cards2__header .pb-section-titre { color: white; }
 .pb-cards2__grid {
   display: grid;
   grid-template-rows: 320px;
@@ -1096,7 +1101,8 @@ const heroBg = (image: any) => {
   margin-bottom: 2rem;
   color: var(--color-text);
 }
-.section--dark .pb-section-titre { color: white; }
+.section--dark .pb-section-titre,
+.section--ocean .pb-section-titre { color: white; }
 .sous-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1286,12 +1292,17 @@ const heroBg = (image: any) => {
   font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--color-ocean-main); font-weight: 600; margin-bottom: 0.5rem;
 }
-.section--dark .pb-eyebrow-sm { color: var(--color-ocean-light); }
+.section--dark .pb-eyebrow-sm,
+.section--ocean .pb-eyebrow-sm { color: var(--color-ocean-light); }
 .pb-prog__h2  { margin-bottom: 0.5rem; }
+.section--dark .pb-prog__h2,
+.section--ocean .pb-prog__h2 { color: white; }
 .pb-prog__intro {
   font-size: 1rem; line-height: 1.7; color: var(--color-text-muted);
   max-width: 640px; margin-bottom: 2.5rem;
 }
+.section--dark .pb-prog__intro,
+.section--ocean .pb-prog__intro { color: rgba(255,255,255,0.72); }
 .pb-prog__rows { display: flex; flex-direction: column; gap: 2rem; }
 .pb-prog__row {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -1503,6 +1514,16 @@ const heroBg = (image: any) => {
 .pb-prog-txt__list li:last-child { border-bottom: none; }
 .pb-prog-txt__list--check li.ok::before { content: '✓'; color: #22c55e; }
 .pb-prog-txt__list--check li.no::before { content: '✗'; color: #ef4444; }
+/* Fond dark/ocean → cartes semi-transparentes */
+.section--dark .pb-prog-txt__card,
+.section--ocean .pb-prog-txt__card {
+  background: rgba(255,255,255,0.1);
+  box-shadow: none;
+}
+.section--dark .pb-prog-txt__label,
+.section--ocean .pb-prog-txt__label { color: var(--color-ocean-light); }
+.section--dark .pb-prog-txt__list li,
+.section--ocean .pb-prog-txt__list li { color: rgba(255,255,255,0.82); }
 @media (max-width: 768px) {
   .pb-prog-txt__grid { grid-template-columns: 1fr; }
 }
@@ -1685,14 +1706,22 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
 .section--sand  .pb-prog-cart__desc { color: var(--color-text-muted); }
 
 /* Fond dark → semi-transparent, textes clairs */
-.section--dark .pb-prog-cart__card {
-  background: rgba(255,255,255,0.07);
+.section--dark .pb-prog-cart__card,
+.section--ocean .pb-prog-cart__card {
+  background: rgba(255,255,255,0.1);
   border-top-color: var(--color-ocean-light);
   box-shadow: none;
 }
-.section--dark .pb-prog-cart__num { color: var(--color-ocean-light); opacity: 0.6; }
-.section--dark .pb-prog-cart__h3  { color: var(--color-ocean-light); }
-.section--dark .pb-prog-cart__desc { color: rgba(255,255,255,0.65); }
+.section--dark .pb-prog-cart__num,
+.section--ocean .pb-prog-cart__num { color: var(--color-ocean-light); opacity: 0.6; }
+.section--dark .pb-prog-cart__h3,
+.section--ocean .pb-prog-cart__h3  { color: white; }
+.section--dark .pb-prog-cart__desc,
+.section--ocean .pb-prog-cart__desc { color: rgba(255,255,255,0.65); }
+.section--dark .pb-prog-cart__sub,
+.section--ocean .pb-prog-cart__sub { color: var(--color-ocean-light); }
+.section--dark .pb-prog-cart__note,
+.section--ocean .pb-prog-cart__note { color: rgba(255,255,255,0.55); }
 
 /* ── BILAN DE SÉJOUR ── */
 .pb-bilan__inner {
