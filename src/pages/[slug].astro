@@ -143,13 +143,6 @@ function blocks(content: any[]): string {
   return out
 }
 
-// ── Extrait l'ID d'une URL YouTube ───────────────────────────────────────────
-function ytId(url: string): string | null {
-  if (!url) return null
-  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|v\/|shorts\/))([a-zA-Z0-9_-]{11})/)
-  return m ? m[1] : null
-}
-
 // ── Fond de section ───────────────────────────────────────────────────────────
 const bgClass: Record<string,string> = {
   white: 'section--white',
