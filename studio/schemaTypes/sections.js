@@ -118,6 +118,18 @@ export const sectionHero = {
       description: 'Ex : "Matériel bar", "Matériel truite"…',
     },
     {
+      name: 'videoUrl',
+      title: '🎬 Vidéo de fond — URL MP4 (optionnel)',
+      type: 'url',
+      description: 'Remplace la photo si renseignée. Héberger sur Cloudflare R2 ou autre CDN. Format MP4 H.264, muette, ~30s en boucle.',
+    },
+    {
+      name: 'videoWebmUrl',
+      title: '🎬 Vidéo de fond — URL WebM (optionnel)',
+      type: 'url',
+      description: 'Version WebM plus légère (même vidéo, format alternatif). Prioritaire sur MP4 dans les navigateurs modernes.',
+    },
+    {
       name: 'btnYoutubeLien',
       title: 'Bouton YouTube — URL de la chaîne (optionnel)',
       type: 'url',
