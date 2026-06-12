@@ -232,8 +232,12 @@ const heroBg = (image: any) => {
           <h1 class="pb-hero__h1">{s.titre}</h1>
           {s.sousTitre && <p class="pb-hero__sub">{s.sousTitre}</p>}
           <div class="pb-hero__cta">
-            <a href={s.btnReserverLien || '/contact'} class="btn-prim">{s.btnReserverTexte || 'Réserver une sortie'}</a>
-            <a href={`tel:${(s.btnTelTexte || '06 87 30 34 56').replace(/\s/g,'')}`} class="btn-ghost">{s.btnTelTexte || '06 87 30 34 56'}</a>
+            {stegaClean(s.btnReserverTexte) && (
+              <a href={s.btnReserverLien || '/contact'} class="btn-prim">{s.btnReserverTexte}</a>
+            )}
+            {stegaClean(s.btnTelTexte) && (
+              <a href={`tel:${stegaClean(s.btnTelTexte).replace(/\s/g,'')}`} class="btn-ghost">{s.btnTelTexte}</a>
+            )}
             {s.btnMaterielLien && (
               <MatierielBtn href={s.btnMaterielLien} label={s.btnMaterielLabel || 'Matériel'} />
             )}
