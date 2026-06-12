@@ -187,19 +187,41 @@ const heroBg = (image: any) => {
                 const debut = s.videoYoutubeDebut ?? 0
                 const fin   = s.videoYoutubeFin
                 const params = new URLSearchParams({
-                  autoplay: '1', mute: '1', loop: '1', playlist: vid,
+                  autoplay: '1', mute: '1',
                   controls: '0', rel: '0', iv_load_policy: '3',
                   modestbranding: '1', playsinline: '1', disablekb: '1',
+                  enablejsapi: '1',
                   start: String(debut),
                   ...(fin != null ? { end: String(fin) } : {}),
                 })
+                // Script inline : reboucle sur le segment via IFrame API
+                const loopScript = `(function(){
+                  function init(){
+                    if(typeof YT==='undefined'||!YT.Player){setTimeout(init,150);return;}
+                    new YT.Player('yt-hero-player',{events:{onStateChange:function(e){
+                      if(e.data===0){e.target.seekTo(${debut},true);e.target.playVideo();}
+                    }}});
+                  }
+                  if(!document.getElementById('yt-api')){
+                    var s=document.createElement('script');
+                    s.id='yt-api';s.src='https://www.youtube.com/iframe_api';
+                    document.head.appendChild(s);
+                  }
+                  var prev=window.onYouTubeIframeAPIReady;
+                  window.onYouTubeIframeAPIReady=function(){if(prev)prev();init();};
+                  if(typeof YT!=='undefined'&&YT.Player)init();
+                })();`
                 return (
-                  <iframe
-                    class="pb-hero__yt-iframe"
-                    src={`https://www.youtube-nocookie.com/embed/${vid}?${params}`}
-                    allow="autoplay; encrypted-media"
-                    title="hero video"
-                  />
+                  <>
+                    <iframe
+                      id="yt-hero-player"
+                      class="pb-hero__yt-iframe"
+                      src={`https://www.youtube-nocookie.com/embed/${vid}?${params}`}
+                      allow="autoplay; encrypted-media"
+                      title="hero video"
+                    />
+                    <script is:inline set:html={loopScript} />
+                  </>
                 )
               })()}
             </div>
