@@ -40,6 +40,7 @@ jobs:
             "src/pages/disponibilites-guidages.astro"
             "src/pages/bon-cadeau.astro"
             "src/pages/videos.astro"
+            "src/pages/voyages-peche-mouche.astro"
             "src/pages/blog/index.astro"
             "src/pages/blog/[slug].astro"
           )
