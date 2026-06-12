@@ -2,14 +2,15 @@
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import { VisualEditing } from '@sanity/astro/visual-editing'
-import { client } from '../lib/sanity.js'
+import { stegaClient } from '../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
-const builder = imageUrlBuilder(client)
+const builder = imageUrlBuilder(stegaClient)
 const urlFor  = (source: any) => builder.image(source)
 
 // ── Un seul fetch pour tout le site (SEO global + données Footer) ──────────
-const params = await client.fetch(`*[_id == "siteParametres"][0]{
+const params = await stegaClient.fetch(`*[_id == "siteParametres"][0]{
   siteTitle, siteDescription, ogImage,
   telephone, email, adresse, footerTexte, mentionsLegales,
   facebook, instagram, youtube, vimeo
@@ -22,8 +23,8 @@ interface Props {
 }
 
 const {
-  title       = params?.siteTitle       || 'Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne',
-  description = params?.siteDescription || 'Moniteur-Guide diplômé, Jean-Baptiste Vidal vous accompagne pour la pêche à la mouche sur les plus belles rivières de Bretagne.',
+  title       = stegaClean(params?.siteTitle)       || 'Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne',
+  description = stegaClean(params?.siteDescription) || 'Moniteur-Guide diplômé, Jean-Baptiste Vidal vous accompagne pour la pêche à la mouche sur les plus belles rivières de Bretagne.',
   image       = params?.ogImage
     ? urlFor(params.ogImage).width(1200).height(630).url()
     : '/og-default.jpg',
@@ -31,16 +32,20 @@ const {
 
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url
 
+// Nettoyage stega pour les balises meta (title/description viennent parfois de pages enfants)
+const metaTitle = stegaClean(title) || title
+const metaDesc  = stegaClean(description) || description
+
 // ── Données passées au Footer (évite un second fetch) ─────────────────────
 const footerProps = {
-  telephone: params?.telephone || '06 87 30 34 56',
-  email:     params?.email     || 'enjoy.fishing@hotmail.fr',
+  telephone: stegaClean(params?.telephone) || '06 87 30 34 56',
+  email:     stegaClean(params?.email)     || 'enjoy.fishing@hotmail.fr',
   adresse:   params?.adresse   || null,
   footerBio: params?.footerTexte || "Moniteur-Guide diplômé d'État.\nPêche à la mouche en rivières de Bretagne.",
-  instagram: params?.instagram || null,
-  facebook:  params?.facebook  || null,
-  youtube:   params?.youtube   || null,
-  vimeo:     params?.vimeo     || null,
+  instagram: stegaClean(params?.instagram) || null,
+  facebook:  stegaClean(params?.facebook)  || null,
+  youtube:   stegaClean(params?.youtube)   || null,
+  vimeo:     stegaClean(params?.vimeo)     || null,
 }
 ---
 
@@ -49,13 +54,13 @@ const footerProps = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
+    <meta name="description" content={metaDesc} />
     <!-- Noindex — site en développement, non destiné à l'indexation -->
     <meta name="robots" content="noindex, nofollow" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={metaTitle} />
+    <meta property="og:description" content={metaDesc} />
     <meta property="og:image" content={image} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:type" content="website" />
@@ -71,7 +76,7 @@ const footerProps = {
       rel="stylesheet"
     />
 
-    <title>{title}</title>
+    <title>{metaTitle}</title>
   </head>
 
   <body>
@@ -102,7 +107,7 @@ const footerProps = {
     --font-serif: 'Playfair Display', Georgia, serif;
     --font-sans:  'DM Sans', system-ui, sans-serif;
 
-    --max-width: 1200px;
+    --max-width: 1280px;
     --header-height: 72px;
   }
 
@@ -152,11 +157,11 @@ const footerProps = {
     width: 100%;
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
   }
 
   .section {
-    padding: 5rem 0;
+    padding: 3.5rem 0;
   }
 
   .section--white {
