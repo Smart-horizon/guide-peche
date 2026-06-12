@@ -67,7 +67,16 @@ const QUERIES: Record<string, string> = {
     seoTitle, seoDescription, ogImage
   }`,
   page: `*[_type == "page" && slug.current == $slug][0]{
-    _id, _type, title, contenu, image, seoTitle, seoDescription
+    _id, _type, title, contenu, image, seoTitle, seoDescription,
+    pagebuilder[]{
+      ...,
+      image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      btnFichier{ asset->{ _id, url } },
+      photos[]{ asset->{ _id, url } },
+      images[]{ asset->{ _id, url } },
+      cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+    }
   }`,
 }
 
