@@ -76,6 +76,7 @@ const QUERIES: Record<string, string> = {
       images[]{ asset->{ _id, url } },
       cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
       etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      items[]{..., photos[]{asset->{_id, url}, alt, caption}},
     }
   }`,
 }
@@ -691,6 +692,110 @@ const heroBg = (image: any) => {
                 {stegaClean(s.labelBouton) || 'Lire l\'article →'}
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════ FRISE CHRONOLOGIQUE ════════════ */}
+    {s._type === 'sectionFriseChronologique' && s.items?.length > 0 && (
+      <section class={`section ${bg(s.fond)||'section--sand'}`}>
+        <div class="container">
+          {(stegaClean(s.eyebrow) || stegaClean(s.titre)) && (
+            <div class="frise-header">
+              {stegaClean(s.eyebrow) && <p class="pb-eyebrow frise-eyebrow">{s.eyebrow}</p>}
+              {stegaClean(s.titre) && <h2 class="frise-h2">{s.titre}</h2>}
+              {stegaClean(s.sousTitre) && <p class="frise-sub">{s.sousTitre}</p>}
+            </div>
+          )}
+          {(s.statsBar?.length > 0 || stegaClean(s.citation)) && (
+            <div class="tl-stats-bar">
+              {s.statsBar?.map((stat: any, si: number) => (
+                <>
+                  {si > 0 && <div class="tl-stat-sep" />}
+                  <div class="tl-stat-item">
+                    <span class="tl-stat-num">{stat.nombre}</span>
+                    <span class="tl-stat-lbl">{stat.label}</span>
+                  </div>
+                </>
+              ))}
+              {s.statsBar?.length > 0 && stegaClean(s.citation) && (
+                <div class="tl-stat-sep tl-stat-sep--hide-sm" />
+              )}
+              {stegaClean(s.citation) && (
+                <blockquote class="tl-stat-quote">{s.citation}</blockquote>
+              )}
+            </div>
+          )}
+          <div class="timeline" id="timeline-list">
+            {s.items?.map((item: any, i: number) => {
+              const hasPhotos = (item.photos?.length ?? 0) > 0
+              return (
+                <div class={`timeline-item${hasPhotos ? ' has-photo' : ''}`} data-idx={String(i)}>
+                  <div class="timeline-periode">{item.periode}</div>
+                  <div class="timeline-dot">
+                    {hasPhotos && (
+                      <svg class="dot-camera" viewBox="0 0 24 24" fill="currentColor" width="8" height="8" aria-hidden="true">
+                        <path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                      </svg>
+                    )}
+                  </div>
+                  <div class="timeline-content">
+                    <h3>{item.lieu}</h3>
+                    {stegaClean(item.detail) && <p>{item.detail}</p>}
+                  </div>
+                  {hasPhotos && (
+                    <div class="tl-expand">
+                      <div class="tl-expand-inner">
+                        <div class="tl-expand-body">
+                          <div class="tl-carousel" data-total={String(item.photos.length)}>
+                            <div class="tl-car-track">
+                              {item.photos.map((ph: any) => (
+                                <div class="tl-car-slide">
+                                  <div class="tl-expand-photo">
+                                    <img
+                                      src={ph.asset?.url}
+                                      alt={stegaClean(ph.alt) || stegaClean(item.lieu) || ''}
+                                      loading="lazy"
+                                      width="560"
+                                      height="373"
+                                    />
+                                    {stegaClean(ph.caption) && (
+                                      <span class="tl-expand-caption">{ph.caption}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            {item.photos.length > 1 && (
+                              <>
+                                <button class="tl-car-btn tl-car-prev" aria-label="Photo précédente" type="button">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+                                </button>
+                                <button class="tl-car-btn tl-car-next" aria-label="Photo suivante" type="button">
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+                                </button>
+                                <div class="tl-car-counter">1 / {item.photos.length}</div>
+                              </>
+                            )}
+                          </div>
+                          {stegaClean(item.lien) && (
+                            <a href={stegaClean(item.lien)} class="tl-expand-link">
+                              {stegaClean(item.lienLabel) || 'Voir →'}
+                            </a>
+                          )}
+                          {stegaClean(item.lien2) && (
+                            <a href={stegaClean(item.lien2)} class="tl-expand-link tl-expand-link--temo">
+                              {stegaClean(item.lienLabel2) || 'Témoignage →'}
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -1686,6 +1791,251 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   .pb-cta__inner { flex-direction: column; text-align: center; }
   .pb-cta__btns  { justify-content: center; }
 }
+
+/* ── FRISE CHRONOLOGIQUE ── */
+.frise-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+}
+.frise-eyebrow { margin-bottom: 0.6rem; }
+.frise-h2 { color: var(--color-text); margin-bottom: 0; }
+.frise-sub {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-top: 0.75rem;
+}
+.tl-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 2rem;
+  background: white;
+  border-radius: 3px;
+  border-left: 3px solid var(--color-ocean-main);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  margin: 0 auto 2.75rem;
+  max-width: 820px;
+}
+.tl-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tl-stat-num {
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: var(--color-ocean);
+  line-height: 1;
+}
+.tl-stat-lbl {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+.tl-stat-sep {
+  width: 1px;
+  height: 32px;
+  background: rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+.tl-stat-quote {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  border-left: 2px solid var(--color-ocean-light);
+  padding-left: 1rem;
+  margin: 0;
+  flex: 1;
+  min-width: 180px;
+}
+.timeline {
+  position: relative;
+  max-width: 820px;
+  margin: 0 auto;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 110px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--color-ocean-main);
+  opacity: 0.22;
+}
+.timeline-item {
+  display: grid;
+  grid-template-columns: 100px 22px minmax(0, 1fr);
+  gap: 0 0.85rem;
+  align-items: start;
+  margin-bottom: 1.5rem;
+  cursor: default;
+}
+.timeline-item.has-photo { cursor: pointer; }
+.timeline-periode {
+  text-align: right;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-ocean-main);
+  text-transform: uppercase;
+  padding-top: 0.28rem;
+  transition: color 0.2s;
+}
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(91,163,201,0.35);
+  border: 1.5px solid var(--color-ocean-main);
+  margin-top: 0.22rem;
+  justify-self: center;
+  transition: background 0.25s, box-shadow 0.25s, transform 0.25s;
+  position: relative;
+  color: white;
+}
+.dot-camera {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  display: block;
+  width: 8px; height: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.timeline-item.has-photo .timeline-dot {
+  background: var(--color-ocean-main);
+  border-color: var(--color-ocean-main);
+}
+.timeline-item.has-photo .dot-camera { opacity: 0.85; }
+.timeline-content h3 {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  color: var(--color-ocean);
+  margin: 0 0 0.25rem;
+  transition: color 0.2s;
+}
+.timeline-content p {
+  font-size: 0.83rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+.timeline-item.has-photo:hover .timeline-periode,
+.timeline-item.is-active .timeline-periode { color: var(--color-ocean); }
+.timeline-item.has-photo:hover .timeline-dot,
+.timeline-item.is-active .timeline-dot {
+  background: var(--color-ocean-light);
+  border-color: var(--color-ocean-light);
+  box-shadow: 0 0 0 5px rgba(126,200,227,0.2);
+  transform: scale(1.25);
+}
+.timeline-item.has-photo:hover .timeline-content h3,
+.timeline-item.is-active .timeline-content h3 { color: var(--color-ocean); }
+.tl-expand {
+  grid-column: 3;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.42s cubic-bezier(0.4,0,0.2,1);
+}
+.tl-expand-inner { overflow: hidden; min-height: 0; }
+.tl-expand-body { padding: 0.85rem 0 0.5rem; }
+.tl-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.16);
+}
+.tl-car-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+}
+.tl-car-slide { flex: 0 0 100%; min-width: 0; }
+.tl-expand-photo {
+  position: relative;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+}
+.tl-expand-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.tl-car-btn {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10; padding: 0;
+  transition: background 0.2s;
+}
+.tl-car-btn:hover { background: rgba(0,0,0,0.72); }
+.tl-car-prev { left: 0.5rem; }
+.tl-car-next { right: 0.5rem; }
+.tl-car-counter {
+  position: absolute;
+  bottom: 0.45rem; right: 0.6rem;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.78);
+  background: rgba(0,0,0,0.4);
+  padding: 0.12rem 0.4rem; border-radius: 2px;
+  pointer-events: none;
+}
+.tl-expand-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 1.25rem 1rem 0.75rem;
+  background: linear-gradient(to top, rgba(7,24,31,0.82) 0%, transparent 100%);
+  color: rgba(255,255,255,0.88);
+  font-size: 0.68rem; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.tl-expand-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.72rem;
+  color: var(--color-ocean-main);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(27,94,138,0.35);
+  padding-bottom: 0.1rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tl-expand-link:hover { color: var(--color-ocean); border-color: var(--color-ocean); }
+.tl-expand-link--temo {
+  color: #5a8c5c;
+  border-bottom-color: rgba(90,140,92,0.35);
+  margin-left: 0.75rem;
+}
+.tl-expand-link--temo:hover { color: #3d6b3f; border-color: #3d6b3f; }
+.timeline-item.is-active .tl-expand { grid-template-rows: 1fr; }
+@media (max-width: 900px) {
+  .tl-stats-bar { gap: 1.25rem; padding: 1rem 1.25rem; }
+  .tl-stat-sep--hide-sm { display: none; }
+  .tl-stat-quote { min-width: 100%; border-left: none; padding-left: 0; border-top: 1px solid rgba(0,0,0,0.07); padding-top: 0.75rem; margin-top: 0.25rem; }
+  .timeline::before { left: 90px; }
+  .timeline-item { grid-template-columns: 80px 20px 1fr; }
+}
+@media (max-width: 640px) {
+  .timeline::before { left: 72px; }
+  .timeline-item { grid-template-columns: 64px 20px 1fr; }
+  .tl-expand-photo { max-width: 100%; }
+}
 </style>
 
 <script>
@@ -1749,4 +2099,84 @@ document.querySelectorAll('[data-carr]').forEach(wrap => {
 
   startAutoplay()
 })
+
+// ── FRISE CHRONOLOGIQUE — mini-carrousels + accordéon ─────────────────────────
+;(function() {
+
+  // Mini-carrousels
+  document.querySelectorAll<HTMLElement>('.tl-carousel').forEach(car => {
+    const track   = car.querySelector<HTMLElement>('.tl-car-track')
+    const counter = car.querySelector<HTMLElement>('.tl-car-counter')
+    const total   = parseInt(car.dataset.total || '1', 10)
+    let idx = 0
+    let autoTimer: ReturnType<typeof setInterval> | null = null
+
+    function carGo(n: number) {
+      idx = (n + total) % total
+      if (track) track.style.transform = `translateX(-${idx * 100}%)`
+      if (counter) counter.textContent = `${idx + 1} / ${total}`
+    }
+    function startAuto() {
+      if (total <= 1 || autoTimer) return
+      autoTimer = setInterval(() => carGo(idx + 1), 2800)
+    }
+    function stopAuto() {
+      if (autoTimer) { clearInterval(autoTimer); autoTimer = null }
+    }
+
+    car.querySelector('.tl-car-prev')?.addEventListener('click', (e) => {
+      e.stopPropagation(); stopAuto(); carGo(idx - 1); setTimeout(startAuto, 5000)
+    })
+    car.querySelector('.tl-car-next')?.addEventListener('click', (e) => {
+      e.stopPropagation(); stopAuto(); carGo(idx + 1); setTimeout(startAuto, 5000)
+    })
+    startAuto()
+  })
+
+  // Accordéon
+  const CLOSE_DELAY = 900
+  const timelineEl = document.getElementById('timeline-list')
+  if (!timelineEl) return
+  const items = timelineEl.querySelectorAll<HTMLElement>('.timeline-item.has-photo')
+  const timers = new Map<HTMLElement, ReturnType<typeof setTimeout>>()
+
+  function openItem(item: HTMLElement) {
+    const t = timers.get(item)
+    if (t !== undefined) { clearTimeout(t); timers.delete(item) }
+    items.forEach(i => { if (i !== item) i.classList.remove('is-active') })
+    item.classList.add('is-active')
+    item.querySelectorAll<HTMLImageElement>('.tl-expand img[loading="lazy"]').forEach(img => {
+      img.loading = 'eager'
+    })
+  }
+
+  function scheduleClose(item: HTMLElement) {
+    const t = setTimeout(() => {
+      item.classList.remove('is-active')
+      timers.delete(item)
+    }, CLOSE_DELAY)
+    timers.set(item, t)
+  }
+
+  if (window.innerWidth > 900) {
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => openItem(item))
+      item.addEventListener('mouseleave', () => scheduleClose(item))
+    })
+  } else {
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        const wasActive = item.classList.contains('is-active')
+        items.forEach(i => i.classList.remove('is-active'))
+        if (!wasActive) {
+          item.classList.add('is-active')
+          item.querySelectorAll<HTMLImageElement>('.tl-expand img[loading="lazy"]').forEach(img => {
+            img.loading = 'eager'
+          })
+        }
+      })
+    })
+  }
+
+})()
 </script>
