@@ -33,12 +33,12 @@ const QUERIES: Record<string, string> = {
     _id, _type, title, categorie,
     pagebuilder[]{
       ...,
-      image{ asset->{ _id, url, metadata{ dimensions } } },
+      image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
       btnFichier{ asset->{ _id, url } },
       photos[]{ asset->{ _id, url } },
       images[]{ asset->{ _id, url } },
-      cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
-      etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+      cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
     },
     seoTitle, seoDescription, ogImage
   }`,
@@ -46,15 +46,15 @@ const QUERIES: Record<string, string> = {
     _id, _type, title, pays, especes, periode, prix,
     pagebuilder[]{
       ...,
-      image{ asset->{ _id, url, metadata{ dimensions } } },
+      image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
       btnFichier{ asset->{ _id, url } },
       photos[]{ asset->{ _id, url } },
       images[]{ asset->{ _id, url } },
-      cards[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
-      etapes[]{ ..., image{ asset->{ _id, url, metadata{ dimensions } } } },
+      cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
       'options': options[]{
         ...,
-        image{ asset->{ _id, url, metadata{ dimensions } } },
+        image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
       },
       'galerie': galerie[]{
         asset->{ _id, url, metadata{ dimensions } }
