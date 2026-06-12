@@ -242,7 +242,7 @@ const heroBg = (image: any) => {
             const isLast   = i === s.cards.length - 1
             const isOdd    = s.cards.length % 2 === 1
             const cardImgUrl = c.image?.asset
-              ? urlFor(c.image).width(800).height(600).fit('crop').url()
+              ? urlFor(c.image).width(800).height(600).fit('crop').crop('focalpoint').url()
               : null
             return (
               <a href={c.lien||'#'} class:list={['wf-card', isOdd&&isLast&&'wf-card--wide']}>
@@ -271,7 +271,7 @@ const heroBg = (image: any) => {
         <div class="pb-cards2__grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||4},1fr)`}>
           {s.cards?.map((c: any) => {
             const cardImgUrl = c.image?.asset
-              ? urlFor(c.image).width(800).height(600).fit('crop').url()
+              ? urlFor(c.image).width(800).height(600).fit('crop').crop('focalpoint').url()
               : null
             return (
               <a href={c.lien||'#'} class="wf-card">
@@ -305,7 +305,7 @@ const heroBg = (image: any) => {
           {(s.image?.asset || s.texteImageUrl) && (
             <figure class="pb-ti__fig">
               {s.image?.asset
-                ? <img src={urlFor(s.image).width(680).height(520).fit('crop').url()} alt={s.image?.alt || ''} loading="lazy" />
+                ? <img src={urlFor(s.image).width(680).height(520).fit('crop').crop('focalpoint').url()} alt={s.image?.alt || ''} loading="lazy" />
                 : <img src={`${s.texteImageUrl}?w=680&fit=crop`} alt={s.image?.alt || ''} loading="lazy" />
               }
             </figure>
@@ -321,7 +321,7 @@ const heroBg = (image: any) => {
           {s.titre && <h2 class="pb-section-titre">{s.titre}</h2>}
           <div class="galerie-grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||3},1fr)`}>
             {s.photos?.map((p: any) => (
-              <img src={urlFor(p).width(600).height(450).fit('crop').url()} alt={p.alt||''} loading="lazy" class="galerie-img"/>
+              <img src={urlFor(p).width(600).height(450).fit('crop').crop('focalpoint').url()} alt={p.alt||''} loading="lazy" class="galerie-img"/>
             ))}
           </div>
         </div>
@@ -375,7 +375,7 @@ const heroBg = (image: any) => {
           <div class="pb-prog__rows">
             {s.etapes?.map((etape: any, i: number) => {
               const imgUrl = etape.image?.asset
-                ? urlFor(etape.image).width(900).height(700).fit('crop').url()
+                ? urlFor(etape.image).width(900).height(700).fit('crop').crop('focalpoint').url()
                 : null
               return (
                 <div class:list={['pb-prog__row', i % 2 === 1 && 'pb-prog__row--rev']}>
@@ -426,7 +426,7 @@ const heroBg = (image: any) => {
 
     {/* ════════════ MISE EN PAGE D'INFO ════════════ */}
     {s._type === 'sectionProgrammeCartes' && (() => {
-      const imgUrl = s.image?.asset ? urlFor(s.image).width(560).height(460).fit('crop').url() : null
+      const imgUrl = s.image?.asset ? urlFor(s.image).width(560).height(460).fit('crop').crop('focalpoint').url() : null
       return (
         <section class={`section pb-prog-cart ${bg(s.fond)||'section--sand'}`}>
           <div class="container">
@@ -486,7 +486,7 @@ const heroBg = (image: any) => {
           <div class="pb-sel__list">
             {s.items?.map((item: any, i: number) => {
               const imgUrl = item.image?.asset
-                ? urlFor(item.image).width(900).height(700).fit('crop').url()
+                ? urlFor(item.image).width(900).height(700).fit('crop').crop('focalpoint').url()
                 : null
               const isReverse = i % 2 === 1
               const bodySand  = stegaClean(s.styleCorps) !== 'white'
@@ -525,7 +525,7 @@ const heroBg = (image: any) => {
 
     {/* ════════════ BILAN DE SÉJOUR ════════════ */}
     {s._type === 'sectionBilan' && (() => {
-      const imgUrl = s.image?.asset ? urlFor(s.image).width(680).height(520).fit('crop').url() : null
+      const imgUrl = s.image?.asset ? urlFor(s.image).width(680).height(520).fit('crop').crop('focalpoint').url() : null
       return (
         <section class={`section pb-bilan ${bg(s.fond)||'section--sand'}`}>
           <div class="container pb-bilan__inner">
