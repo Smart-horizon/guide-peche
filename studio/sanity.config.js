@@ -182,9 +182,13 @@ const customStructure = (S, context) =>
               S.divider(),
 
               // ── Autres pages ──────────────────────────────────────────────
-              S.listItem()
-                .title('🤝 Partenaires')
-                .child(S.document().schemaType('page').documentId('page-partenaires-jeanbaptistevidal').title('Partenaires')),
+              orderableDocumentListDeskItem({
+                type: 'partenaire',
+                title: '🤝 Partenaires',
+                icon: () => '🤝',
+                S,
+                context,
+              }),
               S.listItem()
                 .title('🎥 Vidéos')
                 .child(S.document().schemaType('page').documentId('page-videos-jeanbaptiste-vidal-moniteur-guide-de-peche').title('Vidéos')),

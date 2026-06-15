@@ -1,22 +1,13 @@
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
+
 export default {
   name: 'partenaire',
   title: 'Partenaire',
   type: 'document',
-  orderings: [
-    {
-      title: 'Ordre manuel',
-      name: 'orderRankAsc',
-      by: [{ field: 'orderRank', direction: 'asc' }],
-    },
-  ],
+  icon: () => '🤝',
+  orderings: [orderRankOrdering],
   fields: [
-    {
-      name: 'orderRank',
-      title: 'Ordre d\'affichage',
-      type: 'number',
-      description: 'Nombre pour trier (1 = premier). Glisser-déposer non disponible ici.',
-      initialValue: 99,
-    },
+    orderRankField({ type: 'partenaire' }),
     {
       name: 'nom',
       title: 'Nom court',
