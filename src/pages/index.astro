@@ -148,10 +148,8 @@ const materielSection = {
     : MATERIEL_CARDS_FALLBACK,
 }
 
-// ── Sections pagebuilder (hors sections HP fixes) ─────────────────────────────
-// On filtre les 4 types HP fixes car ils sont rendus en dur ci-dessous
-const HP_FIXED = ['sectionGuideHP', 'sectionMaterielHP', 'sectionTemoignagesHP', 'sectionBonCadeauHP']
-const pbSections = (hp?.pagebuilder ?? []).filter((s: any) => !HP_FIXED.includes(s._type))
+// ── Toutes les sections dans l'ordre Sanity ───────────────────────────────────
+const allSections = hp?.pagebuilder ?? []
 ---
 
 <BaseLayout
@@ -160,8 +158,8 @@ const pbSections = (hp?.pagebuilder ?? []).filter((s: any) => !HP_FIXED.includes
   image={ogImg}
 >
 
-  {/* ── Sections pagebuilder (hero + autres blocs libres) ── */}
-  {!pbSections.some((s: any) => s._type === 'sectionHero') && (
+  {/* ── Hero fallback (si aucune sectionHero dans le pagebuilder) ── */}
+  {!allSections.some((s: any) => s._type === 'sectionHero') && (
     <section class="hp-hero-fallback">
       <div class="hp-hero-fallback__bg"></div>
       <div class="hp-hero-fallback__overlay"></div>
@@ -180,134 +178,140 @@ const pbSections = (hp?.pagebuilder ?? []).filter((s: any) => !HP_FIXED.includes
       </div>
     </section>
   )}
-  <PageBuilderSections sections={pbSections} pageTitle={pageTitle} />
 
-  {/* ── LE GUIDE — section fixe ── */}
-  <section class="section section--sand guide-section">
-    <div class="container guide-inner">
-      <div class="guide-photo" style={guidePhotoUrl ? `background-image: url('${guidePhotoUrl}')` : undefined}></div>
-      <div class="guide-text">
-        <p class="eyebrow">{guideEyebrow}</p>
-        <h2>{guideNom}</h2>
-        <p class="guide-accroche">{guideAccroche}</p>
-        <p>{guideBio}</p>
-        <ul class="guide-stats">
-          {guideStats.map((s) => (
-            <li><strong>{s.valeur}</strong> {s.label}</li>
-          ))}
-        </ul>
-        <a href={guideBtnLien} class="btn btn--ocean">{guideBtnTxt}</a>
-      </div>
-    </div>
-  </section>
+  {/* ── Toutes les sections dans l'ordre Sanity ── */}
+  {allSections.map((s: any) => {
 
-  {/* ── MATÉRIEL — section fixe ── */}
-  <section class="section hp-materiel">
-    <div class="container hp-materiel__header">
-      <p class="eyebrow">{materielSection.eyebrow}</p>
-      <h2>{materielSection.titre}</h2>
-    </div>
-    <div class="hp-materiel__grid">
-      <div class="hp-mat-card hp-mat-card--featured">
-        <div class="hp-mat-card__bg" style={`background-image: url('${materielSection.featuredImage}')`}></div>
-        <div class="hp-mat-card__body hp-mat-card__body--featured">
-          <div class="hp-mat-card__left">
-            <p class="hp-mat-card__eyebrow">{materielSection.featuredEyebrow}</p>
-            <h3>{materielSection.featuredTitre}</h3>
-            <a href={materielSection.featuredLien} class="hp-mat-card__all">Voir tout →</a>
+    if (s._type === 'sectionGuideHP') return (
+      <section class="section section--sand guide-section">
+        <div class="container guide-inner">
+          <div class="guide-photo" style={guidePhotoUrl ? `background-image: url('${guidePhotoUrl}')` : undefined}></div>
+          <div class="guide-text">
+            <p class="eyebrow">{guideEyebrow}</p>
+            <h2>{guideNom}</h2>
+            <p class="guide-accroche">{guideAccroche}</p>
+            <p>{guideBio}</p>
+            <ul class="guide-stats">
+              {guideStats.map((st) => (
+                <li><strong>{st.valeur}</strong> {st.label}</li>
+              ))}
+            </ul>
+            <a href={guideBtnLien} class="btn btn--ocean">{guideBtnTxt}</a>
           </div>
-          <nav class="hp-mat-subnav" aria-label="Sous-pages matériel">
-            {materielSection.sousLiens.map((l: any) => (
-              <a href={l.href} class="hp-mat-subnav__link">{l.label}</a>
-            ))}
-          </nav>
         </div>
-      </div>
-      {materielSection.cardsSecondaires.map((c: any) => (
-        <a href={c.lien} class="hp-mat-card">
-          <div class="hp-mat-card__bg" style={`background-image: url('${c.imageUrl}')`}></div>
-          <div class="hp-mat-card__body">
-            <p class="hp-mat-card__eyebrow">{c.eyebrow}</p>
-            <h3>{c.titre}</h3>
-            <span class="hp-mat-card__arrow">Découvrir →</span>
+      </section>
+    )
+
+    if (s._type === 'sectionMaterielHP') return (
+      <section class="section hp-materiel">
+        <div class="container hp-materiel__header">
+          <p class="eyebrow">{materielSection.eyebrow}</p>
+          <h2>{materielSection.titre}</h2>
+        </div>
+        <div class="hp-materiel__grid">
+          <div class="hp-mat-card hp-mat-card--featured">
+            <div class="hp-mat-card__bg" style={`background-image: url('${materielSection.featuredImage}')`}></div>
+            <div class="hp-mat-card__body hp-mat-card__body--featured">
+              <div class="hp-mat-card__left">
+                <p class="hp-mat-card__eyebrow">{materielSection.featuredEyebrow}</p>
+                <h3>{materielSection.featuredTitre}</h3>
+                <a href={materielSection.featuredLien} class="hp-mat-card__all">Voir tout →</a>
+              </div>
+              <nav class="hp-mat-subnav" aria-label="Sous-pages matériel">
+                {materielSection.sousLiens.map((l: any) => (
+                  <a href={l.href} class="hp-mat-subnav__link">{l.label}</a>
+                ))}
+              </nav>
+            </div>
           </div>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  {/* ── BON CADEAU — section fixe ── */}
-  <section class="hp-cadeau">
-    <div class="hp-cadeau__bg"></div>
-    <div class="hp-cadeau__overlay"></div>
-    <div class="container hp-cadeau__inner">
-      <div class="hp-cadeau__content">
-        <p class="hp-cadeau__eyebrow">🎁 Idée cadeau</p>
-        <h2 class="hp-cadeau__titre">{cadeauTitre}</h2>
-        <p class="hp-cadeau__texte">{cadeauTexte}</p>
-        <div class="hp-cadeau__actions">
-          <a href={cadeauBtn1L} class="hp-cadeau__btn hp-cadeau__btn--prim">{cadeauBtn1T}</a>
-          <a href={cadeauBtn2L} class="hp-cadeau__btn hp-cadeau__btn--ghost">{cadeauBtn2T}</a>
-        </div>
-      </div>
-      <div class="hp-cadeau__aside">
-        <div class="hp-cadeau__card">
-          <p class="hp-cadeau__card-label">Format</p>
-          <p class="hp-cadeau__card-val">Journée · Demi-journée</p>
-          <p class="hp-cadeau__card-label">Valable sur</p>
-          <p class="hp-cadeau__card-val">Toutes les prestations · Eau douce &amp; Bar</p>
-          <p class="hp-cadeau__card-label">Validité</p>
-          <p class="hp-cadeau__card-val">1 an à compter de la date d'achat</p>
-          <p class="hp-cadeau__card-label">Envoi</p>
-          <p class="hp-cadeau__card-val">Par e-mail ou courrier · Personnalisable</p>
-          <a href={cadeauBtn1L} class="hp-cadeau__card-cta">Commander →</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* ── TÉMOIGNAGES — rotator fixe ── */}
-  <section class="hp-temo">
-    <div class="container hp-temo__inner">
-
-      <div class="hp-temo__left">
-        <p class="hp-temo__eyebrow">{temoEyebrow}</p>
-        <div class="hp-temo__mark">&ldquo;</div>
-        <div class="hp-temo__rotator" id="temoRotator">
-          {temoignages.map((t: any, i: number) => (
-            <figure class={`hp-temo__quote${i === 0 ? ' hp-temo__quote--active' : ''}`}>
-              <blockquote>{t.texte}</blockquote>
-              <figcaption>
-                <strong class="hp-temo__name">{t.nom}</strong>
-                <span class="hp-temo__cat">{t.prestation}</span>
-                <span class="hp-temo__stars">{'★'.repeat(t.note ?? 5)}</span>
-              </figcaption>
-            </figure>
+          {materielSection.cardsSecondaires.map((c: any) => (
+            <a href={c.lien} class="hp-mat-card">
+              <div class="hp-mat-card__bg" style={`background-image: url('${c.imageUrl}')`}></div>
+              <div class="hp-mat-card__body">
+                <p class="hp-mat-card__eyebrow">{c.eyebrow}</p>
+                <h3>{c.titre}</h3>
+                <span class="hp-mat-card__arrow">Découvrir →</span>
+              </div>
+            </a>
           ))}
         </div>
-        <div class="hp-temo__dots" id="temoDots">
-          {temoignages.map((_: any, i: number) => (
-            <button
-              class={`hp-temo__dot${i === 0 ? ' hp-temo__dot--active' : ''}`}
-              aria-label={`Témoignage ${i + 1}`}
-            ></button>
-          ))}
-        </div>
-      </div>
+      </section>
+    )
 
-      <div class="hp-temo__right">
-        <div class="hp-temo__score">
-          <div class="hp-temo__score-num">{temoAvgNote}</div>
-          <div class="hp-temo__score-stars">★★★★★</div>
-          <div class="hp-temo__score-label">{temoLabel}</div>
+    if (s._type === 'sectionBonCadeauHP') return (
+      <section class="hp-cadeau">
+        <div class="hp-cadeau__bg"></div>
+        <div class="hp-cadeau__overlay"></div>
+        <div class="container hp-cadeau__inner">
+          <div class="hp-cadeau__content">
+            <p class="hp-cadeau__eyebrow">🎁 Idée cadeau</p>
+            <h2 class="hp-cadeau__titre">{cadeauTitre}</h2>
+            <p class="hp-cadeau__texte">{cadeauTexte}</p>
+            <div class="hp-cadeau__actions">
+              <a href={cadeauBtn1L} class="hp-cadeau__btn hp-cadeau__btn--prim">{cadeauBtn1T}</a>
+              <a href={cadeauBtn2L} class="hp-cadeau__btn hp-cadeau__btn--ghost">{cadeauBtn2T}</a>
+            </div>
+          </div>
+          <div class="hp-cadeau__aside">
+            <div class="hp-cadeau__card">
+              <p class="hp-cadeau__card-label">Format</p>
+              <p class="hp-cadeau__card-val">Journée · Demi-journée</p>
+              <p class="hp-cadeau__card-label">Valable sur</p>
+              <p class="hp-cadeau__card-val">Toutes les prestations · Eau douce &amp; Bar</p>
+              <p class="hp-cadeau__card-label">Validité</p>
+              <p class="hp-cadeau__card-val">1 an à compter de la date d'achat</p>
+              <p class="hp-cadeau__card-label">Envoi</p>
+              <p class="hp-cadeau__card-val">Par e-mail ou courrier · Personnalisable</p>
+              <a href={cadeauBtn1L} class="hp-cadeau__card-cta">Commander →</a>
+            </div>
+          </div>
         </div>
-        <div class="hp-temo__divider"></div>
-        <p class="hp-temo__pitch">{temoPitch}</p>
-        <a href={temoCtaLien} class="hp-temo__cta">{temoCtaTxt}</a>
-      </div>
+      </section>
+    )
 
-    </div>
-  </section>
+    if (s._type === 'sectionTemoignagesHP') return (
+      <section class="hp-temo">
+        <div class="container hp-temo__inner">
+          <div class="hp-temo__left">
+            <p class="hp-temo__eyebrow">{temoEyebrow}</p>
+            <div class="hp-temo__mark">&ldquo;</div>
+            <div class="hp-temo__rotator" id="temoRotator">
+              {temoignages.map((t: any, i: number) => (
+                <figure class={`hp-temo__quote${i === 0 ? ' hp-temo__quote--active' : ''}`}>
+                  <blockquote>{t.texte}</blockquote>
+                  <figcaption>
+                    <strong class="hp-temo__name">{t.nom}</strong>
+                    <span class="hp-temo__cat">{t.prestation}</span>
+                    <span class="hp-temo__stars">{'★'.repeat(t.note ?? 5)}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+            <div class="hp-temo__dots" id="temoDots">
+              {temoignages.map((_: any, i: number) => (
+                <button
+                  class={`hp-temo__dot${i === 0 ? ' hp-temo__dot--active' : ''}`}
+                  aria-label={`Témoignage ${i + 1}`}
+                ></button>
+              ))}
+            </div>
+          </div>
+          <div class="hp-temo__right">
+            <div class="hp-temo__score">
+              <div class="hp-temo__score-num">{temoAvgNote}</div>
+              <div class="hp-temo__score-stars">★★★★★</div>
+              <div class="hp-temo__score-label">{temoLabel}</div>
+            </div>
+            <div class="hp-temo__divider"></div>
+            <p class="hp-temo__pitch">{temoPitch}</p>
+            <a href={temoCtaLien} class="hp-temo__cta">{temoCtaTxt}</a>
+          </div>
+        </div>
+      </section>
+    )
+
+    return <PageBuilderSections sections={[s]} pageTitle={pageTitle} />
+  })}
 
 </BaseLayout>
 
