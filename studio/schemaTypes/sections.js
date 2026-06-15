@@ -1816,6 +1816,119 @@ export const sectionBonCadeauHP = {
   },
 }
 
+// ── BANNIÈRE + INFOCARD FLOUTÉ ────────────────────────────────────────────────
+export const sectionBanniereCard = {
+  name: 'sectionBanniereCard',
+  title: '🎴 Bannière + Infocard',
+  type: 'object',
+  fields: [
+    {
+      name: 'image',
+      title: 'Photo de fond',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Photo affichée en arrière-plan (plein cadre)',
+    },
+    {
+      name: 'eyebrow',
+      title: 'Eyebrow',
+      type: 'string',
+      description: 'Petite ligne au-dessus du titre — ex: "🎁 Idée cadeau"',
+    },
+    {
+      name: 'titre',
+      title: 'Titre',
+      type: 'string',
+    },
+    {
+      name: 'texte',
+      title: 'Texte de description',
+      type: 'text',
+      rows: 3,
+    },
+    {
+      name: 'boutons',
+      title: 'Boutons (max 2)',
+      type: 'array',
+      validation: Rule => Rule.max(2),
+      of: [{
+        type: 'object',
+        name: 'bouton',
+        title: 'Bouton',
+        fields: [
+          { name: 'texte', title: 'Texte', type: 'string' },
+          { name: 'lien',  title: 'Lien',  type: 'string' },
+          {
+            name: 'style',
+            title: 'Style',
+            type: 'string',
+            options: { list: [
+              { title: 'Primaire (fond clair)', value: 'primaire' },
+              { title: 'Ghost (bordure blanche)', value: 'ghost' },
+            ]},
+            initialValue: 'primaire',
+          },
+        ],
+        preview: {
+          select: { texte: 'texte', style: 'style' },
+          prepare: ({ texte, style }) => ({ title: texte, subtitle: style }),
+        },
+      }],
+    },
+    {
+      name: 'infocard',
+      title: 'Infocard (encart flouté à droite)',
+      type: 'object',
+      options: { collapsible: true, collapsed: false },
+      fields: [
+        {
+          name: 'afficher',
+          title: 'Afficher l\'infocard',
+          type: 'boolean',
+          initialValue: true,
+          description: 'Désactiver pour n\'afficher que le contenu texte (pleine largeur)',
+        },
+        {
+          name: 'lignes',
+          title: 'Lignes label / valeur',
+          type: 'array',
+          of: [{
+            type: 'object',
+            name: 'ligne',
+            title: 'Ligne',
+            fields: [
+              { name: 'label',  title: 'Label (petit)',  type: 'string' },
+              { name: 'valeur', title: 'Valeur (grand)', type: 'string' },
+            ],
+            preview: {
+              select: { label: 'label', valeur: 'valeur' },
+              prepare: ({ label, valeur }) => ({ title: label, subtitle: valeur }),
+            },
+          }],
+        },
+        {
+          name: 'ctaTexte',
+          title: 'Bouton CTA — texte',
+          type: 'string',
+          description: 'Ex: "Commander →"',
+        },
+        {
+          name: 'ctaLien',
+          title: 'Bouton CTA — lien',
+          type: 'string',
+        },
+      ],
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', eyebrow: 'eyebrow', media: 'image' },
+    prepare: ({ titre, eyebrow, media }) => ({
+      title: `🎴 ${titre || eyebrow || '(Bannière + Infocard)'}`,
+      media,
+    }),
+  },
+}
+
 // ── GRILLE WILD FLY — style n°3 ──────────────────────────────────────────────
 export const sectionCards3 = {
   name: 'sectionCards3',
