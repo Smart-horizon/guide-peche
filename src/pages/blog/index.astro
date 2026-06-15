@@ -59,7 +59,7 @@ const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean)
           {articles.map(article => (
             <a href={`/blog/${article.slug?.current}`} class="article-card">
               <div class="article-img" style={article.image
-                ? `background-image: url(${urlFor(article.image).width(600).height(380).url()})`
+                ? `background-image: url(${urlFor(article.image).width(600).height(380).fit('crop').crop('focalpoint').url()})`
                 : ''}>
                 {article.espece && (
                   <span class="article-espece">{especeLabel[article.espece] ?? article.espece}</span>

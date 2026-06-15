@@ -26,7 +26,7 @@ const {
   title       = stegaClean(params?.siteTitle)       || 'Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne',
   description = stegaClean(params?.siteDescription) || 'Moniteur-Guide diplômé, Jean-Baptiste Vidal vous accompagne pour la pêche à la mouche sur les plus belles rivières de Bretagne.',
   image       = params?.ogImage
-    ? urlFor(params.ogImage).width(1200).height(630).url()
+    ? urlFor(params.ogImage).width(1200).height(630).fit('crop').crop('focalpoint').url()
     : '/og-default.jpg',
 } = Astro.props
 

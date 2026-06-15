@@ -34,7 +34,7 @@ const heroSection = hp?.pagebuilder?.find((s: any) => s._type === 'sectionHero')
 const pageTitle   = hp?.seoTitle || heroSection?.titre || hp?.title || 'Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne'
 const pageDesc    = hp?.seoDescription || 'Moniteur-Guide diplômé, 21 ans de guidage. Stages de pêche à la mouche, guidage bar, truite, alose et brochet en Bretagne-Sud.'
 const ogImg       = heroSection?.image
-  ? urlFor(heroSection.image).width(1200).height(630).url()
+  ? urlFor(heroSection.image).width(1200).height(630).fit('crop').crop('focalpoint').url()
   : undefined
 
 // ── Stats témoignages ─────────────────────────────────────────────────────────

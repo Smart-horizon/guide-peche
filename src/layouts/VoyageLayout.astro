@@ -72,7 +72,7 @@ let carouselCount = 0
 {/* ═══════════════ HERO ═══════════════ */}
 {s._type === 'sectionHero' && (() => {
   const heroBg = s.image?.asset
-    ? `background-image:url('${urlFor(s.image).width(1600).height(900).url()}')`
+    ? `background-image:url('${urlFor(s.image).width(1600).height(900).fit('crop').crop('focalpoint').url()}')`
     : `background-color:var(--color-ocean)`
   return (
     <section class="voy-hero">

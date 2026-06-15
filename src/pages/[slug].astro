@@ -88,9 +88,9 @@ const heroSection  = doc.pagebuilder?.find((s: any) => s._type === 'sectionHero'
 const pageTitle    = doc.seoTitle || heroSection?.titre || doc.title
 const pageDesc     = doc.seoDescription || ''
 const ogImg        = doc.ogImage
-  ? urlFor(doc.ogImage).width(1200).height(630).url()
+  ? urlFor(doc.ogImage).width(1200).height(630).fit('crop').crop('focalpoint').url()
   : heroSection?.image
-    ? urlFor(heroSection.image).width(1200).height(630).url()
+    ? urlFor(heroSection.image).width(1200).height(630).fit('crop').crop('focalpoint').url()
     : undefined
 
 // ── Utilitaires pour le fallback (pages sans pagebuilder) ─────────────────────
