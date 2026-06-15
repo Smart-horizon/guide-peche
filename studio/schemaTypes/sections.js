@@ -1765,19 +1765,25 @@ export const sectionTemoignagesHP = {
   type: 'object',
   fields: [
     {
-      name: 'eyebrow', title: 'Eyebrow', type: 'string',
-      description: 'Ex: "Ils sont venus pêcher"',
+      name: 'eyebrow', title: 'Eyebrow (haut gauche)', type: 'string',
+      description: 'Ex: "Ce qu\'ils disent"',
     },
     {
-      name: 'pitch', title: 'Phrase d\'accroche', type: 'string',
+      name: 'pitch', title: 'Phrase d\'accroche (droite)', type: 'text', rows: 3,
+      description: 'Texte affiché sous la note moyenne, côté droit. Ex: "Des pêcheurs de toute la France font confiance à Jean-Baptiste depuis 2004."',
     },
     {
       name: 'ctaTexte', title: 'Texte du lien', type: 'string',
-      description: 'Ex: "Tous les avis →"',
+      description: 'Ex: "Lire tous les témoignages"',
     },
     {
       name: 'ctaLien', title: 'URL du lien', type: 'string',
       description: 'Ex: /temoignages',
+    },
+    {
+      name: '_note', title: '💡 Sélection des témoignages', type: 'string',
+      readOnly: true,
+      initialValue: 'Pour choisir les témoignages affichés ici, allez dans "Témoignages" et cochez "Afficher en accueil" sur chaque fiche souhaitée.',
     },
   ],
   preview: {
