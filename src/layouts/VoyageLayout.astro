@@ -18,7 +18,7 @@ const { doc } = Astro.props
 const pb = (doc?.pagebuilder || []) as any[]
 
 const builder = imageUrlBuilder(stegaClient)
-const urlFor  = (source: any) => builder.image(source)
+const urlFor = (source: any) => { const b = builder.image(source); const hs = source?.hotspot; return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b }
 
 // ── SEO ───────────────────────────────────────────────────────────────────────
 const heroSection = pb.find((s: any) => s._type === 'sectionHero')

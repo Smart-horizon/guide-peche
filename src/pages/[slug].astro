@@ -6,7 +6,7 @@ import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
 const builder = imageUrlBuilder(stegaClient)
-const urlFor  = (source: any) => builder.image(source)
+const urlFor = (source: any) => { const b = builder.image(source); const hs = source?.hotspot; return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b }
 
 // ── Routes statiques (client non-stega — juste des slugs) ────────────────────
 export async function getStaticPaths() {

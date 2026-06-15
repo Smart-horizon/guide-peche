@@ -26,7 +26,7 @@ const client = createClient({
 })
 
 const builder = imageUrlBuilder(client)
-const urlFor = (source) => builder.image(source)
+const urlFor = (source) => { const b = builder.image(source); const hs = source?.hotspot; return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b }
 
 const article = await client.fetch(
   `*[_type == "article" && slug.current == $slug][0]{
