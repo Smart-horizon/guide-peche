@@ -1,5 +1,6 @@
 import page from './page'
 import navigation from './navigation'
+import partenaire from './partenaire'
 import prestation from './prestation'
 import voyage from './voyage'
 import temoignage from './temoignage'
@@ -23,6 +24,7 @@ export const schemaTypes = [
   // Documents
   navigation,
   accueil,
+  partenaire,
   sectionAccueil,
   pageTemoignages,
   parametres,

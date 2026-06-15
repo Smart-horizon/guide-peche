@@ -1,7 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { client } from '../lib/sanity.js'
 
-const partners = [
+// Fetch partners from Sanity
+const sanityPartners = await client.fetch(`
+  *[_type == "partenaire"] | order(orderRank asc) {
+    _id, nom, nomComplet, tag, description, url, labelLien,
+    logo { asset->{ url } }
+  }
+`)
+
+// Hardcoded fallback (used when Sanity has no partners yet)
+const fallbackPartners = [
   {
     slug: 'ffmgp',
     ext: 'jpg',
@@ -113,6 +123,21 @@ const partners = [
     label: 'agence-dhdlaika.com',
   },
 ]
+
+// Normalise Sanity documents to the same shape as fallback
+const fromSanity = sanityPartners.map((p: any) => ({
+  _id: p._id,
+  name: p.nom,
+  fullName: p.nomComplet || p.nom,
+  tag: p.tag || '',
+  desc: p.description || '',
+  url: p.url || '#',
+  label: p.labelLien || '',
+  logoUrl: p.logo?.asset?.url || null,
+}))
+
+// Use Sanity data if available, otherwise fall back to hardcoded
+const partners = fromSanity.length > 0 ? fromSanity : fallbackPartners
 ---
 
 <BaseLayout
@@ -140,31 +165,42 @@ const partners = [
   <section class="section part-grid-section">
     <div class="container">
       <div class="part-grid">
-        {partners.map(p => (
+        {partners.map((p: any) => (
           <article class="part-card">
             <div class="part-card__logo-wrap">
-              <img
-                src={`/images/partner-${p.slug}.${p.ext}`}
-                alt={`Logo ${p.name}`}
-                class="part-card__logo"
-                loading="lazy"
-              />
+              {p.logoUrl ? (
+                <img
+                  src={p.logoUrl}
+                  alt={`Logo ${p.name}`}
+                  class="part-card__logo"
+                  loading="lazy"
+                />
+              ) : p.slug ? (
+                <img
+                  src={`/images/partner-${p.slug}.${p.ext}`}
+                  alt={`Logo ${p.name}`}
+                  class="part-card__logo"
+                  loading="lazy"
+                />
+              ) : null}
             </div>
             <div class="part-card__body">
               <span class="part-card__tag">{p.tag}</span>
               <h2 class="part-card__name">{p.name}</h2>
               <p class="part-card__desc">{p.desc}</p>
             </div>
-            <a
-              href={p.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="part-card__link"
-              aria-label={`Visiter le site ${p.name}`}
-            >
-              {p.label}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            </a>
+            {p.url && p.url !== '#' && (
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="part-card__link"
+                aria-label={`Visiter le site ${p.name}`}
+              >
+                {p.label || p.url}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            )}
           </article>
         ))}
       </div>
