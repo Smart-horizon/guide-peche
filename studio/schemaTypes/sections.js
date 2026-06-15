@@ -1781,7 +1781,7 @@ export const sectionTemoignagesHP = {
       description: 'Ex: /temoignages',
     },
     {
-      name: '_note', title: '💡 Sélection des témoignages', type: 'string',
+      name: 'aide', title: '💡 Sélection des témoignages', type: 'string',
       readOnly: true,
       initialValue: 'Pour choisir les témoignages affichés ici, allez dans "Témoignages" et cochez "Afficher en accueil" sur chaque fiche souhaitée.',
     },
