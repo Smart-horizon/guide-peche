@@ -1,5 +1,6 @@
 ---
-import { client } from '../lib/sanity.js'
+import { stegaClient } from '../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 
 // ── Fallback hardcodé — utilisé si le document "navigation" n'existe pas encore dans Sanity
 const NAV_FALLBACK = [
@@ -79,10 +80,20 @@ const NAV_FALLBACK = [
 // ── Fetch Sanity — si le document n'existe pas encore, on utilise le fallback
 let navLinks = NAV_FALLBACK
 try {
-  const nav = await client.fetch(
+  const nav = await stegaClient.fetch(
     `*[_type == "navigation" && _id == "navigation"][0]{ items }`
   )
-  if (nav?.items?.length) navLinks = nav.items
+  if (nav?.items?.length) {
+    navLinks = nav.items.map((item: any) => ({
+      ...item,
+      href: stegaClean(item.href),
+      activePrefix: item.activePrefix ? stegaClean(item.activePrefix) : undefined,
+      children: item.children?.map((child: any) => ({
+        ...child,
+        href: stegaClean(child.href),
+      })),
+    }))
+  }
 } catch (e) {
   // Sanity non disponible au build → fallback silencieux
 }

@@ -1723,6 +1723,35 @@ export const sectionGuideHP = {
       name: 'boutonLien', title: 'Lien du bouton', type: 'string',
       description: 'Ex: /jean-baptiste-vidal-moniteur-guide-de-peche',
     },
+    {
+      name: 'stats',
+      title: 'Stats / Chiffres clés',
+      type: 'array',
+      description: 'Les 4 badges chiffres (ex: "33 ans — de pêche à la mouche")',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'valeur',
+              title: 'Valeur (en gras)',
+              type: 'string',
+              description: 'Ex: "33 ans" ou "Voyages"',
+            },
+            {
+              name: 'label',
+              title: 'Description',
+              type: 'string',
+              description: 'Ex: "de pêche à la mouche"',
+            },
+          ],
+          preview: {
+            select: { valeur: 'valeur', label: 'label' },
+            prepare: ({ valeur, label }) => ({ title: `${valeur || '—'} ${label || ''}` }),
+          },
+        },
+      ],
+    },
   ],
   preview: {
     select: { nom: 'nom' },
@@ -1787,6 +1816,161 @@ export const sectionBonCadeauHP = {
   },
 }
 
+// ── GRILLE WILD FLY — style n°3 ──────────────────────────────────────────────
+export const sectionCards3 = {
+  name: 'sectionCards3',
+  title: '🃏 Grille Wild Fly — style n°3',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Eyebrow', type: 'string',
+    },
+    {
+      name: 'titre', title: 'Titre de section', type: 'string',
+    },
+    {
+      name: 'cartes',
+      title: 'Cartes',
+      description: 'Recommandé : 1 grande carte + 4 cartes normales (5 au total)',
+      type: 'array',
+      validation: Rule => Rule.max(6).warning('Maximum 6 cartes recommandé'),
+      of: [{
+        type: 'object',
+        name: 'carte3',
+        title: 'Carte',
+        fields: [
+          {
+            name: 'image', title: 'Photo de fond', type: 'image',
+            options: { hotspot: true },
+          },
+          { name: 'label', title: 'Titre de la carte', type: 'string' },
+          {
+            name: 'sousTitre', title: 'Sous-label (catégorie)', type: 'string',
+            description: 'Ex: "Truite · Alose · Brochet"',
+          },
+          { name: 'lien', title: 'Lien (URL)', type: 'string' },
+          {
+            name: 'isLarge',
+            title: 'Grande carte (occupe 2 colonnes)',
+            type: 'boolean',
+            initialValue: false,
+            description: 'Idéalement 1 seule grande carte par grille — placez-la en premier',
+          },
+        ],
+        preview: {
+          select: { label: 'label', isLarge: 'isLarge', image: 'image' },
+          prepare: ({ label, isLarge, image }) => ({
+            title: `${isLarge ? '▬▬' : '▬'} ${label || '(sans titre)'}`,
+            media: image,
+          }),
+        },
+      }],
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', eyebrow: 'eyebrow' },
+    prepare: ({ titre, eyebrow }) => ({
+      title: `🃏 Grille WF — ${titre || eyebrow || ''}`,
+    }),
+  },
+}
+
+// ── Section Matériel / Mouches / Bateau (HP) ─────────────────────────────────
+export const sectionMaterielHP = {
+  name: 'sectionMaterielHP',
+  title: 'Matériel HP',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow',
+      title: 'Eyebrow de section',
+      type: 'string',
+      description: 'Ex : "Équipement · Ressources"',
+    },
+    {
+      name: 'titre',
+      title: 'Titre de section',
+      type: 'string',
+      description: 'Ex : "Matériel & univers"',
+    },
+    {
+      name: 'featuredEyebrow',
+      title: 'Carte principale — eyebrow',
+      type: 'string',
+      description: 'Ex : "Cannes · Soies · Moulinets · Accessoires"',
+    },
+    {
+      name: 'featuredTitre',
+      title: 'Carte principale — titre',
+      type: 'string',
+      description: 'Ex : "Mon matériel"',
+    },
+    {
+      name: 'featuredLien',
+      title: 'Carte principale — lien',
+      type: 'string',
+      description: 'Ex : "/materiel-jeanbaptistevidal"',
+    },
+    {
+      name: 'featuredImage',
+      title: 'Carte principale — image de fond',
+      type: 'image',
+      options: { hotspot: true },
+    },
+    {
+      name: 'sousLiens',
+      title: 'Sous-liens matériel',
+      type: 'array',
+      description: 'Les liens de navigation rapide (matériel bar, truite, etc.)',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'label', title: 'Texte', type: 'string' },
+            { name: 'href',  title: 'Lien (URL)',  type: 'string' },
+          ],
+          preview: {
+            select: { label: 'label', href: 'href' },
+            prepare: ({ label, href }) => ({ title: label, subtitle: href }),
+          },
+        },
+      ],
+    },
+    {
+      name: 'cardsSecondaires',
+      title: 'Cartes secondaires (Mouches, Bateau…)',
+      type: 'array',
+      description: 'Ex : "Mes mouches" et "Le bateau"',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'eyebrow', title: 'Eyebrow',      type: 'string' },
+            { name: 'titre',   title: 'Titre',         type: 'string' },
+            { name: 'lien',    title: 'Lien (URL)',     type: 'string' },
+            {
+              name: 'image',
+              title: 'Image de fond',
+              type: 'image',
+              options: { hotspot: true },
+            },
+          ],
+          preview: {
+            select: { titre: 'titre', eyebrow: 'eyebrow' },
+            prepare: ({ titre, eyebrow }) => ({ title: titre, subtitle: eyebrow }),
+          },
+        },
+      ],
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', eyebrow: 'eyebrow' },
+    prepare: ({ titre, eyebrow }) => ({
+      title: `🎣 Matériel HP — ${titre || eyebrow || ''}`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -1794,6 +1978,7 @@ export const allSectionTypes = [
   sectionTitre,
   sectionCards,
   sectionCards2,
+  sectionCards3,
   sectionTexte,
   sectionTexteImage,
   sectionGalerie,
@@ -1814,6 +1999,7 @@ export const allSectionTypes = [
   sectionLienBlog,
   sectionPrestationsHP,
   sectionGuideHP,
+  sectionMaterielHP,
   sectionTemoignagesHP,
   sectionBonCadeauHP,
 ]

@@ -5,7 +5,6 @@ import {frFRLocale} from '@sanity/locale-fr-fr'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {presentationTool} from 'sanity/presentation'
 import {schemaTypes} from './schemaTypes'
-import {SectionOrderManager} from './components/SectionOrderManager'
 
 // ── Structure personnalisée du menu latéral ──
 const customStructure = (S, context) =>
@@ -13,51 +12,24 @@ const customStructure = (S, context) =>
     .title('Jean-Baptiste Vidal')
     .items([
 
-      // 🏠 Page d'accueil — sections personnalisées listées directement (async)
+      // 🏠 Page d'accueil — même pagebuilder que les autres pages
       S.listItem()
         .title("🏠 Page d'accueil")
         .child(async () => {
           const sanityClient = context.getClient({ apiVersion: '2024-01-01' })
-          const EMOJI = { texteImage: '📝', promo: '🌟', cartes: '🃏', banniere: '📢' }
-
-          let customSections = []
-          try {
-            customSections = await sanityClient.fetch(
-              `*[_type == "sectionAccueil"] | order(position asc) { _id, titre, sectionType }`
-            )
-          } catch (e) {
-            console.error('[Structure] sectionAccueil fetch error:', e)
+          const doc = await sanityClient.fetch(
+            `*[_type == "page" && slug.current == "/"][0]{ _id }`
+          ).catch(() => null)
+          if (doc?._id) {
+            return S.document()
+              .schemaType('page')
+              .documentId(doc._id)
+              .title("Page d'accueil")
           }
-
-          return S.list()
+          // Fallback si le document n'existe pas encore
+          return S.documentList()
             .title("Page d'accueil")
-            .items([
-              // ── Contenu principal (singleton accueil) ────────────────────
-              S.listItem()
-                .title("✏️ Contenu principal")
-                .child(
-                  S.document()
-                    .schemaType('accueil')
-                    .documentId('accueil')
-                    .title("Page d'accueil")
-                    .views([
-                      S.view.component(SectionOrderManager).id('contenu').title('✏️ Contenu'),
-                    ])
-                ),
-
-              // ── Sections personnalisées (une par une, pas de sous-dossier) ─
-              ...(customSections.length > 0 ? [S.divider()] : []),
-              ...customSections.map(s =>
-                S.listItem()
-                  .id(s._id)
-                  .title(`${EMOJI[s.sectionType] ?? '➕'} ${s.titre || '(sans titre)'}`)
-                  .child(
-                    S.document()
-                      .schemaType('sectionAccueil')
-                      .documentId(s._id)
-                  )
-              ),
-            ])
+            .filter('_type == "page" && slug.current == "/"')
         }),
 
       // 🧭 Menu de navigation (singleton)
@@ -149,6 +121,81 @@ const customStructure = (S, context) =>
 
       S.divider(),
 
+      // 📄 Pages du site
+      S.listItem()
+        .title('📄 Pages du site')
+        .child(
+          S.list()
+            .title('Pages du site')
+            .items([
+
+              // ── Le guide (bio JBV) ─────────────────────────────────────────
+              S.listItem()
+                .title('👤 Jean-Baptiste Vidal (bio)')
+                .child(
+                  S.document()
+                    .schemaType('page')
+                    .documentId('page-jean-baptiste-vidal-moniteur-guide-de-peche')
+                    .title('Jean-Baptiste Vidal — Le guide')
+                ),
+
+              S.divider(),
+
+              // ── Pages mer ─────────────────────────────────────────────────
+              S.listItem()
+                .title('🚤 Le bateau (Carolina Skiff)')
+                .child(S.document().schemaType('page').documentId('page-bateau-bar-a-la-mouche').title('Le bateau')),
+
+              S.divider(),
+
+              // ── Pages pratiques ───────────────────────────────────────────
+              S.listItem()
+                .title('💰 Tarifs')
+                .child(S.document().schemaType('page').documentId('page-tarifs').title('Tarifs')),
+              S.listItem()
+                .title('📅 Disponibilités')
+                .child(S.document().schemaType('page').documentId('page-disponibilites-guidages').title('Disponibilités')),
+              S.listItem()
+                .title('🎁 Bon cadeau')
+                .child(S.document().schemaType('page').documentId('page-bon-cadeau-peche-mouche').title('Bon cadeau')),
+
+              S.divider(),
+
+              // ── Matériel ──────────────────────────────────────────────────
+              S.listItem()
+                .title('🎣 Mon matériel')
+                .child(
+                  S.list()
+                    .title('Matériel')
+                    .items([
+                      S.listItem().title('🎣 Matériel (hub)').child(S.document().schemaType('page').documentId('page-materiel-jeanbaptistevidal').title('Mon matériel')),
+                      S.listItem().title('🪰 Mes mouches').child(S.document().schemaType('page').documentId('page-mouches-de-peche-jeanbaptiste-vidal').title('Mes mouches')),
+                      S.listItem().title('🌊 Matériel bar').child(S.document().schemaType('page').documentId('page-materiel-mouche-bar').title('Matériel bar')),
+                      S.listItem().title('🏞️ Matériel truite').child(S.document().schemaType('page').documentId('page-materiel-mouche-truite').title('Matériel truite')),
+                      S.listItem().title('🐟 Matériel migrateurs').child(S.document().schemaType('page').documentId('page-materiel-mouche-migrateur').title('Matériel migrateurs')),
+                      S.listItem().title('🎿 Matériel réservoir').child(S.document().schemaType('page').documentId('page-materiel-mouche-reservoir').title('Matériel réservoir')),
+                      S.listItem().title('🐊 Matériel brochet').child(S.document().schemaType('page').documentId('page-materiel-mouche-brochet').title('Matériel brochet')),
+                      S.listItem().title('✈️ Matériel exotique').child(S.document().schemaType('page').documentId('page-materiel-mouche-peche-exotique').title('Matériel exotique')),
+                    ])
+                ),
+
+              S.divider(),
+
+              // ── Autres pages ──────────────────────────────────────────────
+              S.listItem()
+                .title('🤝 Partenaires')
+                .child(S.document().schemaType('page').documentId('page-partenaires-jeanbaptistevidal').title('Partenaires')),
+              S.listItem()
+                .title('🎥 Vidéos')
+                .child(S.document().schemaType('page').documentId('page-videos-jeanbaptiste-vidal-moniteur-guide-de-peche').title('Vidéos')),
+              S.listItem()
+                .title('📰 Revue de presse')
+                .child(S.document().schemaType('page').documentId('page-revue-de-presse-jbvidal').title('Revue de presse')),
+            ])
+        ),
+
+      S.divider(),
+
       // ✍️ Blog
       S.listItem()
         .title('✍️ Blog')
@@ -219,6 +266,12 @@ export default defineConfig({
           voyage: (doc) => ({
             locations: doc?.slug?.current
               ? [{ title: doc.title || 'Voyage', href: `/${doc.slug.current}` }]
+              : [],
+          }),
+          // Pages génériques → page publiée (statique)
+          page: (doc) => ({
+            locations: doc?.slug?.current
+              ? [{ title: doc.title || 'Page', href: doc.slug.current === '/' ? '/' : `/${doc.slug.current}` }]
               : [],
           }),
           // Articles → page statique (pas de route preview pour le blog)

@@ -22,6 +22,9 @@ const hp = await stegaClient.fetch(`
       cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
       etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
       items[]{..., photos[]{asset->{_id, url}, alt, caption}},
+      featuredImage{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      cardsSecondaires[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      sousLiens[],
     }
   }
 `)
@@ -33,45 +36,6 @@ const pageDesc    = hp?.seoDescription || 'Moniteur-Guide diplômé, 21 ans de g
 const ogImg       = heroSection?.image
   ? urlFor(heroSection.image).width(1200).height(630).url()
   : undefined
-
-// ── Prestations (pour la grille Wild Fly) ────────────────────────────────────
-const prestations = await client.fetch(`
-  *[_type == "prestation"] | order(_createdAt asc) {
-    title, slug, categorie, tarif, duree, image,
-    "description": description[0].children[0].text
-  }
-`)
-
-// ── Données grille prestations HP ─────────────────────────────────────────────
-// Récupère la sectionPrestationsHP du pagebuilder si elle existe, sinon fallback
-const prestationsHPSection = hp?.pagebuilder?.find((s: any) => s._type === 'sectionPrestationsHP')
-const prestationsEyebrow = stegaClean(prestationsHPSection?.eyebrow) || 'Ce que je propose'
-const prestationsTitre   = stegaClean(prestationsHPSection?.titre)   || 'Stages & guidages'
-
-const imgFallback: Record<string, string> = {
-  'eau-douce':   '/images/prestation-eaudouce.jpg',
-  'bar':         '/images/prestation-bar.jpg',
-  'masterclass': '/images/prestation-masterclass.jpg',
-  'spey-cast':   '/images/prestation-speycast.jpg',
-  'bon-cadeau':  '/images/prestation-cadeau.jpg',
-}
-
-const rawCards = [
-  { label: 'Eau douce',          sub: 'Truite · Alose · Brochet',         href: '/peche-a-la-mouche-en-bretagne',      categorie: 'eau-douce'   },
-  { label: 'Pêche du bar',       sub: 'Pêche à vue · Bateau',             href: '/peche-du-bar-a-la-mouche',           categorie: 'bar'         },
-  { label: 'Masterclass',        sub: 'Réservoir · Nymphe au fil',        href: '/masterclass',                        categorie: 'masterclass'  },
-  { label: 'Spey Cast & Lancer', sub: 'Canne une main · Switch · Spey',   href: '/stage-spey-cast-et-cours-de-lancer', categorie: 'spey-cast'   },
-  { label: 'Bon cadeau',         sub: 'Offrir une sortie',                href: '/bon-cadeau-peche-mouche',            categorie: 'bon-cadeau'  },
-]
-
-const prestationsCards = rawCards.map((card, i) => {
-  const slug    = card.categorie
-  const sanityImg = prestations.find((p: any) => p.categorie === slug)?.image
-  const img = sanityImg
-    ? urlFor(sanityImg).width(i === 0 ? 900 : 600).height(i === 0 ? 600 : 400).url()
-    : (imgFallback[slug] ?? '/images/hero.jpg')
-  return { ...card, img, isLarge: i === 0 }
-})
 
 // ── Stats témoignages ─────────────────────────────────────────────────────────
 const allTemoStats = await client.fetch(`*[_type == "temoignage"] { note }`)
@@ -132,10 +96,57 @@ const guideAccroche  = stegaClean(guideHP?.accroche)    || "33 ans de pêche à 
 const guideBio       = stegaClean(guideHP?.bio)         || "Après des études dans l'environnement et 5 ans à la Fédération de Pêche du Finistère, Jean-Baptiste a guidé 6 saisons sur le Rio Grande (Argentine) pour Nervous Waters, puis en Irlande, Russie et Bolivie. Depuis 2014, il propose ses services de Moniteur-Guide en Bretagne-Sud, tout au long de l'année."
 const guideBtnTxt    = stegaClean(guideHP?.boutonTexte) || 'Votre guide'
 const guideBtnLien   = stegaClean(guideHP?.boutonLien)  || '/jean-baptiste-vidal-moniteur-guide-de-peche'
+const guideStats: { valeur: string; label: string }[] = (guideHP?.stats ?? []).length > 0
+  ? guideHP.stats.map((s: any) => ({ valeur: stegaClean(s.valeur) || '', label: stegaClean(s.label) || '' }))
+  : [
+      { valeur: '33 ans',   label: 'de pêche à la mouche' },
+      { valeur: '21 ans',   label: 'de guidage' },
+      { valeur: '8 ans',    label: 'de guidage à l\'étranger' },
+      { valeur: 'Voyages',  label: 'Organisation de voyages' },
+    ]
+
+// ── Section Matériel ──────────────────────────────────────────────────────────
+const materielHP = hp?.pagebuilder?.find((s: any) => s._type === 'sectionMaterielHP')
+
+const MATERIEL_CARDS_FALLBACK = [
+  { eyebrow: 'Streamers · Nymphes · Sèches', titre: 'Mes mouches', lien: '/mouches-de-peche-jeanbaptiste-vidal', imageUrl: '/images/A1.avif' },
+  { eyebrow: 'Carolina Skiff · Fond plat',   titre: 'Le bateau',   lien: '/bateau-bar-a-la-mouche',            imageUrl: '/images/bateau-3.jpg' },
+]
+
+const materielSection = {
+  eyebrow:         stegaClean(materielHP?.eyebrow)         || 'Équipement · Ressources',
+  titre:           stegaClean(materielHP?.titre)           || 'Matériel & univers',
+  featuredEyebrow: stegaClean(materielHP?.featuredEyebrow) || 'Cannes · Soies · Moulinets · Accessoires',
+  featuredTitre:   stegaClean(materielHP?.featuredTitre)   || 'Mon matériel',
+  featuredLien:    stegaClean(materielHP?.featuredLien)    || '/materiel-jeanbaptistevidal',
+  featuredImage:   materielHP?.featuredImage?.asset
+    ? urlFor(materielHP.featuredImage).width(900).height(700).fit('crop').crop('focalpoint').url()
+    : '/images/materiel-hero.jpg',
+  sousLiens: (materielHP?.sousLiens?.length > 0)
+    ? materielHP.sousLiens.map((l: any) => ({ label: stegaClean(l.label) || '', href: stegaClean(l.href) || '#' }))
+    : [
+        { label: 'Matériel migrateurs', href: '/materiel-mouche-migrateur' },
+        { label: 'Matériel truite',     href: '/materiel-mouche-truite' },
+        { label: 'Matériel bar',        href: '/materiel-mouche-bar' },
+        { label: 'Matériel réservoir',  href: '/materiel-mouche-reservoir' },
+        { label: 'Matériel brochet',    href: '/materiel-mouche-brochet' },
+        { label: 'Matériel exotique',   href: '/materiel-mouche-peche-exotique' },
+      ],
+  cardsSecondaires: (materielHP?.cardsSecondaires?.length > 0)
+    ? materielHP.cardsSecondaires.map((c: any, i: number) => ({
+        eyebrow:  stegaClean(c.eyebrow) || MATERIEL_CARDS_FALLBACK[i]?.eyebrow || '',
+        titre:    stegaClean(c.titre)   || MATERIEL_CARDS_FALLBACK[i]?.titre   || '',
+        lien:     stegaClean(c.lien)    || MATERIEL_CARDS_FALLBACK[i]?.lien    || '#',
+        imageUrl: c.image?.asset
+          ? urlFor(c.image).width(600).height(500).fit('crop').crop('focalpoint').url()
+          : MATERIEL_CARDS_FALLBACK[i]?.imageUrl || null,
+      }))
+    : MATERIEL_CARDS_FALLBACK,
+}
 
 // ── Sections pagebuilder (hors sections HP fixes) ─────────────────────────────
 // On filtre les 4 types HP fixes car ils sont rendus en dur ci-dessous
-const HP_FIXED = ['sectionPrestationsHP', 'sectionGuideHP', 'sectionTemoignagesHP', 'sectionBonCadeauHP']
+const HP_FIXED = ['sectionGuideHP', 'sectionMaterielHP', 'sectionTemoignagesHP', 'sectionBonCadeauHP']
 const pbSections = (hp?.pagebuilder ?? []).filter((s: any) => !HP_FIXED.includes(s._type))
 ---
 
@@ -146,27 +157,26 @@ const pbSections = (hp?.pagebuilder ?? []).filter((s: any) => !HP_FIXED.includes
 >
 
   {/* ── Sections pagebuilder (hero + autres blocs libres) ── */}
+  {!pbSections.some((s: any) => s._type === 'sectionHero') && (
+    <section class="hp-hero-fallback">
+      <div class="hp-hero-fallback__bg"></div>
+      <div class="hp-hero-fallback__overlay"></div>
+      <div class="hp-hero-fallback__content container">
+        <div class="hp-hero-fallback__badges">
+          <span class="hp-hero-fallback__badge">21 ans de guidage</span>
+          <span class="hp-hero-fallback__badge hp-hero-fallback__badge--mouche">🪶 Exclusivement Mouche</span>
+        </div>
+        <p class="hp-hero-fallback__eyebrow">Moniteur-Guide · Bretagne-Sud</p>
+        <h1 class="hp-hero-fallback__h1">Pêche à la mouche<br/><em>en Bretagne</em></h1>
+        <p class="hp-hero-fallback__sub">Guidage bar, truite, alose et brochet. Stages toutes techniques, de l'initiation à la masterclass.</p>
+        <div class="hp-hero-fallback__cta">
+          <a href="/contact" class="btn-prim">Réserver une sortie</a>
+          <a href="tel:0687303456" class="btn-ghost-hero">06 87 30 34 56</a>
+        </div>
+      </div>
+    </section>
+  )}
   <PageBuilderSections sections={pbSections} pageTitle={pageTitle} />
-
-  {/* ── PRESTATIONS — grille Wild Fly fixe ── */}
-  <section class="prestations-section">
-    <div class="prestations-header container">
-      <p class="eyebrow">{prestationsEyebrow}</p>
-      <h2>{prestationsTitre}</h2>
-    </div>
-    <div class="wildfly-grid">
-      {prestationsCards.map((card: any) => (
-        <a href={card.href} class={`wf-card ${card.isLarge ? 'wf-card--large' : ''}`}>
-          <div class="wf-card-bg" style={`background-image: url(${card.img})`}></div>
-          <div class="wf-overlay"></div>
-          <div class="wf-body">
-            <span class="wf-sub">{card.sub}</span>
-            <strong class="wf-label">{card.label}</strong>
-          </div>
-        </a>
-      ))}
-    </div>
-  </section>
 
   {/* ── LE GUIDE — section fixe ── */}
   <section class="section section--sand guide-section">
@@ -178,13 +188,47 @@ const pbSections = (hp?.pagebuilder ?? []).filter((s: any) => !HP_FIXED.includes
         <p class="guide-accroche">{guideAccroche}</p>
         <p>{guideBio}</p>
         <ul class="guide-stats">
-          <li><strong>33 ans</strong> de pêche à la mouche</li>
-          <li><strong>21 ans</strong> de guidage</li>
-          <li><strong>8 ans</strong> de guidage à l'étranger</li>
-          <li><strong>Voyages</strong> Organisation de voyages</li>
+          {guideStats.map((s) => (
+            <li><strong>{s.valeur}</strong> {s.label}</li>
+          ))}
         </ul>
         <a href={guideBtnLien} class="btn btn--ocean">{guideBtnTxt}</a>
       </div>
+    </div>
+  </section>
+
+  {/* ── MATÉRIEL — section fixe ── */}
+  <section class="section hp-materiel">
+    <div class="container hp-materiel__header">
+      <p class="eyebrow">{materielSection.eyebrow}</p>
+      <h2>{materielSection.titre}</h2>
+    </div>
+    <div class="hp-materiel__grid">
+      <div class="hp-mat-card hp-mat-card--featured">
+        <div class="hp-mat-card__bg" style={`background-image: url('${materielSection.featuredImage}')`}></div>
+        <div class="hp-mat-card__body hp-mat-card__body--featured">
+          <div class="hp-mat-card__left">
+            <p class="hp-mat-card__eyebrow">{materielSection.featuredEyebrow}</p>
+            <h3>{materielSection.featuredTitre}</h3>
+            <a href={materielSection.featuredLien} class="hp-mat-card__all">Voir tout →</a>
+          </div>
+          <nav class="hp-mat-subnav" aria-label="Sous-pages matériel">
+            {materielSection.sousLiens.map((l: any) => (
+              <a href={l.href} class="hp-mat-subnav__link">{l.label}</a>
+            ))}
+          </nav>
+        </div>
+      </div>
+      {materielSection.cardsSecondaires.map((c: any) => (
+        <a href={c.lien} class="hp-mat-card">
+          <div class="hp-mat-card__bg" style={`background-image: url('${c.imageUrl}')`}></div>
+          <div class="hp-mat-card__body">
+            <p class="hp-mat-card__eyebrow">{c.eyebrow}</p>
+            <h3>{c.titre}</h3>
+            <span class="hp-mat-card__arrow">Découvrir →</span>
+          </div>
+        </a>
+      ))}
     </div>
   </section>
 
@@ -265,141 +309,107 @@ const pbSections = (hp?.pagebuilder ?? []).filter((s: any) => !HP_FIXED.includes
 
 <style>
   /* ══════════════════════════════════════
-     PRESTATIONS — WILD FLY STYLE
+     HERO FALLBACK (si pagebuilder vide)
   ══════════════════════════════════════ */
-  .prestations-section { background: #fff; }
-
-  .prestations-header {
-    text-align: center;
-    padding: 4rem 2rem 2.5rem;
-  }
-
-  .wildfly-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 420px 300px;
-    gap: 4px;
-  }
-
-  /* Carte large : col 1-2, row 1 */
-  .wf-card--large {
-    grid-column: 1 / 3;
-    grid-row: 1 / 2;
-  }
-
-  /* Bar : col 3, row 1 */
-  .wf-card:nth-child(2) {
-    grid-column: 3 / 4;
-    grid-row: 1 / 2;
-  }
-
-  /* 3 petites : row 2 */
-  .wf-card:nth-child(3) { grid-column: 1; grid-row: 2; }
-  .wf-card:nth-child(4) { grid-column: 2; grid-row: 2; }
-  .wf-card:nth-child(5) { grid-column: 3; grid-row: 2; }
-
-  .wf-card {
+  .hp-hero-fallback {
     position: relative;
-    display: block;
-    overflow: hidden;
-    text-decoration: none;
-    color: white;
-    background: var(--color-ocean);
-  }
-
-  .wf-card-bg {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: transform 0.6s ease;
-  }
-
-  .wf-card:hover .wf-card-bg {
-    transform: scale(1.06);
-  }
-
-  .wf-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(7, 24, 31, 0.25);
-    transition: background 0.35s ease;
-  }
-
-  .wf-card:hover::after {
-    background: rgba(7, 24, 31, 0.1);
-  }
-
-  .wf-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(7,24,31,0.75) 0%, transparent 55%);
-    z-index: 1;
-    transition: opacity 0.35s ease;
-  }
-
-  .wf-body {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.5rem 1.75rem 1.75rem;
-    z-index: 2;
+    min-height: 100svh;
     display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
+    align-items: flex-end;
+    padding-bottom: 6rem;
+    overflow: hidden;
   }
-
-  .wf-sub {
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
+  .hp-hero-fallback__bg {
+    position: absolute; inset: 0;
+    background: url('/images/hero.jpg') center / cover no-repeat;
+  }
+  .hp-hero-fallback__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.92) 0%, rgba(13,43,62,0.55) 55%, rgba(13,43,62,0.3) 100%);
+  }
+  .hp-hero-fallback__content {
+    position: relative; z-index: 1;
+    max-width: 780px;
+  }
+  .hp-hero-fallback__badges {
+    display: flex; gap: 0.75rem; flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .hp-hero-fallback__badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .hp-hero-fallback__badge--mouche {
+    background: rgba(126,200,227,0.15);
+    border-color: rgba(126,200,227,0.35);
+    color: var(--color-ocean-light);
+  }
+  .hp-hero-fallback__eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--color-ocean-light);
+    margin-bottom: 1rem;
     font-weight: 500;
   }
-
-  .wf-label {
+  .hp-hero-fallback__h1 {
     font-family: var(--font-serif);
-    font-size: 1.45rem;
-    font-weight: 500;
-    line-height: 1.2;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 400;
+    line-height: 1.1;
     color: white;
+    margin-bottom: 1.5rem;
   }
-
-  .wf-card--large .wf-label {
-    font-size: 2rem;
+  .hp-hero-fallback__h1 em { font-style: italic; color: var(--color-ocean-light); }
+  .hp-hero-fallback__sub {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.72);
+    line-height: 1.65;
+    max-width: 540px;
+    margin-bottom: 2.5rem;
   }
-
-  @media (max-width: 900px) {
-    .wildfly-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 280px 280px 240px;
-    }
-    .wf-card--large { grid-column: 1 / 3; grid-row: 1; }
-    .wf-card:nth-child(2) { grid-column: 1; grid-row: 2; }
-    .wf-card:nth-child(3) { grid-column: 2; grid-row: 2; }
-    .wf-card:nth-child(4) { grid-column: 1; grid-row: 3; }
-    .wf-card:nth-child(5) { grid-column: 2; grid-row: 3; }
+  .hp-hero-fallback__cta {
+    display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;
   }
-
-  @media (max-width: 560px) {
-    .wildfly-grid {
-      grid-template-columns: 1fr;
-      grid-template-rows: repeat(5, 260px);
-    }
-    .wf-card--large, .wf-card:nth-child(2),
-    .wf-card:nth-child(3), .wf-card:nth-child(4),
-    .wf-card:nth-child(5) {
-      grid-column: 1; grid-row: auto;
-    }
+  .btn-prim {
+    display: inline-block;
+    padding: 0.9rem 2rem;
+    background: var(--color-ocean-light);
+    color: #07181f;
+    font-weight: 600;
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
   }
+  .btn-prim:hover { background: white; transform: translateY(-2px); }
+  .btn-ghost-hero {
+    display: inline-block;
+    padding: 0.9rem 1.8rem;
+    border: 1.5px solid rgba(255,255,255,0.35);
+    color: white;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost-hero:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
   /* ══════════════════════════════════════
      LE GUIDE
   ══════════════════════════════════════ */
   .section--sand { background: var(--color-sand); }
+  .guide-section { overflow: hidden; }
 
   .guide-inner {
     display: grid;
@@ -738,6 +748,110 @@ const pbSections = (hp?.pagebuilder ?? []).filter((s: any) => !HP_FIXED.includes
     .hp-temo__rotator { min-height: 260px; }
     .hp-temo__quote blockquote { font-size: 1.1rem; }
     .hp-temo__mark { font-size: 5rem; }
+  }
+
+  /* ══════════════════════════════════════
+     MATÉRIEL
+  ══════════════════════════════════════ */
+  .hp-materiel { background: #fff; }
+  .hp-materiel__header { text-align: center; padding-bottom: 2.5rem; }
+  .hp-materiel__header .eyebrow { margin-bottom: 0.6rem; }
+  .hp-materiel__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  .hp-mat-card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    aspect-ratio: 4/3;
+    background: var(--color-ocean);
+  }
+  .hp-mat-card--featured {
+    grid-column: 1 / -1;
+    aspect-ratio: auto;
+    height: 400px;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+  }
+  .hp-mat-card__bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    transition: transform 0.6s ease;
+  }
+  .hp-mat-card:hover .hp-mat-card__bg { transform: scale(1.04); }
+  .hp-mat-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.82) 0%, rgba(7,24,31,0.25) 55%, transparent 100%);
+  }
+  .hp-mat-card--featured::after {
+    background:
+      linear-gradient(to right, rgba(7,24,31,0.1) 30%, rgba(7,24,31,0.78) 65%, rgba(7,24,31,0.92) 100%),
+      linear-gradient(to top, rgba(7,24,31,0.6) 0%, transparent 55%);
+  }
+  .hp-mat-card__body {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1.6rem 1.8rem; z-index: 1;
+  }
+  .hp-mat-card__body--featured {
+    top: 0; bottom: 0;
+    display: flex; justify-content: space-between;
+    align-items: stretch; gap: 2rem; padding: 2.5rem;
+  }
+  .hp-mat-card__left {
+    flex: 1; display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .hp-mat-card__eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-ocean-light); margin-bottom: 0.4rem;
+  }
+  .hp-mat-card h3 {
+    font-family: var(--font-serif); font-size: 1.5rem;
+    font-weight: 600; color: white; margin-bottom: 0.6rem; line-height: 1.2;
+  }
+  .hp-mat-card--featured h3 { font-size: 2rem; }
+  .hp-mat-card__arrow {
+    font-size: 0.8rem; letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.65); transition: color 0.2s;
+  }
+  .hp-mat-card:hover .hp-mat-card__arrow { color: white; }
+  .hp-mat-card__all {
+    display: inline-block; margin-top: 0.4rem;
+    font-size: 0.8rem; letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.2s;
+  }
+  .hp-mat-card__all:hover { color: white; }
+  .hp-mat-subnav {
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    min-width: 230px; padding: 0.5rem 0 0.5rem 2rem;
+    border-left: 1px solid rgba(255,255,255,0.15);
+  }
+  .hp-mat-subnav__link {
+    display: flex; align-items: center;
+    justify-content: flex-end; gap: 0.7rem;
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    font-size: 0.95rem; letter-spacing: 0.02em;
+    transition: color 0.2s; padding: 0.25rem 0;
+  }
+  .hp-mat-subnav__link::after {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--color-ocean-light); flex-shrink: 0;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .hp-mat-subnav__link:hover { color: white; }
+  .hp-mat-subnav__link:hover::after { transform: scale(1.5); background: white; }
+  @media (max-width: 900px) {
+    .hp-materiel__grid { grid-template-columns: 1fr; }
+    .hp-mat-card--featured { height: auto; min-height: 360px; }
+    .hp-mat-card__body--featured { flex-direction: column; align-items: flex-start; gap: 1.5rem; padding: 2rem; }
+    .hp-mat-subnav { border-left: none; border-top: 1px solid rgba(255,255,255,0.15); padding-left: 0; padding-top: 1rem; min-width: auto; width: 100%; justify-content: flex-start; gap: 0.6rem; }
+    .hp-mat-subnav__link { justify-content: flex-start; font-size: 0.9rem; }
+    .hp-mat-subnav__link::after { order: -1; }
+    .hp-mat-card { aspect-ratio: 16/9; }
   }
 </style>
 

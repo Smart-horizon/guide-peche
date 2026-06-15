@@ -299,6 +299,22 @@ SANITY_DATASET=production
 
 ---
 
+## 📝 NOTES PAR PAGE
+
+### /peche-a-la-mouche-en-bretagne
+- **Photos** : mettre à jour avec la meilleure qualité disponible (scraped/images/)
+
+### /jean-baptiste-vidal-moniteur-guide-de-peche (Le Guide)
+- **Frise chronologique** : reste à configurer — envisager une démo à montrer à JBV pour valider le concept avant de remplir le contenu définitif
+- Comparaison ancien hardcodé / nouveau Sanity : disponible via `git restore src/pages/jean-baptiste-vidal-moniteur-guide-de-peche.astro` (local) vs workers.dev (Sanity)
+- ⚠️ **PROCÉDURE DEPLOY OBLIGATOIRE** — toujours utiliser `bash deploy.sh` et JAMAIS `npm run deploy` directement.
+  Le script détecte automatiquement tous les fichiers hardcodés trackés dans git (hors whitelist), les supprime avant le deploy, puis les restaure. Résultat : **workers.dev = Sanity, localhost = anciens fichiers hardcodés**.
+  ```
+  bash deploy.sh
+  ```
+
+---
+
 ## 🎣 CONTEXTE PERSONNEL
 
 - Projet mené par Quentin (consultant indépendant, ami du guide)

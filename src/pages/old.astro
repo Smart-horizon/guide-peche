@@ -1,0 +1,100 @@
+---
+if (import.meta.env.PROD) {
+  return new Response(null, { status: 404 })
+}
+
+const pages = [
+  { slug: 'jean-baptiste-vidal-moniteur-guide-de-peche',              label: 'Le Guide — Jean-Baptiste Vidal' },
+  { slug: 'peche-a-la-mouche-en-bretagne',                            label: 'Pêche à la mouche en Bretagne (hub)' },
+  { slug: 'peche-de-la-truite-a-la-mouche-en-bretagne',              label: 'Truite à la mouche en Bretagne' },
+  { slug: 'peche-de-l-alose-a-la-mouche',                            label: 'Alose à la mouche' },
+  { slug: 'peche-de-la-truite-en-reservoir',                          label: 'Truite en réservoir' },
+  { slug: 'peche-du-brochet-a-la-mouche',                            label: 'Brochet à la mouche' },
+  { slug: 'initiation-peche-a-la-mouche',                            label: 'Initiation pêche à la mouche' },
+  { slug: 'initiation-peche-du-bar-a-la-mouche',                     label: 'Initiation pêche du bar' },
+  { slug: 'peche-du-bar-a-la-mouche-coaching',                       label: 'Bar — Coaching' },
+  { slug: 'peche-du-bar-a-vue-a-la-mouche',                          label: 'Bar à vue' },
+  { slug: 'peche-du-bar-perfectionnement',                            label: 'Bar — Perfectionnement' },
+  { slug: 'peche-mouche-bar-bateau-bretagne',                         label: 'Bar en bateau Bretagne' },
+  { slug: 'bateau-bar-a-la-mouche',                                   label: 'Le bateau (Carolina Skiff)' },
+  { slug: 'masterclass',                                              label: 'Masterclass (hub)' },
+  { slug: 'master-class-peche-en-reservoir',                          label: 'Masterclass réservoir' },
+  { slug: 'master-class-nymphe-au-fil',                               label: 'Masterclass nymphe au fil' },
+  { slug: 'stage-peche-mouche',                                       label: 'Stage pêche mouche (hub)' },
+  { slug: 'stage-spey-cast-et-cours-de-lancer',                      label: 'Spey Cast & Cours de lancer (hub)' },
+  { slug: 'voyages-peche-mouche',                                     label: 'Voyages pêche mouche (hub)' },
+  { slug: 'voyage-peche-argentine-rio-grande-truite-de-mer',         label: 'Voyage Argentine — Rio Grande' },
+  { slug: 'los-roques-venezuela',                                     label: 'Voyage Venezuela — Los Roques' },
+  { slug: 'peche-mouche-cuba-cayo-cruz',                              label: 'Voyage Cuba — Cayo Cruz' },
+  { slug: 'peche-mouche-cuba-cayo-santa-maria',                       label: 'Voyage Cuba — Cayo Santa Maria' },
+  { slug: 'voyage-peche-mouche-mexique',                              label: 'Voyage Mexique' },
+  { slug: 'materiel-jeanbaptistevidal',                               label: 'Mon matériel (hub)' },
+  { slug: 'materiel-mouche-bar',                                      label: 'Matériel bar' },
+  { slug: 'materiel-mouche-truite',                                   label: 'Matériel truite' },
+  { slug: 'materiel-mouche-migrateur',                                label: 'Matériel migrateurs' },
+  { slug: 'materiel-mouche-reservoir',                                label: 'Matériel réservoir' },
+  { slug: 'materiel-mouche-brochet',                                  label: 'Matériel brochet' },
+  { slug: 'materiel-mouche-peche-exotique',                           label: 'Matériel exotique' },
+  { slug: 'mouches-de-peche-jeanbaptiste-vidal',                     label: 'Mes mouches' },
+  { slug: 'partenaires-jeanbaptistevidal',                            label: 'Partenaires' },
+  { slug: 'videos-jeanbaptiste-vidal-moniteur-guide-de-peche',       label: 'Vidéos' },
+  { slug: 'revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche', label: 'Revue de presse' },
+]
+
+const prod = 'https://guide-peche.smart-horizon.workers.dev'
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pages hardcodées — comparaison locale</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #0d1117; color: #e6edf3; padding: 2rem; }
+    h1 { font-size: 1.4rem; margin-bottom: 0.4rem; color: #58a6ff; }
+    p.note { font-size: 0.8rem; color: #8b949e; margin-bottom: 2rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { text-align: left; padding: 0.5rem 0.75rem; background: #161b22; color: #8b949e; border-bottom: 1px solid #30363d; }
+    tr:hover td { background: #161b22; }
+    td { padding: 0.55rem 0.75rem; border-bottom: 1px solid #21262d; vertical-align: middle; }
+    td:first-child { color: #8b949e; font-size: 0.75rem; width: 1.5rem; text-align: right; }
+    .label { color: #e6edf3; }
+    .links { display: flex; gap: 0.5rem; }
+    a.local  { color: #3fb950; text-decoration: none; font-weight: 500; }
+    a.local:hover  { text-decoration: underline; }
+    a.prod   { color: #8b949e; text-decoration: none; font-size: 0.78rem; }
+    a.prod:hover   { color: #58a6ff; }
+    .slug { font-family: monospace; color: #79c0ff; font-size: 0.78rem; }
+    .badge { display: inline-block; padding: 0.1rem 0.45rem; border-radius: 12px; font-size: 0.7rem; background: #1f6feb30; color: #58a6ff; border: 1px solid #1f6feb; margin-left: 0.4rem; }
+  </style>
+</head>
+<body>
+  <h1>🗂 Pages hardcodées — comparaison locale <span class="badge">DEV ONLY</span></h1>
+  <p class="note">Ces pages existent uniquement sur localhost. workers.dev = version Sanity. Cette page disparaît en production.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Page</th>
+        <th>Slug</th>
+        <th>Liens</th>
+      </tr>
+    </thead>
+    <tbody>
+      {pages.map((p, i) => (
+        <tr>
+          <td>{i + 1}</td>
+          <td class="label">{p.label}</td>
+          <td class="slug">/{p.slug}</td>
+          <td>
+            <div class="links">
+              <a class="local" href={`/old/${p.slug}`} target="_blank">← localhost /old/</a>
+              <a class="prod"  href={`${prod}/${p.slug}`} target="_blank">workers.dev →</a>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</body>
+</html>

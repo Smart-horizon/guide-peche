@@ -1,43 +1,90 @@
+import { allSectionTypes } from './sections.js'
+
 export default {
   name: 'page',
   title: 'Pages',
   type: 'document',
+  icon: () => '📄',
+  groups: [
+    { name: 'page', title: '🏗️ Page Builder' },
+    { name: 'seo',  title: '🔍 SEO' },
+  ],
   fields: [
     {
       name: 'title',
-      title: 'Titre',
+      title: 'Titre de la page (affiché dans le Studio)',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
     },
     {
       name: 'slug',
-      title: 'URL',
+      title: 'URL de la page',
       type: 'slug',
       options: { source: 'title' },
-      validation: Rule => Rule.required()
+      description: '⚠️ Ne pas modifier après publication — risque SEO',
+      validation: Rule => Rule.required(),
     },
+
+    // ── Page Builder ───────────────────────────────────────────────────────
+    {
+      name: 'pagebuilder',
+      title: 'Sections de la page',
+      description: '✋ Glissez-déposez pour réorganiser · Cliquez "+" pour ajouter une section',
+      type: 'array',
+      group: 'page',
+      of: allSectionTypes.map(s => ({ type: s.name })),
+    },
+
+    // ── Contenu simple (legacy / fallback) ─────────────────────────────────
     {
       name: 'contenu',
-      title: 'Contenu',
+      title: 'Contenu (texte simple)',
       type: 'array',
-      of: [{ type: 'block' }]
+      group: 'page',
+      description: "Utilisé uniquement si aucune section pagebuilder n'est définie",
+      of: [{ type: 'block' }],
     },
     {
       name: 'image',
       title: 'Image principale',
       type: 'image',
-      options: { hotspot: true }
+      group: 'page',
+      options: { hotspot: true },
     },
+
+    // ── SEO ────────────────────────────────────────────────────────────────
     {
       name: 'seoTitle',
-      title: 'Titre SEO',
-      type: 'string'
+      title: 'Titre SEO (balise <title>)',
+      type: 'string',
+      group: 'seo',
+      validation: Rule => Rule.max(65).warning('Idéalement moins de 65 caractères'),
     },
     {
       name: 'seoDescription',
-      title: 'Description SEO',
+      title: 'Description SEO (meta description)',
       type: 'text',
-      rows: 3
-    }
-  ]
+      rows: 3,
+      group: 'seo',
+      validation: Rule => Rule.max(160).warning('Idéalement moins de 160 caractères'),
+    },
+    {
+      name: 'ogImage',
+      title: 'Image de partage (Open Graph)',
+      type: 'image',
+      group: 'seo',
+      options: { hotspot: true },
+    },
+  ],
+
+  preview: {
+    select: { title: 'title', sections: 'pagebuilder' },
+    prepare({ title, sections }) {
+      const nb = sections?.length ?? 0
+      return {
+        title,
+        subtitle: `📄 ${nb} section${nb > 1 ? 's' : ''}`,
+      }
+    },
+  },
 }
