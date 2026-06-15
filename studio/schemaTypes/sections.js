@@ -2099,6 +2099,7 @@ export const allSectionTypes = [
   sectionStats,
   sectionCta,
   sectionBanniere,
+  sectionBanniereCard,
   sectionCarrousel3Images,
   sectionProgramme,
   sectionProgrammeTexte,
