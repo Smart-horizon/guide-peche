@@ -29,6 +29,7 @@ const hp = await stegaClient.fetch(`
       featuredImage{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
       cardsSecondaires[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
       sousLiens[],
+      temoignagesManuels[]->{ _id, nom, note, texte, prestation },
     }
   }
 `)
@@ -58,27 +59,37 @@ const temoEyebrow = stegaClean(temoHPSection?.eyebrow) || "Ce qu'ils disent"
 const temoPitch   = stegaClean(temoHPSection?.pitch)   || 'Des pêcheurs de toute la France font confiance à Jean-Baptiste depuis 2004.'
 const temoCtaTxt  = stegaClean(temoHPSection?.ctaTexte) || 'Lire tous les témoignages'
 const temoCtaLien = stegaClean(temoHPSection?.ctaLien)  || '/temoignages'
+const temoNombre  = temoHPSection?.nombreTemoignages ?? 6
 
-// ── Témoignages (avec fallback) ───────────────────────────────────────────────
-const sanityTemoignages = await stegaClient.fetch(`
-  *[_type == "temoignage" && afficherAccueil == true] | order(orderRank asc) [0...6] {
-    _id, nom, note, texte, prestation
-  }
-`)
-const temoignagesFallbackQuery = await stegaClient.fetch(`
-  *[_type == "temoignage"] | order(orderRank asc) [0...6] {
-    _id, nom, note, texte, prestation
-  }
-`)
+// ── Témoignages : manuels en priorité, sinon auto avec fallback ───────────────
+const temoManuels = (temoHPSection?.temoignagesManuels ?? []).filter(Boolean)
 const fallbackTemoignages = [
   { _id: 'f1', nom: 'Diego', prestation: 'Stage saumon & Spey Cast', note: 5, texte: "Il m'a fallu désapprendre pour réapprendre. 5 jours de stage intensif au saumon à la mouche en Bretagne : le site est proprement magnifique et les rivières sont brunes et mystérieuses." },
   { _id: 'f2', nom: 'Marc', prestation: 'Découverte bar à vue & bateau', note: 5, texte: 'Jean-Baptiste connaît le poisson par cœur, ses habitudes, les sites qui vont bien. Super matos, super conseils. Très agréable et efficace. Grande expérience du guidage.' },
   { _id: 'f3', nom: 'Fiona et Romain', prestation: 'Découverte de la pêche à la mouche', note: 5, texte: "Ce fut un vrai plaisir d'apprendre avec toi. Pas de stress, de la rigolade et surtout un excellent prof qui ne se contente pas de l'apprentissage brut du lancer mais fait découvrir l'art qu'est véritablement la pêche à la mouche." },
   { _id: 'f4', nom: 'Vincent', prestation: 'Bar à vue & bateau, Bretagne-Sud', note: 5, texte: "Je conseille à tout le monde d'essayer de prendre ces gros bars que Jean-Baptiste connaît par cœur — ressentir ces montées d'adrénaline à la vue de bars énormes postés devant vous." },
 ]
-const temoignages = sanityTemoignages.length > 0
-  ? sanityTemoignages
-  : (temoignagesFallbackQuery.length > 0 ? temoignagesFallbackQuery : fallbackTemoignages)
+
+let temoignages: any[]
+if (temoManuels.length > 0) {
+  temoignages = temoManuels.slice(0, temoNombre)
+} else {
+  const sanityTemoignages = await stegaClient.fetch(`
+    *[_type == "temoignage" && afficherAccueil == true] | order(orderRank asc) [0...${temoNombre}] {
+      _id, nom, note, texte, prestation
+    }
+  `)
+  if (sanityTemoignages.length > 0) {
+    temoignages = sanityTemoignages
+  } else {
+    const temoAll = await stegaClient.fetch(`
+      *[_type == "temoignage"] | order(orderRank asc) [0...${temoNombre}] {
+        _id, nom, note, texte, prestation
+      }
+    `)
+    temoignages = temoAll.length > 0 ? temoAll : fallbackTemoignages
+  }
+}
 
 // ── Bon cadeau HP ─────────────────────────────────────────────────────────────
 const bonCadeauHP = hp?.pagebuilder?.find((s: any) => s._type === 'sectionBonCadeauHP')
