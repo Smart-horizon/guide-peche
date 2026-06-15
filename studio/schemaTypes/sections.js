@@ -2090,6 +2090,26 @@ export const sectionMaterielHP = {
   },
 }
 
+// ── GRILLE PARTENAIRES ────────────────────────────────────────────────────────
+export const sectionPartenaires = {
+  name: 'sectionPartenaires',
+  title: '🤝 Grille Partenaires',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Eyebrow (optionnel)', type: 'string',
+      description: 'Petit texte au-dessus du titre',
+    },
+    {
+      name: 'titre', title: 'Titre de section (optionnel)', type: 'string',
+    },
+    fondField('white'),
+  ],
+  preview: {
+    prepare: () => ({ title: '🤝 Grille Partenaires (auto)' }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -2122,4 +2142,5 @@ export const allSectionTypes = [
   sectionMaterielHP,
   sectionTemoignagesHP,
   sectionBonCadeauHP,
+  sectionPartenaires,
 ]

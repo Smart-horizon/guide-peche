@@ -1,5 +1,5 @@
 ---
-import { stegaClient } from '../lib/sanity.js'
+import { stegaClient, client } from '../lib/sanity.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 import MatierielBtn from './MatierielBtn.astro'
@@ -87,6 +87,11 @@ interface Props {
 }
 
 const { sections, pageTitle = '' } = Astro.props
+
+const hasPartenaires = (sections ?? []).some((s: any) => s._type === 'sectionPartenaires')
+const partenaires: any[] = hasPartenaires
+  ? await client.fetch(`*[_type == "partenaire"] | order(orderRank asc) { _id, nom, nomComplet, tag, description, url, labelLien, logo { asset->{ url } } }`)
+  : []
 ---
 
 {sections?.map((s: any) => (
@@ -886,6 +891,43 @@ const { sections, pageTitle = '' } = Astro.props
               </div>
             )
           })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ════════════ GRILLE PARTENAIRES ════════════ */}
+  {s._type === 'sectionPartenaires' && (
+    <section class={`section pb-part-section ${bg(s.fond) || 'section--white'}`}>
+      <div class="container">
+        {(stegaClean(s.eyebrow) || stegaClean(s.titre)) && (
+          <div class="pb-part-header">
+            {stegaClean(s.eyebrow) && <p class="pb-eyebrow">{s.eyebrow}</p>}
+            {stegaClean(s.titre) && <h2 class="pb-part-h2">{s.titre}</h2>}
+          </div>
+        )}
+        <div class="pb-part-grid">
+          {partenaires.map((p: any) => (
+            <article class="pb-part-card">
+              <div class="pb-part-card__logo-wrap">
+                {p.logo?.asset?.url
+                  ? <img src={p.logo.asset.url} alt={`Logo ${p.nom}`} class="pb-part-card__logo" loading="lazy" />
+                  : <span class="pb-part-card__logo-placeholder">{p.nom}</span>
+                }
+              </div>
+              <div class="pb-part-card__body">
+                {p.tag && <span class="pb-part-card__tag">{p.tag}</span>}
+                <h3 class="pb-part-card__name">{p.nom}</h3>
+                {p.description && <p class="pb-part-card__desc">{p.description}</p>}
+              </div>
+              {p.url && (
+                <a href={p.url} target="_blank" rel="noopener noreferrer" class="pb-part-card__link" aria-label={`Visiter le site ${p.nom}`}>
+                  {p.labelLien || p.url}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              )}
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -2322,6 +2364,44 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   .timeline-item { grid-template-columns: 64px 20px 1fr; }
   .tl-expand-photo { max-width: 100%; }
 }
+
+/* ── GRILLE PARTENAIRES ── */
+.pb-part-header { margin-bottom: 2.5rem; }
+.pb-part-h2 { font-family: var(--font-serif); font-size: clamp(1.5rem,3vw,2rem); color: var(--color-ocean); margin: 0.5rem 0 0; }
+.pb-part-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.pb-part-card {
+  display: flex; flex-direction: column;
+  border: 1px solid rgba(0,0,0,0.07); border-radius: 6px;
+  overflow: hidden; background: white;
+  transition: box-shadow .25s, transform .25s;
+}
+.pb-part-card:hover { box-shadow: 0 8px 32px rgba(27,94,138,.10); transform: translateY(-3px); }
+.pb-part-card__logo-wrap {
+  height: 120px; display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem 2rem; background: #fafafa;
+  border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.pb-part-card__logo { max-width: 100%; max-height: 72px; width: auto; height: auto; object-fit: contain; filter: grayscale(20%); transition: filter .2s; }
+.pb-part-card:hover .pb-part-card__logo { filter: grayscale(0%); }
+.pb-part-card__logo-placeholder { font-size: .8rem; font-weight: 700; color: var(--color-ocean-main); text-align: center; }
+.pb-part-card__body { flex: 1; padding: 1.4rem 1.4rem .8rem; }
+.pb-part-card__tag { font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; color: var(--color-ocean-main); display: block; margin-bottom: .5rem; }
+.pb-part-card__name { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; color: var(--color-ocean); margin: 0 0 .75rem; line-height: 1.3; }
+.pb-part-card__desc { font-size: .85rem; line-height: 1.7; color: var(--color-text-muted, #555); margin: 0; }
+.pb-part-card__link {
+  display: inline-flex; align-items: center; gap: .45rem;
+  margin: 1rem 1.4rem 1.4rem; font-size: .75rem; font-weight: 600; letter-spacing: .06em;
+  color: var(--color-ocean-main); text-decoration: none;
+  border-bottom: 1.5px solid rgba(27,94,138,.25); padding-bottom: .15rem;
+  transition: color .2s, border-color .2s; align-self: flex-start;
+}
+.pb-part-card__link:hover { color: var(--color-ocean); border-color: var(--color-ocean); }
+@media (max-width: 1024px) { .pb-part-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 640px) { .pb-part-grid { grid-template-columns: 1fr; gap: 1.25rem; } }
 </style>
 
 <script>

@@ -17,7 +17,7 @@ import {
   sectionSelection, sectionCards2, sectionBilan, sectionDates, sectionChoix,
   sectionFriseChronologique, sectionListe, sectionLienBlog,
   sectionPrestationsHP, sectionGuideHP, sectionMaterielHP, sectionTemoignagesHP, sectionBonCadeauHP,
-  sectionCards3, sectionBanniereCard,
+  sectionCards3, sectionBanniereCard, sectionPartenaires,
 } from './sections.js'
 
 export const schemaTypes = [
@@ -64,4 +64,5 @@ export const schemaTypes = [
   sectionTemoignagesHP,
   sectionBonCadeauHP,
   sectionBanniereCard,
+  sectionPartenaires,
 ]
