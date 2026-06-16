@@ -207,11 +207,32 @@ const customStructure = (S, context) =>
                     ])
                 ),
               S.listItem()
+                .title('📰 Revue de presse')
+                .child(
+                  S.list()
+                    .title('Revue de presse')
+                    .items([
+                      S.listItem()
+                        .title('✏️ Contenu de la page')
+                        .child(
+                          S.document()
+                            .schemaType('page')
+                            .documentId('page-revue-de-presse-jbvidal')
+                            .title('Page Revue de presse — sections')
+                        ),
+                      S.divider(),
+                      orderableDocumentListDeskItem({
+                        type: 'revuePresse',
+                        title: '📰 Liste des articles de presse',
+                        icon: () => '📰',
+                        S,
+                        context,
+                      }),
+                    ])
+                ),
+              S.listItem()
                 .title('🎥 Vidéos')
                 .child(S.document().schemaType('page').documentId('page-videos-jeanbaptiste-vidal-moniteur-guide-de-peche').title('Vidéos')),
-              S.listItem()
-                .title('📰 Revue de presse')
-                .child(S.document().schemaType('page').documentId('page-revue-de-presse-jbvidal').title('Revue de presse')),
             ])
         ),
 

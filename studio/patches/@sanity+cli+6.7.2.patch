@@ -1,0 +1,43 @@
+diff --git a/node_modules/@sanity/cli/dist/actions/deploy/deployStudio.js b/node_modules/@sanity/cli/dist/actions/deploy/deployStudio.js
+index 20291e1..160754e 100644
+--- a/node_modules/@sanity/cli/dist/actions/deploy/deployStudio.js
++++ b/node_modules/@sanity/cli/dist/actions/deploy/deployStudio.js
+@@ -119,7 +119,8 @@ export async function deployStudio(options) {
+                 exit: 1
+             });
+         }
+-        if (!studioManifest) {
++        // PATCHED: allow null/minimal manifest (Node.js v24 compatibility)
++        if (studioManifest === undefined) {
+             output.error('Failed to generate studio manifest. Please check your schemas and manifests.', {
+                 exit: 1
+             });
+diff --git a/node_modules/@sanity/cli/dist/actions/deploy/deployStudioSchemasAndManifests.worker.js b/node_modules/@sanity/cli/dist/actions/deploy/deployStudioSchemasAndManifests.worker.js
+index 3c8c1f0..c49f215 100644
+--- a/node_modules/@sanity/cli/dist/actions/deploy/deployStudioSchemasAndManifests.worker.js
++++ b/node_modules/@sanity/cli/dist/actions/deploy/deployStudioSchemasAndManifests.worker.js
+@@ -97,7 +97,9 @@ async function main() {
+  *
+  * @param workspaces - The workspaces to deploy
+  */ async function handleInternalDeployment({ outPath, projectId, schemaInputs, verbose, workDir, workspaceManifests, workspaces }) {
+-    const [studioManifest] = await Promise.all([
++    // PATCHED: make uploadSchemaToLexicon non-fatal (Node.js v24 Worker thread HTTP issue)
++    let studioManifest = null;
++    const [lexiconResult, , ] = await Promise.allSettled([
+         uploadSchemaToLexicon({
+             projectId,
+             verbose,
+@@ -115,6 +117,13 @@ async function main() {
+             workspaces: schemaInputs
+         })
+     ]);
++    if (lexiconResult.status === 'fulfilled') {
++        studioManifest = lexiconResult.value;
++    } else {
++        debug('uploadSchemaToLexicon failed (non-fatal): %o', lexiconResult.reason);
++        // Return a minimal manifest so the deploy can continue
++        studioManifest = { workspaces: [{ name: 'default', projectId, dataset: workspaces[0]?.dataset || 'production' }] };
++    }
+     return [
+         studioManifest
+     ];

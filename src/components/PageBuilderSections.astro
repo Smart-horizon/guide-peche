@@ -92,6 +92,11 @@ const hasPartenaires = (sections ?? []).some((s: any) => s._type === 'sectionPar
 const partenaires: any[] = hasPartenaires
   ? await client.fetch(`*[_type == "partenaire"] | order(orderRank asc) { _id, nom, nomComplet, tag, description, url, labelLien, logo { asset->{ url } } }`)
   : []
+
+const hasRevuePresse = (sections ?? []).some((s: any) => s._type === 'sectionRevuePresse')
+const revuePresse: any[] = hasRevuePresse
+  ? await client.fetch(`*[_type == "revuePresse"] | order(orderRank asc) { _id, magazine, numero, date, annee, titre, description, type, cover { asset->{ url } }, lien, labelLien }`)
+  : []
 ---
 
 {sections?.map((s: any) => (
@@ -891,6 +896,48 @@ const partenaires: any[] = hasPartenaires
               </div>
             )
           })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ════════════ GRILLE REVUE DE PRESSE ════════════ */}
+  {s._type === 'sectionRevuePresse' && (
+    <section class={`section pb-press-section ${bg(s.fond) || 'section--white'}`}>
+      <div class="container">
+        {(stegaClean(s.eyebrow) || stegaClean(s.titre)) && (
+          <div class="pb-press-header">
+            {stegaClean(s.eyebrow) && <p class="pb-eyebrow">{s.eyebrow}</p>}
+            {stegaClean(s.titre) && <h2 class="pb-press-h2">{s.titre}</h2>}
+          </div>
+        )}
+        <div class="pb-press-grid">
+          {revuePresse.map((item: any) => (
+            <article class="pb-press-card">
+              <div class="pb-press-card__cover-wrap">
+                {item.cover?.asset?.url
+                  ? <img src={item.cover.asset.url} alt={`${item.magazine}${item.numero ? ' ' + item.numero : ''} — ${item.titre}`} class="pb-press-card__cover" loading="lazy" />
+                  : <span class="pb-press-card__cover-placeholder">{item.magazine}</span>
+                }
+                {item.type && <span class="pb-press-card__badge">{item.type}</span>}
+              </div>
+              <div class="pb-press-card__body">
+                <div class="pb-press-card__meta">
+                  <span class="pb-press-card__magazine">{item.magazine}</span>
+                  {item.numero && <span class="pb-press-card__numero">{item.numero}</span>}
+                  <span class="pb-press-card__date">{item.date}</span>
+                </div>
+                <h3 class="pb-press-card__titre">{item.titre}</h3>
+                {item.description && <p class="pb-press-card__desc">{item.description}</p>}
+                {item.lien && (
+                  <a href={item.lien} target={item.lien.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer" class="pb-press-card__link">
+                    {item.labelLien || item.lien}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </a>
+                )}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -2363,6 +2410,96 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   .timeline::before { left: 72px; }
   .timeline-item { grid-template-columns: 64px 20px 1fr; }
   .tl-expand-photo { max-width: 100%; }
+}
+
+/* ── GRILLE REVUE DE PRESSE ── */
+.pb-press-section { background: white; }
+.pb-press-header { margin-bottom: 2.5rem; }
+.pb-press-h2 { font-family: var(--font-serif); font-size: clamp(1.5rem,3vw,2rem); color: var(--color-ocean); margin: 0.5rem 0 0; }
+.pb-press-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.pb-press-card {
+  display: flex; flex-direction: column;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 6px; overflow: hidden;
+  background: white;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.pb-press-card:hover {
+  box-shadow: 0 8px 32px rgba(27,94,138,0.10);
+  transform: translateY(-3px);
+}
+.pb-press-card__cover-wrap {
+  position: relative; height: 260px;
+  background: #0d2b3e; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.pb-press-card__cover {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  transition: transform 0.4s ease;
+}
+.pb-press-card:hover .pb-press-card__cover { transform: scale(1.03); }
+.pb-press-card__cover-placeholder {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.8rem; text-align: center; padding: 1rem;
+}
+.pb-press-card__badge {
+  position: absolute; top: 0.65rem; left: 0.65rem;
+  font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+  font-weight: 700; color: white;
+  background: rgba(27,94,138,0.85);
+  padding: 0.2rem 0.6rem; border-radius: 2px;
+  backdrop-filter: blur(4px);
+}
+.pb-press-card__body {
+  flex: 1; display: flex; flex-direction: column;
+  padding: 1.25rem 1.25rem 1.4rem;
+}
+.pb-press-card__meta {
+  display: flex; align-items: baseline;
+  gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.7rem;
+}
+.pb-press-card__magazine {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--color-ocean-main, #1B5E8A);
+}
+.pb-press-card__numero {
+  font-size: 0.72rem; color: var(--color-ocean, #1B5E8A); font-weight: 500;
+}
+.pb-press-card__date {
+  font-size: 0.7rem; color: rgba(0,0,0,0.38); margin-left: auto;
+}
+.pb-press-card__titre {
+  font-family: var(--font-serif);
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--color-ocean, #1B5E8A);
+  line-height: 1.4; margin: 0 0 0.75rem;
+}
+.pb-press-card__desc {
+  font-size: 0.82rem; line-height: 1.7;
+  color: var(--color-text-muted, #555);
+  margin: 0; flex: 1;
+}
+.pb-press-card__link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-top: 1rem; font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-ocean-main, #1B5E8A);
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(27,94,138,0.25);
+  padding-bottom: 0.1rem; align-self: flex-start;
+  transition: color 0.2s, border-color 0.2s;
+}
+.pb-press-card__link:hover { color: var(--color-ocean, #1B5E8A); border-color: var(--color-ocean, #1B5E8A); }
+@media (max-width: 1100px) { .pb-press-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  .pb-press-grid { grid-template-columns: 1fr; }
+  .pb-press-card__cover-wrap { height: 220px; }
 }
 
 /* ── GRILLE PARTENAIRES ── */

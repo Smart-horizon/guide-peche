@@ -5,6 +5,7 @@
   "main": "package.json",
   "license": "UNLICENSED",
   "scripts": {
+    "postinstall": "patch-package",
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
@@ -18,16 +19,17 @@
     "@sanity/locale-fr-fr": "^1.2.32",
     "@sanity/orderable-document-list": "^1.5.1",
     "@sanity/presentation": "^2.0.0",
-    "@sanity/vision": "^5.27.0",
+    "@sanity/vision": "^5.31.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "sanity": "^5.27.0",
+    "sanity": "^5.31.1",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^6.0.0",
     "@types/react": "^19.2.14",
     "eslint": "^9.28",
+    "patch-package": "^8.0.1",
     "prettier": "^3.5",
     "typescript": "^5.8"
   },

@@ -2110,6 +2110,25 @@ export const sectionPartenaires = {
   },
 }
 
+export const sectionRevuePresse = {
+  name: 'sectionRevuePresse',
+  title: '📰 Grille Revue de presse',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Eyebrow (optionnel)', type: 'string',
+      description: 'Petit texte au-dessus du titre',
+    },
+    {
+      name: 'titre', title: 'Titre de section (optionnel)', type: 'string',
+    },
+    fondField('white'),
+  ],
+  preview: {
+    prepare: () => ({ title: '📰 Grille Revue de presse (auto)' }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -2143,4 +2162,5 @@ export const allSectionTypes = [
   sectionTemoignagesHP,
   sectionBonCadeauHP,
   sectionPartenaires,
+  sectionRevuePresse,
 ]
