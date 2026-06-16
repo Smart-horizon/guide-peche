@@ -60,16 +60,23 @@ export default {
       description: 'Couverture du magazine ou visuel de l\'article',
     },
     {
+      name: 'fichierPdf',
+      title: 'Fichier PDF à télécharger (optionnel)',
+      type: 'file',
+      options: { accept: '.pdf' },
+      description: '⬆️ Glissez-déposez le PDF de l\'article ici — prioritaire sur le lien URL ci-dessous',
+    },
+    {
       name: 'lien',
-      title: 'Lien (optionnel)',
+      title: 'Lien externe (optionnel)',
       type: 'string',
-      description: 'URL ou chemin vers article en ligne / PDF. Ex : https://... ou /pdfs/article.pdf',
+      description: 'URL vers l\'article en ligne — utilisé uniquement si aucun PDF n\'est uploadé',
     },
     {
       name: 'labelLien',
-      title: 'Label du lien',
+      title: 'Label du bouton',
       type: 'string',
-      description: 'Ex : Lire le magazine en ligne, Lire l\'article (PDF)',
+      description: 'Ex : Lire le magazine en ligne — laisser vide pour "Télécharger l\'article (PDF)" par défaut',
     },
   ],
   preview: {

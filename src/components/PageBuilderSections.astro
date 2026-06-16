@@ -95,7 +95,7 @@ const partenaires: any[] = hasPartenaires
 
 const hasRevuePresse = (sections ?? []).some((s: any) => s._type === 'sectionRevuePresse')
 const revuePresse: any[] = hasRevuePresse
-  ? await client.fetch(`*[_type == "revuePresse"] | order(orderRank asc) { _id, magazine, numero, date, annee, titre, description, type, cover { asset->{ url } }, lien, labelLien }`)
+  ? await client.fetch(`*[_type == "revuePresse"] | order(orderRank asc) { _id, magazine, numero, date, annee, titre, description, type, cover { asset->{ url } }, fichierPdf { asset->{ url } }, lien, labelLien }`)
   : []
 ---
 
@@ -929,12 +929,17 @@ const revuePresse: any[] = hasRevuePresse
                 </div>
                 <h3 class="pb-press-card__titre">{item.titre}</h3>
                 {item.description && <p class="pb-press-card__desc">{item.description}</p>}
-                {item.lien && (
-                  <a href={item.lien} target={item.lien.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer" class="pb-press-card__link">
-                    {item.labelLien || item.lien}
+                {item.fichierPdf?.asset?.url ? (
+                  <a href={item.fichierPdf.asset.url} download class="pb-press-card__link pb-press-card__link--dl">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    {item.labelLien || 'Télécharger l\'article (PDF)'}
+                  </a>
+                ) : item.lien ? (
+                  <a href={item.lien} target="_blank" rel="noopener noreferrer" class="pb-press-card__link">
+                    {item.labelLien || 'Lire l\'article'}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   </a>
-                )}
+                ) : null}
               </div>
             </article>
           ))}
