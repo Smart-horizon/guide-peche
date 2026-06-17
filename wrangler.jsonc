@@ -4,7 +4,10 @@
   "compatibility_date": "2026-06-02",
   "assets": {
     "directory": "./dist",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    // Requis pour que le Worker intercepte TOUTES les requêtes (SSR + middleware).
+    // Sans ça, Cloudflare sert les assets statiques directement sans passer par le Worker.
+    "run_worker_first": true
   },
   // KV namespace SESSION créé lors du premier déploiement SSR (requis par @astrojs/cloudflare).
   // L'ID ici empêche wrangler de tenter de re-créer le namespace à chaque deploy.

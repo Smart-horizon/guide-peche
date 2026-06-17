@@ -1,85 +1,52 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PageBuilderSections from '../components/PageBuilderSections.astro'
-import { client, stegaClient } from '../lib/sanity.js'
-import { stegaClean } from '@sanity/client/stega'
+import { client } from '../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
 
-const builder = imageUrlBuilder(stegaClient)
+const builder = imageUrlBuilder(client)
 const urlFor = (source: any) => { const b = builder.image(source); const hs = source?.hotspot; return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b }
 
-// ── Routes statiques (client non-stega — juste des slugs) ────────────────────
+// ── Routes statiques générées au build depuis Sanity ─────────────────────────
 export async function getStaticPaths() {
-  const [pages, prestations, voyages] = await Promise.all([
-    client.fetch(`*[_type == "page"       && defined(slug.current)]{ "slug": slug.current }`),
-    client.fetch(`*[_type == "prestation" && defined(slug.current)]{ "slug": slug.current }`),
-    client.fetch(`*[_type == "voyage"     && defined(slug.current)]{ "slug": slug.current }`),
-  ])
-  return [
-    ...pages      .filter(d => d.slug && d.slug !== '/').map(d => ({ params: { slug: d.slug }, props: { docType: 'page'        } })),
-    ...prestations.filter(d => d.slug && d.slug !== '/').map(d => ({ params: { slug: d.slug }, props: { docType: 'prestation'  } })),
-    ...voyages    .filter(d => d.slug && d.slug !== '/').map(d => ({ params: { slug: d.slug }, props: { docType: 'voyage'      } })),
-  ]
+  const docs = await client.fetch(`
+    *[_type in ["page", "prestation", "voyage"] && defined(slug.current)]{ "slug": slug.current }
+  `)
+  return docs
+    .filter((d: any) => d.slug && d.slug !== '/')
+    .map((d: any) => ({ params: { slug: d.slug } }))
 }
 
 const { slug } = Astro.params
-const { docType } = Astro.props
 
-// ── Fetch du document (stegaClient — active les overlays Visual Editing) ─────
-const QUERIES: Record<string, string> = {
-  prestation: `*[_type == "prestation" && slug.current == $slug][0]{
-    _id, _type, title, categorie,
+// ── Requête universelle avec tous les champs nécessaires ──────────────────────
+const doc = await client.fetch(`
+  *[slug.current == $slug && _type in ["page", "prestation", "voyage"]][0]{
+    _id, _type, title, categorie, pays, especes, periode, prix, contenu, description,
     pagebuilder[]{
       ...,
       image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
       btnFichier{ asset->{ _id, url } },
-      photos[]{ asset->{ _id, url } },
-      images[]{ asset->{ _id, url } },
-      cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
-      etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
-    },
-    seoTitle, seoDescription, ogImage
-  }`,
-  voyage: `*[_type == "voyage" && slug.current == $slug][0]{
-    _id, _type, title, pays, especes, periode, prix,
-    pagebuilder[]{
-      ...,
-      image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
-      btnFichier{ asset->{ _id, url } },
-      photos[]{ asset->{ _id, url } },
-      images[]{ asset->{ _id, url } },
+      photos[]{ _type, hotspot, crop, asset->{ _id, url }, alt },
+      images[]{ _type, hotspot, crop, asset->{ _id, url }, alt, legende },
       cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
       etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
       'options': options[]{
         ...,
         image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
       },
-      'galerie': galerie[]{
-        asset->{ _id, url, metadata{ dimensions } }
-      },
-      items[],
+      'galerie': galerie[]{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      items[]{..., photos[]{ _type, hotspot, crop, asset->{_id, url}, alt, caption}},
+      cartes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url } } },
+      specs[],
+      liens[],
       sejours[],
       stats[],
       lignesInfo[],
     },
-    seoTitle, seoDescription, ogImage
-  }`,
-  page: `*[_type == "page" && slug.current == $slug][0]{
-    _id, _type, title, contenu, image, seoTitle, seoDescription,
-    pagebuilder[]{
-      ...,
-      image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
-      btnFichier{ asset->{ _id, url } },
-      photos[]{ asset->{ _id, url } },
-      images[]{ asset->{ _id, url } },
-      cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
-      etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
-      items[]{..., photos[]{asset->{_id, url}, alt, caption}},
-    }
-  }`,
-}
-
-const doc = await stegaClient.fetch(QUERIES[docType], { slug })
+    image, seoTitle, seoDescription, ogImage
+  }
+`, { slug })
 
 if (!doc) return Astro.redirect('/404')
 

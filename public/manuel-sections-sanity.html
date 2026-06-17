@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuel Sanity Studio — Jean-Baptiste Vidal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ocean:#1B5E8A;--dark:#0d2b3e;--footer-bg:#07181f;
+  --beige:#f8f7f4;--beige-d:#f0eff0;--text:#1a1a1f;--muted:#6b7280;
+  --border:rgba(0,0,0,0.09);--border-m:rgba(0,0,0,0.14);
+  --serif:'Playfair Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif
+}
+body{font-family:var(--sans);background:var(--beige);color:var(--text);line-height:1.6}
+
+/* Header */
+.hdr{background:var(--dark);padding:2rem 2rem 2.5rem}
+.hdr-inner{max-width:1280px;margin:0 auto}
+.hdr-lbl{font-size:.68rem;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.5rem}
+.hdr-h1{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.2rem);color:#fff;font-weight:400;margin-bottom:.5rem}
+.hdr-sub{font-size:.9rem;color:rgba(255,255,255,.5);max-width:500px}
+
+/* Category bar */
+.cat-bar{background:rgba(13,43,62,.98);padding:.5rem 1.5rem;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(255,255,255,.07)}
+.cat-bar::-webkit-scrollbar{display:none}
+.cat-bar-inner{display:flex;gap:6px;max-width:1280px;margin:0 auto;min-width:max-content}
+.cat-btn{font-family:var(--sans);font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;border-radius:20px;border:none;cursor:pointer;transition:all .13s;white-space:nowrap}
+.cat-btn.on{background:var(--ocean);color:#fff}
+.cat-btn:not(.on){background:rgba(255,255,255,.07);color:rgba(255,255,255,.5)}
+.cat-btn:not(.on):hover{background:rgba(255,255,255,.13);color:rgba(255,255,255,.8)}
+
+/* Tabs */
+.tabs-wrap{background:var(--dark);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;border-bottom:2px solid rgba(255,255,255,.07)}
+.tabs-wrap::-webkit-scrollbar{display:none}
+.tabs{display:flex;max-width:1280px;margin:0 auto;padding:0 1.5rem;gap:1px}
+.tab{padding:.7rem .85rem .6rem;font-family:var(--sans);font-size:.68rem;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);white-space:nowrap;border-bottom:2.5px solid transparent;transition:all .13s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.tab:hover{color:rgba(255,255,255,.75)}
+.tab.on{color:#7EC8E3;font-weight:500;border-bottom-color:var(--ocean)}
+.tab-icon{font-size:15px;line-height:1}
+.tab-name{font-size:.62rem;letter-spacing:.02em}
+.sf-warn{background:#fff8e6;border-left:3px solid #f59e0b;padding:8px 11px;font-size:10px;color:#92400e;margin:0 14px 12px;border-radius:0 4px 4px 0;line-height:1.5}
+
+/* Legend */
+.legend{max-width:1280px;margin:0 auto;padding:.75rem 1.5rem;display:flex;align-items:center;gap:1.5rem;font-size:.75rem;color:var(--muted)}
+.leg-item{display:flex;align-items:center;gap:6px}
+
+/* Compare */
+.compare{max-width:1280px;margin:0 auto;padding:0 1.5rem 3rem;display:flex;gap:1.25rem;align-items:flex-start}
+.panel{flex:1;min-width:0;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:#fff}
+.panel-l{flex:1.2}
+.panel-r{flex:.8}
+.panel-hd{padding:10px 16px;font-size:.75rem;font-weight:500;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);color:var(--muted)}
+.panel-hd-site{background:var(--beige-d)}
+.panel-hd-studio{background:#1e1e1e;color:rgba(255,255,255,.65)}
+.hd-dot{width:8px;height:8px;border-radius:50%;background:var(--ocean);flex-shrink:0}
+.s-badge{width:18px;height:18px;border-radius:4px;background:#e5423a;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0}
+.panel-body{max-height:620px;overflow-y:auto}
+
+/* Number badge */
+.nb{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--ocean);color:#fff;font-size:10px;font-weight:700;flex-shrink:0;border:1.5px solid rgba(255,255,255,.5);line-height:1;font-family:var(--sans)}
+.nb-lt{border-color:var(--ocean)}
+
+/* Studio fields */
+.sf-wrap{padding:14px 14px 6px}
+.sf{display:flex;align-items:flex-start;gap:9px;margin-bottom:13px}
+.sf-body{flex:1;min-width:0}
+.sf-lbl{font-size:11px;font-weight:500;color:#222;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.sf-req{color:#e5423a;font-size:9px;margin-left:2px}
+.sf-note{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
+.sf-in{width:100%;padding:6px 9px;border:1px solid #ddd;border-radius:4px;font-size:12px;font-family:var(--sans);color:#333;background:#fafafa}
+.sf-in::placeholder{color:#bbb}
+.sf-img{border:1.5px dashed #ccc;border-radius:6px;padding:12px;text-align:center;background:#f8f8f8;font-size:11px;color:var(--muted)}
+.sf-img-icon{font-size:22px;margin-bottom:3px}
+.sf-rt{border:1px solid #ddd;border-radius:4px;background:#fff;min-height:60px;padding:6px 9px;font-size:11px;color:#bbb}
+.sf-rt-tb{display:flex;gap:4px;padding-bottom:5px;border-bottom:1px solid #eee;margin-bottom:4px}
+.rtb{font-size:10px;padding:2px 5px;border:1px solid #e0e0e0;border-radius:3px;background:#fff;color:#555;font-family:var(--sans)}
+.sf-sel{width:100%;padding:6px 9px;border:1px solid #ddd;border-radius:4px;background:#fafafa;font-size:12px;color:#333;cursor:pointer}
+.sf-grp{display:flex;gap:5px}
+.sf-grp .sf-in{flex:1}
+.sf-lbl-sm{font-size:10px;color:var(--muted);margin-bottom:2px}
+.sf-arr{border:1px solid #ddd;border-radius:5px;overflow:hidden;background:#fff}
+.sf-arr-it{padding:7px 10px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:7px;font-size:11px;color:#333}
+.sf-arr-it:last-child{border-bottom:none}
+.sf-drag{color:#ccc;font-size:11px;cursor:grab}
+.sf-arr-add{padding:7px 10px;font-size:11px;color:var(--ocean);background:#f7f9fb;border-top:1px solid #eee;display:flex;align-items:center;gap:4px;cursor:pointer}
+.sf-tip{background:#eaf3fb;border-left:3px solid var(--ocean);padding:8px 12px;font-size:10.5px;color:#185fa5;margin:0 14px 14px;border-radius:0 4px 4px 0;line-height:1.5}
+
+/* Footer */
+.footer{background:var(--footer-bg);color:rgba(255,255,255,.3);text-align:center;padding:1.25rem;font-size:.8rem;margin-top:2rem}
+
+/* Responsive */
+@media(max-width:700px){
+  .compare{flex-direction:column;padding:0 1rem 2rem}
+  .hdr{padding:1.5rem 1rem 2rem}
+  .legend{padding:.5rem 1rem}
+  .tabs{padding:0 1rem}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <p class="hdr-lbl">Guide de pêche à la mouche · Bretagne</p>
+    <h1 class="hdr-h1">Manuel Sanity Studio</h1>
+    <p class="hdr-sub">Sélectionne une catégorie puis une section pour voir l'aperçu et les champs modifiables dans Studio.</p>
+  </div>
+</header>
+
+<div class="cat-bar">
+  <div class="cat-bar-inner" id="cat-bar"></div>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="legend">
+  <div class="leg-item">
+    <span class="nb" style="font-size:9px">1</span>
+    <span>Les numéros relient le champ Sanity à son emplacement sur le site</span>
+  </div>
+</div>
+
+<div class="compare">
+  <div class="panel panel-l">
+    <div class="panel-hd panel-hd-site">
+      <span class="hd-dot"></span>
+      Ce que voit le visiteur
+    </div>
+    <div class="panel-body" id="preview"></div>
+  </div>
+  <div class="panel panel-r">
+    <div class="panel-hd panel-hd-studio">
+      <span class="s-badge">S</span>
+      Sanity Studio — champs à modifier
+    </div>
+    <div class="panel-body" id="studio"></div>
+  </div>
+</div>
+
+<footer class="footer">Manuel généré pour Jean-Baptiste Vidal — Guide de pêche à la mouche en Bretagne</footer>
+
+<script>
+const OCEAN='#1B5E8A',DARK='#0d2b3e',FOOTER='#07181f',BEIGE='#f8f7f4',BEIGE2='#f0eff0'
+
+/* ── nb badge helpers ─────────────────────────────────────── */
+function nb(n,dark){return`<span class="nb${dark?'':' nb-lt'}" style="${dark?'':'border-color:'+OCEAN}">${n}</span>`}
+function row(n,dark,el){return`<div style="display:flex;align-items:flex-start;gap:7px;margin:5px 0">${nb(n,dark)}${el}</div>`}
+
+/* ── Preview builders ─────────────────────────────────────── */
+const PV = {
+
+hero(){return`
+<div style="position:relative;min-height:280px;background:linear-gradient(to bottom,rgba(13,43,62,.78),rgba(7,24,31,.96)),linear-gradient(135deg,#1B5E8A,#0d2b3e);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;padding:32px 24px;text-align:center">
+  <div style="position:absolute;top:10px;left:10px">${nb(1,true)}</div>
+  ${row(2,true,`<p style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0">Pêche à la mouche · Bretagne-Sud</p>`)}
+  ${row(3,true,`<h2 style="font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,28px);color:#fff;margin:0;line-height:1.2;text-align:left">Guide de pêche à la mouche en Bretagne</h2>`)}
+  ${row(4,true,`<p style="font-size:12.5px;color:rgba(255,255,255,.62);max-width:380px;margin:0;text-align:left">Pêche du bar, truite, migrateurs et voyages exotiques avec Jean-Baptiste Vidal — 21 ans de guidage professionnel</p>`)}
+  <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px">
+    ${row(5,true,`<a style="padding:9px 18px;background:${OCEAN};color:#fff;border-radius:4px;font-size:12px;text-decoration:none;font-family:var(--sans)">Réserver une sortie</a>`)}
+    ${row(6,true,`<a style="padding:9px 18px;border:1.5px solid rgba(255,255,255,.45);color:#fff;border-radius:4px;font-size:12px;text-decoration:none;font-family:var(--sans)">06 87 30 34 56</a>`)}
+  </div>
+</div>`},
+
+texteimg(){return`
+<div style="min-height:220px;background:#fff;display:flex;gap:0">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:28px 24px">
+    ${row(1,false,`<p style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:${OCEAN};margin:0">Bar · Bretagne</p>`)}
+    ${row(2,false,`<h2 style="font-family:'Playfair Display',serif;font-size:20px;color:#1a1a1f;margin:0;line-height:1.25">Pêche du bar à la mouche en Bretagne</h2>`)}
+    ${row(3,false,`<p style="font-size:12.5px;color:#555;margin:0;line-height:1.6">Le bar à la mouche, c'est la chasse visuelle par excellence. Depuis mon bateau Carolina Skiff ou à pieds dans les vasières, je traque les barres en chasse active sur les côtes bretonnes.</p>`)}
+    ${row(5,false,`<div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-size:10px;background:${BEIGE2};padding:3px 8px;border-radius:12px;color:#444">Bar en chasse</span><span style="font-size:10px;background:${BEIGE2};padding:3px 8px;border-radius:12px;color:#444">Bar à vue</span></div>`)}
+  </div>
+  <div style="width:200px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+    ${row(4,false,`<div style="width:160px;height:170px;background:linear-gradient(135deg,#7EC8E3,#1B5E8A);border-radius:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:11px">Photo</div>`)}
+  </div>
+</div>`},
+
+intro(){return`
+<div style="min-height:240px;background:#fff;display:flex;gap:0;flex-wrap:wrap">
+  <div style="flex:1.1;min-width:200px;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:24px 20px">
+    ${row(1,false,`<p style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:${OCEAN};margin:0">Initiation · 1 ou 2 jours</p>`)}
+    ${row(2,false,`<h2 style="font-family:'Playfair Display',serif;font-size:20px;color:#1a1a1f;margin:0;line-height:1.25">Initiation à la pêche du bar à la mouche</h2>`)}
+    ${row(3,false,`<p style="font-size:12px;color:#555;margin:0;line-height:1.6">Aucun prérequis nécessaire. J'adapte la journée à ton niveau et tes attentes, du premier lancer jusqu'aux techniques avancées de chasse visuelle.</p>`)}
+  </div>
+  <div style="width:180px;flex-shrink:0;padding:20px 16px 20px 0;min-width:160px">
+    <div style="background:${BEIGE};border-radius:8px;padding:14px;font-size:11px">
+      <div style="font-weight:500;font-size:12px;margin-bottom:10px;color:#1a1a1f">Infos pratiques</div>
+      ${row(4,false,`<div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Niveau</div><div style="color:#333;font-size:11px">Tous niveaux</div></div>`)}
+      <div style="border-top:1px solid rgba(0,0,0,.06);margin:7px 0"></div>
+      ${row(4,false,`<div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Tarif</div><div style="color:#333;font-size:11px">400€ / journée</div></div>`)}
+      <div style="border-top:1px solid rgba(0,0,0,.06);margin:7px 0"></div>
+      ${row(4,false,`<div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Durée</div><div style="color:#333;font-size:11px">7h → 19h</div></div>`)}
+      <div style="margin-top:10px">
+        ${row(5,false,`<a style="display:block;background:${OCEAN};color:#fff;text-align:center;padding:8px;border-radius:4px;font-size:11px;text-decoration:none">Réserver</a>`)}
+      </div>
+    </div>
+  </div>
+</div>`},
+
+programme(){return`
+<div style="background:${BEIGE};padding:24px 20px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:18px;color:#1a1a1f;margin:0">Programme de la journée</h2>`)}
+  <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+    ${[
+      ['Briefing & préparation','Présentation du matériel, analyse des conditions météo et courants, choix des spots. Départ du port de Concarneau.'],
+      ['Pêche du matin — bar en chasse','On cherche les stries de surface et les goélands qui plongent. Je t\'enseigne la lecture de l\'eau et la présentation de la mouche.'],
+      ['Pêche de l\'après-midi — bar à vue','Sur les vasières découvertes, on traque les barres à l\'œil nu. La technique la plus excitante de la pêche côtière.']
+    ].map(([titre,texte],i)=>`
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      ${row(2,false,`<div style="width:28px;height:28px;border-radius:50%;background:${OCEAN};color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;font-family:var(--sans);flex-shrink:0">${i+1}</div>`)}
+      <div style="flex:1">
+        ${row(3,false,`<strong style="font-size:13px;color:#1a1a1f">${titre}</strong>`)}
+        ${row(4,false,`<p style="font-size:11.5px;color:#555;margin:3px 0 0;line-height:1.5">${texte}</p>`)}
+      </div>
+      ${row(5,false,`<div style="width:70px;height:54px;background:linear-gradient(135deg,#7EC8E3,#1B5E8A);border-radius:5px;flex-shrink:0"></div>`)}
+    </div>`).join('')}
+  </div>
+</div>`},
+
+galerie(){return`
+<div style="background:${BEIGE};padding:20px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:18px;color:#1a1a1f;margin:0 0 14px">Galerie photos</h2>`)}
+  <div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px">
+      ${['#7EC8E3,#1B5E8A','#1B5E8A,#0d2b3e','#5BA3C9,#1B5E8A'].map((g,i)=>`
+      <div style="aspect-ratio:4/3;background:linear-gradient(135deg,${g});border-radius:5px;display:flex;align-items:center;justify-content:center">
+        ${row(2,true,`<span style="color:rgba(255,255,255,.5);font-size:10px">Photo ${i+1}</span>`)}
+      </div>`).join('')}
+    </div>
+    <div style="text-align:center;margin-top:4px">
+      ${row(3,false,`<p style="font-size:10px;color:var(--muted)">3 colonnes (modifiable : 2, 3 ou 4)</p>`)}
+    </div>
+  </div>
+</div>`},
+
+carrousel(){return`
+<div style="background:${DARK};padding:16px 12px">
+  ${row(1,true,`<h2 style="font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin:0 0 12px">Matériel bar à la mouche</h2>`)}
+  <div style="display:flex;gap:6px">
+    ${[
+      ['#7EC8E3,#1B5E8A','Canne SAGE 9# 9\''],
+      ['#1B5E8A,#23638e','Soie RIO Outbound'],
+      ['#23638e,#1a4a6b','Mouche Clouser Minnow']
+    ].map(([g,lbl],i)=>`
+    <div style="flex:1;border-radius:6px;overflow:hidden">
+      <div style="aspect-ratio:3/2;background:linear-gradient(135deg,${g});display:flex;flex-direction:column;justify-content:flex-end;padding:8px">
+        ${row(2,true,`<span style="color:rgba(255,255,255,.9);font-size:10px">${lbl}</span>`)}
+        ${row(3,true,`<span style="color:rgba(255,255,255,.5);font-size:9px">Légende optionnelle</span>`)}
+      </div>
+    </div>`).join('')}
+  </div>
+  <div style="display:flex;justify-content:center;gap:4px;margin-top:10px">
+    ${Array(3).fill(0).map((_,i)=>`<div style="width:${i===0?18:6}px;height:3px;border-radius:2px;background:${i===0?'#fff':'rgba(255,255,255,.3)'}"></div>`).join('')}
+  </div>
+</div>`},
+
+cta(){return`
+<div style="background:${FOOTER};display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;padding:28px 24px;min-height:130px">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    ${row(1,true,`<h2 style="font-family:'Playfair Display',serif;font-size:20px;color:#fff;margin:0;line-height:1.2">Réservons votre sortie de pêche</h2>`)}
+    ${row(2,true,`<p style="font-size:12px;color:rgba(255,255,255,.55);margin:0">Disponibilités et tarifs sur demande — réponse sous 24h.</p>`)}
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    ${row(3,true,`<a style="padding:11px 20px;background:${OCEAN};color:#fff;border-radius:4px;font-size:12px;text-decoration:none;font-family:var(--sans)">Me contacter</a>`)}
+    ${row(4,true,`<a style="padding:11px 20px;border:1.5px solid rgba(255,255,255,.35);color:#fff;border-radius:4px;font-size:12px;text-decoration:none;font-family:var(--sans)">06 87 30 34 56</a>`)}
+  </div>
+</div>`},
+
+stats(){return`
+<div style="background:${FOOTER};padding:28px 16px">
+  ${row(1,true,`<p style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.4);margin:0 0 16px;text-align:center">33 ans de passion · 12 pays · 21 ans de guidage</p>`)}
+  <div style="display:flex;flex-wrap:wrap;gap:0">
+    ${[['33','ans de pêche'],['21','ans de guidage'],['12','pays visités'],['400+','clients guidés']].map(([n,l],i)=>`
+    <div style="flex:1;min-width:100px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px;border-right:${i<3?'1px solid rgba(255,255,255,.1)':'none'}">
+      ${row(2,true,`<span style="font-family:'Playfair Display',serif;font-size:28px;color:#fff;font-weight:600;line-height:1">${n}</span>`)}
+      ${row(3,true,`<span style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45)">${l}</span>`)}
+    </div>`).join('')}
+  </div>
+</div>`},
+
+dates(){return`
+<div style="background:#07181f;padding:24px 20px;min-height:240px">
+  ${row(1,true,`<h2 style="font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin:0 0 4px">Séjours disponibles — Argentine 2026</h2>`)}
+  ${row(2,true,`<p style="font-size:11px;color:rgba(255,255,255,.45);margin:0 0 16px">Río Grande · Tierra del Fuego</p>`)}
+  <div style="display:flex;flex-direction:column;gap:8px">
+    ${[
+      {dates:'15 → 24 janvier 2026',desc:'Groupe de 4 pêcheurs · Lodge Las Buitreras',prix:'8 500 €',statut:'disponible',c:'#22c55e'},
+      {dates:'7 → 16 mars 2026',desc:'Groupe de 4 pêcheurs · Lodge Las Buitreras',prix:'8 500 €',statut:'peu de places',c:'#f59e0b'},
+      {dates:'2 → 11 avril 2026',desc:'Groupe de 4 pêcheurs · Lodge Las Buitreras',prix:'8 500 €',statut:'complet',c:'#ef4444'},
+    ].map(s=>`
+    <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:12px 14px;display:flex;align-items:center;flex-wrap:wrap;gap:8px">
+      <div style="flex:1;min-width:140px">
+        ${row(3,true,`<strong style="font-size:12px;color:#fff">${s.dates}</strong>`)}
+        ${row(4,true,`<span style="font-size:10px;color:rgba(255,255,255,.5)">${s.desc} · ${s.prix}</span>`)}
+      </div>
+      ${row(5,true,`<span style="background:${s.c};border-radius:12px;padding:3px 10px;font-size:10px;color:#fff;white-space:nowrap">${s.statut}</span>`)}
+    </div>`).join('')}
+  </div>
+</div>`},
+
+/* ── STRUCTURE (nouveaux) ─────── */
+titre(){return`
+<div style="background:${BEIGE};padding:34px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px">
+  ${row(1,false,`<p style="font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:${OCEAN};margin:0">Pêche à la mouche</p>`)}
+  ${row(2,false,`<h2 style="font-family:'Playfair Display',serif;font-size:21px;color:#1a1a1f;margin:0;line-height:1.2">Programme des sorties guidées 2026</h2>`)}
+  ${row(3,false,`<p style="font-size:12px;color:#6b7280;margin:0;max-width:380px;line-height:1.5">Découvrez toutes les formules proposées pour la saison en cours</p>`)}
+</div>`},
+
+banniere(){return`
+<div>
+  <div style="background:${OCEAN};padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    ${row(1,true,`<span style="font-size:12.5px;color:#fff;font-weight:500">🗓 Disponibilités 2026 ouvertes — places limitées !</span>`)}
+    ${row(2,true,`<a style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);padding:4px 13px;border-radius:3px;color:#fff;font-size:11px;text-decoration:none;white-space:nowrap">En savoir plus →</a>`)}
+  </div>
+  <div style="background:${BEIGE};padding:8px 20px;font-size:10.5px;color:#9ca3af">Style actif : "Bleu océan" — peut aussi être Sable ou Accent</div>
+</div>`},
+
+bannierecard(){return`
+<div style="min-height:250px;display:flex;overflow:hidden">
+  <div style="flex:1.3;background:linear-gradient(to right,rgba(7,24,31,.65),rgba(7,24,31,.45)),linear-gradient(135deg,${OCEAN},${DARK});padding:26px 22px;display:flex;flex-direction:column;justify-content:center;gap:8px;position:relative">
+    <div style="position:absolute;top:9px;left:9px">${nb(1,true)}</div>
+    ${row(2,true,`<p style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.5);margin:0">Bar · Bretagne</p>`)}
+    ${row(3,true,`<h2 style="font-family:'Playfair Display',serif;font-size:19px;color:#fff;margin:0;line-height:1.2;max-width:240px">Pêche du bar à la mouche en Bretagne-Sud</h2>`)}
+    ${row(4,true,`<p style="font-size:11px;color:rgba(255,255,255,.65);margin:0;max-width:230px;line-height:1.45">Chasse visuelle, bar en surface, pêche côtière</p>`)}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:3px">
+      ${row(5,true,`<a style="padding:8px 14px;background:${OCEAN};color:#fff;border-radius:4px;font-size:10.5px;text-decoration:none;font-weight:600">Réserver</a>`)}
+      ${row(5,true,`<a style="padding:8px 14px;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:4px;font-size:10.5px;text-decoration:none">Infos</a>`)}
+    </div>
+  </div>
+  <div style="width:165px;flex-shrink:0;background:rgba(255,255,255,.96);margin:14px;border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:7px;box-shadow:0 2px 10px rgba(0,0,0,.18)">
+    <div style="font-size:10.5px;font-weight:700;color:#1a1a1f;padding-bottom:7px;border-bottom:1px solid #eee">Infos pratiques</div>
+    ${row(6,false,`<div style="font-size:9.5px;color:#444;line-height:1.3">Niveau : Débutant → Confirmé</div>`)}
+    ${row(6,false,`<div style="font-size:9.5px;color:#444;line-height:1.3">Tarif : 400€ / journée</div>`)}
+    ${row(6,false,`<div style="font-size:9.5px;color:#444;line-height:1.3">Durée : 7h → 19h</div>`)}
+    ${row(7,false,`<a style="display:block;margin-top:4px;background:${OCEAN};color:#fff;text-align:center;padding:7px;border-radius:4px;font-size:10px;text-decoration:none;font-weight:600">Réserver</a>`)}
+  </div>
+</div>`},
+
+/* ── TEXTE & MÉDIAS (nouveaux) ── */
+texte(){return`
+<div style="background:#fff;padding:26px 22px">
+  <div style="max-width:600px;margin:0 auto">
+    ${row(1,false,`<div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;color:#1a1a1f;margin-bottom:10px;line-height:1.25">La pêche à la mouche en Bretagne-Sud</div>
+      <p style="font-size:12px;color:#444;line-height:1.7;margin:0 0 8px">La Bretagne-Sud offre des conditions exceptionnelles pour la pêche à la mouche. Entre les vasières du Finistère-Sud, les rivières à truites et les spots à bar de la côte, les opportunités sont infinies.</p>
+      <p style="font-size:12px;color:#444;line-height:1.7;margin:0">Jean-Baptiste Vidal guide depuis 21 ans sur ce territoire qu'il connaît mieux que personne. <strong>Chaque session est adaptée aux conditions du jour</strong> et au niveau du pêcheur.</p>
+    </div>`)}
+  </div>
+</div>`},
+
+video(){return`
+<div style="background:#fff;display:flex;flex-wrap:wrap;min-height:190px">
+  <div style="flex:1.1;min-width:170px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;position:relative">
+    <div style="position:absolute;top:7px;left:7px">${nb(1,true)}</div>
+    <div style="width:36px;height:36px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center">
+      <span style="font-size:13px;margin-left:2px">▶</span>
+    </div>
+    <span style="font-size:9.5px;color:rgba(255,255,255,.45)">Vidéo YouTube</span>
+    <span style="font-size:8px;color:rgba(255,255,255,.25)">youtube.com/watch?v=...</span>
+  </div>
+  <div style="flex:1;min-width:155px;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:20px 16px">
+    ${row(2,false,`<p style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:${OCEAN};margin:0">Enjoy Fishing</p>`)}
+    ${row(3,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0;line-height:1.25">Bar à la mouche — chasse visuelle en Bretagne</h2>`)}
+    ${row(4,false,`<p style="font-size:11px;color:#555;margin:0;line-height:1.5">Session sur les vasières du Finistère-Sud avec des bars en chasse active.</p>`)}
+  </div>
+</div>`},
+
+videos(){return`
+<div style="background:#fff;padding:18px 16px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 12px">Mes vidéos de pêche</h2>`)}
+  ${[
+    {g:'#1B5E8A,#0d2b3e',t:'Bar à la mouche en Bretagne-Sud',tag:'Bar · Bretagne',rev:false},
+    {g:'#23638e,#1a4a6b',t:'Pêche de la truite en rivière',tag:'Truite · Eau douce',rev:true},
+  ].map(v=>`
+  <div style="display:flex;flex-direction:${v.rev?'row-reverse':'row'};gap:10px;margin-bottom:11px;align-items:center">
+    ${row(2,false,`<div style="width:108px;flex-shrink:0;background:linear-gradient(135deg,${v.g});aspect-ratio:16/9;border-radius:4px;display:flex;align-items:center;justify-content:center"><div style="background:rgba(255,255,255,.85);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center"><span style="font-size:10px;margin-left:1px">▶</span></div></div>`)}
+    <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+      ${row(3,false,`<span style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:${OCEAN}">${v.tag}</span>`)}
+      ${row(4,false,`<strong style="font-size:12px;color:#1a1a1f">${v.t}</strong>`)}
+    </div>
+  </div>`).join('')}
+</div>`},
+
+lienblog(){return`
+<div style="background:#fff;padding:16px 18px">
+  <div style="border:1px solid #e5e7eb;border-radius:7px;display:flex;overflow:hidden">
+    <div style="width:4px;flex-shrink:0;background:${OCEAN}"></div>
+    <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:6px">
+      ${row(1,false,`<p style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:${OCEAN};margin:0">Blog · Enjoy Fishing</p>`)}
+      ${row(2,false,`<strong style="font-size:13px;color:#1a1a1f;line-height:1.3">Pêche du bar à vue en Bretagne-Sud — récit d'une session exceptionnelle</strong>`)}
+      ${row(3,false,`<p style="font-size:11px;color:#555;margin:0;line-height:1.5">Les barres étaient visibles à 50 mètres, en pleine chasse sur la vasière. Une journée à ne pas oublier...</p>`)}
+      ${row(4,false,`<a style="display:inline-block;padding:6px 14px;background:${OCEAN};color:#fff;border-radius:4px;font-size:10.5px;text-decoration:none;margin-top:2px;font-weight:600">Lire l'article →</a>`)}
+    </div>
+  </div>
+</div>`},
+
+/* ── CARTES & GRILLES (nouveaux) */
+cards(){return`
+<div style="display:flex;gap:5px;min-height:210px">
+  ${[
+    {g:'#1B5E8A,#0d2b3e',t:'Pêche du bar à la mouche',s:'Bretagne · Côte'},
+    {g:'#0d2b3e,#07181f',t:'Pêche de la truite',s:'Eau douce · Rivière'},
+    {g:'#23638e,#1B5E8A',t:'Voyages de pêche exotique',s:'Argentine · Cuba'},
+  ].map((c,i)=>`
+  <div style="flex:1;background:linear-gradient(to top,rgba(0,0,0,.85) 40%,rgba(0,0,0,.18)),linear-gradient(135deg,${c.g});border-radius:6px;display:flex;flex-direction:column;justify-content:flex-end;padding:13px 11px;min-height:190px;position:relative">
+    ${i===0?`<div style="position:absolute;top:8px;left:8px">${nb(1,true)}</div>`:''}
+    ${row(2,true,`<strong style="font-size:11.5px;color:#fff;line-height:1.3">${c.t}</strong>`)}
+    ${row(3,true,`<span style="font-size:9.5px;color:rgba(255,255,255,.55)">${c.s}</span>`)}
+  </div>`).join('')}
+</div>`},
+
+cards2(){return`
+<div style="background:${BEIGE};padding:16px 14px">
+  ${row(1,false,`<p style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:${OCEAN};margin:0 0 3px">Mes prestations</p>`)}
+  ${row(2,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 11px">Pêche guidée en Bretagne</h2>`)}
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px">
+    ${['#1B5E8A,#23638e','#0d2b3e,#1B5E8A','#23638e,#1a4a6b','#2d6a9f,#1B5E8A'].map((g,i)=>`
+    <div style="border-radius:5px;overflow:hidden">
+      <div style="aspect-ratio:3/4;background:linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,.1)),linear-gradient(135deg,${g});display:flex;flex-direction:column;justify-content:flex-end;padding:7px">
+        ${row(3,true,`<strong style="font-size:9.5px;color:#fff">${['Bar côtier','Truite','Brochet','Spey'][i]}</strong>`)}
+      </div>
+    </div>`).join('')}
+  </div>
+</div>`},
+
+cards3(){return`
+<div style="background:${DARK};padding:14px 12px">
+  ${row(1,true,`<p style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#7EC8E3;margin:0 0 10px">Mes prestations</p>`)}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+    <div style="grid-row:span 2;background:linear-gradient(to top,rgba(0,0,0,.8),rgba(0,0,0,.15)),linear-gradient(135deg,#1B5E8A,#0d2b3e);border-radius:6px;display:flex;flex-direction:column;justify-content:flex-end;padding:13px;min-height:175px">
+      ${row(2,true,`<span style="font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;color:#7EC8E3">⭐ Mise en avant</span>`)}
+      ${row(3,true,`<strong style="font-size:13px;color:#fff;line-height:1.3">Pêche du bar à la mouche</strong>`)}
+      ${row(4,true,`<span style="font-size:9.5px;color:rgba(255,255,255,.55)">Bretagne-Sud</span>`)}
+    </div>
+    ${[['Truite rivière','Eau douce','#23638e,#1B5E8A'],['Voyages exotique','Argentine · Cuba','#2d6a9f,#1a4a6b']].map(([t,s,g])=>`
+    <div style="background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,.1)),linear-gradient(135deg,${g});border-radius:5px;padding:11px;min-height:82px;display:flex;flex-direction:column;justify-content:flex-end">
+      ${row(3,true,`<strong style="font-size:11px;color:#fff">${t}</strong>`)}
+      ${row(4,true,`<span style="font-size:9px;color:rgba(255,255,255,.5)">${s}</span>`)}
+    </div>`).join('')}
+  </div>
+</div>`},
+
+grille(){return`
+<div style="background:${BEIGE};padding:16px 13px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 11px">Matériel par espèce</h2>`)}
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">
+    ${[
+      {g:'#1B5E8A,#23638e',tag:'Bar · Bretagne',t:'Matériel bar à la mouche',d:'Cannes 9-12#, soies Shooting Head...'},
+      {g:'#23638e,#1a4a6b',tag:'Eau douce',t:'Matériel truite',d:'Soies légères, cannes fines...'},
+      {g:'#2d6a9f,#1B5E8A',tag:'Saumon · Alose',t:'Matériel migrateurs',d:'Cannes Spey, soies Skagit...'},
+    ].map(c=>`
+    <div style="background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 7px rgba(0,0,0,.07)">
+      <div style="height:75px;background:linear-gradient(135deg,${c.g})"></div>
+      <div style="padding:9px;display:flex;flex-direction:column;gap:4px">
+        ${row(2,false,`<span style="font-size:8.5px;text-transform:uppercase;letter-spacing:.09em;color:${OCEAN};font-weight:600">${c.tag}</span>`)}
+        ${row(3,false,`<strong style="font-size:11.5px;color:#1a1a1f;line-height:1.3">${c.t}</strong>`)}
+        ${row(4,false,`<span style="font-size:9.5px;color:#6b7280;line-height:1.4">${c.d}</span>`)}
+      </div>
+    </div>`).join('')}
+  </div>
+</div>`},
+
+equipement(){return`
+<div style="background:${BEIGE};padding:16px 13px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 11px">Cannes et moulinets recommandés</h2>`)}
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">
+    ${[
+      {t:'SAGE R8 9\' #9',d:'La canne que j\'utilise au quotidien.'},
+      {t:'RIO Outbound Short',d:'Soie idéale pour les longs lancers.'},
+      {t:'Lamson Liquid Reel',d:'Moulinet fiable pour la pêche côtière.'},
+    ].map(e=>`
+    <div style="background:#fff;border-radius:7px;padding:11px;box-shadow:0 1px 5px rgba(0,0,0,.05)">
+      ${row(2,false,`<strong style="font-size:11.5px;color:#1a1a1f;line-height:1.3">${e.t}</strong>`)}
+      ${row(3,false,`<p style="font-size:10px;color:#555;margin:3px 0 6px;line-height:1.4">${e.d}</p>`)}
+      ${row(4,false,`<a style="font-size:10px;color:${OCEAN};font-weight:600;text-decoration:none;border:1px solid ${OCEAN};padding:3px 9px;border-radius:3px">Retrouver →</a>`)}
+    </div>`).join('')}
+  </div>
+  ${row(5,false,`<div style="text-align:center;margin-top:9px"><a style="font-size:10.5px;color:${OCEAN};font-weight:600;text-decoration:none">Tout le matériel sur Ardent Pêche →</a></div>`)}
+</div>`},
+
+/* ── PROGRAMMES (nouveaux) ──────── */
+progtexte(){return`
+<div style="background:${BEIGE};padding:20px 16px">
+  ${row(1,false,`<p style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:${OCEAN};margin:0 0 4px">Pédagogie</p>`)}
+  ${row(2,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 12px">Ce que vous allez apprendre</h2>`)}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    ${[
+      {l:'✓ Inclus',items:['Matériel prêté si besoin','Briefing technique personnalisé','Lecture de l\'eau','Mouches fournies']},
+      {l:'⚡ Techniques',items:['Lancer de précision','Dérive naturelle de la mouche','Chasse visuelle','Ferrage et combat']},
+    ].map(col=>`
+    <div>
+      ${row(3,false,`<div style="font-weight:700;font-size:11px;color:#1a1a1f;border-bottom:2px solid ${OCEAN};padding-bottom:5px;margin-bottom:7px">${col.l}</div>`)}
+      ${col.items.map(it=>`${row(4,false,`<div style="font-size:10.5px;color:#444;padding:2px 0;display:flex;gap:5px"><span style="color:${OCEAN}">→</span>${it}</div>`)}`).join('')}
+    </div>`).join('')}
+  </div>
+</div>`},
+
+progcartes(){return`
+<div style="background:${BEIGE};padding:20px 14px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 11px">Ce que vous apprenez</h2>`)}
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:9px">
+    ${[
+      {t:'Lancer de précision',s:'Maîtrise de la soie',d:'Technique de base indispensable'},
+      {t:'Lecture de l\'eau',s:'Déchiffrer les spots',d:'Savoir où se cachent les bars'},
+      {t:'Chasse visuelle',s:'Bar à vue',d:'La technique la plus excitante'},
+    ].map(c=>`
+    <div style="background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.06)">
+      <div style="background:${OCEAN};padding:7px 9px">
+        ${row(2,true,`<strong style="font-size:10.5px;color:#fff">${c.t}</strong>`)}
+        ${row(3,true,`<span style="font-size:9px;color:rgba(255,255,255,.65)">${c.s}</span>`)}
+      </div>
+      ${row(4,false,`<p style="font-size:10px;color:#555;padding:8px 9px;margin:0;line-height:1.4">${c.d}</p>`)}
+    </div>`).join('')}
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px">
+    ${row(5,false,`<p style="font-size:10px;color:#6b7280;font-style:italic">Programme complet disponible en téléchargement</p>`)}
+    ${row(6,false,`<a style="font-size:10.5px;color:${OCEAN};border:1px solid ${OCEAN};padding:5px 12px;border-radius:3px;text-decoration:none;font-weight:600">📎 Télécharger PDF</a>`)}
+  </div>
+</div>`},
+
+selection(){return`
+<div style="background:#fff">
+  ${[
+    {g:'#1B5E8A,#0d2b3e',tag:'Bar en chasse',t:'Pêche du bar côtière',reverse:false},
+    {g:'#23638e,#1B5E8A',tag:'Truite · Eau douce',t:'Pêche de la truite en rivière',reverse:true},
+  ].map((s,i)=>`
+  <div style="display:flex;flex-direction:${s.reverse?'row-reverse':'row'};min-height:120px">
+    <div style="flex:1;background:linear-gradient(135deg,${s.g});display:flex;align-items:center;justify-content:center;position:relative">
+      ${i===0?`<div style="position:absolute;top:7px;left:7px">${nb(4,true)}</div>`:''}
+      <span style="color:rgba(255,255,255,.3);font-size:11px">Photo</span>
+    </div>
+    <div style="flex:1;padding:18px 16px;display:flex;flex-direction:column;justify-content:center;gap:6px;background:${s.reverse?BEIGE:'#fff'}">
+      ${row(1,false,`<span style="font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:${OCEAN};font-weight:600">${s.tag}</span>`)}
+      ${row(2,false,`<h3 style="font-family:'Playfair Display',serif;font-size:15px;color:#1a1a1f;margin:0;line-height:1.3">${s.t}</h3>`)}
+      ${row(3,false,`<p style="font-size:10.5px;color:#555;margin:0;line-height:1.5">Description de la prestation — 2 à 3 phrases.</p>`)}
+    </div>
+  </div>`).join('')}
+</div>`},
+
+/* ── VOYAGES & BIO (nouveaux) ─── */
+bilan(){return`
+<div style="background:${BEIGE};padding:20px 16px">
+  ${row(1,false,`<p style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:${OCEAN};margin:0 0 3px">Retour de voyage</p>`)}
+  ${row(2,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 12px">Bilan Argentine — janvier 2025</h2>`)}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
+    ${[{v:'47',l:'Truites capturées'},{v:'12 kg',l:'Plus gros poisson'}].map(s=>`
+    <div style="background:${OCEAN};border-radius:6px;padding:11px;text-align:center">
+      ${row(3,true,`<div style="font-family:'Playfair Display',serif;font-size:21px;color:#fff;font-weight:600">${s.v}</div>`)}
+      ${row(4,true,`<div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.6)">${s.l}</div>`)}
+    </div>`).join('')}
+  </div>
+  <div style="display:flex;gap:11px;align-items:flex-start">
+    ${row(5,false,`<p style="font-size:11.5px;color:#444;flex:1;line-height:1.6;margin:0">Un voyage mémorable sur le Río Grande. 10 jours de pêche intensive avec des conditions idéales...</p>`)}
+    ${row(6,false,`<div style="width:85px;height:85px;border-radius:5px;background:linear-gradient(135deg,${OCEAN},${DARK});flex-shrink:0"></div>`)}
+  </div>
+</div>`},
+
+choix(){return`
+<div style="background:${BEIGE};padding:16px 13px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 11px">Choisissez votre lodge</h2>`)}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+    ${[
+      {n:'01',t:'Lodge Las Buitreras',tag:'Río Grande · Haut de gamme',g:'#1B5E8A,#0d2b3e'},
+      {n:'02',t:'Lodge Aurelia',tag:'Río Grande · Confort',g:'#23638e,#1a4a6b'},
+    ].map(l=>`
+    <div style="background:#fff;border-radius:7px;overflow:hidden;box-shadow:0 1px 7px rgba(0,0,0,.07)">
+      <div style="height:100px;background:linear-gradient(to top,rgba(0,0,0,.6),rgba(0,0,0,.1)),linear-gradient(135deg,${l.g});display:flex;flex-direction:column;justify-content:space-between;padding:9px">
+        ${row(2,true,`<span style="font-family:'Playfair Display',serif;font-size:17px;color:rgba(255,255,255,.25);font-weight:600">${l.n}</span>`)}
+        ${row(3,true,`<strong style="font-size:11.5px;color:#fff">${l.t}</strong>`)}
+      </div>
+      <div style="padding:8px 10px">
+        ${row(4,false,`<span style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:${OCEAN}">${l.tag}</span>`)}
+        ${row(5,false,`<p style="font-size:10px;color:#555;margin:4px 0 0;line-height:1.4">Description du lodge et de ses équipements.</p>`)}
+      </div>
+    </div>`).join('')}
+  </div>
+</div>`},
+
+frise(){return`
+<div style="background:${BEIGE};padding:18px 16px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 14px">Mon parcours</h2>`)}
+  <div style="position:relative;padding-left:18px;border-left:2px solid ${OCEAN}">
+    ${[
+      {p:'1991',l:'Bretagne',d:'Premières mouches avec mon père sur l\'Ellé'},
+      {p:'2003',l:'Bretagne-Sud',d:'Obtention du brevet de guide de pêche professionnel'},
+      {p:'2005',l:'Argentine',d:'Premier voyage sur le Río Grande — truites de mer'},
+    ].map(e=>`
+    <div style="position:relative;margin-bottom:13px">
+      <div style="position:absolute;left:-23px;top:4px;width:8px;height:8px;border-radius:50%;background:${OCEAN};border:2px solid ${BEIGE}"></div>
+      <div style="display:flex;gap:7px;align-items:flex-start">
+        ${row(2,false,`<span style="font-size:9.5px;background:${OCEAN};color:#fff;padding:2px 7px;border-radius:9px;white-space:nowrap">${e.p}</span>`)}
+        <div style="flex:1">
+          ${row(3,false,`<strong style="font-size:11px;color:#1a1a1f">${e.l}</strong>`)}
+          ${row(4,false,`<p style="font-size:10px;color:#555;margin:2px 0 0;line-height:1.4">${e.d}</p>`)}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>
+</div>`},
+
+liste(){return`
+<div style="background:#fff;padding:20px 18px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 12px">Diplômes & qualifications</h2>`)}
+  <div>
+    ${[
+      {a:'1999',d:'Brevet d\'État d\'Éducateur Sportif 1er degré (BEES1)'},
+      {a:'2002',d:'Qualification Moniteur-Guide de Pêche professionnel'},
+      {a:'2008',d:'Formation spécialisée pêche au leurre côtier'},
+    ].map(e=>`
+    <div style="display:flex;gap:9px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0">
+      ${row(2,false,`<div style="width:48px;flex-shrink:0;background:${BEIGE2};border-radius:3px;padding:3px 5px;text-align:center;font-size:10px;font-weight:700;color:${OCEAN}">${e.a}</div>`)}
+      ${row(3,false,`<span style="font-size:11.5px;color:#333;flex:1;line-height:1.4">${e.d}</span>`)}
+    </div>`).join('')}
+  </div>
+</div>`},
+
+/* ── AUTO-GÉNÉRÉES (nouveaux) ─── */
+partenaires(){return`
+<div style="background:#fff;padding:20px 16px;text-align:center">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 14px">Mes partenaires</h2>`)}
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
+    ${['SAGE','RIO Products','Ardent Pêche','Patagonia','Vision','Scott','Orvis','Loop'].map(n=>`
+    <div style="border:1px solid #e5e7eb;border-radius:5px;padding:11px 7px;display:flex;align-items:center;justify-content:center;background:#fafafa">
+      <span style="font-size:9.5px;font-weight:700;color:#9ca3af">${n}</span>
+    </div>`).join('')}
+  </div>
+  <div style="margin-top:9px;font-size:9.5px;color:#c0c0c0">Auto-rempli depuis Sanity → Partenaires</div>
+</div>`},
+
+revuepresse(){return`
+<div style="background:${BEIGE};padding:18px 14px">
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#1a1a1f;margin:0 0 11px">Ils parlent de moi</h2>`)}
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">
+    ${[
+      {m:'Pêche & Mouche',t:'Jean-Baptiste Vidal, maître du bar à vue',a:'2024'},
+      {m:'Sea Trout Quest',t:'Fly fishing guide in Brittany',a:'2023'},
+      {m:'Région Bretagne',t:'Les meilleurs guides pêche',a:'2022'},
+    ].map(a=>`
+    <div style="background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.06)">
+      <div style="height:52px;background:linear-gradient(135deg,${DARK},${OCEAN});display:flex;align-items:center;justify-content:center;padding:5px">
+        <span style="font-size:9.5px;font-weight:700;color:#fff;text-align:center">${a.m}</span>
+      </div>
+      <div style="padding:8px 9px">
+        ${row(2,false,`<strong style="font-size:10px;color:#1a1a1f;line-height:1.3">${a.t}</strong>`)}
+        ${row(3,false,`<span style="font-size:8.5px;color:#9ca3af">${a.a}</span>`)}
+      </div>
+    </div>`).join('')}
+  </div>
+  <div style="text-align:center;margin-top:8px;font-size:9.5px;color:#c0c0c0">Auto-rempli depuis Sanity → Revue de presse</div>
+</div>`},
+
+temoignageshp(){return`
+<div style="background:${BEIGE};padding:20px 16px;display:flex;gap:12px;flex-wrap:wrap">
+  <div style="flex:1;min-width:150px;display:flex;flex-direction:column;gap:8px;justify-content:center">
+    ${row(1,false,`<p style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:${OCEAN};margin:0">Ce que disent mes clients</p>`)}
+    ${row(2,false,`<p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:#1a1a1f;line-height:1.45;margin:0">« Plus de 400 clients guidés depuis 2003, une seule passion. »</p>`)}
+    ${row(3,false,`<a style="font-size:11px;color:${OCEAN};font-weight:600;text-decoration:none">Lire tous les témoignages →</a>`)}
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:165px">
+    ${['Michel D.','Sophie & Marc','Thomas G.'].map(n=>`
+    <div style="background:#fff;border-radius:6px;padding:9px 11px;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+      <div style="font-size:9.5px;color:#555;margin-bottom:4px;line-height:1.4">« Journée exceptionnelle — guide passionné et très pédagogue. »</div>
+      <div style="font-size:9px;color:#9ca3af;font-weight:500">${n} — ⭐⭐⭐⭐⭐</div>
+    </div>`).join('')}
+  </div>
+</div>`},
+
+/* ── PAGE D'ACCUEIL (nouveaux) ── */
+prestationshp(){return`
+<div style="background:${DARK};padding:20px 14px">
+  <div style="margin-bottom:12px">
+    ${row(1,true,`<p style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#7EC8E3;margin:0 0 3px">Mes prestations</p>`)}
+    ${row(2,true,`<h2 style="font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin:0">Pêche guidée en Bretagne</h2>`)}
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:5px">
+    ${[['Bar côtier','#1B5E8A,#0d2b3e'],['Truite rivière','#0d2b3e,#07181f'],['Stage Spey','#23638e,#1B5E8A'],['Voyages','#2d6a9f,#1a4a6b']].map(([t,g])=>`
+    <div style="border-radius:5px;overflow:hidden">
+      <div style="height:82px;background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,.15)),linear-gradient(135deg,${g});display:flex;flex-direction:column;justify-content:flex-end;padding:9px">
+        <div style="font-size:11.5px;color:#fff;font-weight:600">${t}</div>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div style="margin-top:7px;font-size:9px;color:rgba(255,255,255,.28);text-align:center">← Auto-rempli depuis Sanity → Prestations</div>
+</div>`},
+
+guidehp(){return`
+<div style="min-height:210px;display:flex;flex-wrap:wrap">
+  <div style="flex:1;min-width:150px;background:linear-gradient(to right,rgba(0,0,0,.5),rgba(0,0,0,.2)),linear-gradient(135deg,${DARK},${OCEAN});display:flex;align-items:center;justify-content:center;position:relative">
+    <div style="position:absolute;top:8px;left:8px">${nb(4,true)}</div>
+    <div style="width:65px;height:65px;border-radius:50%;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);font-size:10px">Photo</div>
+  </div>
+  <div style="flex:1.2;min-width:170px;padding:18px 16px;background:#fff;display:flex;flex-direction:column;justify-content:center;gap:7px">
+    ${row(1,false,`<p style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:${OCEAN};margin:0">Guide professionnel</p>`)}
+    ${row(2,false,`<h2 style="font-family:'Playfair Display',serif;font-size:18px;color:#1a1a1f;margin:0">Jean-Baptiste Vidal</h2>`)}
+    ${row(3,false,`<p style="font-size:11px;color:${OCEAN};font-weight:500;margin:0">33 ans de pêche, 21 ans de guidage</p>`)}
+    ${row(5,false,`<p style="font-size:11px;color:#555;margin:0;line-height:1.5">Basé en Bretagne-Sud entre Quimper et Quimperlé...</p>`)}
+    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:3px">
+      ${[['33','ans de pêche'],['21','guidage'],['12','pays']].map(([n,l])=>`
+      <div style="text-align:center">
+        ${row(6,false,`<div style="font-family:'Playfair Display',serif;font-size:17px;color:${OCEAN};font-weight:600">${n}</div>`)}
+        <div style="font-size:8.5px;text-transform:uppercase;letter-spacing:.07em;color:#9ca3af">${l}</div>
+      </div>`).join('')}
+    </div>
+    ${row(7,false,`<a style="display:inline-block;padding:7px 14px;background:${OCEAN};color:#fff;border-radius:4px;font-size:10.5px;text-decoration:none;font-weight:600">Découvrir mon parcours</a>`)}
+  </div>
+</div>`},
+
+boncadeauhp(){return`
+<div style="background:${OCEAN};padding:30px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px">
+  <span style="font-size:26px">🎁</span>
+  ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:20px;color:#fff;margin:0;line-height:1.2">Offrez une journée de pêche à la mouche</h2>`)}
+  ${row(2,false,`<p style="font-size:12px;color:rgba(255,255,255,.75);max-width:350px;margin:0;line-height:1.5">Le cadeau idéal pour un pêcheur ou un curieux. Valable pour toutes les prestations.</p>`)}
+  <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:3px">
+    ${row(3,true,`<a style="padding:9px 18px;background:#fff;color:${OCEAN};border-radius:4px;font-size:11.5px;text-decoration:none;font-weight:700">Commander un bon cadeau</a>`)}
+    ${row(4,true,`<a style="padding:9px 18px;border:1.5px solid rgba(255,255,255,.5);color:#fff;border-radius:4px;font-size:11.5px;text-decoration:none">Voir les offres</a>`)}
+  </div>
+</div>`},
+
+materielhp(){return`
+<div style="background:${DARK};padding:16px 13px">
+  <div style="margin-bottom:11px">
+    ${row(1,true,`<p style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#7EC8E3;margin:0 0 3px">Matériel</p>`)}
+    ${row(2,true,`<h2 style="font-family:'Playfair Display',serif;font-size:17px;color:#fff;margin:0">Équipement recommandé</h2>`)}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+    <div style="grid-row:span 2;background:linear-gradient(to top,rgba(0,0,0,.8),rgba(0,0,0,.15)),linear-gradient(135deg,#1B5E8A,#0d2b3e);border-radius:6px;padding:13px;display:flex;flex-direction:column;justify-content:flex-end;min-height:155px">
+      ${row(3,true,`<span style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#7EC8E3">Hub matériel</span>`)}
+      ${row(4,true,`<strong style="font-size:12.5px;color:#fff">Tout le matériel</strong>`)}
+    </div>
+    ${[{t:'Matériel bar',g:'#23638e,#1a4a6b'},{t:'Matériel truite',g:'#1a4a6b,#0d2b3e'},{t:'Matériel voyage',g:'#2d6a9f,#1B5E8A'}].map(c=>`
+    <div style="background:linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,.1)),linear-gradient(135deg,${c.g});border-radius:5px;padding:9px;min-height:69px;display:flex;align-items:flex-end">
+      ${row(5,true,`<span style="font-size:10.5px;color:#fff;font-weight:500">${c.t}</span>`)}
+    </div>`).join('')}
+  </div>
+</div>`},
+
+/* ── MATÉRIEL (nouveaux) ────────── */
+materielintro(){return`
+<div style="background:#fff;display:flex;flex-wrap:wrap;min-height:190px">
+  <div style="flex:1.2;min-width:170px;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:20px 18px">
+    ${row(1,false,`<h2 style="font-family:'Playfair Display',serif;font-size:18px;color:#1a1a1f;margin:0;line-height:1.25">Cannes et moulinets pour le bar</h2>`)}
+    ${row(2,false,`<p style="font-size:11.5px;color:#555;margin:0;line-height:1.6">Après 21 ans de guidage sur les côtes bretonnes, voici le matériel que j'utilise et recommande pour la pêche du bar à la mouche...</p>`)}
+  </div>
+  <div style="flex:1;min-width:145px;padding:16px 12px 16px 0">
+    <div style="background:${BEIGE};border-radius:7px;padding:11px">
+      <div style="font-weight:700;font-size:11px;color:#1a1a1f;margin-bottom:8px">Fiche technique</div>
+      ${[['Cannes','SAGE R8 · Redington'],['Soies','RIO Outbound Short'],['Moulinet','Lamson Liquid'],['Revendeur','Ardent Pêche, Pontivy']].map(([l,v])=>`
+      ${row(3,false,`<div style="font-size:10px;border-bottom:1px solid rgba(0,0,0,.06);padding-bottom:5px;margin-bottom:5px;line-height:1.3"><span style="color:#9ca3af;font-size:9px">${l}</span><br><strong style="color:#333">${v}</strong></div>`)}`).join('')}
+    </div>
+  </div>
+</div>`},
+
+materielnav(){return`
+<div style="background:${BEIGE};padding:14px 16px">
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+    ${[{t:'Bar · Côtier',on:true},{t:'Truite · Eau douce',on:false},{t:'Brochet',on:false},{t:'Migrateurs',on:false},{t:'Voyage exotique',on:false}].map(l=>`
+    ${row(1,false,`<a style="padding:6px 13px;border-radius:18px;font-size:11px;font-weight:600;text-decoration:none;background:${l.on?OCEAN:'white'};color:${l.on?'#fff':OCEAN};border:1.5px solid ${OCEAN}">${l.t}</a>`)}`).join('')}
+  </div>
+</div>`},
+
+tarifs(){return`
+<div style="display:flex;font-family:var(--sans);min-height:230px;overflow:hidden;border:1px solid #e5e7eb;border-radius:4px">
+  <div style="width:38%;background:#0d2b3e;padding:16px 14px;display:flex;flex-direction:column;gap:7px;flex-shrink:0">
+    ${row(1,true,`<span style="font-size:8.5px;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.4)">Estuaires · Bretagne-Sud</span>`)}
+    ${row(2,true,`<h2 style="font-family:'Playfair Display',serif;font-size:16px;color:#fff;margin:0;line-height:1.25">Bar à la mouche</h2>`)}
+    ${row(3,true,`<p style="font-size:10px;color:rgba(255,255,255,.5);margin:0;line-height:1.5">Bar à vue, en bateau, en estuaire.</p>`)}
+    ${row(4,true,`<span style="font-size:9px;color:rgba(255,255,255,.3)">/peche-du-bar-a-la-mouche</span>`)}
+    ${row(5,true,`<a style="font-size:10px;color:#7EC8E3;text-decoration:none">Découvrir les prestations →</a>`)}
+    ${row(6,true,`<div style="font-size:9px;padding:3px 7px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.45);border-radius:3px;display:inline-block">🌊 Bar — bleu #0d2b3e</div>`)}
+    ${row(7,true,`<div style="font-size:9px;padding:3px 7px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.45);border-radius:3px;display:inline-block">⬜ Blanc (fond droit)</div>`)}
+  </div>
+  <div style="flex:1;background:#fff;padding:12px 14px;display:flex;flex-direction:column;gap:4px;overflow:hidden">
+    ${row(8,false,`<div style="flex:1">
+      <div style="font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.09em;margin-bottom:6px">Prestations</div>
+      <div style="padding:6px 0;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;gap:4px">
+        <span style="font-size:10px;color:#1a1a1f">Initiation bar — 1 journée</span>
+        <div style="display:flex;gap:3px;flex-shrink:0">
+          <div style="padding:3px 7px;background:#f0f7ff;border-radius:10px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#1B5E8A">320 €</div><div style="font-size:7px;color:#888">1 pers.</div></div>
+          <div style="padding:3px 7px;background:#f0f7ff;border-radius:10px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#1B5E8A">225 €</div><div style="font-size:7px;color:#888">2 pers.</div></div>
+        </div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;gap:4px;background:#f8fbff">
+        <span style="font-size:10px;color:#1a1a1f">Bar à vue — accentué ⭐</span>
+        <div style="display:flex;gap:3px;flex-shrink:0">
+          <div style="padding:3px 7px;background:#1B5E8A;border-radius:10px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#fff">320 €</div><div style="font-size:7px;color:rgba(255,255,255,.7)">1 pers.</div></div>
+          <div style="padding:3px 7px;background:#1B5E8A;border-radius:10px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#fff">225 €</div><div style="font-size:7px;color:rgba(255,255,255,.7)">2 pers.</div></div>
+        </div>
+      </div>
+      <div style="padding:6px 0;display:flex;justify-content:space-between;align-items:center;opacity:.4">
+        <span style="font-size:10px;color:#999">Pêche du saumon</span>
+        <span style="font-size:8.5px;padding:2px 6px;background:#ef4444;color:#fff;border-radius:3px;flex-shrink:0">Fermé</span>
+      </div>
+    </div>`)}
+    ${row(9,false,`<div style="flex:1">
+      <div style="font-size:9px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.09em;margin-bottom:5px">Matrice — Grande alose</div>
+      <div style="display:grid;grid-template-columns:55px repeat(3,1fr);border:1px solid #e5e7eb;border-radius:4px;overflow:hidden;font-size:7.5px">
+        <div style="padding:4px;background:#f4f4f5"></div><div style="padding:4px;background:#f4f4f5;font-weight:700;color:#555;text-align:center">Coup du soir</div><div style="padding:4px;background:#f4f4f5;font-weight:700;color:#555;text-align:center">1j. Aulne</div><div style="padding:4px;background:#f4f4f5;font-weight:700;color:#555;text-align:center">1j. Blavet</div>
+        <div style="padding:4px;background:#fff;font-weight:600;color:#555">1 pers.</div><div style="padding:4px;background:#fff;text-align:center;color:#1B5E8A;font-weight:700">200 €</div><div style="padding:4px;background:#fff;text-align:center;color:#1B5E8A;font-weight:700">320 €</div><div style="padding:4px;background:#fff;text-align:center;color:#1B5E8A;font-weight:700">350 €</div>
+        <div style="padding:4px;background:#fafafa;font-weight:600;color:#555">2 pers.</div><div style="padding:4px;background:#fafafa;text-align:center;color:#1B5E8A;font-weight:700">180 €</div><div style="padding:4px;background:#fafafa;text-align:center;color:#1B5E8A;font-weight:700">200 €</div><div style="padding:4px;background:#fafafa;text-align:center;color:#1B5E8A;font-weight:700">250 €</div>
+      </div>
+    </div>`)}
+  </div>
+</div>`},
+
+}
+
+/* ── Studio field renderer ─────────────────────────────────── */
+function renderField(f){
+  let input=''
+  if(f.type==='image')input=`<div class="sf-img"><div class="sf-img-icon">📷</div>Cliquer pour ajouter une image</div>`
+  else if(f.type==='text')input=`<input class="sf-in" type="text" placeholder="${f.ph||''}" readonly>`
+  else if(f.type==='textarea')input=`<textarea class="sf-in" rows="2" placeholder="${f.ph||''}" readonly style="resize:none"></textarea>`
+  else if(f.type==='rt')input=`<div class="sf-rt"><div class="sf-rt-tb"><button class="rtb">B</button><button class="rtb">I</button><button class="rtb">H2</button><button class="rtb">H3</button><button class="rtb">≡</button></div><span>Saisir le texte ici…</span></div>`
+  else if(f.type==='sel')input=`<select class="sf-sel"><option>${f.opts||''}</option></select>`
+  else if(f.type==='grp')input=`<div style="display:flex;flex-direction:column;gap:4px"><div class="sf-lbl-sm">Texte du bouton</div><input class="sf-in" type="text" placeholder="${f.ph1||''}" readonly><div class="sf-lbl-sm" style="margin-top:2px">URL ou lien</div><input class="sf-in" type="text" placeholder="${f.ph2||''}" readonly></div>`
+  else if(f.type==='arr')input=`<div class="sf-arr">${(f.items||[]).map(it=>`<div class="sf-arr-it"><span class="sf-drag">⠿</span>${it}</div>`).join('')}<div class="sf-arr-add">+ Ajouter un élément</div></div>`
+  else if(f.type==='arr-img')input=`<div class="sf-arr"><div class="sf-arr-it"><span class="sf-drag">⠿</span>📷 Photo 1</div><div class="sf-arr-it"><span class="sf-drag">⠿</span>📷 Photo 2</div><div class="sf-arr-it"><span class="sf-drag">⠿</span>📷 Photo 3</div><div class="sf-arr-add">+ Ajouter une photo</div></div>`
+  else if(f.type==='boolean')input=`<div style="display:flex;align-items:center;gap:8px;padding:3px 0"><div style="width:36px;height:20px;background:#22c55e;border-radius:10px;position:relative;flex-shrink:0"><div style="width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px"></div></div><span style="font-size:11px;color:#6b7280">Oui (activé par défaut)</span></div>`
+  else if(f.type==='number')input=`<input class="sf-in" type="number" placeholder="${f.ph||'0'}" readonly style="width:110px">`
+  else if(f.type==='url')input=`<input class="sf-in" type="text" placeholder="${f.ph||'https://...'}" readonly>`
+  else if(f.type==='file')input=`<div class="sf-img" style="background:#f8f7f4;border:1.5px dashed rgba(0,0,0,.18)"><div class="sf-img-icon">📄</div>Choisir un fichier PDF</div>`
+  return`<div class="sf"><span class="nb nb-lt" style="border-color:${OCEAN};margin-top:1px">${f.n}</span><div class="sf-body"><div class="sf-lbl">${f.lbl}${f.req?'<span class="sf-req">obligatoire</span>':''}</div>${input}${f.note?`<div class="sf-note">${f.note}</div>`:''}</div></div>`
+}
+
+/* ── Section data ─────────────────────────────────────────── */
+const SECS=[
+/* ═══ STRUCTURE ════════════════════════════════════════════ */
+{id:'hero',cat:'s',icon:'🎯',name:'Hero',sanityTitle:'🎯 Hero',preview:PV.hero,
+ tip:'Le Hero est la première chose que voit le visiteur. Le titre H1 est obligatoire et important pour le SEO.',
+ fields:[
+  {n:1,lbl:'Photo de fond',type:'image',note:'Grande photo 1920×1080 minimum. Si une vidéo est renseignée, la photo sert de fallback.'},
+  {n:2,lbl:'Texte au-dessus du titre (eyebrow)',type:'text',ph:'Pêche à la mouche · Bretagne-Sud'},
+  {n:3,lbl:'Titre principal (H1)',type:'text',req:true,ph:'Guide de pêche à la mouche en Bretagne',note:'Obligatoire — très important pour le référencement Google'},
+  {n:4,lbl:'Phrase d\'accroche sous le titre',type:'text',ph:'Pêche du bar, truite, migrateurs et voyages exotiques'},
+  {n:null,lbl:'Hauteur du hero',type:'sel',opts:'Plein écran (72vh) · Moyen (50vh) · Compact (35vh)'},
+  {n:5,lbl:'Bouton principal — texte',type:'text',ph:'Réserver une sortie'},
+  {n:null,lbl:'Bouton principal — URL',type:'text',ph:'/contact'},
+  {n:6,lbl:'Bouton téléphone — texte',type:'text',ph:'06 87 30 34 56'},
+  {n:null,lbl:'Bouton matériel — URL (optionnel)',type:'text',ph:'/materiel-mouche-bar',note:'Laisser vide si non souhaité'},
+  {n:null,lbl:'Bouton matériel — libellé',type:'text',ph:'Matériel bar'},
+  {n:null,lbl:'▶️ Vidéo fond — URL YouTube (optionnel)',type:'url',ph:'https://www.youtube.com/watch?v=...',note:'Remplace la photo par une vidéo muette en boucle'},
+  {n:null,lbl:'⏱ Début de boucle (secondes)',type:'number',note:'Conditionnel — visible si URL YouTube renseignée'},
+  {n:null,lbl:'⏱ Fin de boucle (secondes)',type:'number',note:'Conditionnel — visible si URL YouTube renseignée'},
+  {n:null,lbl:'🎬 Vidéo fond — URL MP4 (optionnel)',type:'url',note:'Alternative à YouTube — héberger sur Cloudflare R2'},
+  {n:null,lbl:'🎬 Vidéo fond — URL WebM (optionnel)',type:'url',note:'Version WebM (prioritaire sur MP4 dans Chrome/Firefox)'},
+  {n:null,lbl:'Bouton YouTube — URL de la chaîne',type:'url',ph:'https://youtube.com/@enjoyfishing'},
+  {n:null,lbl:'Bouton YouTube — libellé',type:'text',ph:'S\'abonner à ma chaîne'},
+  {n:null,lbl:'📊 Stats dans le hero (optionnel)',type:'arr',items:['21 — ans de guidage','33 — ans de pratique','12+ — pays'],note:'Si renseignées, remplacent les boutons CTA. Format : Valeur — Libellé'},
+]},
+{id:'titre',cat:'s',icon:'🏷️',name:'Titre de section',sanityTitle:'🏷️ Titre de section',preview:PV.titre,
+ tip:'Sert de séparateur visuel pour organiser une longue page. Le titre H2 est obligatoire.',
+ fields:[
+  {n:1,lbl:'Texte au-dessus du titre (eyebrow)',type:'text',ph:'Pêche à la mouche'},
+  {n:2,lbl:'Titre (H2)',type:'text',req:true,ph:'Programme des sorties 2026'},
+  {n:3,lbl:'Sous-titre (optionnel)',type:'textarea',ph:'Découvrez toutes les formules proposées pour la saison en cours'},
+  {n:null,lbl:'Alignement du texte',type:'sel',opts:'⬛ Centré (défaut) · ⬅️ Aligné à gauche'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'banniere',cat:'s',icon:'📢',name:'Bannière / annonce',sanityTitle:'📢 Bannière / annonce',preview:PV.banniere,
+ tip:'Bannière courte pour une annonce urgente — ex : "Disponibilités 2026 ouvertes". Le lien est optionnel.',
+ fields:[
+  {n:1,lbl:'Texte de la bannière',type:'text',req:true,ph:'🗓 Disponibilités 2026 ouvertes — places limitées !'},
+  {n:2,lbl:'Lien (optionnel)',type:'text',ph:'/contact',note:'Si renseigné, la bannière devient cliquable'},
+  {n:null,lbl:'Style visuel',type:'sel',opts:'Bleu océan (défaut) · Beige · Accentué'},
+]},
+{id:'bannierecard',cat:'s',icon:'🎴',name:'Bannière + Infocard',sanityTitle:'🎴 Bannière + Infocard',preview:PV.bannierecard,
+ tip:'Très efficace sur les pages prestations. La photo est en arrière-plan à gauche, la fiche d\'info à droite.',
+ fields:[
+  {n:1,lbl:'Photo de fond',type:'image',note:'Photo affichée en arrière-plan (plein cadre)'},
+  {n:2,lbl:'Eyebrow',type:'text',ph:'🎁 Idée cadeau'},
+  {n:3,lbl:'Titre',type:'text',ph:'Pêche du bar à la mouche en Bretagne-Sud'},
+  {n:4,lbl:'Texte de description',type:'textarea',ph:'Chasse visuelle, bar en surface, pêche côtière...'},
+  {n:5,lbl:'Boutons (max 2)',type:'arr',items:['Réserver → /contact','06 87 30 34 56 → tel:...']},
+  {n:6,lbl:'Infocard — Afficher l\'encart',type:'boolean',note:'Par défaut : Oui — décocher pour masquer l\'infocard'},
+  {n:7,lbl:'Infocard — Lignes label / valeur',type:'arr',items:['Niveau : Tous niveaux','Tarif : 400€ / journée','Durée : 7h → 19h']},
+  {n:8,lbl:'Infocard — Bouton CTA — texte',type:'text',ph:'Commander →'},
+  {n:null,lbl:'Infocard — Bouton CTA — lien',type:'text',ph:'/bon-cadeau-peche-mouche'},
+]},
+{id:'cta',cat:'s',icon:'📣',name:'Bloc CTA',sanityTitle:'📣 Bloc CTA (réservation)',preview:PV.cta,
+ tip:'Section de bas de page classique. Le style "Bleu nuit" est le plus efficace pour inciter à réserver.',
+ fields:[
+  {n:1,lbl:'Titre',type:'text',ph:'Réservez votre sortie'},
+  {n:2,lbl:'Texte sous le titre',type:'textarea',ph:'Disponibilités et tarifs sur demande — réponse sous 24h.'},
+  {n:3,lbl:'Bouton 1 — texte',type:'text',ph:'Me contacter'},
+  {n:null,lbl:'Bouton 1 — URL',type:'text',ph:'/contact'},
+  {n:4,lbl:'Bouton 2 — texte (optionnel)',type:'text',ph:'06 87 30 34 56'},
+  {n:null,lbl:'Bouton 2 — URL (optionnel)',type:'text',ph:'tel:0687303456'},
+  {n:null,lbl:'Style visuel',type:'sel',opts:'🟦 Bleu nuit (défaut) · 🔵 Bleu océan · 🟫 Beige (sable)'},
+]},
+
+/* ═══ TEXTE & MÉDIAS ═══════════════════════════════════════ */
+{id:'texte',cat:'t',icon:'📝',name:'Bloc de texte',sanityTitle:'📝 Bloc de texte',preview:PV.texte,
+ tip:'L\'éditeur supporte le gras, l\'italique, les titres H2/H3, les listes et les liens. Utilise "Large" pour les textes avec beaucoup de contenu.',
+ fields:[
+  {n:1,lbl:'Contenu',type:'rt',note:'Supporte : paragraphes, gras (B), italique (I), titres H2/H3, listes (≡), liens (🔗), images'},
+  {n:null,lbl:'Largeur du texte',type:'sel',opts:'Normale (défaut) · Large · Pleine largeur'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'texteimg',cat:'t',icon:'📰',name:'Texte + Image',sanityTitle:'📰 Texte + Image',preview:PV.texteimg,
+ tip:'La position de la photo est configurable. "Étiquettes" = petites chips sous le texte (ex: "Bar en chasse", "Bar à vue").',
+ fields:[
+  {n:1,lbl:'Libellé au-dessus du titre (eyebrow)',type:'text',ph:'Bar · Bretagne'},
+  {n:2,lbl:'Titre de la section',type:'text',ph:'Pêche du bar à la mouche en Bretagne'},
+  {n:3,lbl:'Texte',type:'rt'},
+  {n:4,lbl:'Image (optionnel)',type:'image'},
+  {n:5,lbl:'Étiquettes (optionnel)',type:'arr',items:['Bar en chasse','Bar à vue','Bar bateau'],note:'Chips affichées sous le texte'},
+  {n:null,lbl:'Position de l\'image',type:'sel',opts:'Image à droite (défaut) · Image à gauche'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'galerie',cat:'t',icon:'🖼️',name:'Galerie photos',sanityTitle:'🖼️ Galerie photos',preview:PV.galerie,
+ tip:'Les photos sont réordonnables par glisser-déposer. Pour ajouter : clique sur "+ Ajouter une photo".',
+ fields:[
+  {n:1,lbl:'Titre de la galerie (optionnel)',type:'text',ph:'Galerie photos'},
+  {n:2,lbl:'Photos',type:'arr-img'},
+  {n:null,lbl:'Nombre de colonnes',type:'sel',opts:'2 · 3 colonnes (défaut) · 4'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'carrousel',cat:'t',icon:'🎠',name:'Carrousel 3 images',sanityTitle:'🎠 Carrousel 3 images',preview:PV.carrousel,
+ tip:'Affiche 3 images côte à côte. Au moins 1 image requise. Le format 3:2 est le plus courant pour des photos de pêche.',
+ fields:[
+  {n:1,lbl:'Titre au-dessus (optionnel)',type:'text',ph:'Matériel bar à la mouche'},
+  {n:2,lbl:'Images',type:'arr-img',note:'3 s\'affichent à la fois — au moins 1 requise'},
+  {n:null,lbl:'Format des images',type:'sel',opts:'Cinéma 3:2 (défaut) · Paysage 4:3 · Carré 1:1'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟦 Bleu nuit (défaut) · ⬜ Blanc · 🟫 Beige (sable)'},
+]},
+{id:'video',cat:'t',icon:'▶️',name:'Vidéo + texte',sanityTitle:'▶️ Vidéo + texte',preview:PV.video,
+ tip:'La vidéo YouTube s\'affiche côte à côte avec un bloc de texte. L\'URL complète youtube.com/watch?v=... est requise.',
+ fields:[
+  {n:1,lbl:'URL de la vidéo (YouTube)',type:'url',req:true,ph:'https://www.youtube.com/watch?v=...'},
+  {n:2,lbl:'Libellé (eyebrow)',type:'text',ph:'Enjoy Fishing'},
+  {n:3,lbl:'Titre',type:'text',ph:'Bar à la mouche — chasse visuelle en Bretagne'},
+  {n:4,lbl:'Description',type:'textarea',ph:'Session sur les vasières du Finistère-Sud...'},
+  {n:null,lbl:'Position de la vidéo',type:'sel',opts:'Vidéo à gauche (défaut) · Vidéo à droite'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'videos',cat:'t',icon:'🎬',name:'Vidéos YouTube',sanityTitle:'🎬 Vidéos YouTube (layout alterné)',preview:PV.videos,
+ tip:'L\'ID YouTube est la partie après "?v=" dans l\'URL. Ex : pour youtube.com/watch?v=9x2h5ezHV1Q, l\'ID est 9x2h5ezHV1Q.',
+ fields:[
+  {n:1,lbl:'Titre de section',type:'text',ph:'Mes vidéos de pêche'},
+  {n:2,lbl:'Lien vers la chaîne YouTube',type:'text',ph:'https://youtube.com/@enjoyfishing'},
+  {n:null,lbl:'Label du lien chaîne',type:'text',ph:'Toutes les vidéos Enjoy Fishing'},
+  {n:3,lbl:'Vidéos',type:'arr',items:['Bar à la mouche en Bretagne-Sud','Pêche de la truite en rivière'],note:'Chaque vidéo s\'ouvre pour révéler ses champs'},
+  {n:4,lbl:'→ Titre de la vidéo',type:'text',req:true,ph:'Bar à la mouche en Bretagne-Sud'},
+  {n:null,lbl:'→ ID YouTube',type:'text',ph:'9x2h5ezHV1Q',note:'La partie après ?v= dans l\'URL YouTube'},
+  {n:null,lbl:'→ Espèce / tag',type:'text',ph:'Bar · Bretagne'},
+  {n:null,lbl:'→ Description (optionnel)',type:'textarea'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'lienblog',cat:'t',icon:'📰',name:'Lien blog →',sanityTitle:'📰 Lien vers article de blog',preview:PV.lienblog,
+ tip:'Sert à mettre en avant un article de ton blog Enjoy Fishing. L\'URL et le titre sont obligatoires.',
+ fields:[
+  {n:1,lbl:'Eyebrow',type:'text',ph:'Blog · Enjoy Fishing'},
+  {n:2,lbl:'Titre de l\'article',type:'text',req:true,ph:'Pêche du bar à vue en Bretagne-Sud'},
+  {n:3,lbl:'Description',type:'textarea',ph:'Courte présentation de l\'article (1–2 phrases)'},
+  {n:4,lbl:'URL de l\'article',type:'url',req:true,ph:'https://enjoyfishing.fr/...'},
+  {n:null,lbl:'Libellé du bouton',type:'text',ph:'Lire l\'article →'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+
+/* ═══ CARTES & GRILLES ═════════════════════════════════════ */
+{id:'cards',cat:'c',icon:'🃏',name:'Grille cartes n°1',sanityTitle:'🃏 Grille de cartes — style n°1',preview:PV.cards,
+ tip:'Style immersif avec photo plein fond. Idéal pour présenter les grandes catégories (Bar, Truite, Voyages...).',
+ fields:[
+  {n:1,lbl:'Titre de la section (optionnel)',type:'text'},
+  {n:2,lbl:'Cartes',type:'arr',items:['Pêche du bar à la mouche','Pêche de la truite','Voyages exotiques'],note:'Chaque carte : titre, sous-titre, URL, image, position photo'},
+  {n:3,lbl:'→ Titre de la carte',type:'text',req:true,ph:'Pêche du bar à la mouche'},
+  {n:4,lbl:'→ Sous-titre',type:'text',ph:'Bretagne · Côte'},
+  {n:null,lbl:'→ URL (lien)',type:'text',ph:'/peche-du-bar-a-la-mouche'},
+  {n:null,lbl:'→ Image de fond',type:'image'},
+]},
+{id:'cards2',cat:'c',icon:'🃏',name:'Grille cartes n°2',sanityTitle:'🃏 Grille de cartes — style n°2',preview:PV.cards2,
+ tip:'Version compacte en grille. Pratique pour lister de nombreuses sous-pages. Nombre de colonnes configurable.',
+ fields:[
+  {n:1,lbl:'Libellé au-dessus du titre (eyebrow)',type:'text',ph:'Mes prestations'},
+  {n:2,lbl:'Titre de la section (optionnel)',type:'text',ph:'Pêche guidée en Bretagne'},
+  {n:null,lbl:'Nombre de colonnes',type:'sel',opts:'2 · 3 · 4 colonnes (défaut)'},
+  {n:3,lbl:'Cartes',type:'arr',items:['Bar côtier','Truite rivière','Brochet','Stage Spey'],note:'Chaque carte : titre, sous-titre, URL, image'},
+  {n:4,lbl:'→ Titre de la carte',type:'text',req:true},
+  {n:null,lbl:'→ Sous-titre',type:'text'},
+  {n:null,lbl:'→ Image',type:'image'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'cards3',cat:'c',icon:'🃏',name:'Grille Wild Fly n°3',sanityTitle:'🃏 Grille Wild Fly — style n°3',preview:PV.cards3,
+ tip:'Style Wild Fly Production. La "grande carte" (isLarge) prend 2 colonnes — à cocher sur la carte à mettre en avant.',
+ fields:[
+  {n:1,lbl:'Eyebrow',type:'text',ph:'Mes prestations'},
+  {n:null,lbl:'Titre de section',type:'text',ph:'Pêche guidée en Bretagne'},
+  {n:2,lbl:'Cartes',type:'arr',items:['⭐ Pêche du bar (grande carte)','Truite rivière','Voyages exotiques'],note:'Réordonnables par glisser-déposer'},
+  {n:3,lbl:'→ Image',type:'image',req:true},
+  {n:4,lbl:'→ Label / titre',type:'text',req:true},
+  {n:null,lbl:'→ Sous-titre',type:'text'},
+  {n:null,lbl:'→ Lien',type:'text'},
+  {n:null,lbl:'→ Grande carte (2 colonnes)',type:'boolean',note:'Cocher pour que cette carte prenne 2 fois plus de place'},
+]},
+{id:'grille',cat:'c',icon:'🗂️',name:'Grille sous-pages',sanityTitle:'🗂️ Grille de sous-pages (hub)',preview:PV.grille,
+ tip:'Utilisée comme page hub/index. Le tag s\'affiche en petites majuscules au-dessus du titre de chaque carte.',
+ fields:[
+  {n:null,lbl:'Libellé au-dessus du titre (eyebrow)',type:'text'},
+  {n:1,lbl:'Titre',type:'text',ph:'Matériel par espèce'},
+  {n:2,lbl:'Cartes',type:'arr',items:['Matériel bar','Matériel truite','Matériel migrateurs'],note:'Chaque carte : titre, tag, description, URL, image'},
+  {n:3,lbl:'→ Titre de la carte',type:'text',req:true},
+  {n:4,lbl:'→ Tag / catégorie',type:'text',ph:'Bar · Côte'},
+  {n:null,lbl:'→ Description courte',type:'textarea'},
+  {n:null,lbl:'→ URL interne',type:'text',ph:'/materiel-mouche-bar'},
+  {n:null,lbl:'→ Image',type:'image'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+]},
+{id:'equipement',cat:'c',icon:'🪝',name:'Équipement / Mouches',sanityTitle:'🪝 Équipement / Mouches — cartes 3 colonnes',preview:PV.equipement,
+ tip:'Conçu pour présenter du matériel ou des mouches avec liens vers la boutique Ardent Pêche.',
+ fields:[
+  {n:1,lbl:'Titre de section',type:'text',ph:'Cannes et moulinets recommandés'},
+  {n:2,lbl:'Lien boutique (optionnel)',type:'text',ph:'https://www.ardentflyfishing.com/...'},
+  {n:null,lbl:'Label du lien boutique',type:'text',ph:'Retrouvez ces mouches sur Ardent'},
+  {n:3,lbl:'Cartes',type:'arr',items:['SAGE R8 9\' #9','RIO Outbound Short','Lamson Liquid'],note:'Chaque carte : titre, description, lien, label du lien'},
+  {n:4,lbl:'→ Titre',type:'text',req:true,ph:'SAGE R8 9\' #9'},
+  {n:null,lbl:'→ Description',type:'textarea',ph:'La canne que j\'utilise au quotidien...'},
+  {n:null,lbl:'→ Lien',type:'url'},
+  {n:null,lbl:'→ Label du lien',type:'text'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+]},
+
+/* ═══ PROGRAMMES ════════════════════════════════════════════ */
+{id:'intro',cat:'p',icon:'📋',name:'Intro + Info card',sanityTitle:'📋 Intro + Info card',preview:PV.intro,
+ tip:'Idéale en début de page prestation. La fiche info à droite synthétise les infos clés. Chaque champ (niveau, tarif...) est optionnel.',
+ fields:[
+  {n:1,lbl:'Libellé (au-dessus du titre)',type:'text',ph:'Initiation · 1 ou 2 jours'},
+  {n:2,lbl:'Titre de la section (H2)',type:'text',ph:'Initiation à la pêche du bar à la mouche'},
+  {n:3,lbl:'Texte principal',type:'rt'},
+  {n:null,lbl:'Afficher l\'encart d\'infos pratiques ?',type:'boolean',note:'Par défaut : Oui — décocher pour masquer la fiche à droite'},
+  {n:4,lbl:'Niveau requis',type:'text',ph:'Tous niveaux — Débutant à expert'},
+  {n:5,lbl:'Format(s) proposé(s)',type:'textarea',ph:'Initiation · Perfectionnement · Bar à vue'},
+  {n:6,lbl:'Saison / période',type:'text',ph:'Toute l\'année'},
+  {n:7,lbl:'Tarif',type:'text',ph:'300 € / journée · 180 € / demi-journée'},
+  {n:8,lbl:'Horaires',type:'text',ph:'9h30–18h · Soit 7 à 8h de guidage'},
+  {n:9,lbl:'Infos supplémentaires (libres)',type:'arr',items:['Matériel : Waders recommandés','Participants : 2 pers. max','Lieu : Rivière Odet'],note:'Chaque ligne : Étiquette + Valeur (+ Note en italique optionnel)'},
+  {n:10,lbl:'Boutons de l\'info card',type:'arr',items:['Vérifier les disponibilités → /contact','06 87 30 34 56 → tel:0687303456'],note:'Boutons affichés en bas de la fiche'},
+  {n:11,lbl:'Intervenant / Expert invité (optionnel)',type:'arr',items:['Grégoire Juglaret — Champion du Monde 2025'],note:'Bloc profil co-intervenant : Avatar + Nom + Titre + Bio'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'programme',cat:'p',icon:'🗓️',name:'Prog. avec images',sanityTitle:'🗓️ Programme / Étapes avec images',preview:PV.programme,
+ tip:'Les étapes sont réordonnables par glisser-déposer. Chaque étape peut avoir un titre, un tag, du texte et une photo.',
+ fields:[
+  {n:1,lbl:'Libellé (au-dessus du titre)',type:'text'},
+  {n:2,lbl:'Titre de la section',type:'text',ph:'Programme de la journée'},
+  {n:null,lbl:'Texte d\'introduction (optionnel)',type:'textarea'},
+  {n:3,lbl:'Étapes du programme',type:'arr',items:['Étape 1 — Briefing & préparation','Étape 2 — Pêche du matin','Étape 3 — Pêche de l\'après-midi'],note:'Au moins 1 étape requise'},
+  {n:4,lbl:'→ Titre de l\'étape',type:'text',req:true,ph:'Briefing & préparation'},
+  {n:null,lbl:'→ Tag (optionnel)',type:'text',ph:'7h → 10h'},
+  {n:5,lbl:'→ Description',type:'textarea',ph:'Présentation du matériel, analyse des conditions météo…'},
+  {n:null,lbl:'→ Photo de l\'étape (optionnel)',type:'image'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+]},
+{id:'progtexte',cat:'p',icon:'🗓️',name:'Prog. sans image',sanityTitle:'🗓️ Programme / Étapes sans image style 1',preview:PV.progtexte,
+ tip:'Version sans photos. Pratique pour les listes "Ce qui est inclus", "Ce que vous apprenez", ou objectifs pédagogiques.',
+ fields:[
+  {n:1,lbl:'Libellé (au-dessus du titre)',type:'text'},
+  {n:2,lbl:'Titre de la section',type:'text',ph:'Ce que vous allez apprendre'},
+  {n:null,lbl:'Introduction (optionnel)',type:'textarea'},
+  {n:3,lbl:'Colonnes / Blocs',type:'arr',items:['✓ Inclus dans la sortie','⚡ Techniques abordées'],note:'Au moins 1 colonne requise'},
+  {n:4,lbl:'→ Label / titre de la colonne',type:'text',req:true,ph:'✓ Inclus dans la sortie'},
+  {n:null,lbl:'→ Style de liste',type:'sel',opts:'Flèches (défaut) · Coches · Puces'},
+  {n:null,lbl:'→ Items de la colonne',type:'arr',items:['Guide professionnel inclus','Matériel fourni si nécessaire']},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+]},
+{id:'progcartes',cat:'p',icon:'📐',name:'Mise en page info',sanityTitle:'📐 Mise en page d\'info',preview:PV.progcartes,
+ tip:'Section polyvalente pour techniques, avantages, objectifs… 2 styles au choix. Le PDF permet de télécharger un programme.',
+ fields:[
+  {n:1,lbl:'Libellé au-dessus du titre (eyebrow)',type:'text'},
+  {n:2,lbl:'Titre de la section',type:'text'},
+  {n:null,lbl:'Style de mise en page',type:'sel',opts:'Style A · Style B'},
+  {n:null,lbl:'Image (optionnel)',type:'image'},
+  {n:null,lbl:'Introduction (optionnel)',type:'textarea'},
+  {n:3,lbl:'Cartes',type:'arr',items:['Lancer de précision','Lecture de l\'eau','Chasse visuelle'],note:'Au moins 1 carte requise — titre + sous-titre + description'},
+  {n:4,lbl:'→ Titre (barre bleue)',type:'text',req:true,ph:'Lancer de précision'},
+  {n:null,lbl:'→ Sous-titre',type:'text',ph:'Maîtrise de la soie'},
+  {n:null,lbl:'→ Description',type:'textarea'},
+  {n:null,lbl:'Nombre de colonnes',type:'sel',opts:'2 · 3 colonnes (défaut) · 4'},
+  {n:5,lbl:'Note de bas de section (optionnel)',type:'text',ph:'Programme complet disponible en téléchargement'},
+  {n:null,lbl:'Bouton — texte (optionnel)',type:'text',ph:'Télécharger le programme PDF'},
+  {n:6,lbl:'Bouton — fichier PDF (optionnel)',type:'file',note:'Upload un fichier .pdf — apparaît en bas de section'},
+  {n:null,lbl:'Bouton — URL externe (optionnel)',type:'url',note:'Utilisé si aucun fichier PDF n\'est uploadé'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+]},
+{id:'selection',cat:'p',icon:'🗂️',name:'Sélection alternée',sanityTitle:'🗂️ Sélection (image + texte alternés)',preview:PV.selection,
+ tip:'Très efficace pour présenter plusieurs espèces ou spots. La photo et le texte alternent automatiquement gauche/droite.',
+ fields:[
+  {n:1,lbl:'Libellé (au-dessus du titre)',type:'text'},
+  {n:null,lbl:'Titre de la section',type:'text'},
+  {n:null,lbl:'Introduction (optionnel)',type:'textarea'},
+  {n:null,lbl:'Fond du bloc texte',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc'},
+  {n:2,lbl:'Éléments de la sélection',type:'arr',items:['Pêche du bar côtière','Truite en rivière'],note:'Au moins 1 élément requis — la photo alterne auto gauche/droite'},
+  {n:3,lbl:'→ Tag (optionnel)',type:'text',ph:'Bar en chasse'},
+  {n:4,lbl:'→ Titre (H3)',type:'text',req:true,ph:'Pêche du bar côtière'},
+  {n:5,lbl:'→ Texte',type:'rt'},
+  {n:6,lbl:'→ Image',type:'image',req:true},
+  {n:null,lbl:'→ Pills / étiquettes (optionnel)',type:'arr',items:['Bretagne-Sud','Bateau']},
+  {n:null,lbl:'→ Infos clés (optionnel)',type:'arr',items:['Niveau : Intermédiaire','Tarif : 400€']},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+
+/* ═══ VOYAGES & BIO ══════════════════════════════════════════ */
+{id:'stats',cat:'v',icon:'📋',name:'Infos clés — Bandeau',sanityTitle:'📋 Infos clés — Bandeau',preview:PV.stats,
+ tip:'Ce bandeau chiffré est très efficace pour rassurer les clients. Le champ "stats" contient les valeurs (nombre) + libellés.',
+ fields:[
+  {n:1,lbl:'Infos (tableau de statistiques)',type:'arr',items:['33 ans de pêche','21 ans de guidage','12 pays visités','400+ clients'],note:'Chaque stat : Valeur (ex: "33") + Libellé (ex: "ans de pêche")'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟦 Bleu nuit (défaut) · ⬜ Blanc · 🟫 Beige (sable)'},
+]},
+{id:'bilan',cat:'v',icon:'📓',name:'Bilan de séjour',sanityTitle:'📓 Bilan de séjour',preview:PV.bilan,
+ tip:'Sert à partager un compte-rendu de voyage. Les résultats clés s\'affichent en gros en haut de la section.',
+ fields:[
+  {n:1,lbl:'Mention au-dessus du titre (eyebrow)',type:'text',ph:'Récit de séjour · Mars 2015'},
+  {n:2,lbl:'Titre du bilan',type:'text',req:true,ph:'Une semaine à Cayo Cruz'},
+  {n:null,lbl:'Contexte court (dates, groupe, conditions)',type:'text',ph:'4 pêcheurs · 10 jours · Lodge Cayo Cruz'},
+  {n:3,lbl:'Récit du séjour',type:'rt'},
+  {n:4,lbl:'Résultats clés (optionnel)',type:'arr',items:['Bonefish : 47 capturés','Permit : 3 capturés'],note:'Chaque résultat : Label + Valeur — affiché en grand'},
+  {n:null,lbl:'Photo du séjour (optionnel)',type:'image'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+]},
+{id:'dates',cat:'v',icon:'📅',name:'Dates des séjours',sanityTitle:'📅 Dates des séjours',preview:PV.dates,
+ tip:'Le statut change la couleur du badge : Disponible (vert), Peu de places (orange), Complet (rouge), Liste d\'attente (gris).',
+ fields:[
+  {n:1,lbl:'Mention au-dessus du titre (eyebrow)',type:'text',ph:'Hosted Trips 2026'},
+  {n:2,lbl:'Titre de la section',type:'text',req:true,ph:'Séjours disponibles — Argentine 2026'},
+  {n:null,lbl:'Texte d\'introduction (optionnel)',type:'text'},
+  {n:3,lbl:'Séjours disponibles',type:'arr',items:['15 → 24 janvier 2026','7 → 16 mars 2026','2 → 11 avril 2026'],note:'Chaque séjour : dates + destination + description + prix + places dispo + statut'},
+  {n:4,lbl:'→ Dates (ex : 15 → 24 janv. 2026)',type:'text',req:true},
+  {n:null,lbl:'→ Destination',type:'text',ph:'Lodge Las Buitreras · Río Grande'},
+  {n:null,lbl:'→ Description',type:'text'},
+  {n:null,lbl:'→ Prix indicatif',type:'text',ph:'8 500 €'},
+  {n:null,lbl:'→ Places totales',type:'number',ph:'4'},
+  {n:null,lbl:'→ Places disponibles',type:'number',ph:'2'},
+  {n:5,lbl:'→ Statut',type:'sel',opts:'Disponible · Peu de places · Complet · Liste d\'attente'},
+  {n:null,lbl:'Bouton — texte',type:'text',ph:'Me contacter pour réserver'},
+  {n:null,lbl:'Bouton — URL',type:'text',ph:'/contact'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟦 Bleu nuit (défaut) · ⬜ Blanc · 🟫 Beige (sable)'},
+]},
+{id:'choix',cat:'v',icon:'🏠',name:'Choix (lodges)',sanityTitle:'🏠 Choix (lodges, options)',preview:PV.choix,
+ tip:'Pour présenter plusieurs options de lodge ou d\'hébergement. Le numéro s\'affiche en grand en coin de chaque carte.',
+ fields:[
+  {n:1,lbl:'Mention au-dessus du titre',type:'text'},
+  {n:2,lbl:'Titre de la section',type:'text',req:true,ph:'Choisissez votre lodge'},
+  {n:null,lbl:'Texte introductif',type:'textarea'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+  {n:3,lbl:'Options / Choix',type:'arr',items:['Lodge Las Buitreras','Lodge Aurelia'],note:'Chaque option : numéro, titre, tag, description, image'},
+  {n:null,lbl:'→ Numéro',type:'text',ph:'01'},
+  {n:4,lbl:'→ Titre du lodge / option',type:'text',req:true,ph:'Lodge Las Buitreras'},
+  {n:5,lbl:'→ Tag court',type:'text',ph:'Río Grande · Haut de gamme'},
+  {n:6,lbl:'→ Description',type:'textarea'},
+  {n:null,lbl:'→ Image',type:'image'},
+  {n:null,lbl:'Galerie photos (optionnel)',type:'arr-img',note:'2–4 photos de l\'hébergement en bas de section'},
+]},
+{id:'frise',cat:'v',icon:'📅',name:'Frise chronologique',sanityTitle:'📅 Frise chronologique',preview:PV.frise,
+ tip:'Utilisée sur la page "Le Guide". Les étapes sont réordonnables. La barre de stats et la citation sont optionnelles.',
+ fields:[
+  {n:1,lbl:'Eyebrow (au-dessus du titre)',type:'text'},
+  {n:2,lbl:'Titre de la section (H2)',type:'text'},
+  {n:null,lbl:'Sous-titre (phrase introductive)',type:'textarea'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+  {n:null,lbl:'Barre de stats (optionnel)',type:'arr',items:['21 — ans de guidage','33 — ans de pratique'],note:'Petits chiffres affichés au-dessus de la frise'},
+  {n:null,lbl:'Citation (dans la barre de stats)',type:'text',ph:'"33 ans de pêche à la mouche, 21 ans de guidage"'},
+  {n:3,lbl:'Étapes de la frise',type:'arr',items:['1991 — Bretagne','2003 — Bretagne-Sud','2005 — Argentine'],note:'Au moins 1 étape requise'},
+  {n:4,lbl:'→ Période',type:'text',req:true,ph:'1991'},
+  {n:5,lbl:'→ Lieu',type:'text',req:true,ph:'Bretagne'},
+  {n:null,lbl:'→ Détail / texte',type:'textarea'},
+  {n:null,lbl:'→ Photos (optionnel)',type:'arr-img',note:'1 ou 2 photos par étape'},
+  {n:null,lbl:'→ Lien (optionnel)',type:'text'},
+]},
+{id:'liste',cat:'v',icon:'📋',name:'Liste (diplômes...)',sanityTitle:'📋 Liste (diplômes, qualifications...)',preview:PV.liste,
+ tip:'Idéale pour lister des diplômes, certifications ou qualifications. L\'étiquette à gauche est généralement l\'année.',
+ fields:[
+  {n:1,lbl:'Eyebrow',type:'text'},
+  {n:2,lbl:'Titre (H2)',type:'text'},
+  {n:null,lbl:'Texte introductif',type:'textarea'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+  {n:3,lbl:'Éléments de la liste',type:'arr',items:['1999 — BEES1','2002 — Qualification Guide de pêche','2008 — Formation leurre côtier'],note:'Au moins 1 élément requis — Étiquette (ex: année) + Label (ex: diplôme)'},
+  {n:null,lbl:'→ Étiquette (ex: année)',type:'text',req:true,ph:'1999'},
+  {n:null,lbl:'→ Label (ex: diplôme)',type:'text',req:true,ph:'BEES1 — Brevet d\'État d\'Éducateur Sportif'},
+  {n:4,lbl:'Photo (côté droit, optionnel)',type:'image'},
+]},
+
+/* ═══ AUTO-GÉNÉRÉES ═════════════════════════════════════════ */
+{id:'partenaires',cat:'a',icon:'🤝',name:'Grille Partenaires',sanityTitle:'🤝 Grille Partenaires',preview:PV.partenaires,
+ tip:'Les logos viennent automatiquement de Sanity → Partenaires. Pour ajouter/modifier un logo, va dans ce menu, pas ici.',
+ fields:[
+  {n:1,lbl:'Eyebrow (optionnel)',type:'text'},
+  {n:2,lbl:'Titre de section (optionnel)',type:'text',ph:'Mes partenaires'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'revuepresse',cat:'a',icon:'📰',name:'Grille Revue presse',sanityTitle:'📰 Grille Revue de presse',preview:PV.revuepresse,
+ tip:'Les articles viennent automatiquement de Sanity → Revue de presse. Pour ajouter un article, va dans ce menu.',
+ fields:[
+  {n:1,lbl:'Eyebrow (optionnel)',type:'text'},
+  {n:2,lbl:'Titre de section (optionnel)',type:'text',ph:'Ils parlent de moi'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'temoignageshp',cat:'a',icon:'⭐',name:'Témoignages HP',sanityTitle:'Témoignages (section HP)',preview:PV.temoignageshp,
+ warn:'Section spécifique à la page d\'accueil — les témoignages affichés viennent de Sanity → Témoignages.',
+ tip:'Pour choisir quels témoignages s\'affichent, va dans Sanity → Témoignages et gère leur ordre par drag & drop.',
+ fields:[
+  {n:1,lbl:'Eyebrow (haut gauche)',type:'text',ph:'Ce qu\'ils disent'},
+  {n:2,lbl:'Phrase d\'accroche (côté droit)',type:'textarea',ph:'Plus de 400 clients guidés depuis 2003...'},
+  {n:3,lbl:'Texte du lien "Voir tous"',type:'text',ph:'Lire tous les témoignages'},
+  {n:null,lbl:'URL du lien',type:'text',ph:'/temoignages'},
+  {n:null,lbl:'💡 Sélection des témoignages',type:'text',note:'(lecture seule) Pour choisir les témoignages, aller dans Sanity → Témoignages'},
+]},
+
+/* ═══ PAGE D'ACCUEIL ════════════════════════════════════════ */
+{id:'prestationshp',cat:'h',icon:'🎣',name:'Prestations (HP)',sanityTitle:'Prestations (grille HP)',preview:PV.prestationshp,
+ warn:'Section spécifique à la page d\'accueil — les cartes sont auto-remplies depuis Sanity → Prestations.',
+ tip:'Pour modifier les cartes, va dans Sanity → Prestations et édite chaque prestation directement.',
+ fields:[
+  {n:1,lbl:'Eyebrow (optionnel)',type:'text',ph:'Mes prestations'},
+  {n:2,lbl:'Titre de section (optionnel)',type:'text',ph:'Pêche guidée en Bretagne'},
+]},
+{id:'guidehp',cat:'h',icon:'🧑‍✈️',name:'Le Guide (HP)',sanityTitle:'Le Guide (section HP)',preview:PV.guidehp,
+ warn:'Section spécifique à la page d\'accueil.',
+ tip:'Section de présentation sur la page d\'accueil. Les stats ici sont indépendantes du bandeau Stats.',
+ fields:[
+  {n:1,lbl:'Eyebrow (optionnel)',type:'text',ph:'Votre guide'},
+  {n:2,lbl:'Nom du guide',type:'text',ph:'Jean-Baptiste Vidal'},
+  {n:3,lbl:'Accroche (sous-titre)',type:'text',ph:'33 ans de pêche à la mouche, 21 ans de guidage'},
+  {n:null,lbl:'Bio courte',type:'textarea',ph:'Basé en Bretagne-Sud entre Quimper et Quimperlé...'},
+  {n:4,lbl:'Photo du guide',type:'image'},
+  {n:5,lbl:'Texte du bouton',type:'text',ph:'En savoir plus'},
+  {n:null,lbl:'Lien du bouton',type:'text',ph:'/jean-baptiste-vidal-moniteur-guide-de-peche'},
+  {n:6,lbl:'Stats / Chiffres clés',type:'arr',items:['33 — ans de pêche','21 — ans de guidage','12 — pays visités'],note:'Chaque stat : Valeur (ex: 33) + Libellé (ex: ans de pêche)'},
+]},
+{id:'boncadeauhp',cat:'h',icon:'🎁',name:'Bon cadeau (HP)',sanityTitle:'Bon cadeau (section HP)',preview:PV.boncadeauhp,
+ warn:'Section spécifique à la page d\'accueil. Fond bleu océan fixe.',
+ tip:'Idéale pour les périodes de fêtes. Mettre à jour les liens des boutons selon la page bon cadeau.',
+ fields:[
+  {n:1,lbl:'Titre',type:'text',ph:'Offrez une journée de pêche à la mouche'},
+  {n:2,lbl:'Texte',type:'textarea',ph:'Le cadeau idéal pour un pêcheur ou un curieux. Valable pour toutes les prestations.'},
+  {n:3,lbl:'Bouton 1 — texte',type:'text',ph:'Commander un bon cadeau'},
+  {n:null,lbl:'Bouton 1 — lien',type:'text',ph:'/bon-cadeau-peche-mouche'},
+  {n:4,lbl:'Bouton 2 — texte (optionnel)',type:'text',ph:'Voir les offres'},
+  {n:null,lbl:'Bouton 2 — lien (optionnel)',type:'text',ph:'/tarifs'},
+]},
+{id:'materielhp',cat:'h',icon:'🎣',name:'Matériel HP',sanityTitle:'Matériel HP',preview:PV.materielhp,
+ warn:'Section spécifique à la page d\'accueil.',
+ tip:'La carte principale (grande) pointe vers la page hub matériel. Les cartes secondaires sont les sous-catégories.',
+ fields:[
+  {n:1,lbl:'Eyebrow de section',type:'text',ph:'Équipement · Ressources'},
+  {n:2,lbl:'Titre de section',type:'text',ph:'Matériel & univers'},
+  {n:3,lbl:'Carte principale — eyebrow',type:'text',ph:'Hub matériel'},
+  {n:4,lbl:'Carte principale — titre',type:'text',ph:'Mon matériel'},
+  {n:null,lbl:'Carte principale — lien',type:'text',ph:'/materiel-jeanbaptistevidal'},
+  {n:null,lbl:'Carte principale — image de fond',type:'image'},
+  {n:5,lbl:'Sous-liens matériel',type:'arr',items:['Bar → /materiel-mouche-bar','Truite → /materiel-mouche-truite'],note:'Petits liens sous la carte principale'},
+  {n:6,lbl:'Cartes secondaires (Mouches, Bateau…)',type:'arr',items:['Mes mouches','Mon bateau'],note:'Cartes secondaires à droite de la grande — eyebrow + titre + lien + image'},
+]},
+
+/* ═══ MATÉRIEL ══════════════════════════════════════════════ */
+{id:'materielintro',cat:'m',icon:'🎣',name:'Matériel — Intro',sanityTitle:'🎣 Matériel — Intro + fiche technique',preview:PV.materielintro,
+ tip:'Spécifique aux pages matériel. Le texte est à gauche, la fiche technique (carte sable) à droite.',
+ fields:[
+  {n:1,lbl:'Titre H2',type:'text',ph:'Cannes et moulinets pour le bar'},
+  {n:2,lbl:'Texte (gauche)',type:'rt'},
+  {n:3,lbl:'Fiche technique (carte à droite)',type:'arr',items:['Cannes : SAGE R8 · Redington','Soies : RIO Outbound Short','Moulinet : Lamson Liquid','Revendeur : Ardent Pêche, Pontivy'],note:'Chaque ligne : Label + Valeur'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+]},
+{id:'materielnav',cat:'m',icon:'🗺️',name:'Nav. matériel',sanityTitle:'🗺️ Navigation matériel (liens sous-pages)',preview:PV.materielnav,
+ tip:'Affiche des boutons de navigation entre les pages matériel. Permet au visiteur de naviguer facilement entre espèces.',
+ fields:[
+  {n:1,lbl:'Liens',type:'arr',items:['Bar · Côtier → /materiel-mouche-bar','Truite · Eau douce → /materiel-mouche-truite','Brochet → /materiel-mouche-brochet'],note:'Chaque lien : Label affiché + URL de destination'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'🟫 Beige (sable) (défaut) · ⬜ Blanc · 🟦 Bleu nuit'},
+]},
+/* ═══ TARIFS ════════════════════════════════════════════════ */
+{id:'tarifs',cat:'s',icon:'💰',name:'Tableau de tarifs',sanityTitle:'💰 Tableau de tarifs',preview:PV.tarifs,
+ tip:'Section tarification : panneau gauche coloré (prestation) + tableau de prix à droite. Lignes simples (statuts : normal · accentué · fermé · contact) ou matrices croisées (ex : alose par format × personnes).',
+ fields:[
+  {n:1,lbl:'Libellé au-dessus du titre (eyebrow)',type:'text',ph:'Estuaires · Bretagne-Sud'},
+  {n:2,lbl:'Titre du panneau gauche',type:'text',ph:'Bar à la mouche',req:true},
+  {n:3,lbl:'Description courte',type:'textarea',ph:'Bar à vue, en bateau, en estuaire…'},
+  {n:4,lbl:'URL "Découvrir..."',type:'text',ph:'/peche-du-bar-a-la-mouche'},
+  {n:5,lbl:'Libellé du lien',type:'text',ph:'Découvrir les prestations →'},
+  {n:6,lbl:'Couleur du panneau gauche',type:'sel',opts:'🌊 Bar — bleu #0d2b3e · 🏞️ Eau douce — bleu #112e42 · 🎿 Stages — bleu nuit'},
+  {n:7,lbl:'Couleur de fond (corps droit)',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable) · 🟦 Bleu nuit'},
+  {n:8,lbl:'Prestations (lignes)',type:'arr',items:['Initiation bar → 1 journée → statut: normal → [320 € / 1 pers.] [225 € / 2 pers.]','Bar à vue en estuaire → 1 session → statut: accentué','Pêche du saumon → Fermée en 2026 → statut: fermé','Masterclass → Format sur mesure → statut: contact (bouton "Nous contacter")'],note:'Chaque ligne : Nom + URL opt. + Format + Statut (normal · accentué · fermé · contact) + Prix (1 pill = 1 tarif : valeur + libellé)'},
+  {n:9,lbl:'Matrices de prix (tableaux croisés — optionnel)',type:'arr',items:['Grande alose — colonnes: Coup du soir · 1j. Aulne · 1j. Blavet — lignes: 1 pers. · 2 pers. · 3 pers.','Stage Père/enfant — colonnes: ½ journée · 1 journée — lignes: Père + 1 enfant · Père + 2 enfants'],note:'Matrice = titre + URL opt. + note + colonnes (formats) + lignes (nb personnes × valeurs)'},
+]},
+]
+
+/* ── Categories ─────────────────────────────────────────────── */
+const CATS=[
+  {k:'all',lbl:'Toutes (38)'},
+  {k:'s',lbl:'📐 Structure'},
+  {k:'t',lbl:'📝 Texte & Médias'},
+  {k:'c',lbl:'🃏 Cartes'},
+  {k:'p',lbl:'📌 Programmes'},
+  {k:'v',lbl:'🗺 Voyages & Bio'},
+  {k:'a',lbl:'⚙️ Auto-générées'},
+  {k:'h',lbl:'🏠 Page d\'accueil'},
+  {k:'m',lbl:'🎣 Matériel'},
+]
+
+let curCat='all', curId=null
+
+/* ── showSec ─────────────────────────────────────────────── */
+function showSec(id){
+  const s=SECS.find(x=>x.id===id)
+  if(!s) return
+  curId=id
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.id===id))
+  document.getElementById('preview').innerHTML=`<div style="overflow:hidden">${s.preview()}</div>`
+  let html=`<div style="padding:7px 14px 6px;background:#161616;border-bottom:1px solid rgba(255,255,255,.08)"><div style="font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:2px">Nom dans Sanity Studio</div><div style="font-size:11.5px;color:#7EC8E3;font-weight:500">${s.sanityTitle||s.icon+' '+s.name}</div></div>`+
+           (s.warn?`<div class="sf-warn">⚠️ ${s.warn}</div>`:'')+
+           (s.tip?`<div class="sf-tip" style="margin:14px 14px 0">💡 ${s.tip}</div>`:'')+
+           `<div class="sf-wrap">`
+  s.fields.forEach(f=>{
+    if(f.n){
+      html+=renderField(f)
+    } else {
+      let inp=''
+      if(f.type==='sel') inp=`<select class="sf-sel"><option>${f.opts||''}</option></select>`
+      else if(f.type==='text'||f.type==='url') inp=`<input class="sf-in" type="text" placeholder="${f.ph||''}" readonly>`
+      else if(f.type==='textarea') inp=`<textarea class="sf-ta" readonly placeholder="${f.ph||''}"></textarea>`
+      else if(f.type==='boolean') inp=`<div style="display:flex;align-items:center;gap:8px;padding:3px 0"><div style="width:36px;height:20px;background:#22c55e;border-radius:10px;position:relative;flex-shrink:0"><div style="width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px"></div></div><span style="font-size:11px;color:#6b7280">Oui (activé par défaut)</span></div>`
+      else if(f.type==='number') inp=`<input class="sf-in" type="number" placeholder="${f.ph||'0'}" readonly style="width:110px">`
+      else if(f.type==='file') inp=`<div class="sf-img" style="background:#f8f7f4;border:1.5px dashed rgba(0,0,0,.18)"><div class="sf-img-icon">📄</div>Choisir un fichier PDF</div>`
+      html+=`<div style="margin:0 0 11px 29px"><div class="sf-lbl" style="margin-bottom:3px">${f.lbl}${f.req?'<span class="sf-req">obligatoire</span>':''}</div>${inp}${f.note?`<div class="sf-note">${f.note}</div>`:''}</div>`
+    }
+  })
+  html+=`</div>`
+  document.getElementById('studio').innerHTML=html
+}
+
+/* ── showCat ─────────────────────────────────────────────── */
+function showCat(k){
+  curCat=k
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('on',b.dataset.cat===k))
+  const visible=k==='all'?SECS:SECS.filter(s=>s.cat===k)
+  document.getElementById('tabs').innerHTML=visible.map(s=>
+    `<button class="tab${s.id===curId?' on':''}" data-id="${s.id}" onclick="showSec('${s.id}')">
+      <span class="tab-icon">${s.icon}</span>
+      <span class="tab-name">${s.name}</span>
+    </button>`).join('')
+  if(visible.length && !visible.find(s=>s.id===curId)){
+    showSec(visible[0].id)
+  }
+}
+
+/* ── Init ────────────────────────────────────────────────── */
+document.getElementById('cat-bar').innerHTML=CATS.map(c=>
+  `<button class="cat-btn" data-cat="${c.k}" onclick="showCat('${c.k}')">${c.lbl}</button>`
+).join('')
+
+showCat('all')
+</script>
+</body>
+</html>

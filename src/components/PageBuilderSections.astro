@@ -77,8 +77,14 @@ const heroHeight = (h: string) => {
 
 const heroBg = (image: any) => {
   if (!image?.asset) return 'background:var(--color-ocean)'
-  const url = urlFor(image).width(1600).height(900).fit('crop').crop('focalpoint').url()
-  return `background:linear-gradient(to top,rgba(7,24,31,.88) 0%,rgba(13,43,62,.45) 60%,rgba(13,43,62,.3) 100%),url(${url}) center/cover no-repeat`
+  // On sert l'image à pleine largeur sans crop CDN,
+  // et on laisse background-position CSS gérer le hotspot (plus fiable que crop=focalpoint)
+  const url = urlFor(image).width(1600).auto('format').url()
+  const hs = image?.hotspot
+  const bgPos = (hs?.x != null && hs?.y != null)
+    ? `${Math.round(hs.x * 100)}% ${Math.round(hs.y * 100)}%`
+    : 'center'
+  return `background:linear-gradient(to top,rgba(7,24,31,.88) 0%,rgba(13,43,62,.45) 60%,rgba(13,43,62,.3) 100%),url(${url}) ${bgPos}/cover no-repeat`
 }
 
 interface Props {
@@ -95,7 +101,20 @@ const partenaires: any[] = hasPartenaires
 
 const hasRevuePresse = (sections ?? []).some((s: any) => s._type === 'sectionRevuePresse')
 const revuePresse: any[] = hasRevuePresse
-  ? await client.fetch(`*[_type == "revuePresse"] | order(orderRank asc) { _id, magazine, numero, date, annee, titre, description, type, cover { asset->{ url } }, fichierPdf { asset->{ url } }, lien, labelLien }`)
+  ? await client.fetch(`*[_type == "revuePresse"] | order(orderRank asc) { _id, magazine, numero, date, annee, titre, description, type, cover { asset->{ url } }, photos[] { asset->{ url }, alt }, fichierPdf { asset->{ url, originalFilename } }, lien, labelLien }`)
+  : []
+
+const hasVoyagesGrid = (sections ?? []).some((s: any) => s._type === 'sectionVoyagesGrid')
+const voyagesForGrid: any[] = hasVoyagesGrid
+  ? await client.fetch(`
+    *[_type == "voyage"] {
+      _id, title, slug, pays, periode, especes,
+      "displayTitle": coalesce(pagebuilder[_type == "sectionHero"][0].titre, title),
+      "tagline": coalesce(pagebuilder[_type == "sectionHero"][0].sousTitre, especes),
+      "region": pagebuilder[_type == "sectionHero"][0].eyebrow,
+      "heroImage": pagebuilder[_type == "sectionHero"][0].image { _type, hotspot, crop, asset->{ _id, url } }
+    }
+  `)
   : []
 ---
 
@@ -104,10 +123,7 @@ const revuePresse: any[] = hasRevuePresse
   {/* ════════════ HERO ════════════ */}
   {s._type === 'sectionHero' && (
     <section class="pb-hero" style={`min-height:${heroHeight(s.hauteur)}`}>
-      {ytId(stegaClean(s.videoYoutubeUrl) || '') ? (
-        <>
-          <div class="pb-hero__yt-wrapper">
-            {(() => {
+      {ytId(stegaClean(s.videoYoutubeUrl) || '') ? (() => {
               const vid   = ytId(stegaClean(s.videoYoutubeUrl) || '')!
               const debut = s.videoYoutubeDebut ?? 0
               const fin   = s.videoYoutubeFin
@@ -119,13 +135,22 @@ const revuePresse: any[] = hasRevuePresse
                 start: String(debut),
                 ...(fin != null ? { end: String(fin) } : {}),
               })
+              const posterUrl = s.image?.asset
+                ? urlFor(s.image).width(1600).auto('format').url()
+                : null
               const loopScript = `(function(){
                 function init(){
                   if(typeof YT==='undefined'||!YT.Player){setTimeout(init,150);return;}
                   new YT.Player('yt-hero-player',{events:{
                     onReady:function(e){e.target.setPlaybackQuality('highres');},
                     onStateChange:function(e){
-                      if(e.data===1)e.target.setPlaybackQuality('highres');
+                      if(e.data===1){
+                        e.target.setPlaybackQuality('highres');
+                        setTimeout(function(){
+                          var p=document.getElementById('yt-hero-poster');
+                          if(p){p.style.opacity='0';setTimeout(function(){p.style.display='none';},900);}
+                        },2500);
+                      }
                       if(e.data===0){e.target.seekTo(${debut},true);e.target.playVideo();}
                     }
                   }});
@@ -141,21 +166,25 @@ const revuePresse: any[] = hasRevuePresse
               })();`
               return (
                 <>
-                  <iframe
-                    id="yt-hero-player"
-                    class="pb-hero__yt-iframe"
-                    src={`https://www.youtube-nocookie.com/embed/${vid}?${params}`}
-                    allow="autoplay; encrypted-media"
-                    title="hero video"
+                  <div class="pb-hero__yt-wrapper">
+                    <iframe
+                      id="yt-hero-player"
+                      class="pb-hero__yt-iframe"
+                      src={`https://www.youtube-nocookie.com/embed/${vid}?${params}`}
+                      allow="autoplay; encrypted-media"
+                      title="hero video"
+                    />
+                    <script is:inline set:html={loopScript} />
+                  </div>
+                  <div
+                    id="yt-hero-poster"
+                    class="pb-hero__yt-poster"
+                    style={posterUrl ? `background-image:url(${posterUrl})` : ''}
                   />
-                  <script is:inline set:html={loopScript} />
+                  <div class="pb-hero__overlay"></div>
                 </>
               )
-            })()}
-          </div>
-          <div class="pb-hero__overlay"></div>
-        </>
-      ) : stegaClean(s.videoUrl) ? (
+            })() : stegaClean(s.videoUrl) ? (
         <>
           <video
             class="pb-hero__video"
@@ -912,37 +941,63 @@ const revuePresse: any[] = hasRevuePresse
           </div>
         )}
         <div class="pb-press-grid">
-          {revuePresse.map((item: any) => (
-            <article class="pb-press-card">
-              <div class="pb-press-card__cover-wrap">
-                {item.cover?.asset?.url
-                  ? <img src={item.cover.asset.url} alt={`${item.magazine}${item.numero ? ' ' + item.numero : ''} — ${item.titre}`} class="pb-press-card__cover" loading="lazy" />
-                  : <span class="pb-press-card__cover-placeholder">{item.magazine}</span>
-                }
-                {item.type && <span class="pb-press-card__badge">{item.type}</span>}
-              </div>
-              <div class="pb-press-card__body">
-                <div class="pb-press-card__meta">
-                  <span class="pb-press-card__magazine">{item.magazine}</span>
-                  {item.numero && <span class="pb-press-card__numero">{item.numero}</span>}
-                  <span class="pb-press-card__date">{item.date}</span>
+          {revuePresse.map((item: any) => {
+            // Cover en premier, puis les photos du carrousel (combinés pour l'effet livre)
+            const coverPhoto: {url:string,alt:string}[] = item.cover?.asset?.url
+              ? [{ url: item.cover.asset.url, alt: item.titre || '' }]
+              : []
+            const extraPhotos: {url:string,alt:string}[] = item.photos?.length
+              ? item.photos.filter((p: any) => p.asset?.url).map((p: any) => ({ url: p.asset.url, alt: p.alt || item.titre || '' }))
+              : []
+            const allPhotos: {url:string,alt:string}[] = [...coverPhoto, ...extraPhotos]
+            return (
+              <article class="pb-press-card2">
+                <div class="pb-press-card2__media">
+                  <div class="pb-press-flip" data-press-flip>
+                    {allPhotos.length > 0
+                      ? allPhotos.map((ph, idx) => (
+                          <img
+                            src={ph.url}
+                            alt={ph.alt}
+                            class:list={['pb-press-flip__img', idx === 0 && 'is-active']}
+                            loading="lazy"
+                          />
+                        ))
+                      : <span class="pb-press-flip__placeholder">{item.magazine}</span>
+                    }
+                  </div>
+                  {allPhotos.length > 1 && (
+                    <div class="pb-press-flip__dots">
+                      {allPhotos.map((_: any, idx: number) => (
+                        <span class:list={['pb-press-flip__dot', idx === 0 && 'is-active']} />
+                      ))}
+                    </div>
+                  )}
+                  {item.type && <span class="pb-press-card2__badge">{item.type}</span>}
                 </div>
-                <h3 class="pb-press-card__titre">{item.titre}</h3>
-                {item.description && <p class="pb-press-card__desc">{item.description}</p>}
-                {item.fichierPdf?.asset?.url ? (
-                  <a href={item.fichierPdf.asset.url} download class="pb-press-card__link pb-press-card__link--dl">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    {item.labelLien || 'Télécharger l\'article (PDF)'}
-                  </a>
-                ) : item.lien ? (
-                  <a href={item.lien} target="_blank" rel="noopener noreferrer" class="pb-press-card__link">
-                    {item.labelLien || 'Lire l\'article'}
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  </a>
-                ) : null}
-              </div>
-            </article>
-          ))}
+                <div class="pb-press-card2__body">
+                  <div class="pb-press-card2__meta">
+                    <span class="pb-press-card2__magazine">{item.magazine}</span>
+                    {item.numero && <span class="pb-press-card2__numero">&middot; {item.numero}</span>}
+                    <span class="pb-press-card2__date">{item.date}</span>
+                  </div>
+                  <h3 class="pb-press-card2__titre">{item.titre}</h3>
+                  {item.description && <p class="pb-press-card2__desc">{item.description}</p>}
+                  {item.fichierPdf?.asset?.url ? (
+                    <a href={`${item.fichierPdf.asset.url}?dl=${encodeURIComponent(item.fichierPdf.asset.originalFilename || 'article.pdf')}`} class="pb-press-card2__link pb-press-card2__link--dl">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                      {item.labelLien || 'Télécharger l\'article (PDF)'}
+                    </a>
+                  ) : item.lien ? (
+                    <a href={item.lien} target="_blank" rel="noopener noreferrer" class="pb-press-card2__link">
+                      {item.labelLien || 'Lire l\'article'}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                  ) : null}
+                </div>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>
@@ -985,10 +1040,492 @@ const revuePresse: any[] = hasRevuePresse
     </section>
   )}
 
+  {/* ════════════ MATÉRIEL — INTRO + SPECS ════════════ */}
+  {s._type === 'sectionMaterielIntro' && (
+    <section class={`section pb-mat-intro ${bg(s.fond)||'section--white'}`}>
+      <div class="container pb-mat-intro__grid">
+        <div class="pb-mat-intro__body">
+          {stegaClean(s.titre) && <h2 class="pb-mat-intro__h2">{s.titre}</h2>}
+          <div class="prose" set:html={blocks(s.texte)} />
+        </div>
+        {s.specs?.length > 0 && (
+          <aside class="pb-mat-specs">
+            {s.specs.map((sp: any) => (
+              <div class="pb-mat-specs__row">
+                <span class="pb-mat-specs__label">{sp.label}</span>
+                <span class="pb-mat-specs__val">{sp.valeur}</span>
+              </div>
+            ))}
+          </aside>
+        )}
+      </div>
+    </section>
+  )}
+
+  {/* ════════════ MATÉRIEL — ÉQUIPEMENT / MOUCHES CARTES ════════════ */}
+  {s._type === 'sectionEquipement' && (
+    <section class={`section pb-equip ${bg(s.fond)||'section--sand'}`}>
+      <div class="container">
+        <div class="pb-equip__header">
+          {stegaClean(s.titre) && <h2 class="pb-equip__h2">{s.titre}</h2>}
+          {s.lienBoutique && (
+            <a href={stegaClean(s.lienBoutique)} target="_blank" rel="noopener noreferrer" class="pb-equip__lien-boutique">
+              {stegaClean(s.labelBoutique) || 'Voir sur Ardent'}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          )}
+        </div>
+        <div class="pb-equip__grid">
+          {s.items?.map((item: any) => (
+            <div class="pb-equip__card">
+              <h3 class="pb-equip__card-titre">{item.titre}</h3>
+              {item.description && <p class="pb-equip__card-desc">{item.description}</p>}
+              {item.lien && (
+                <a href={stegaClean(item.lien)} target="_blank" rel="noopener noreferrer" class="pb-equip__card-lien">
+                  {stegaClean(item.labelLien) || 'Acheter sur Ardent'}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ════════════ MATÉRIEL — NAVIGATION SOUS-PAGES ════════════ */}
+  {s._type === 'sectionMaterielNav' && (
+    <section class={`section pb-mat-nav ${bg(s.fond)||'section--sand'}`}>
+      <div class="container pb-mat-nav__inner">
+        {s.liens?.map((lien: any) => (
+          <a href={stegaClean(lien.url)} class="pb-mat-nav__btn">{lien.label}</a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {/* ════════════ VIDÉOS YOUTUBE ALTERNÉES ════════════ */}
+  {s._type === 'sectionVideos' && (
+    <section class={`section pb-videos ${bg(s.fond)||'section--white'}`}>
+      <div class="container">
+        <div class="pb-videos__header">
+          {stegaClean(s.titre) && <h2 class="pb-videos__h2">{s.titre}</h2>}
+          {s.lienChaine && (
+            <a href={stegaClean(s.lienChaine)} target="_blank" rel="noopener noreferrer" class="pb-videos__lien-chaine">
+              {stegaClean(s.labelChaine) || 'Voir la chaîne YouTube'}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          )}
+        </div>
+        {s.items?.map((item: any, idx: number) => (
+          <div class:list={['pb-video-row', idx % 2 === 1 && 'pb-video-row--rev']}>
+            <div class="pb-video-row__embed" data-yt-id={stegaClean(item.youtubeId)}>
+              <img
+                src={`https://img.youtube.com/vi/${stegaClean(item.youtubeId)}/hqdefault.jpg`}
+                alt={stegaClean(item.titre) || 'Vidéo YouTube'}
+                class="pb-video-row__thumb"
+                loading="lazy"
+              />
+              <button class="pb-video-row__play" aria-label="Lire la vidéo">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="40" height="40"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+            </div>
+            <div class="pb-video-row__body">
+              {item.espece && <span class="pb-video-row__tag">{item.espece}</span>}
+              <h3 class="pb-video-row__titre">{item.titre}</h3>
+              {item.description && <p class="pb-video-row__desc">{item.description}</p>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {/* ════════════ GRILLE HUB SOUS-PAGES ════════════ */}
+  {s._type === 'sectionGrilleSubPages' && (
+    <section class={`section pb-hub ${bg(s.fond)||'section--sand'}`}>
+      <div class="container">
+        {(stegaClean(s.eyebrow) || stegaClean(s.titre)) && (
+          <div class="pb-hub__header">
+            {stegaClean(s.eyebrow) && <p class="pb-eyebrow">{s.eyebrow}</p>}
+            {stegaClean(s.titre) && <h2 class="pb-hub__h2">{s.titre}</h2>}
+          </div>
+        )}
+        <div class="pb-hub__grid">
+          {s.cartes?.map((carte: any) => (
+            <a href={stegaClean(carte.url)} class="pb-hub__card">
+              <div class="pb-hub__card-img-wrap">
+                {carte.image?.asset?.url
+                  ? <img src={carte.image.asset.url} alt={stegaClean(carte.image?.alt) || stegaClean(carte.titre) || ''} class="pb-hub__card-img" loading="lazy" />
+                  : <div class="pb-hub__card-img pb-hub__card-img--placeholder" />
+                }
+              </div>
+              <div class="pb-hub__card-body">
+                {stegaClean(carte.tag) && <span class="pb-hub__card-tag">{carte.tag}</span>}
+                <h3 class="pb-hub__card-titre">{carte.titre}</h3>
+                {stegaClean(carte.description) && <p class="pb-hub__card-desc">{carte.description}</p>}
+                <span class="pb-hub__card-arrow">→</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ════════════ TARIFS ════════════ */}
+  {s._type === 'sectionTarifs' && (() => {
+    const panel = stegaClean(s.couleurPanel) || 'bar'
+    const body  = stegaClean(s.fond) === 'sand' ? 'sand' : 'white'
+    return (
+      <div class="pb-tarifs">
+        <section class="ts-section">
+          {/* Panneau gauche */}
+          <div class={`ts-panel ts-panel--${panel}`}>
+            {stegaClean(s.eyebrow)    && <p class="ts-eyebrow">{s.eyebrow}</p>}
+            {stegaClean(s.titre)      && <h2 class="ts-title">{s.titre}</h2>}
+            <div class="ts-divider"></div>
+            {stegaClean(s.description) && <p class="ts-desc">{s.description}</p>}
+            {stegaClean(s.lienUrl)    && (
+              <a href={stegaClean(s.lienUrl)} class="ts-more">
+                {stegaClean(s.lienLabel) || 'Découvrir →'}
+              </a>
+            )}
+          </div>
+          {/* Corps droit */}
+          <div class={`ts-body ts-body--${body}`}>
+            {s.lignes?.map((ligne: any) => {
+              const statut    = stegaClean(ligne.statut) || 'normal'
+              const isFerme   = statut === 'ferme'
+              const isContact = statut === 'contact'
+              const isAccent  = statut === 'accentue'
+              return (
+                <div class={`ts-row${isFerme ? ' ts-row--closed' : ''}`}>
+                  <div class="ts-row__info">
+                    {stegaClean(ligne.lienUrl)
+                      ? <a href={stegaClean(ligne.lienUrl)} class="ts-row__name">{ligne.nom}</a>
+                      : <span class="ts-row__name">{ligne.nom}</span>}
+                    {stegaClean(ligne.format) && (
+                      <span class="ts-row__format">
+                        {isFerme
+                          ? <span class="tag-closed">Fermée en 2026</span>
+                          : ligne.format}
+                      </span>
+                    )}
+                  </div>
+                  <div class={`ts-prices${isContact ? ' ts-prices--contact' : ''}`}>
+                    {isContact
+                      ? <a href="/contact" class="ts-contact-price ts-contact-price--link">Nous contacter</a>
+                      : ligne.prix?.map((p: any) => (
+                          <div class={`ts-price${isAccent ? ' ts-price--accent' : ''}`}>
+                            <span class="ts-price__val">{p.valeur}</span>
+                            <span class="ts-price__lbl">{p.label}</span>
+                          </div>
+                        ))
+                    }
+                  </div>
+                </div>
+              )
+            })}
+            {s.matrices?.map((m: any) => {
+              const cols     = m.colonnes || []
+              const nbCols   = cols.length
+              const colPx    = 95
+              const gridCols = `1fr ${cols.map(() => `${colPx}px`).join(' ')}`
+              return (
+                <div class="ts-matrix">
+                  <div class="ts-matrix__title">
+                    {stegaClean(m.titreUrl)
+                      ? <a href={stegaClean(m.titreUrl)} class="ts-matrix__title-link">{m.titre}</a>
+                      : <span>{m.titre}</span>}
+                    {stegaClean(m.note) && <span> {m.note}</span>}
+                  </div>
+                  <div class="ts-matrix__head" style={`grid-template-columns:${gridCols}`}>
+                    <span></span>
+                    {cols.map((col: string) => <span class="ts-mh__col">{col}</span>)}
+                  </div>
+                  {m.lignes?.map((lig: any) => (
+                    <div class="ts-matrix__row" style={`grid-template-columns:${gridCols}`}>
+                      <span class="ts-mrow__label">{lig.label}</span>
+                      {lig.valeurs?.map((v: string) => <span class="ts-mrow__val">{v}</span>)}
+                    </div>
+                  ))}
+                </div>
+              )
+            })}
+          </div>
+        </section>
+      </div>
+    )
+  })()}
+
+  {/* ════════════ AVANTAGES ════════════ */}
+  {s._type === 'sectionAvantages' && (
+    <section class={`section pb-avantages ${bg(s.fond)||''}`}>
+      <div class="container">
+        {stegaClean(s.eyebrow) && <p class="pb-eyebrow">{s.eyebrow}</p>}
+        {stegaClean(s.titre) && <h2 class="pb-avantages__titre">{s.titre}</h2>}
+        <div class="pb-avantages__grid">
+          {s.items?.map((item: any) => (
+            <div class="pb-avantages__item">
+              {stegaClean(item.icone) && <div class="pb-avantages__icon">{item.icone}</div>}
+              {stegaClean(item.titre) && <h3 class="pb-avantages__h3">{item.titre}</h3>}
+              {stegaClean(item.texte) && <p class="pb-avantages__p">{item.texte}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ════════════ VOYAGES GRID ════════════ */}
+  {s._type === 'sectionVoyagesGrid' && (() => {
+    const eyebrow = stegaClean(s.eyebrow) || 'Destinations'
+    const titre   = stegaClean(s.titre) || 'Choisissez votre aventure'
+    const featuredSlug = stegaClean(s.voyageFeaturedSlug) || 'los-roques-venezuela'
+
+    const featured = voyagesForGrid.find((v: any) => stegaClean(v.slug?.current) === featuredSlug)
+    const ORDRE = [
+      'voyage-peche-argentine-rio-grande-truite-de-mer',
+      'peche-mouche-cuba-cayo-cruz',
+      'peche-mouche-cuba-cayo-santa-maria',
+      'voyage-peche-mouche-mexique',
+    ]
+    const rest = voyagesForGrid
+      .filter((v: any) => stegaClean(v.slug?.current) !== featuredSlug)
+      .sort((a: any, b: any) => {
+        const ai = ORDRE.indexOf(stegaClean(a.slug?.current) ?? '')
+        const bi = ORDRE.indexOf(stegaClean(b.slug?.current) ?? '')
+        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi)
+      })
+
+    const vRegion = (v: any): string => {
+      const raw = stegaClean(v.region) || stegaClean(v.pays) || ''
+      return raw.replace(/^Voyage\s*[·•]\s*/i, '')
+    }
+    const vImg = (v: any, w: number, h: number): string | null =>
+      v.heroImage?.asset ? urlFor(v.heroImage).width(w).height(h).fit('crop').crop('focalpoint').url() : null
+
+    return (
+      <section class="vg-section">
+        {(eyebrow || titre) && (
+          <div class="container vg-header">
+            {eyebrow && <p class="pb-eyebrow">{eyebrow}</p>}
+            {titre   && <h2 class="vg-titre">{titre}</h2>}
+          </div>
+        )}
+        <div class="vg-grid">
+          {featured && (
+            <a href={`/${stegaClean(featured.slug?.current)}`} class="vg-card vg-card--large">
+              {vImg(featured, 1400, 900) && <div class="vg-card__bg" style={`background-image:url(${vImg(featured, 1400, 900)})`}></div>}
+              <div class="vg-overlay"></div>
+              <div class="vg-body">
+                {vRegion(featured) && <span class="vg-sub">{vRegion(featured)}</span>}
+                <strong class="vg-label">{stegaClean(featured.displayTitle) || featured.title}</strong>
+                {(stegaClean(featured.tagline) || featured.especes) && <span class="vg-tagline">{stegaClean(featured.tagline) || featured.especes}</span>}
+                {stegaClean(featured.periode) && <span class="vg-saison">{stegaClean(featured.periode)}</span>}
+              </div>
+            </a>
+          )}
+          {rest.map((v: any) => {
+            const img = vImg(v, 900, 640)
+            return (
+              <a href={`/${stegaClean(v.slug?.current)}`} class="vg-card">
+                {img && <div class="vg-card__bg" style={`background-image:url(${img})`}></div>}
+                <div class="vg-overlay"></div>
+                <div class="vg-body">
+                  {vRegion(v) && <span class="vg-sub">{vRegion(v)}</span>}
+                  <strong class="vg-label">{stegaClean(v.displayTitle) || v.title}</strong>
+                  {(stegaClean(v.tagline) || v.especes) && <span class="vg-tagline">{stegaClean(v.tagline) || v.especes}</span>}
+                  {stegaClean(v.periode) && <span class="vg-saison">{stegaClean(v.periode)}</span>}
+                </div>
+              </a>
+            )
+          })}
+        </div>
+      </section>
+    )
+  })()}
+
   </>
 ))}
 
 <style is:global>
+/* ═══ TARIFS ══════════════════════════════════════════════════════════════ */
+.pb-tarifs {
+  background: #eceae5;
+  padding: 3rem 2rem;
+}
+.pb-tarifs + .pb-tarifs {
+  padding-top: 2px;
+}
+
+.ts-section {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+
+.ts-panel {
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-ocean, #0d2b3e);
+}
+.ts-panel--bar   { background: #0d2b3e; }
+.ts-panel--eau   { background: #112e42; }
+.ts-panel--stage { background: #0d2b3e; }
+
+.ts-eyebrow {
+  font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--color-ocean-light, #7EC8E3); font-weight: 600; margin-bottom: 0.75rem;
+}
+.ts-title {
+  font-family: var(--font-serif, 'Playfair Display', serif);
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  font-weight: 500; color: white; line-height: 1.15; margin: 0;
+}
+.ts-divider {
+  width: 36px; height: 2px; background: var(--color-ocean-light, #7EC8E3);
+  margin: 1.25rem 0; flex-shrink: 0;
+}
+.ts-desc {
+  font-size: 0.83rem; color: rgba(255,255,255,0.52);
+  line-height: 1.7; margin-bottom: 1.5rem; flex: 1;
+}
+.ts-more {
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--color-ocean-light, #7EC8E3); text-decoration: none;
+  font-weight: 600; transition: color 0.2s;
+}
+.ts-more:hover { color: white; }
+
+.ts-body { padding: 0; display: flex; flex-direction: column; }
+.ts-body--white { background: white; }
+.ts-body--sand  { background: var(--color-sand, #f8f7f4); }
+
+.ts-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1.5rem; padding: 1.3rem 2rem;
+  border-bottom: 1px solid rgba(0,0,0,0.065);
+  border-left: 3px solid transparent;
+  transition: background 0.18s, border-left-color 0.18s;
+}
+.ts-row:last-child { border-bottom: none; }
+.ts-row:hover {
+  background: rgba(27,94,138,0.05);
+  border-left-color: var(--color-ocean-light, #7EC8E3);
+}
+.ts-row--closed { opacity: 0.45; pointer-events: none; }
+
+.ts-row__info { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; min-width: 0; }
+.ts-row__name {
+  font-size: 0.92rem; font-weight: 500;
+  color: var(--color-ocean-main, #1B5E8A); text-decoration: none;
+  transition: color 0.2s; line-height: 1.3;
+}
+.ts-row__name:hover { color: var(--color-ocean, #0d2b3e); text-decoration: underline; }
+span.ts-row__name { color: var(--color-text, #1a1a1f); }
+.ts-row__format { font-size: 0.72rem; color: #999; font-style: italic; }
+
+.ts-prices { display: flex; gap: 0.55rem; flex-shrink: 0; }
+.ts-price {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(27,94,138,0.07); border-radius: 6px;
+  padding: 0.55rem 0.9rem; min-width: 76px; transition: background 0.18s;
+}
+.ts-row:hover .ts-price { background: rgba(27,94,138,0.11); }
+.ts-price--accent { background: rgba(27,94,138,0.12); border: 1px solid rgba(27,94,138,0.15); }
+.ts-row:hover .ts-price--accent { background: rgba(27,94,138,0.18); }
+.ts-price__val {
+  display: block; font-size: 1.05rem; font-weight: 700;
+  color: var(--color-ocean, #0d2b3e); font-variant-numeric: tabular-nums; line-height: 1.2;
+}
+.ts-price__lbl {
+  display: block; font-size: 0.56rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--color-ocean-main, #1B5E8A);
+  font-weight: 600; margin-top: 0.25rem; opacity: 0.7;
+}
+.ts-prices--contact { align-items: center; }
+.ts-contact-price { font-size: 0.78rem; color: #aaa; font-style: italic; padding: 0.5rem 1rem; text-decoration: none; }
+.ts-contact-price--link {
+  color: var(--color-ocean-main, #1B5E8A); font-style: normal; font-weight: 500;
+  border: 1.5px solid var(--color-ocean-main, #1B5E8A); border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+.ts-contact-price--link:hover { background: var(--color-ocean-main, #1B5E8A); color: white; }
+
+.tag-closed {
+  display: inline-block; font-size: 0.58rem; text-transform: uppercase;
+  letter-spacing: 0.1em; background: rgba(200,50,50,0.1); color: #b83232;
+  padding: 0.18rem 0.5rem; border-radius: 2px; font-weight: 700; font-style: normal;
+}
+
+.ts-matrix { margin: 0.5rem 2rem 1.25rem; border-radius: 6px; overflow: hidden; border: 1px solid rgba(27,94,138,0.14); }
+.ts-matrix__title {
+  padding: 0.65rem 1.25rem; background: rgba(27,94,138,0.07);
+  border-bottom: 1px solid rgba(27,94,138,0.12); font-size: 0.72rem; color: #777;
+}
+.ts-matrix__title-link {
+  color: var(--color-ocean-main, #1B5E8A); text-decoration: none;
+  font-weight: 600; transition: color 0.2s;
+}
+.ts-matrix__title-link:hover { color: var(--color-ocean, #0d2b3e); }
+.ts-matrix__head {
+  display: grid; padding: 0.5rem 1.25rem;
+  background: var(--color-ocean, #0d2b3e);
+  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em;
+  font-weight: 600; color: rgba(255,255,255,0.55);
+}
+.ts-mh__col { text-align: center; }
+.ts-matrix__row {
+  display: grid; padding: 0.7rem 1.25rem;
+  border-bottom: 1px solid rgba(27,94,138,0.08);
+  align-items: center; font-size: 0.85rem; background: white; transition: background 0.15s;
+}
+.ts-body--sand .ts-matrix__row { background: var(--color-sand, #f8f7f4); }
+.ts-matrix__row:last-child { border-bottom: none; }
+.ts-matrix__row:hover { background: rgba(27,94,138,0.05); }
+.ts-mrow__label { color: var(--color-text, #1a1a1f); }
+.ts-mrow__val {
+  font-weight: 700; color: var(--color-ocean, #0d2b3e);
+  font-size: 0.9rem; text-align: center; font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 960px) {
+  .pb-tarifs { padding: 2rem 1.25rem; }
+  .ts-section { grid-template-columns: 220px 1fr; }
+  .ts-row { padding: 1.1rem 1.5rem; }
+  .ts-matrix { margin: 0.5rem 1.5rem 1.25rem; }
+}
+@media (max-width: 700px) {
+  .pb-tarifs { padding: 1.5rem 0.75rem; }
+  .ts-section { grid-template-columns: 1fr; }
+  .ts-panel {
+    padding: 2rem 1.5rem;
+    flex-direction: row; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: flex-end;
+  }
+  .ts-eyebrow { width: 100%; margin-bottom: 0; }
+  .ts-title   { font-size: 1.4rem; flex: 1; }
+  .ts-divider, .ts-desc { display: none; }
+  .ts-more    { margin-left: auto; white-space: nowrap; }
+  .ts-price   { min-width: 64px; padding: 0.45rem 0.6rem; }
+  .ts-price__val { font-size: 0.9rem; }
+  .ts-price__lbl { font-size: 0.5rem; }
+  .ts-row     { padding: 1rem; gap: 0.75rem; }
+  .ts-matrix  { margin: 0.5rem 1rem 1rem; }
+}
+@media (max-width: 420px) {
+  .ts-price   { min-width: 58px; }
+  .ts-prices .ts-price:nth-child(3) { display: none; }
+}
+/* ═══════════════════════════════════════════════════════════════════════ */
+
 /* ── HERO ── */
 .pb-hero {
   position: relative;
@@ -1018,6 +1555,17 @@ const revuePresse: any[] = hasRevuePresse
   min-height: 100vh;
   transform: translate(-50%, -50%);
   border: none;
+}
+.pb-hero__yt-poster {
+  position: absolute;
+  inset: 0;
+  background: #07181f;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+  z-index: 1;
+  will-change: opacity;
+  transition: opacity 0.8s ease;
 }
 .pb-hero__video {
   position: absolute;
@@ -2426,85 +2974,199 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
 }
-.pb-press-card {
-  display: flex; flex-direction: column;
-  border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 6px; overflow: hidden;
+
+/* ── Carte presse v2 ── */
+.pb-press-card2 {
   background: white;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transition: box-shadow 0.25s, transform 0.25s;
 }
-.pb-press-card:hover {
-  box-shadow: 0 8px 32px rgba(27,94,138,0.10);
-  transform: translateY(-3px);
+.pb-press-card2:hover {
+  box-shadow: 0 10px 36px rgba(27,94,138,0.13);
+  transform: translateY(-4px);
 }
-.pb-press-card__cover-wrap {
-  position: relative; height: 260px;
-  background: #0d2b3e; overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
+
+/* ── Zone image / carrousel ── */
+.pb-press-card2__media {
+  position: relative;
+  aspect-ratio: 3/4;
+  background: #f0eff0;
+  flex-shrink: 0;
 }
-.pb-press-card__cover {
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: center top;
-  transition: transform 0.4s ease;
+
+.pb-press-flip {
+  position: absolute;
+  inset: 0;
 }
-.pb-press-card:hover .pb-press-card__cover { transform: scale(1.03); }
-.pb-press-card__cover-placeholder {
-  color: rgba(255,255,255,0.4);
-  font-size: 0.8rem; text-align: center; padding: 1rem;
+
+.pb-press-flip__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
 }
-.pb-press-card__badge {
-  position: absolute; top: 0.65rem; left: 0.65rem;
-  font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
-  font-weight: 700; color: white;
-  background: rgba(27,94,138,0.85);
-  padding: 0.2rem 0.6rem; border-radius: 2px;
+.pb-press-flip__img.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.pb-press-flip__img.is-leaving {
+  opacity: 1;
+  animation: pb-flip-out 0.48s ease-in forwards;
+  transform-origin: right center;
+}
+.pb-press-flip__img.is-entering {
+  animation: pb-flip-in 0.48s ease-out forwards;
+  transform-origin: left center;
+}
+
+@keyframes pb-flip-out {
+  from { transform: perspective(700px) rotateY(0deg);   opacity: 1; }
+  to   { transform: perspective(700px) rotateY(-90deg); opacity: 0; }
+}
+@keyframes pb-flip-in {
+  from { transform: perspective(700px) rotateY(90deg);  opacity: 0; }
+  to   { transform: perspective(700px) rotateY(0deg);   opacity: 1; }
+}
+
+.pb-press-flip__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 1.5rem;
+}
+
+/* ── Pastilles de navigation ── */
+.pb-press-flip__dots {
+  position: absolute;
+  bottom: 0.55rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.32rem;
+  z-index: 2;
+  pointer-events: none;
+}
+.pb-press-flip__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.16);
+  transition: background 0.25s, transform 0.25s;
+}
+.pb-press-flip__dot.is-active {
+  background: var(--color-ocean-main);
+  transform: scale(1.3);
+}
+
+/* ── Badge type ── */
+.pb-press-card2__badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: white;
+  background: rgba(27,94,138,0.82);
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
   backdrop-filter: blur(4px);
+  z-index: 2;
 }
-.pb-press-card__body {
-  flex: 1; display: flex; flex-direction: column;
-  padding: 1.25rem 1.25rem 1.4rem;
+
+/* ── Corps de la carte ── */
+.pb-press-card2__body {
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem 1.4rem 1.4rem;
+  flex: 1;
+  gap: 0.55rem;
 }
-.pb-press-card__meta {
-  display: flex; align-items: baseline;
-  gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.7rem;
+.pb-press-card2__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem;
+  line-height: 1.4;
 }
-.pb-press-card__magazine {
-  font-size: 0.7rem; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--color-ocean-main, #1B5E8A);
+.pb-press-card2__magazine {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
 }
-.pb-press-card__numero {
-  font-size: 0.72rem; color: var(--color-ocean, #1B5E8A); font-weight: 500;
+.pb-press-card2__numero {
+  font-size: 0.67rem;
+  color: var(--color-ocean);
+  font-weight: 500;
 }
-.pb-press-card__date {
-  font-size: 0.7rem; color: rgba(0,0,0,0.38); margin-left: auto;
+.pb-press-card2__date {
+  font-size: 0.65rem;
+  color: rgba(0,0,0,0.36);
+  margin-left: auto;
 }
-.pb-press-card__titre {
+.pb-press-card2__titre {
   font-family: var(--font-serif);
-  font-size: 0.95rem; font-weight: 600;
-  color: var(--color-ocean, #1B5E8A);
-  line-height: 1.4; margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.35;
+  margin: 0;
 }
-.pb-press-card__desc {
-  font-size: 0.82rem; line-height: 1.7;
-  color: var(--color-text-muted, #555);
-  margin: 0; flex: 1;
+.pb-press-card2__desc {
+  font-size: 0.83rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  margin: 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.pb-press-card__link {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  margin-top: 1rem; font-size: 0.72rem; font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--color-ocean-main, #1B5E8A);
+.pb-press-card2__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-ocean-main);
   text-decoration: none;
-  border-bottom: 1.5px solid rgba(27,94,138,0.25);
-  padding-bottom: 0.1rem; align-self: flex-start;
-  transition: color 0.2s, border-color 0.2s;
+  transition: color 0.2s;
+  align-self: flex-start;
 }
-.pb-press-card__link:hover { color: var(--color-ocean, #1B5E8A); border-color: var(--color-ocean, #1B5E8A); }
-@media (max-width: 1100px) { .pb-press-grid { grid-template-columns: repeat(2, 1fr); } }
+.pb-press-card2__link:hover { color: var(--color-ocean); }
+
+@media (max-width: 900px) {
+  .pb-press-grid { gap: 1.5rem; }
+}
 @media (max-width: 640px) {
-  .pb-press-grid { grid-template-columns: 1fr; }
-  .pb-press-card__cover-wrap { height: 220px; }
+  .pb-press-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .pb-press-card2__media { aspect-ratio: 4/3; }
 }
 
 /* ── GRILLE PARTENAIRES ── */
@@ -2544,9 +3206,520 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
 .pb-part-card__link:hover { color: var(--color-ocean); border-color: var(--color-ocean); }
 @media (max-width: 1024px) { .pb-part-grid { grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 640px) { .pb-part-grid { grid-template-columns: 1fr; gap: 1.25rem; } }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   SECTIONS MATÉRIEL
+══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Intro + Specs ── */
+.pb-mat-intro__grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 3rem;
+  align-items: start;
+}
+.pb-mat-intro__h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--color-ocean-main);
+  margin: 0 0 1.5rem;
+}
+.pb-mat-specs {
+  background: var(--color-sand);
+  border-left: 3px solid var(--color-ocean-main);
+  border-radius: 6px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  position: sticky;
+  top: calc(var(--header-height, 70px) + 1.5rem);
+}
+.pb-mat-specs__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.pb-mat-specs__row:last-child { border-bottom: none; padding-bottom: 0; }
+.pb-mat-specs__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+}
+.pb-mat-specs__val {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+@media (max-width: 900px) {
+  .pb-mat-intro__grid { grid-template-columns: 1fr; }
+  .pb-mat-specs { position: static; }
+}
+
+/* ── Équipement / Mouches cartes ── */
+.pb-equip__header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.pb-equip__h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  color: var(--color-ocean-main);
+  margin: 0;
+}
+.pb-equip__lien-boutique {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+.pb-equip__lien-boutique:hover { color: var(--color-ocean); }
+.pb-equip__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.pb-equip__card {
+  background: white;
+  border-radius: 8px;
+  border-top: 3px solid var(--color-ocean-main);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.pb-equip__card-titre {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--color-ocean-main);
+  margin: 0;
+}
+.pb-equip__card-desc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--color-text);
+  margin: 0;
+  flex: 1;
+}
+.pb-equip__card-lien {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+.pb-equip__card-lien:hover { color: var(--color-ocean); }
+@media (max-width: 900px) { .pb-equip__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .pb-equip__grid { grid-template-columns: 1fr; } }
+
+/* ── Navigation sous-pages matériel ── */
+.pb-mat-nav { padding: 2rem 0; }
+.pb-mat-nav__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.pb-mat-nav__btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.25rem;
+  background: white;
+  border: 1px solid rgba(27,94,138,0.25);
+  border-radius: 4px;
+  color: var(--color-ocean-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.pb-mat-nav__btn:hover {
+  background: var(--color-ocean-main);
+  border-color: var(--color-ocean-main);
+  color: white;
+}
+
+/* ── Vidéos YouTube alternées ── */
+.pb-videos__header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.pb-videos__h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  color: var(--color-ocean-main);
+  margin: 0;
+}
+.pb-videos__lien-chaine {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-bottom: 1px solid currentColor;
+}
+.pb-videos__lien-chaine:hover { color: var(--color-ocean); }
+.pb-video-row {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.pb-video-row:last-child { border-bottom: none; }
+.pb-video-row--rev { direction: rtl; }
+.pb-video-row--rev > * { direction: ltr; }
+.pb-video-row__embed {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #07181f;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.pb-video-row__thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s;
+}
+.pb-video-row__embed:hover .pb-video-row__thumb { opacity: 0.7; }
+.pb-video-row__play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.3);
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pb-video-row__play:hover { background: rgba(27,94,138,0.6); }
+.pb-video-row__iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
+}
+.pb-video-row__tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: white;
+  background: var(--color-ocean-main);
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  margin-bottom: 0.75rem;
+}
+.pb-video-row__titre {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--color-ocean-main);
+  margin: 0 0 0.75rem;
+}
+.pb-video-row__desc {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .pb-video-row { grid-template-columns: 1fr; direction: ltr; }
+  .pb-video-row--rev { direction: ltr; }
+}
+
+/* ── Grille hub sous-pages ── */
+.pb-hub__header { margin-bottom: 2.5rem; }
+.pb-hub__h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--color-ocean-main);
+  margin: 0.5rem 0 0;
+}
+.pb-hub__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.pb-hub__card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.pb-hub__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+}
+.pb-hub__card-img-wrap {
+  height: 200px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-ocean);
+}
+.pb-hub__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.pb-hub__card:hover .pb-hub__card-img { transform: scale(1.05); }
+.pb-hub__card-img--placeholder { width: 100%; height: 100%; background: var(--color-ocean); }
+.pb-hub__card-body {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.pb-hub__card-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.pb-hub__card-titre {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--color-text);
+  margin: 0 0 0.65rem;
+  line-height: 1.3;
+}
+.pb-hub__card-desc {
+  font-size: 0.875rem;
+  color: #555;
+  line-height: 1.65;
+  flex: 1;
+  margin: 0 0 1rem;
+}
+.pb-hub__card-arrow {
+  font-size: 1.1rem;
+  color: var(--color-ocean-main);
+  font-weight: 700;
+  transition: transform 0.2s;
+  align-self: flex-start;
+}
+.pb-hub__card:hover .pb-hub__card-arrow { transform: translateX(4px); }
+@media (max-width: 900px) { .pb-hub__grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px) { .pb-hub__grid { grid-template-columns: 1fr; } }
+
+/* ═══ AVANTAGES ════════════════════════════════════════════════════════════ */
+.pb-avantages { background: var(--color-sand); }
+.pb-avantages__titre {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.pb-avantages__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+.pb-avantages__item {
+  padding: 1.75rem;
+  background: white;
+  border-radius: 8px;
+  border-top: 3px solid var(--color-ocean-main);
+}
+.section--white .pb-avantages__item { background: var(--color-sand); }
+.pb-avantages__icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.pb-avantages__h3 {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--color-ocean);
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+.pb-avantages__p {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+@media (max-width: 900px) { .pb-avantages__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .pb-avantages__grid { grid-template-columns: 1fr; } }
+
+/* ═══ VOYAGES GRID ═════════════════════════════════════════════════════════ */
+.vg-section { background: #fff; }
+.vg-header { text-align: center; padding: 4rem 2rem 2.5rem; }
+.vg-titre {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 400;
+}
+.vg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 480px 320px;
+  gap: 4px;
+}
+.vg-card--large { grid-column: 1 / 3; grid-row: 1; }
+.vg-card:nth-child(2) { grid-column: 3; grid-row: 1; }
+.vg-card:nth-child(3) { grid-column: 1; grid-row: 2; }
+.vg-card:nth-child(4) { grid-column: 2; grid-row: 2; }
+.vg-card:nth-child(5) { grid-column: 3; grid-row: 2; }
+.vg-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+  background: var(--color-ocean);
+}
+.vg-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 0.6s ease;
+}
+.vg-card:hover .vg-card__bg { transform: scale(1.05); }
+.vg-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(7,24,31,0.22);
+  transition: background 0.35s ease;
+}
+.vg-card:hover::after { background: rgba(7,24,31,0.08); }
+.vg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(7,24,31,0.82) 0%, rgba(7,24,31,0.1) 55%, transparent 100%);
+  z-index: 1;
+}
+.vg-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 1.5rem 1.75rem 1.75rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.vg-sub {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ocean-light);
+  font-weight: 500;
+}
+.vg-label {
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  font-weight: 500;
+  line-height: 1.15;
+  color: white;
+}
+.vg-card--large .vg-label { font-size: 2.2rem; }
+.vg-tagline {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.4;
+  margin-top: 0.1rem;
+}
+.vg-card--large .vg-tagline { font-size: 0.9rem; }
+.vg-saison {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ocean-light);
+  border: 1px solid rgba(126,200,227,.35);
+  border-radius: 2px;
+  padding: 0.15rem 0.55rem;
+  align-self: flex-start;
+}
+@media (max-width: 900px) {
+  .vg-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 300px 260px 260px;
+  }
+  .vg-card--large { grid-column: 1 / 3; grid-row: 1; }
+  .vg-card:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .vg-card:nth-child(3) { grid-column: 2; grid-row: 2; }
+  .vg-card:nth-child(4) { grid-column: 1; grid-row: 3; }
+  .vg-card:nth-child(5) { grid-column: 2; grid-row: 3; }
+}
+@media (max-width: 560px) {
+  .vg-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 260px);
+  }
+  .vg-card--large,
+  .vg-card:nth-child(2),
+  .vg-card:nth-child(3),
+  .vg-card:nth-child(4),
+  .vg-card:nth-child(5) { grid-column: 1; grid-row: auto; }
+  .vg-card--large .vg-label { font-size: 1.6rem; }
+}
 </style>
 
 <script>
+// ── VIDÉOS YOUTUBE — click pour lire ─────────────────────────────────────────
+document.querySelectorAll('.pb-video-row__embed').forEach(embed => {
+  embed.addEventListener('click', () => {
+    const id = embed.dataset.ytId
+    if (!id) return
+    const iframe = document.createElement('iframe')
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture'
+    iframe.allowFullscreen = true
+    iframe.className = 'pb-video-row__iframe'
+    embed.innerHTML = ''
+    embed.appendChild(iframe)
+  })
+})
+
 // ── CARROUSEL 3 IMAGES ────────────────────────────────────────────────────────
 document.querySelectorAll('[data-carr]').forEach(wrap => {
   const track   = wrap.querySelector('.carr3-track')
@@ -2607,6 +3780,45 @@ document.querySelectorAll('[data-carr]').forEach(wrap => {
 
   startAutoplay()
 })
+
+// ── REVUE DE PRESSE — carrousel "effet page de livre" ────────────────────────
+;(function() {
+  document.querySelectorAll('[data-press-flip]').forEach(flipEl => {
+    const imgs = Array.from(flipEl.querySelectorAll('.pb-press-flip__img'))
+    if (imgs.length <= 1) return
+
+    const card    = flipEl.closest('.pb-press-card2')
+    const dots    = card ? Array.from(card.querySelectorAll('.pb-press-flip__dot')) : []
+    let current   = 0
+    let animating = false
+
+    function flipTo(next) {
+      if (animating || next === current) return
+      animating = true
+      const currImg = imgs[current]
+      const nextImg = imgs[next]
+      currImg.classList.remove('is-active')
+      currImg.classList.add('is-leaving')
+      nextImg.classList.add('is-entering')
+      setTimeout(() => {
+        currImg.classList.remove('is-leaving')
+        nextImg.classList.remove('is-entering')
+        nextImg.classList.add('is-active')
+        dots[current]?.classList.remove('is-active')
+        dots[next]?.classList.add('is-active')
+        current = next
+        animating = false
+      }, 520)
+    }
+
+    // Pause on hover, resume on leave
+    let timer = setInterval(() => flipTo((current + 1) % imgs.length), 3500)
+    if (card) {
+      card.addEventListener('mouseenter', () => { clearInterval(timer); timer = null })
+      card.addEventListener('mouseleave', () => { if (!timer) timer = setInterval(() => flipTo((current + 1) % imgs.length), 3500) })
+    }
+  })
+})()
 
 // ── FRISE CHRONOLOGIQUE — mini-carrousels + accordéon ─────────────────────────
 ;(function() {

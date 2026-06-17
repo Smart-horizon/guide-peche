@@ -9,6 +9,7 @@ export default {
     { name: 'reseaux', title: '📱 Réseaux sociaux' },
     { name: 'footer', title: '🔽 Footer' },
     { name: 'seo', title: '🔍 SEO global' },
+    { name: 'acces', title: '🔒 Accès protégés' },
   ],
   fields: [
     // ── Contact ──
@@ -82,6 +83,14 @@ export default {
       type: 'text',
       rows: 5,
       group: 'footer',
+    },
+    // ── Accès protégés ──
+    {
+      name: 'motDePasseDispo',
+      title: 'Mot de passe — Calendrier des disponibilités',
+      type: 'string',
+      group: 'acces',
+      description: 'Partagez ce mot de passe avec vos clients pour qu\'ils accèdent au calendrier. Laissez vide pour désactiver la protection.',
     },
     // ── SEO global ──
     {

@@ -54,10 +54,21 @@ export default {
     },
     {
       name: 'cover',
-      title: 'Image de couverture',
+      title: 'Image principale (couverture)',
       type: 'image',
       options: { hotspot: false },
-      description: 'Couverture du magazine ou visuel de l\'article',
+      description: 'Couverture du magazine ou visuel principal de l\'article',
+    },
+    {
+      name: 'photos',
+      title: 'Photos du carrousel (optionnel)',
+      type: 'array',
+      of: [{
+        type: 'image',
+        options: { hotspot: false },
+        fields: [{ name: 'alt', type: 'string', title: 'Description (texte alternatif)' }],
+      }],
+      description: '📸 Ajoutez plusieurs photos pour le carrousel automatique (effet page de livre) — si vide, seule l\'image principale est affichée',
     },
     {
       name: 'fichierPdf',

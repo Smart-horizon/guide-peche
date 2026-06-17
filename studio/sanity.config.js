@@ -5,6 +5,7 @@ import {frFRLocale} from '@sanity/locale-fr-fr'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {presentationTool} from 'sanity/presentation'
 import {schemaTypes} from './schemaTypes'
+import {ManuelTool} from './plugins/ManuelTool'
 
 // ── Structure personnalisée du menu latéral ──
 const customStructure = (S, context) =>
@@ -86,7 +87,22 @@ const customStructure = (S, context) =>
       S.listItem()
         .title('✈️ Voyages')
         .child(
-          S.documentList().title('Voyages').filter('_type == "voyage"')
+          S.list()
+            .title('Voyages')
+            .items([
+              S.listItem()
+                .title('✈️ Page hub voyages')
+                .child(
+                  S.document()
+                    .schemaType('page')
+                    .documentId('page-voyages-peche-mouche')
+                    .title('Voyages de pêche à la mouche — hub')
+                ),
+              S.divider(),
+              S.listItem()
+                .title('📋 Tous les voyages')
+                .child(S.documentList().title('Voyages').filter('_type == "voyage"')),
+            ])
         ),
 
       S.divider(),
@@ -153,11 +169,20 @@ const customStructure = (S, context) =>
                 .title('💰 Tarifs')
                 .child(S.document().schemaType('page').documentId('page-tarifs').title('Tarifs')),
               S.listItem()
-                .title('📅 Disponibilités')
+                .title('📅 Disponibilités (page)')
                 .child(S.document().schemaType('page').documentId('page-disponibilites-guidages').title('Disponibilités')),
               S.listItem()
+                .title('📅 Calendrier des disponibilités')
+                .child(
+                  S.documentList()
+                    .title('📅 Calendrier des disponibilités')
+                    .schemaType('disponibilite')
+                    .filter('_type == "disponibilite"')
+                    .defaultOrdering([{ field: 'dateDebut', direction: 'asc' }])
+                ),
+              S.listItem()
                 .title('🎁 Bon cadeau')
-                .child(S.document().schemaType('page').documentId('page-bon-cadeau-peche-mouche').title('Bon cadeau')),
+                .child(S.document().schemaType('page').documentId('page-bon-cadeau').title('Bon cadeau')),
 
               S.divider(),
 
@@ -326,6 +351,15 @@ export default defineConfig({
       },
     }),
     visionTool(),
+  ],
+
+  tools: (prev) => [
+    ...prev,
+    {
+      name: 'manuel',
+      title: '📖 Manuel',
+      component: ManuelTool,
+    },
   ],
 
   schema: {

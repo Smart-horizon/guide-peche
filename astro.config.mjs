@@ -36,10 +36,6 @@ export default defineConfig({
       dataset: 'production',
       useCdn: false,
       apiVersion: '2024-01-01',
-      studioUrl: 'https://jbvidal.sanity.studio',
-      stega: {
-        studioUrl: 'https://jbvidal.sanity.studio',
-      },
     }),
     sitemap(),
   ],

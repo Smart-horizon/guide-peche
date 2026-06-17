@@ -20,10 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 22
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
@@ -36,8 +36,8 @@ jobs:
             "src/pages/[slug].astro"
             "src/pages/contact.astro"
             "src/pages/temoignages.astro"
-            "src/pages/tarifs.astro"
             "src/pages/disponibilites-guidages.astro"
+            "src/pages/disponibilites-login.astro"
             "src/pages/bon-cadeau.astro"
             "src/pages/videos.astro"
             "src/pages/voyages-peche-mouche.astro"
@@ -60,6 +60,18 @@ jobs:
         run: npm run build
         env:
           SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
+
+      - name: Patch wrangler.json (run_worker_first)
+        run: |
+          node -e "
+            const fs = require('fs');
+            const p = 'dist/server/wrangler.json';
+            const cfg = JSON.parse(fs.readFileSync(p, 'utf8'));
+            cfg.assets = cfg.assets || {};
+            cfg.assets.run_worker_first = true;
+            fs.writeFileSync(p, JSON.stringify(cfg));
+            console.log('  ok run_worker_first = true');
+          "
 
       - name: Deploy vers Cloudflare Workers
         run: npx wrangler deploy --config dist/server/wrangler.json

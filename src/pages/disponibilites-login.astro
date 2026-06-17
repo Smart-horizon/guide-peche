@@ -1,0 +1,136 @@
+---
+export const prerender = false
+
+import { client } from '../lib/sanity.js'
+
+let erreur = ''
+let redirect = Astro.url.searchParams.get('r') || '/disponibilites-guidages'
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData()
+  const saisi = form.get('password')?.toString().trim() || ''
+  redirect = form.get('redirect')?.toString() || redirect
+
+  const params = await client.fetch(`*[_id == "siteParametres"][0]{ motDePasseDispo }`)
+  const mdp = params?.motDePasseDispo?.trim()
+
+  if (!mdp) {
+    // Accès libre si pas de mot de passe configuré
+    Astro.cookies.set('dispo_auth', '1', { maxAge: 60 * 60 * 24 * 30, path: '/', httpOnly: true, sameSite: 'lax' })
+    return Astro.redirect(redirect)
+  }
+
+  if (saisi === mdp) {
+    Astro.cookies.set('dispo_auth', '1', { maxAge: 60 * 60 * 24 * 30, path: '/', httpOnly: true, sameSite: 'lax' })
+    return Astro.redirect(redirect)
+  }
+
+  erreur = 'Mot de passe incorrect.'
+}
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accès calendrier — Jean-Baptiste Vidal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0d2b3e;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #0d2b3e;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    .field { margin-bottom: 1.25rem; text-align: left; }
+    label { display: block; font-size: 0.85rem; font-weight: 500; color: #444; margin-bottom: 0.4rem; }
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #d0d5dd;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="password"]:focus { border-color: #1B5E8A; }
+    .erreur {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      border-radius: 6px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.85rem;
+      background: #1B5E8A;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #0d2b3e; }
+    .retour {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+    }
+    .retour a { color: #1B5E8A; text-decoration: none; }
+    .retour a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">📅</div>
+    <h1>Calendrier des disponibilités</h1>
+    <p class="subtitle">Accès réservé aux clients — merci d'entrer le mot de passe communiqué par Jean-Baptiste.</p>
+
+    {erreur && <div class="erreur">{erreur}</div>}
+
+    <form method="POST">
+      <input type="hidden" name="redirect" value={redirect} />
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" autofocus required />
+      </div>
+      <button type="submit">Accéder au calendrier</button>
+    </form>
+
+    <p class="retour"><a href="/">← Retour au site</a></p>
+  </div>
+</body>
+</html>

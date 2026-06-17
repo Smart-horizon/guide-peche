@@ -40,6 +40,22 @@ export default {
       options: { hotspot: true },
     },
     {
+      name: 'galerie',
+      title: 'Galerie photos (optionnel)',
+      type: 'array',
+      group: 'contenu',
+      of: [{
+        type: 'image',
+        options: { hotspot: true },
+        fields: [
+          { name: 'alt',     type: 'string', title: 'Description (texte alternatif)' },
+          { name: 'caption', type: 'string', title: 'Légende (affichée sous la photo)' },
+        ],
+      }],
+      description: '📸 Glissez-déposez plusieurs photos — elles s\'afficheront en galerie sous l\'article',
+      options: { layout: 'grid' },
+    },
+    {
       name: 'extrait',
       title: 'Extrait / Chapô',
       type: 'text',

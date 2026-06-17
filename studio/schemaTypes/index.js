@@ -1,4 +1,5 @@
 import page from './page'
+import disponibilite from './disponibilite'
 import navigation from './navigation'
 import partenaire from './partenaire'
 import revuePresse from './revuePresse'
@@ -19,10 +20,14 @@ import {
   sectionFriseChronologique, sectionListe, sectionLienBlog,
   sectionPrestationsHP, sectionGuideHP, sectionMaterielHP, sectionTemoignagesHP, sectionBonCadeauHP,
   sectionCards3, sectionBanniereCard, sectionPartenaires, sectionRevuePresse,
+  sectionMaterielIntro, sectionEquipement, sectionMaterielNav,
+  sectionVideos, sectionGrilleSubPages, sectionTarifs,
+  sectionAvantages, sectionVoyagesGrid,
 } from './sections.js'
 
 export const schemaTypes = [
   // Documents
+  disponibilite,
   navigation,
   accueil,
   partenaire,
@@ -68,4 +73,12 @@ export const schemaTypes = [
   sectionBanniereCard,
   sectionPartenaires,
   sectionRevuePresse,
+  sectionMaterielIntro,
+  sectionEquipement,
+  sectionMaterielNav,
+  sectionVideos,
+  sectionGrilleSubPages,
+  sectionTarifs,
+  sectionAvantages,
+  sectionVoyagesGrid,
 ]

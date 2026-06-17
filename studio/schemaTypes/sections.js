@@ -2129,6 +2129,421 @@ export const sectionRevuePresse = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION MATÉRIEL — INTRO AVEC SIDEBAR SPECS
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionMaterielIntro = {
+  name: 'sectionMaterielIntro',
+  title: '🎣 Matériel — Intro + fiche technique',
+  type: 'object',
+  fields: [
+    { name: 'titre', title: 'Titre H2', type: 'string' },
+    richText('texte', 'Texte (gauche)'),
+    {
+      name: 'specs',
+      title: 'Fiche technique (carte à droite)',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'label', title: 'Label', type: 'string' },
+          { name: 'valeur', title: 'Valeur', type: 'string' },
+        ],
+        preview: {
+          select: { title: 'label', subtitle: 'valeur' },
+        },
+      }],
+    },
+    fondField('white'),
+  ],
+  preview: {
+    select: { titre: 'titre' },
+    prepare: ({ titre }) => ({ title: `🎣 Intro — ${titre || ''}` }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION MATÉRIEL — CARTES ÉQUIPEMENT / MOUCHES
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionEquipement = {
+  name: 'sectionEquipement',
+  title: '🪝 Équipement / Mouches — cartes 3 colonnes',
+  type: 'object',
+  fields: [
+    { name: 'titre', title: 'Titre de section', type: 'string' },
+    {
+      name: 'lienBoutique',
+      title: 'Lien boutique (optionnel, affiché dans le titre)',
+      type: 'string',
+      description: 'Ex : https://www.ardentflyfishing.com/fr/c/1094-brochet',
+    },
+    {
+      name: 'labelBoutique',
+      title: 'Label du lien boutique',
+      type: 'string',
+      initialValue: 'Retrouvez ces mouches sur Ardent',
+    },
+    {
+      name: 'items',
+      title: 'Cartes',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'titre', title: 'Titre de la carte', type: 'string' },
+          { name: 'description', title: 'Texte', type: 'text', rows: 5 },
+          { name: 'lien', title: 'Lien externe (bouton)', type: 'string' },
+          { name: 'labelLien', title: 'Label du bouton', type: 'string', initialValue: 'Acheter sur Ardent' },
+        ],
+        preview: { select: { title: 'titre', subtitle: 'description' } },
+      }],
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { titre: 'titre', items: 'items' },
+    prepare: ({ titre, items }) => ({ title: `🪝 ${titre || 'Équipement'}`, subtitle: `${items?.length || 0} carte(s)` }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION MATÉRIEL — NAVIGATION SOUS-PAGES
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionMaterielNav = {
+  name: 'sectionMaterielNav',
+  title: '🗺️ Navigation matériel (liens sous-pages)',
+  type: 'object',
+  fields: [
+    {
+      name: 'liens',
+      title: 'Liens',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'label', title: 'Texte du bouton', type: 'string' },
+          { name: 'url', title: 'URL', type: 'string' },
+        ],
+        preview: { select: { title: 'label', subtitle: 'url' } },
+      }],
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { liens: 'liens' },
+    prepare: ({ liens }) => ({ title: `🗺️ Navigation — ${liens?.length || 0} lien(s)` }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION MATÉRIEL — VIDÉOS YOUTUBE ALTERNÉES
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionVideos = {
+  name: 'sectionVideos',
+  title: '🎬 Vidéos YouTube (layout alterné)',
+  type: 'object',
+  fields: [
+    { name: 'titre', title: 'Titre de section', type: 'string' },
+    {
+      name: 'lienChaine',
+      title: 'Lien vers la chaîne YouTube',
+      type: 'string',
+    },
+    {
+      name: 'labelChaine',
+      title: 'Label du lien chaîne',
+      type: 'string',
+      initialValue: 'Toutes les vidéos Enjoy Fishing',
+    },
+    {
+      name: 'items',
+      title: 'Vidéos',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'titre', title: 'Titre de la vidéo', type: 'string' },
+          { name: 'youtubeId', title: 'ID YouTube (ex: 9x2h5ezHV1Q)', type: 'string' },
+          { name: 'espece', title: 'Espèce / Tag (ex: Alose, Bar, Réservoir)', type: 'string' },
+          { name: 'description', title: 'Description', type: 'text', rows: 4 },
+        ],
+        preview: {
+          select: { title: 'titre', subtitle: 'youtubeId' },
+          prepare: ({ title, subtitle }) => ({ title: `▶ ${title || ''}`, subtitle }),
+        },
+      }],
+    },
+    fondField('white'),
+  ],
+  preview: {
+    select: { titre: 'titre', items: 'items' },
+    prepare: ({ titre, items }) => ({ title: `🎬 ${titre || 'Vidéos'}`, subtitle: `${items?.length || 0} vidéo(s)` }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION MATÉRIEL — GRILLE HUB SOUS-PAGES AVEC IMAGES
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionGrilleSubPages = {
+  name: 'sectionGrilleSubPages',
+  title: '🗂️ Grille de sous-pages (hub)',
+  type: 'object',
+  fields: [
+    { name: 'titre', title: 'Titre', type: 'string' },
+    { name: 'eyebrow', title: 'Libellé au-dessus', type: 'string' },
+    {
+      name: 'cartes',
+      title: 'Cartes',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'titre', title: 'Titre', type: 'string' },
+          { name: 'tag', title: 'Tag / Catégorie (ex: Saumon · Alose)', type: 'string' },
+          { name: 'description', title: 'Description courte', type: 'text', rows: 2 },
+          { name: 'url', title: 'URL interne', type: 'string' },
+          {
+            name: 'image', title: 'Image', type: 'image',
+            options: { hotspot: true },
+            fields: [{ name: 'alt', title: 'Description', type: 'string' }],
+          },
+        ],
+        preview: {
+          select: { title: 'titre', media: 'image' },
+        },
+      }],
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { titre: 'titre', cartes: 'cartes' },
+    prepare: ({ titre, cartes }) => ({ title: `🗂️ Grille hub — ${titre || ''}`, subtitle: `${cartes?.length || 0} carte(s)` }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — TABLEAU DE TARIFS
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionTarifs = {
+  name: 'sectionTarifs',
+  title: '💰 Tableau de tarifs',
+  type: 'object',
+  fields: [
+    // ── Panneau gauche ────────────────────────────────────────────────────────
+    { name: 'eyebrow', title: 'Libellé au-dessus du titre', type: 'string',
+      description: 'Ex : "Estuaires · Bretagne-Sud"' },
+    { name: 'titre', title: 'Titre du panneau (H2)', type: 'string',
+      validation: Rule => Rule.required().error('Le titre est obligatoire') },
+    { name: 'description', title: 'Description courte', type: 'text', rows: 2 },
+    { name: 'lienUrl', title: 'URL "Découvrir..."', type: 'string' },
+    { name: 'lienLabel', title: 'Libellé du lien', type: 'string',
+      initialValue: 'Découvrir les prestations →' },
+    {
+      name: 'couleurPanel',
+      title: 'Couleur du panneau gauche',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🌊 Bar à la mouche — bleu #0d2b3e', value: 'bar' },
+          { title: '🏞️ Eau douce — bleu #112e42',      value: 'eau' },
+          { title: '🎿 Stages / Technique — bleu nuit', value: 'stage' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'bar',
+    },
+    // ── Corps (droite) ────────────────────────────────────────────────────────
+    fondField('white'),
+    // ── Lignes (prestations) ──────────────────────────────────────────────────
+    {
+      name: 'lignes',
+      title: 'Prestations',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'nom', title: 'Nom de la prestation', type: 'string',
+            validation: Rule => Rule.required() },
+          { name: 'lienUrl', title: 'URL (optionnel — rend le nom cliquable)', type: 'string' },
+          { name: 'format', title: 'Format / durée', type: 'string',
+            description: 'Ex : "1 journée" · "1 session · Carolina Skiff"' },
+          {
+            name: 'statut',
+            title: 'Statut',
+            type: 'string',
+            options: {
+              list: [
+                { title: 'Normal', value: 'normal' },
+                { title: '★ Accentué (pills bleutées)', value: 'accentue' },
+                { title: '⛔ Fermé (grisé + badge)', value: 'ferme' },
+                { title: '📞 Sur devis — bouton "Nous contacter"', value: 'contact' },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'normal',
+          },
+          {
+            name: 'prix',
+            title: 'Prix par nombre de personnes',
+            type: 'array',
+            description: 'Chaque pill = 1 tarif. Ex : "320 €" pour "1 pers.", "225 €" pour "2 pers."',
+            of: [{
+              type: 'object',
+              fields: [
+                { name: 'valeur', title: 'Prix', type: 'string',
+                  description: 'Ex : "320 €"' },
+                { name: 'label', title: 'Libellé sous le prix', type: 'string',
+                  description: 'Ex : "1 pers." · "2 pers."' },
+              ],
+              preview: { select: { title: 'valeur', subtitle: 'label' } },
+            }],
+          },
+        ],
+        preview: {
+          select: { title: 'nom', subtitle: 'format' },
+          prepare: ({ title, subtitle }) => ({
+            title: title || '(sans nom)',
+            subtitle: subtitle || '',
+          }),
+        },
+      }],
+    },
+    // ── Matrices (tableaux croisés : plusieurs formats × plusieurs pers.) ──────
+    {
+      name: 'matrices',
+      title: 'Matrices de prix (tableaux croisés — optionnel)',
+      type: 'array',
+      description: 'Pour les cas avec plusieurs formats ET plusieurs participants — ex : Alose (coup du soir / journée × 1/2/3 pers.), Père-enfant (½j / 1j × 1 ou 2 enfants).',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'titre', title: 'Titre du tableau', type: 'string' },
+          { name: 'titreUrl', title: 'URL du titre (lien optionnel)', type: 'string' },
+          { name: 'note', title: 'Sous-titre / note', type: 'string',
+            description: 'Ex : "tarif selon le format de sortie"' },
+          {
+            name: 'colonnes',
+            title: 'Colonnes (en-têtes des formats)',
+            type: 'array',
+            description: 'Ex : "Coup du soir" · "1 j. Aulne" · "1 j. Blavet"',
+            of: [{ type: 'string' }],
+          },
+          {
+            name: 'lignes',
+            title: 'Lignes (par nombre de participants)',
+            type: 'array',
+            of: [{
+              type: 'object',
+              fields: [
+                { name: 'label', title: 'Libellé de la ligne', type: 'string',
+                  description: 'Ex : "1 personne" · "Père et 1 enfant"' },
+                {
+                  name: 'valeurs',
+                  title: 'Prix (dans l\'ordre des colonnes)',
+                  type: 'array',
+                  description: 'Autant de valeurs que de colonnes — ex : "200 €" · "320 €" · "350 €"',
+                  of: [{ type: 'string' }],
+                },
+              ],
+              preview: { select: { title: 'label' } },
+            }],
+          },
+        ],
+        preview: {
+          select: { title: 'titre' },
+          prepare: ({ title }) => ({ title: `📊 ${title || 'Matrice sans titre'}` }),
+        },
+      }],
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', lignes: 'lignes' },
+    prepare: ({ titre, lignes }) => ({
+      title: `💰 Tarifs — ${titre || '(sans titre)'}`,
+      subtitle: `${lignes?.length || 0} prestation(s)`,
+    }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — AVANTAGES / POURQUOI (cartes icônes 4 colonnes)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionAvantages = {
+  name: 'sectionAvantages',
+  title: '✅ Avantages / Pourquoi (icônes)',
+  type: 'object',
+  fields: [
+    { name: 'eyebrow', title: 'Texte au-dessus du titre', type: 'string' },
+    { name: 'titre',   title: 'Titre de section', type: 'string' },
+    {
+      name: 'items',
+      title: 'Cartes avantages',
+      type: 'array',
+      of: [{
+        type: 'object',
+        name: 'avantageItem',
+        title: 'Avantage',
+        fields: [
+          { name: 'icone', title: 'Icône (emoji)', type: 'string', description: 'Ex : 🎯 🤝 🎣 🌎' },
+          { name: 'titre', title: 'Titre',         type: 'string', validation: Rule => Rule.required() },
+          { name: 'texte', title: 'Description',   type: 'text', rows: 3 },
+        ],
+        preview: {
+          select: { titre: 'titre', icone: 'icone' },
+          prepare: ({ titre, icone }) => ({ title: `${icone || '•'} ${titre || ''}` }),
+        },
+      }],
+    },
+    fondField('white'),
+  ],
+  preview: {
+    select: { titre: 'titre', items: 'items' },
+    prepare: ({ titre, items }) => ({
+      title: `✅ Avantages — ${titre || ''}`,
+      subtitle: `${items?.length || 0} carte(s)`,
+    }),
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — GRILLE DES VOYAGES (dynamique, auto-Sanity)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionVoyagesGrid = {
+  name: 'sectionVoyagesGrid',
+  title: '✈️ Grille des voyages (automatique)',
+  type: 'object',
+  fields: [
+    {
+      name: 'eyebrow',
+      title: 'Libellé au-dessus',
+      type: 'string',
+      description: 'Ex : "Destinations"',
+      initialValue: 'Destinations',
+    },
+    {
+      name: 'titre',
+      title: 'Titre de section',
+      type: 'string',
+      description: 'Ex : "Choisissez votre aventure"',
+      initialValue: 'Choisissez votre aventure',
+    },
+    {
+      name: 'voyageFeaturedSlug',
+      title: 'Voyage mis en avant (grande carte)',
+      type: 'string',
+      description: 'Slug du voyage affiché en grand — ex : "los-roques-venezuela"',
+      initialValue: 'los-roques-venezuela',
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', eyebrow: 'eyebrow' },
+    prepare: ({ titre, eyebrow }) => ({
+      title: `✈️ Grille voyages — ${titre || eyebrow || ''}`,
+      subtitle: 'Affiche automatiquement tous les voyages Sanity',
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -2163,4 +2578,12 @@ export const allSectionTypes = [
   sectionBonCadeauHP,
   sectionPartenaires,
   sectionRevuePresse,
+  sectionMaterielIntro,
+  sectionEquipement,
+  sectionMaterielNav,
+  sectionVideos,
+  sectionGrilleSubPages,
+  sectionTarifs,
+  sectionAvantages,
+  sectionVoyagesGrid,
 ]

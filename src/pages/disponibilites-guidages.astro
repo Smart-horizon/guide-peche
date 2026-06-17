@@ -1,0 +1,145 @@
+---
+export const prerender = false
+
+import { client } from '../lib/sanity.js'
+import CalendrierDispo from '../components/CalendrierDispo.tsx'
+
+// Récupère toutes les disponibilités triées par date
+const disponibilites = await client.fetch(`
+  *[_type == "disponibilite"] | order(dateDebut asc) {
+    _id, titre, statut, dateDebut, dateFin, note, confidentiel
+  }
+`)
+
+// Paramètres du site pour le header/footer minimal
+const params = await client.fetch(`*[_id == "siteParametres"][0]{ telephone }`)
+const telephone = params?.telephone || ''
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendrier des disponibilités — Jean-Baptiste Vidal</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f8f7f4;
+      color: #1a1a1f;
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    .header {
+      background: #0d2b3e;
+      color: #fff;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .header-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .header-logo span { display: block; font-size: 0.7rem; font-family: 'DM Sans', sans-serif; font-weight: 400; opacity: 0.75; letter-spacing: 0.06em; text-transform: uppercase; }
+    .header-actions { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+    .header-tel { font-size: 0.85rem; color: #7EC8E3; text-decoration: none; }
+    .logout-btn {
+      font-size: 0.8rem;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+    /* ── Contenu ─────────────────────────────────────────────────── */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .page-header { margin-bottom: 2rem; }
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: #0d2b3e;
+      margin-bottom: 0.4rem;
+    }
+    .page-header p { color: #555; font-size: 0.95rem; }
+
+    /* ── Carte calendrier ─────────────────────────────────────────── */
+    .cal-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    /* ── Info contact ──────────────────────────────────────────────── */
+    .contact-box {
+      margin-top: 1.5rem;
+      padding: 1.25rem 1.5rem;
+      background: #eef5fb;
+      border-left: 4px solid #1B5E8A;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      color: #1B5E8A;
+    }
+    .contact-box a { color: #1B5E8A; font-weight: 600; }
+
+    @media (max-width: 600px) {
+      .page-header h1 { font-size: 1.5rem; }
+      .cal-card { padding: 1rem; }
+      .header-tel { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="/" class="header-logo">
+      Jean-Baptiste Vidal
+      <span>Guide de pêche à la mouche · Bretagne</span>
+    </a>
+    <div class="header-actions">
+      {telephone && <a href={`tel:${telephone.replace(/\s/g,'')}`} class="header-tel">{telephone}</a>}
+      <a href="/api/dispo-logout" class="logout-btn">Se déconnecter</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>📅 Calendrier des disponibilités</h1>
+      <p>Retrouvez ici les disponibilités de Jean-Baptiste pour la saison en cours.</p>
+    </div>
+
+    <div class="cal-card">
+      <CalendrierDispo client:only="react" disponibilites={disponibilites} />
+    </div>
+
+    {telephone && (
+      <div class="contact-box">
+        Pour réserver ou poser une option, contactez Jean-Baptiste directement au <a href={`tel:${telephone.replace(/\s/g,'')}`}>{telephone}</a>.
+      </div>
+    )}
+  </main>
+
+</body>
+</html>

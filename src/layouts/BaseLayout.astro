@@ -1,8 +1,7 @@
 ---
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
-import { VisualEditing } from '@sanity/astro/visual-editing'
-import { stegaClient } from '../lib/sanity.js'
+import { client as stegaClient } from '../lib/sanity.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -85,9 +84,6 @@ const footerProps = {
       <slot />
     </main>
     <Footer {...footerProps} />
-    <!-- Visual Editing — s'active UNIQUEMENT dans l'iframe Studio ou avec ?sanity-preview-perspective -->
-    <!-- Les visiteurs normaux ne voient jamais les encadrés bleus -->
-    <VisualEditing enabled={true} />
   </body>
 </html>
 
