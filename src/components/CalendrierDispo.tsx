@@ -35,21 +35,34 @@ function addOneDay(dateStr: string): string {
 export default function CalendrierDispo({ disponibilites }: Props) {
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null)
 
-  const events = disponibilites.map((d) => {
+  const events = disponibilites.flatMap((d) => {
     const fin = d.dateFin && d.dateFin !== d.dateDebut ? addOneDay(d.dateFin) : addOneDay(d.dateDebut)
     if (d.statut === 'favorable') {
-      return {
-        id: d._id,
-        start: d.dateDebut,
-        end: fin,
-        display: 'background',
-        backgroundColor: 'rgba(27,94,138,0.12)',
-        classNames: ['fc-bg-favorable'],
-        extendedProps: { statut: 'favorable' },
-      }
+      return [
+        {
+          id: `${d._id}-bg`,
+          start: d.dateDebut,
+          end: fin,
+          display: 'background',
+          backgroundColor: 'rgba(27,94,138,0.25)',
+          classNames: ['fc-bg-favorable'],
+          extendedProps: { statut: 'favorable' },
+        },
+        {
+          id: `${d._id}-label`,
+          title: d.titre,
+          start: d.dateDebut,
+          end: fin,
+          backgroundColor: 'transparent',
+          borderColor: 'rgba(27,94,138,0.5)',
+          textColor: 'rgba(13,43,62,0.9)',
+          classNames: ['fc-event-favorable-label'],
+          extendedProps: { note: d.note, statut: 'favorable' },
+        },
+      ]
     }
     const couleur = STATUS_COLORS[d.statut] || STATUS_COLORS.disponible
-    return {
+    return [{
       id: d._id,
       title: d.confidentiel ? (STATUS_COLORS[d.statut]?.label || d.statut) : d.titre,
       start: d.dateDebut,
@@ -57,7 +70,7 @@ export default function CalendrierDispo({ disponibilites }: Props) {
       backgroundColor: couleur.bg,
       borderColor: couleur.border,
       extendedProps: { note: d.note, statut: d.statut, confidentiel: d.confidentiel, original: d },
-    }
+    }]
   })
 
   return (
@@ -130,7 +143,9 @@ export default function CalendrierDispo({ disponibilites }: Props) {
         .fc .fc-today-button:disabled { opacity: 0.5; }
         .fc-event-dispo { cursor: default; border-radius: 4px; font-size: 0.78rem; font-weight: 500; padding: 1px 4px; }
         .fc-bg-favorable { position: relative; }
-        .fc-bg-favorable::after { content: ''; position: absolute; top: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 16px 16px 0; border-color: transparent rgba(27,94,138,0.55) transparent transparent; }
+        .fc-bg-favorable::after { content: ''; position: absolute; top: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 16px 16px 0; border-color: transparent rgba(27,94,138,0.7) transparent transparent; }
+        .fc-event-favorable-label { border-style: dashed !important; font-style: italic !important; font-size: 0.72rem !important; cursor: default !important; }
+        .fc-event-favorable-label .fc-event-main { color: rgba(13,43,62,0.9) !important; }
         .fc-daygrid-event-dot { display: none; }
         .fc th { background: #f0eff0; font-weight: 600; font-size: 0.8rem; color: #444; }
         .fc-day-today { background: rgba(27, 94, 138, 0.06) !important; }
