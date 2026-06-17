@@ -44,7 +44,7 @@ export default function CalendrierDispo({ disponibilites }: Props) {
           start: d.dateDebut,
           end: fin,
           display: 'background',
-          backgroundColor: 'rgba(27,94,138,0.25)',
+          backgroundColor: 'rgba(27,94,138,0.42)',
           classNames: ['fc-bg-favorable'],
           extendedProps: { statut: 'favorable' },
         },
