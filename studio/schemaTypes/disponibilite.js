@@ -21,6 +21,7 @@ export default {
           { title: '🔴 Réservé / Guidage confirmé',   value: 'reserve'      },
           { title: '🟡 Option / En discussion',        value: 'option'       },
           { title: '⛔ Indisponible (vacances / arrêt)', value: 'indisponible' },
+          { title: '🌊 Favorable au bar',              value: 'favorable'    },
         ],
         layout: 'radio',
       },
@@ -58,7 +59,7 @@ export default {
   preview: {
     select: { titre: 'titre', dateDebut: 'dateDebut', dateFin: 'dateFin', statut: 'statut' },
     prepare: ({ titre, dateDebut, dateFin, statut }) => {
-      const icons = { disponible: '🟢', reserve: '🔴', option: '🟡', indisponible: '⛔' }
+      const icons = { disponible: '🟢', reserve: '🔴', option: '🟡', indisponible: '⛔', favorable: '🌊' }
       const dates = dateFin && dateFin !== dateDebut
         ? `${dateDebut} → ${dateFin}`
         : (dateDebut || '')
