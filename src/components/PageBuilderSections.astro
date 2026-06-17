@@ -284,12 +284,14 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         {s.cards?.map((c: any, i: number) => {
           const isLast   = i === s.cards.length - 1
           const isOdd    = s.cards.length % 2 === 1
-          const cardImgUrl = c.image?.asset
-            ? urlFor(c.image).width(800).height(600).fit('crop').crop('focalpoint').url()
-            : null
+          const cardImgUrl = c.image?.asset ? urlFor(c.image).width(1400).quality(85).url() : null
+          const hs = c.image?.hotspot
+          const cardImgPos = (hs?.x != null && hs?.y != null)
+            ? `${(hs.x * 100).toFixed(1)}% ${(hs.y * 100).toFixed(1)}%`
+            : (stegaClean(c.positionPhoto) || 'center center')
           return (
             <a href={c.lien||'#'} class:list={['wf-card', isOdd&&isLast&&'wf-card--wide']}>
-              <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl});background-position:${stegaClean(c.positionPhoto)||'center center'}` : ''}></div>
+              <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl});background-position:${cardImgPos}` : ''}></div>
               <div class="wf-overlay"></div>
               <div class="wf-body">
                 {c.sousTitre && <span class="wf-sub">{c.sousTitre}</span>}
@@ -313,12 +315,14 @@ const voyagesForGrid: any[] = hasVoyagesGrid
       )}
       <div class="pb-cards2__grid" style={`grid-template-columns:repeat(${stegaClean(s.colonnes)||4},1fr)`}>
         {s.cards?.map((c: any) => {
-          const cardImgUrl = c.image?.asset
-            ? urlFor(c.image).width(800).height(600).fit('crop').crop('focalpoint').url()
-            : null
+          const cardImgUrl = c.image?.asset ? urlFor(c.image).width(1400).quality(85).url() : null
+          const hs2 = c.image?.hotspot
+          const cardImgPos2 = (hs2?.x != null && hs2?.y != null)
+            ? `${(hs2.x * 100).toFixed(1)}% ${(hs2.y * 100).toFixed(1)}%`
+            : (stegaClean(c.positionPhoto) || 'center center')
           return (
             <a href={c.lien||'#'} class="wf-card">
-              <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl});background-position:${stegaClean(c.positionPhoto)||'center center'}` : ''}></div>
+              <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl});background-position:${cardImgPos2}` : ''}></div>
               <div class="wf-overlay"></div>
               <div class="wf-body">
                 {c.sousTitre && <span class="wf-sub">{c.sousTitre}</span>}
@@ -350,12 +354,14 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         )}
         <div class="wf3-grid">
           {cartes.map((c: any, i: number) => {
-            const img = c.image?.asset
-              ? urlFor(c.image).width(i === 0 ? 1000 : 600).height(i === 0 ? 680 : 420).fit('crop').crop('focalpoint').url()
-              : null
+            const img = c.image?.asset ? urlFor(c.image).width(1400).quality(85).url() : null
+            const hsWf3 = c.image?.hotspot
+            const posWf3 = (hsWf3?.x != null && hsWf3?.y != null)
+              ? `${(hsWf3.x * 100).toFixed(1)}% ${(hsWf3.y * 100).toFixed(1)}%`
+              : 'center center'
             return (
               <a href={stegaClean(c.lien) || '#'} class={`wf3-card${i === 0 ? ' wf3-card--large' : ''}`}>
-                {img && <div class="wf3-card__bg" style={`background-image:url(${img})`}></div>}
+                {img && <div class="wf3-card__bg" style={`background-image:url(${img});background-position:${posWf3}`}></div>}
                 <div class="wf3-overlay"></div>
                 <div class="wf3-body">
                   {c.sousTitre && <span class="wf3-sub">{stegaClean(c.sousTitre)}</span>}
