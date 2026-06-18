@@ -67,7 +67,9 @@ const bgClass: Record<string,string> = {
 const bg = (fond: string) => bgClass[stegaClean(fond) ?? ''] ?? ''
 
 // ── YouTube ID ────────────────────────────────────────────────────────────────
-const ytId = (url: string) => url?.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)?.[1] ?? null
+const ytId = (url: string) =>
+  url?.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)?.[1]
+  ?? (url?.match(/^[a-zA-Z0-9_-]{11}$/) ? url : null)
 
 // ── Helpers hero ──────────────────────────────────────────────────────────────
 const heroHeight = (h: string) => {
@@ -1123,18 +1125,17 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             </a>
           )}
         </div>
-        {s.items?.map((item: any, idx: number) => (
+        {s.items?.filter((item: any) => ytId(stegaClean(item.youtubeId) || stegaClean(item.youtubeUrl) || '')).map((item: any, idx: number) => (
           <div class:list={['pb-video-row', idx % 2 === 1 && 'pb-video-row--rev']}>
-            <div class="pb-video-row__embed" data-yt-id={stegaClean(item.youtubeId)}>
-              <img
-                src={`https://img.youtube.com/vi/${stegaClean(item.youtubeId)}/hqdefault.jpg`}
-                alt={stegaClean(item.titre) || 'Vidéo YouTube'}
-                class="pb-video-row__thumb"
-                loading="lazy"
-              />
-              <button class="pb-video-row__play" aria-label="Lire la vidéo">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="40" height="40"><path d="M8 5v14l11-7z"/></svg>
-              </button>
+            <div class="pb-video-row__player">
+              <div class="video-wrap">
+                <iframe
+                  src={`https://www.youtube.com/embed/${ytId(stegaClean(item.youtubeId) || stegaClean(item.youtubeUrl) || '')}?rel=0`}
+                  title={stegaClean(item.titre) || 'Vidéo YouTube'}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
             </div>
             <div class="pb-video-row__body">
               {item.espece && <span class="pb-video-row__tag">{item.espece}</span>}
@@ -3711,21 +3712,6 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
 </style>
 
 <script>
-// ── VIDÉOS YOUTUBE — click pour lire ─────────────────────────────────────────
-document.querySelectorAll('.pb-video-row__embed').forEach(embed => {
-  embed.addEventListener('click', () => {
-    const id = embed.dataset.ytId
-    if (!id) return
-    const iframe = document.createElement('iframe')
-    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`
-    iframe.allow = 'autoplay; encrypted-media; picture-in-picture'
-    iframe.allowFullscreen = true
-    iframe.className = 'pb-video-row__iframe'
-    embed.innerHTML = ''
-    embed.appendChild(iframe)
-  })
-})
-
 // ── CARROUSEL 3 IMAGES ────────────────────────────────────────────────────────
 document.querySelectorAll('[data-carr]').forEach(wrap => {
   const track   = wrap.querySelector('.carr3-track')

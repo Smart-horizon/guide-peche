@@ -12,8 +12,9 @@ const disponibilites = await client.fetch(`
 `)
 
 // Paramètres du site pour le header/footer minimal
-const params = await client.fetch(`*[_id == "siteParametres"][0]{ telephone }`)
+const params = await client.fetch(`*[_id == "siteParametres"][0]{ telephone, texteContactDispo }`)
 const telephone = params?.telephone || ''
+const texteContactDispo = params?.texteContactDispo || ''
 ---
 
 <!DOCTYPE html>
@@ -134,9 +135,9 @@ const telephone = params?.telephone || ''
       <CalendrierDispo client:only="react" disponibilites={disponibilites} />
     </div>
 
-    {telephone && (
+    {texteContactDispo && (
       <div class="contact-box">
-        Pour réserver ou poser une option, contactez Jean-Baptiste directement au <a href={`tel:${telephone.replace(/\s/g,'')}`}>{telephone}</a>.
+        {texteContactDispo}
       </div>
     )}
   </main>

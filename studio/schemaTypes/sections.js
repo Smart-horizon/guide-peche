@@ -2263,7 +2263,7 @@ export const sectionVideos = {
         type: 'object',
         fields: [
           { name: 'titre', title: 'Titre de la vidéo', type: 'string' },
-          { name: 'youtubeId', title: 'ID YouTube (ex: 9x2h5ezHV1Q)', type: 'string' },
+          { name: 'youtubeId', title: 'Lien YouTube', type: 'string', description: 'Collez l\'URL complète de la vidéo. Ex : https://www.youtube.com/watch?v=d1SjTIJaQFs — l\'ID sera extrait automatiquement.' },
           { name: 'espece', title: 'Espèce / Tag (ex: Alose, Bar, Réservoir)', type: 'string' },
           { name: 'description', title: 'Description', type: 'text', rows: 4 },
         ],

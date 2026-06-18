@@ -92,6 +92,14 @@ export default {
       group: 'acces',
       description: 'Partagez ce mot de passe avec vos clients pour qu\'ils accèdent au calendrier. Laissez vide pour désactiver la protection.',
     },
+    {
+      name: 'texteContactDispo',
+      title: 'Message de contact — bas du calendrier',
+      type: 'text',
+      rows: 2,
+      group: 'acces',
+      description: 'Texte affiché sous le calendrier des disponibilités. Ex : "Pour réserver ou poser une option, contactez Jean-Baptiste au 06 87 30 34 56." Laissez vide pour masquer ce message.',
+    },
     // ── SEO global ──
     {
       name: 'siteTitle',
