@@ -106,7 +106,14 @@ function blocks(content: any[]): string {
 }
 ---
 
-<BaseLayout title={`${pageTitle} — Jean-Baptiste Vidal`} description={pageDesc} image={ogImg}>
+<BaseLayout
+  title={`${pageTitle} — Jean-Baptiste Vidal`}
+  description={pageDesc}
+  image={ogImg}
+  lang="fr"
+  hreflangFr={`/${slug}`}
+  hreflangEn={`/en/${slug}`}
+>
 
   {/* ── PAGE BUILDER ── */}
   <PageBuilderSections sections={doc.pagebuilder} pageTitle={pageTitle} />

@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import PageBuilderSections from '../../components/PageBuilderSections.astro'
+import { client } from '../../lib/sanity.js'
+import imageUrlBuilder from '@sanity/image-url'
+
+const builder = imageUrlBuilder(client)
+const urlFor = (source: any) => {
+  const b = builder.image(source)
+  const hs = source?.hotspot
+  return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b
+}
+
+// ── Routes statiques — mêmes slugs que la version FR ──────────────────────────
+export async function getStaticPaths() {
+  const docs = await client.fetch(`
+    *[_type in ["page", "prestation", "voyage"] && defined(slug.current)]{ "slug": slug.current }
+  `)
+  return docs
+    .filter((d: any) => d.slug && d.slug !== '/')
+    .map((d: any) => ({ params: { slug: d.slug } }))
+}
+
+const { slug } = Astro.params
+
+// ── Fetch — même requête que [slug].astro + pagebuilderEn + SEO EN ────────────
+const doc = await client.fetch(`
+  *[slug.current == $slug && _type in ["page", "prestation", "voyage"]][0]{
+    _id, _type, title, categorie, pays, especes, periode, prix, contenu, description,
+    seoTitle, seoDescription, seoTitleEn, seoDescriptionEn, ogImage, image,
+    pagebuilder[]{
+      ...,
+      image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      btnFichier{ asset->{ _id, url } },
+      photos[]{ _type, hotspot, crop, asset->{ _id, url }, alt },
+      images[]{ _type, hotspot, crop, asset->{ _id, url }, alt, legende },
+      cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      'options': options[]{
+        ...,
+        image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      },
+      'galerie': galerie[]{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      items[]{..., photos[]{ _type, hotspot, crop, asset->{_id, url}, alt, caption}},
+      cartes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url } } },
+      specs[], liens[], sejours[], stats[], lignesInfo[],
+    },
+    pagebuilderEn[]{
+      ...,
+      image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      btnFichier{ asset->{ _id, url } },
+      photos[]{ _type, hotspot, crop, asset->{ _id, url }, alt },
+      images[]{ _type, hotspot, crop, asset->{ _id, url }, alt, legende },
+      cards[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      etapes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } } },
+      'options': options[]{
+        ...,
+        image{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      },
+      'galerie': galerie[]{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
+      items[]{..., photos[]{ _type, hotspot, crop, asset->{_id, url}, alt, caption}},
+      cartes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url } } },
+      specs[], liens[], sejours[], stats[], lignesInfo[],
+    },
+  }
+`, { slug })
+
+if (!doc) return Astro.redirect('/404')
+
+// ── Contenu : EN si disponible, fallback FR ───────────────────────────────────
+const sections = (doc.pagebuilderEn?.length ? doc.pagebuilderEn : doc.pagebuilder) ?? null
+
+// ── SEO EN — fallback sur valeurs FR ─────────────────────────────────────────
+const heroSection = sections?.find((s: any) => s._type === 'sectionHero')
+const pageTitle   = doc.seoTitleEn    || doc.seoTitle    || heroSection?.titre || doc.title
+const pageDesc    = doc.seoDescriptionEn || doc.seoDescription || ''
+const ogImg       = doc.ogImage
+  ? urlFor(doc.ogImage).width(1200).height(630).fit('crop').crop('focalpoint').url()
+  : heroSection?.image
+    ? urlFor(heroSection.image).width(1200).height(630).fit('crop').crop('focalpoint').url()
+    : undefined
+---
+
+<BaseLayout
+  title={`${pageTitle} — Jean-Baptiste Vidal`}
+  description={pageDesc}
+  image={ogImg}
+  lang="en"
+  hreflangFr={`/${slug}`}
+  hreflangEn={`/en/${slug}`}
+>
+  <PageBuilderSections sections={sections} pageTitle={pageTitle} />
+
+  {/* Fallback générique pour pages sans pagebuilder */}
+  {!sections && (
+    <>
+      <section class="pb-hero" style="min-height:52vh">
+        <div class="pb-hero__bg" style={doc.image
+          ? `background:linear-gradient(to top,rgba(7,24,31,.9),rgba(13,43,62,.4)),url(${urlFor(doc.image).width(1600).url()});background-size:cover;background-position:center`
+          : 'background:var(--color-ocean)'}></div>
+        <div class="pb-hero__content container">
+          {doc.pays && <p class="pb-eyebrow">{doc.pays}</p>}
+          <h1 class="pb-hero__h1">{doc.title}</h1>
+        </div>
+      </section>
+      <section class="section section--dark pb-cta">
+        <div class="container pb-cta__inner">
+          <div>
+            <h2 style="color:white">Book your session</h2>
+            <p class="pb-cta__sub">Availability on request — reply within 24h.</p>
+          </div>
+          <div class="pb-cta__btns">
+            <a href="/contact" class="btn-prim">Contact Jean-Baptiste</a>
+            <a href="tel:0687303456" class="btn-ghost-light">+33 6 87 30 34 56</a>
+          </div>
+        </div>
+      </section>
+    </>
+  )}
+</BaseLayout>

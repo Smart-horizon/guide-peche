@@ -2,6 +2,12 @@
 import { stegaClient } from '../lib/sanity.js'
 import { stegaClean } from '@sanity/client/stega'
 
+interface Props {
+  lang?: 'fr' | 'en'
+  hasLangSwitch?: boolean
+}
+const { lang = 'fr', hasLangSwitch = false } = Astro.props
+
 // ── Fallback hardcodé — utilisé si le document "navigation" n'existe pas encore dans Sanity
 const NAV_FALLBACK = [
   { label: 'Accueil', href: '/' },
@@ -99,6 +105,11 @@ try {
 }
 
 const { pathname } = Astro.url
+
+// Language switch URLs
+const isEn  = lang === 'en'
+const frPath = isEn ? pathname.replace(/^\/en/, '') || '/' : pathname
+const enPath = isEn ? pathname : '/en' + pathname
 ---
 
 <header class="site-header" id="site-header">
@@ -152,6 +163,14 @@ const { pathname } = Astro.url
         ))}
       </ul>
     </nav>
+
+    {hasLangSwitch && (
+      <div class="lang-switch" role="navigation" aria-label="Language">
+        <a href={frPath} class:list={['lang-btn', !isEn && 'lang-btn--active']} aria-label="Version française" hreflang="fr">FR</a>
+        <span class="lang-sep" aria-hidden="true"></span>
+        <a href={enPath} class:list={['lang-btn', isEn && 'lang-btn--active']} aria-label="English version" hreflang="en">EN</a>
+      </div>
+    )}
   </div>
 </header>
 
@@ -320,6 +339,44 @@ const { pathname } = Astro.url
     color: white;
   }
 
+  /* ── Language switch ── */
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 5px;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-left: 0.75rem;
+  }
+  .lang-btn {
+    display: block;
+    padding: 0.28rem 0.6rem;
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+    line-height: 1.4;
+    font-family: var(--font-sans);
+  }
+  .lang-btn--active {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+  }
+  .lang-btn:hover:not(.lang-btn--active) {
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.08);
+  }
+  .lang-sep {
+    width: 1px;
+    height: 12px;
+    background: rgba(255,255,255,0.22);
+    display: block;
+    flex-shrink: 0;
+  }
+
   /* Mobile toggle */
   .nav-toggle {
     display: none;
@@ -368,6 +425,10 @@ const { pathname } = Astro.url
 
     .nav-toggle { display: flex; }
     .logo-img { height: 72px; }
+
+    /* Sur mobile, le switch s'intercale entre le titre centré et le hamburger */
+    .lang-switch { margin-left: 0; order: 3; }
+    .nav-toggle  { order: 4; }
 
     /* Titre centré : prend tout l'espace libre entre logo et hamburger */
     .header-title {

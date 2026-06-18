@@ -6,8 +6,9 @@ export default {
   type: 'document',
   icon: () => '🎣',
   groups: [
-    { name: 'page',  title: '🏗️ Page Builder' },
-    { name: 'seo',   title: '🔍 SEO' },
+    { name: 'page',        title: '🏗️ Page Builder' },
+    { name: 'traductions', title: '🇬🇧 Version anglaise' },
+    { name: 'seo',         title: '🔍 SEO' },
   ],
   fields: [
 
@@ -50,6 +51,33 @@ export default {
       description: '✋ Glissez-déposez pour réorganiser · Cliquez "+" pour ajouter une section · "…" pour dupliquer',
       type: 'array',
       group: 'page',
+      of: allSectionTypes.map(s => ({ type: s.name })),
+    },
+
+    // ── Version anglaise ─────────────────────────────────────────────────────
+    {
+      name: 'seoTitleEn',
+      title: 'Titre SEO — English',
+      type: 'string',
+      group: 'traductions',
+      description: 'Balise <title> pour /en/... — laisser vide pour réutiliser le titre FR',
+      validation: Rule => Rule.max(65).warning('Idéalement moins de 65 caractères'),
+    },
+    {
+      name: 'seoDescriptionEn',
+      title: 'Description SEO — English',
+      type: 'text',
+      rows: 3,
+      group: 'traductions',
+      description: 'Meta description anglaise — laisser vide pour réutiliser la FR',
+      validation: Rule => Rule.max(160).warning('Idéalement moins de 160 caractères'),
+    },
+    {
+      name: 'pagebuilderEn',
+      title: '🇬🇧 Sections de la page — English',
+      description: 'Version anglaise du page builder. Même structure qu\'en FR. Si vide, la version française s\'affiche en fallback.',
+      type: 'array',
+      group: 'traductions',
       of: allSectionTypes.map(s => ({ type: s.name })),
     },
 

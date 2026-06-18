@@ -19,6 +19,9 @@ interface Props {
   title?: string
   description?: string
   image?: string   // URL directe — prioritaire sur ogImage Sanity
+  lang?: 'fr' | 'en'
+  hreflangFr?: string  // chemin relatif vers la version FR (ex: /stage-spey-cast)
+  hreflangEn?: string  // chemin relatif vers la version EN (ex: /en/stage-spey-cast)
 }
 
 const {
@@ -27,7 +30,13 @@ const {
   image       = params?.ogImage
     ? urlFor(params.ogImage).width(1200).height(630).fit('crop').crop('focalpoint').url()
     : '/og-default.jpg',
+  lang        = 'fr',
+  hreflangFr,
+  hreflangEn,
 } = Astro.props
+
+const siteBase = Astro.site?.toString().replace(/\/$/, '') || ''
+const hasLangSwitch = !!(hreflangFr && hreflangEn)
 
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url
 
@@ -49,7 +58,7 @@ const footerProps = {
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -65,6 +74,9 @@ const footerProps = {
     <meta property="og:type" content="website" />
 
     <link rel="canonical" href={canonicalURL} />
+    {hreflangFr && <link rel="alternate" hreflang="fr" href={`${siteBase}${hreflangFr}`} />}
+    {hreflangEn && <link rel="alternate" hreflang="en" href={`${siteBase}${hreflangEn}`} />}
+    {hasLangSwitch && <link rel="alternate" hreflang="x-default" href={`${siteBase}${hreflangFr}`} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Google Fonts -->
@@ -79,7 +91,7 @@ const footerProps = {
   </head>
 
   <body>
-    <Header />
+    <Header lang={lang} hasLangSwitch={hasLangSwitch} />
     <main>
       <slot />
     </main>
