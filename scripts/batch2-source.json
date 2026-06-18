@@ -1,0 +1,2494 @@
+[
+  {
+    "id": "prestation-master-class-peche-en-reservoir",
+    "slug": "master-class-peche-en-reservoir",
+    "title": "Master Class Reservoir",
+    "seoTitle": "Master Class \"Techniques de pêche en réservoir\" organisée par Jean-Baptiste Vidal",
+    "seoDescription": "Jean-Baptiste Vidal Moniteur-Guide de pêche à la mouche vous propose des stages très techniques apppelés Master Class accompagné d'expert dans leur discipline. Des stages sur mesure de perfectionnement pour ses stagiaires. Une occasion de progresser à ne pas manquer.",
+    "sections": [
+      {
+        "_key": "hero399",
+        "_type": "sectionHero",
+        "eyebrow": "Masterclass · Pêche en réservoir",
+        "titre": "Master Class — Techniques de pêche en réservoir",
+        "sousTitre": "avec Grégoire Juglaret, Champion du Monde 2025, et Jean-Baptiste Vidal",
+        "btnReserverTexte": "Réserver ma place",
+        "btnMaterielLabel": "Matériel réservoir"
+      },
+      {
+        "_key": "intro400",
+        "_type": "sectionIntro",
+        "eyebrow": "Masterclass · Pêche en réservoir",
+        "titre": "Techniques de pêche en réservoir avec Grégoire Juglaret",
+        "texte": "En début 2026, je propose une Master Class à mes stagiaires afin de leur faire bénéficier d'un stage très pointu sur les techniques de pêche en réservoir. | L'idée est de mutualiser les compétences d'un expert et les miennes pour offrir un contenu très technique sur la pêche en eaux closes. Un stage à ne rater sous aucun prétexte car l'acquisition de compétences est juste hors norme et permet de progresser bien plus rapidement. | Venez profiter des compétences de professionnels lors d'un stage de 2 journées au bord du magnifique réservoir de l'Étang Neuf dans les Côtes d'Armor. Plan d'eau privatisé de 9 hectares, barques et pontons aménagés, salle chauffée et WC.",
+        "niveau": "Débutants et confirmés",
+        "format": "Stage 2 jours",
+        "saison": "Janvier 2026 (16 & 17)",
+        "tarif": "700 € / pers.",
+        "lignesSupp": [
+          {
+            "label": "Dates",
+            "valeur": "16 & 17 Janvier 2026"
+          },
+          {
+            "label": "Participants",
+            "valeur": "4 personnes par session"
+          },
+          {
+            "label": "Niveau",
+            "valeur": "Débutants et confirmés"
+          },
+          {
+            "label": "Lieu",
+            "valeur": "Etang Neuf / Saint Connan (22)"
+          },
+          {
+            "label": "Inclus",
+            "valeur": "Hébergement, pension complète, privatisation du lac"
+          }
+        ],
+        "boutons": [
+          {
+            "texte": "Réserver ma place",
+            "lien": "/contact"
+          }
+        ]
+      },
+      {
+        "_key": "progt413",
+        "_type": "sectionProgrammeTexte",
+        "eyebrow": "Programme",
+        "titre": "Programme du stage",
+        "intro": "",
+        "colonnes": [
+          {
+            "label": "Journée 1",
+            "items": [
+              {
+                "texte": "Accueil des participants en salle pêche au bord du lac"
+              },
+              {
+                "texte": "Session théorique sur les techniques de pêche en réservoir avec Grégoire Juglaret"
+              },
+              {
+                "texte": "Atelier lancer sur les bords du plan d'eau en individuel"
+              },
+              {
+                "texte": "Mise en pratique et pêche sur le réservoir encadrée par les deux intervenants"
+              },
+              {
+                "texte": "Soirée : débriefing, réponses aux questions, programme J2"
+              },
+              {
+                "texte": "Montage de mouches pour le réservoir en soirée avec Grégoire"
+              }
+            ]
+          },
+          {
+            "label": "Journée 2",
+            "items": [
+              {
+                "texte": "Session théorique complémentaire si besoin"
+              },
+              {
+                "texte": "Révision des lancers"
+              },
+              {
+                "texte": "Mise en pratique et pêche : chaque participant passera du temps avec les deux intervenants"
+              },
+              {
+                "texte": "Débriefing final et réponses aux questions"
+              },
+              {
+                "texte": "Fin du stage et départ des participants"
+              }
+            ]
+          },
+          {
+            "label": "Techniques enseignées",
+            "items": [
+              {
+                "texte": "Explication détaillée du matériel pour le réservoir"
+              },
+              {
+                "texte": "Perfectionnement au lancer en individuel"
+              },
+              {
+                "texte": "Noyée, nymphe, streamer, sèche, bung, boobies"
+              },
+              {
+                "texte": "Pêche en washing line / corde à linge"
+              },
+              {
+                "texte": "Soie plongeante S5/S7 aux mouches de fond"
+              }
+            ]
+          },
+          {
+            "label": "Inclus / Non inclus",
+            "items": [
+              {
+                "texte": "Hébergement & restauration pension complète"
+              },
+              {
+                "texte": "Privatisation du lac, barques et salle pêche"
+              },
+              {
+                "texte": "Encadrement par Grégoire Juglaret & JBV"
+              },
+              {
+                "texte": "Assurance RC (à prévoir)"
+              },
+              {
+                "texte": "Permis de pêche national"
+              },
+              {
+                "texte": "Boissons alcoolisées"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "_key": "ti440",
+        "_type": "sectionTexteImage",
+        "titre": "Lieu du stage",
+        "texte": "Le stage se déroule au bord de l'Étang Neuf sur la commune de Saint-Connan dans les Côtes d'Armor (22). Plan d'eau de 9 hectares alimenté par deux tributaires dont la rivière du Trieux, équipé de 9 pontons aménagés pour la pêche. | Nous avons réservé 3 gîtes authentiques situés au bord du lac pour que tous les participants puissent loger ensemble et profiter de moments conviviaux en dehors de la pêche."
+      },
+      {
+        "_key": "e83e0bea2454",
+        "_type": "sectionTexteImage",
+        "titre": "Contenu du stage",
+        "texte": "Notre champion du monde nous délivrera tous ses secrets en vous expliquant en détail toutes les techniques de pêche traditionnelles et modernes de pêche en réservoir. A savoir : | Pêche fine en sèche | Pêche en nymphe et noyée | Pêche au bung | Pêche au bouchon | Pêche en washing line ou corde à linge | Pêche en soie intermédiaire | Pêche en soie S3 | Pêche soie plongeante S5/S7 aux boobies et autres mouches de fond | En soirée, Grégoire vous présentera également le montage de mouches pour le réservoir lors d’un moment de partage convivial."
+      },
+      {
+        "_key": "33cd49abac75",
+        "_type": "sectionTexteImage",
+        "titre": "Hébergement",
+        "texte": "Nous avons réservé pour le stage 3 gîtes authentiques situés au bord du lac, ayant au total 14 couchages dont 7 chambres. Une cuisine, un salon et une salle de bain par gîtes. | Nous pourrons donc tous loger dans ces gîtes pour être ensemble et passer des moments conviviaux en dehors des sessions théoriques et pratiques. | Pour 6 personnes, chaque participant aura une chambre individuelle. | Pour un groupe de 8 personnes, 5 participants pourront avoir une chambre individuelle (à la demande des premiers inscrits), et 3 participants seront en chambre double (dont un avec Grégoire)."
+      },
+      {
+        "_key": "ca2300bf1353",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "gal447",
+        "_type": "sectionGalerie"
+      },
+      {
+        "_key": "cta448",
+        "_type": "sectionCta",
+        "titre": "Réservez votre place",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn1Lien": "/contact",
+        "btn2Texte": "06 87 30 34 56",
+        "btn2Lien": "tel:0687303456"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero399",
+        "_type": "sectionHero",
+        "btnMaterielLabel": "Matériel réservoir",
+        "btnMaterielLien": "/materiel-mouche-reservoir",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Réserver ma place",
+        "btnTelTexte": "06 87 30 34 56",
+        "description": null,
+        "eyebrow": "Masterclass · Pêche en réservoir",
+        "hauteur": "full",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-057f793ce43a20cfa6199af146e9d7c5cd314e14-810x608-heif",
+            "_type": "reference"
+          },
+          "crop": {
+            "_type": "sanity.imageCrop",
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "hotspot": {
+            "_type": "sanity.imageHotspot",
+            "height": 0.47634875990795195,
+            "width": 0.5004753446421377,
+            "x": 0.4938583034177313,
+            "y": 0.4672717974942471
+          }
+        },
+        "sousTitre": "avec Grégoire Juglaret, Champion du Monde 2025, et Jean-Baptiste Vidal",
+        "texte": null,
+        "titre": "Master Class — Techniques de pêche en réservoir"
+      },
+      {
+        "_key": "intro400",
+        "_type": "sectionIntro",
+        "boutons": [
+          {
+            "_key": "btn412",
+            "_type": "bouton",
+            "lien": "/contact",
+            "texte": "Réserver ma place"
+          }
+        ],
+        "description": null,
+        "eyebrow": "Masterclass · Pêche en réservoir",
+        "fond": "white",
+        "format": "Stage 2 jours",
+        "intervenant": {
+          "avatar": "GJ",
+          "bio": "Notre champion du monde vous délivrera tous ses secrets en vous expliquant en détail toutes les techniques de pêche en réservoir : pêche en washing line ou corde à linge, pêche soie plongeante S5/S7 aux boobies et autres mouches de fond.",
+          "nom": "Grégoire Juglaret",
+          "titre": "Champion du Monde de pêche à la mouche par équipe et individuel 2025 · Champion de France réservoir 2025"
+        },
+        "lignesSupp": [
+          {
+            "_key": "li407",
+            "_type": "ligneInfo",
+            "label": "Dates",
+            "valeur": "16 & 17 Janvier 2026"
+          },
+          {
+            "_key": "li408",
+            "_type": "ligneInfo",
+            "label": "Participants",
+            "valeur": "4 personnes par session"
+          },
+          {
+            "_key": "li409",
+            "_type": "ligneInfo",
+            "label": "Niveau",
+            "valeur": "Débutants et confirmés"
+          },
+          {
+            "_key": "li410",
+            "_type": "ligneInfo",
+            "label": "Lieu",
+            "valeur": "Etang Neuf / Saint Connan (22)"
+          },
+          {
+            "_key": "li411",
+            "_type": "ligneInfo",
+            "label": "Inclus",
+            "valeur": "Hébergement, pension complète, privatisation du lac"
+          }
+        ],
+        "niveau": "Débutants et confirmés",
+        "saison": "Janvier 2026 (16 & 17)",
+        "showInfoCard": true,
+        "tarif": "700 € / pers.",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "En début 2026, je propose une Master Class à mes stagiaires afin de leur faire bénéficier d'un stage très pointu sur les techniques de pêche en réservoir."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "L'idée est de mutualiser les compétences d'un expert et les miennes pour offrir un contenu très technique sur la pêche en eaux closes. Un stage à ne rater sous aucun prétexte car l'acquisition de compétences est juste hors norme et permet de progresser bien plus rapidement."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Venez profiter des compétences de professionnels lors d'un stage de 2 journées au bord du magnifique réservoir de l'Étang Neuf dans les Côtes d'Armor. Plan d'eau privatisé de 9 hectares, barques et pontons aménagés, salle chauffée et WC."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Techniques de pêche en réservoir avec Grégoire Juglaret"
+      },
+      {
+        "_key": "progt413",
+        "_type": "sectionProgrammeTexte",
+        "colonnes": [
+          {
+            "_key": "col414",
+            "_type": "colonne",
+            "items": [
+              {
+                "_key": "item415",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Accueil des participants en salle pêche au bord du lac"
+              },
+              {
+                "_key": "item416",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Session théorique sur les techniques de pêche en réservoir avec Grégoire Juglaret"
+              },
+              {
+                "_key": "item417",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Atelier lancer sur les bords du plan d'eau en individuel"
+              },
+              {
+                "_key": "item418",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Mise en pratique et pêche sur le réservoir encadrée par les deux intervenants"
+              },
+              {
+                "_key": "item419",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Soirée : débriefing, réponses aux questions, programme J2"
+              },
+              {
+                "_key": "item420",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Montage de mouches pour le réservoir en soirée avec Grégoire"
+              }
+            ],
+            "label": "Journée 1",
+            "style": "normal"
+          },
+          {
+            "_key": "col421",
+            "_type": "colonne",
+            "items": [
+              {
+                "_key": "item422",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Session théorique complémentaire si besoin"
+              },
+              {
+                "_key": "item423",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Révision des lancers"
+              },
+              {
+                "_key": "item424",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Mise en pratique et pêche : chaque participant passera du temps avec les deux intervenants"
+              },
+              {
+                "_key": "item425",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Débriefing final et réponses aux questions"
+              },
+              {
+                "_key": "item426",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Fin du stage et départ des participants"
+              }
+            ],
+            "label": "Journée 2",
+            "style": "normal"
+          },
+          {
+            "_key": "col427",
+            "_type": "colonne",
+            "items": [
+              {
+                "_key": "item428",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Explication détaillée du matériel pour le réservoir"
+              },
+              {
+                "_key": "item429",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Perfectionnement au lancer en individuel"
+              },
+              {
+                "_key": "item430",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Noyée, nymphe, streamer, sèche, bung, boobies"
+              },
+              {
+                "_key": "item431",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Pêche en washing line / corde à linge"
+              },
+              {
+                "_key": "item432",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Soie plongeante S5/S7 aux mouches de fond"
+              }
+            ],
+            "label": "Techniques enseignées",
+            "style": "normal"
+          },
+          {
+            "_key": "col433",
+            "_type": "colonne",
+            "items": [
+              {
+                "_key": "item434",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Hébergement & restauration pension complète"
+              },
+              {
+                "_key": "item435",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Privatisation du lac, barques et salle pêche"
+              },
+              {
+                "_key": "item436",
+                "_type": "item",
+                "inclus": true,
+                "texte": "Encadrement par Grégoire Juglaret & JBV"
+              },
+              {
+                "_key": "item437",
+                "_type": "item",
+                "inclus": false,
+                "texte": "Assurance RC (à prévoir)"
+              },
+              {
+                "_key": "item438",
+                "_type": "item",
+                "inclus": false,
+                "texte": "Permis de pêche national"
+              },
+              {
+                "_key": "item439",
+                "_type": "item",
+                "inclus": false,
+                "texte": "Boissons alcoolisées"
+              }
+            ],
+            "label": "Inclus / Non inclus",
+            "style": "check"
+          }
+        ],
+        "description": null,
+        "eyebrow": "Programme",
+        "fond": "sand",
+        "intro": "",
+        "texte": null,
+        "titre": "Programme du stage"
+      },
+      {
+        "_key": "ti440",
+        "_type": "sectionTexteImage",
+        "description": null,
+        "distances": [
+          "116 km de St Malo",
+          "119 km de Quimper",
+          "126 km de Rennes",
+          "132 km de Brest",
+          "233 km de Nantes",
+          "475 km de Paris"
+        ],
+        "eyebrow": "Saint Connan - Côtes d’Armor",
+        "fond": "white",
+        "image": {
+          "_type": "image",
+          "alt": "Étang Neuf Saint-Connan — réservoir du stage masterclass",
+          "asset": {
+            "_ref": "image-38f0c24c1f8511c91b4aed45c77b36b4d408e595-774x701-avif",
+            "_type": "reference"
+          }
+        },
+        "imagePosition": "right",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Le stage se déroule au bord de l'Étang Neuf sur la commune de Saint-Connan dans les Côtes d'Armor (22). Plan d'eau de 9 hectares alimenté par deux tributaires dont la rivière du Trieux, équipé de 9 pontons aménagés pour la pêche."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Nous avons réservé 3 gîtes authentiques situés au bord du lac pour que tous les participants puissent loger ensemble et profiter de moments conviviaux en dehors de la pêche."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "texteImageUrl": null,
+        "titre": "Lieu du stage"
+      },
+      {
+        "_key": "e83e0bea2454",
+        "_type": "sectionTexteImage",
+        "description": null,
+        "eyebrow": "L'étang Neuf",
+        "fond": "white",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-233dea0ccdc626b4878a8a8acd952dcbc65f2098-780x585-avif",
+            "_type": "reference"
+          }
+        },
+        "imagePosition": "left",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Notre champion du monde nous délivrera tous ses secrets en vous expliquant en détail toutes les techniques de pêche traditionnelles et modernes de pêche en réservoir. A savoir :"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche fine en sèche"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche en nymphe et noyée"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche au bung"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche au bouchon"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche en washing line ou corde à linge"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche en soie intermédiaire"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche en soie S3"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche soie plongeante S5/S7 aux boobies et autres mouches de fond"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "En soirée, Grégoire vous présentera également le montage de mouches pour le réservoir lors d’un moment de partage convivial."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Contenu du stage"
+      },
+      {
+        "_key": "33cd49abac75",
+        "_type": "sectionTexteImage",
+        "description": null,
+        "eyebrow": "3 Gîtes",
+        "fond": "white",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-f74636c6f71a5bf1a70be32f1cb941c27e436f06-801x601-avif",
+            "_type": "reference"
+          }
+        },
+        "imagePosition": "right",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Nous avons réservé pour le stage 3 gîtes authentiques situés au bord du lac, ayant au total 14 couchages dont 7 chambres. Une cuisine, un salon et une salle de bain par gîtes."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Nous pourrons donc tous loger dans ces gîtes pour être ensemble et passer des moments conviviaux en dehors des sessions théoriques et pratiques."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pour 6 personnes, chaque participant aura une chambre individuelle."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pour un groupe de 8 personnes, 5 participants pourront avoir une chambre individuelle (à la demande des premiers inscrits), et 3 participants seront en chambre double (dont un avec Grégoire)."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Hébergement"
+      },
+      {
+        "_key": "ca2300bf1353",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "accb7c91302a",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-f297df4b36ebb8b89d84f9b69e0645a6327bfb55-810x608-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "961142faab77",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-7e7a74498c28320e760f062e87a1f38a5e1fec1b-737x553-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "ea497f6c97b4",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-38f0c24c1f8511c91b4aed45c77b36b4d408e595-774x701-avif",
+              "_type": "reference"
+            }
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "gal447",
+        "_type": "sectionGalerie",
+        "colonnes": "4",
+        "description": null,
+        "fond": "dark",
+        "photos": [
+          {
+            "_key": "e81d83776af8",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-057f793ce43a20cfa6199af146e9d7c5cd314e14-810x608-heif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "a90dbba1b3a4",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-b32c6a38f16bb7bdf6f226b1177138ba1388b395-810x608-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "00244896f777",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-8ef8fda793df97784d8dfa3884c72daa7fc9585e-810x608-heif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "f119e5c10213",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-9f54e34d72258df9fe6b29a4a79af6c93dc6c128-614x461-avif",
+              "_type": "reference"
+            }
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "cta448",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Réservez votre place"
+      }
+    ]
+  },
+  {
+    "id": "prestation-masterclass",
+    "slug": "masterclass",
+    "title": "Master Class",
+    "seoTitle": "Master Class pêche à la mouche — Jean-Baptiste Vidal",
+    "seoDescription": "Master Class organisées par Jean-Baptiste Vidal avec des experts. Pêche en réservoir avec Grégoire Juglaret, nymphe au fil. Stages très techniques pour progresser rapidement.",
+    "sections": [
+      {
+        "_key": "hero-mc",
+        "_type": "sectionHero",
+        "eyebrow": "Masterclass · Saison 2026",
+        "titre": "Master Class",
+        "sousTitre": "Stages d'excellence avec des experts, pour progresser hors norme",
+        "btnReserverTexte": "Réserver une masterclass"
+      },
+      {
+        "_key": "intro-mc",
+        "_type": "sectionIntro",
+        "eyebrow": "Masterclass · Techniques avancées",
+        "titre": "Des stages techniques animés par des experts",
+        "texte": "Les Masterclass proposées par Jean-Baptiste réunissent ses compétences de guide professionnel et l'expertise de champions pour vous offrir un contenu d'une densité exceptionnelle. | Ces stages en petits groupes (4 à 6 pers.) garantissent un suivi individualisé et une progression rapide. Chaque masterclass se déroule sur 2 jours consécutifs, avec théorie et pratique sur le terrain. | Inscrivez-vous à la newsletter pour être informé en priorité des prochaines dates.",
+        "niveau": "Confirmés · Niveau intermédiaire requis",
+        "format": "2 journées · 6 à 8 participants maximum · Plans d'eau privés",
+        "saison": "Printemps 2026",
+        "tarif": "700 à 800 € / pers. selon la masterclass",
+        "boutons": [
+          {
+            "texte": "Voir les masterclass",
+            "lien": "/contact"
+          }
+        ]
+      },
+      {
+        "_key": "cards-mc",
+        "_type": "sectionCards2",
+        "titre": "Choisissez votre Masterclass"
+      },
+      {
+        "_key": "cta-mc",
+        "_type": "sectionCta",
+        "titre": "Réservez votre Masterclass",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn1Lien": "/contact",
+        "btn2Texte": "06 87 30 34 56",
+        "btn2Lien": "tel:0687303456"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-mc",
+        "_type": "sectionHero",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Réserver une masterclass",
+        "btnTelTexte": "06 87 30 34 56",
+        "description": null,
+        "eyebrow": "Masterclass · Saison 2026",
+        "hauteur": "full",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-11348d9efed922792c9c35abea34a3bb4a30916b-998x748-avif",
+            "_type": "reference"
+          }
+        },
+        "sousTitre": "Stages d'excellence avec des experts, pour progresser hors norme",
+        "texte": null,
+        "titre": "Master Class"
+      },
+      {
+        "_key": "intro-mc",
+        "_type": "sectionIntro",
+        "boutons": [
+          {
+            "_key": "btn-mc",
+            "_type": "bouton",
+            "lien": "/contact",
+            "texte": "Voir les masterclass"
+          }
+        ],
+        "description": null,
+        "eyebrow": "Masterclass · Techniques avancées",
+        "fond": "white",
+        "format": "2 journées · 6 à 8 participants maximum · Plans d'eau privés",
+        "niveau": "Confirmés · Niveau intermédiaire requis",
+        "saison": "Printemps 2026",
+        "showInfoCard": true,
+        "tarif": "700 à 800 € / pers. selon la masterclass",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Les Masterclass proposées par Jean-Baptiste réunissent ses compétences de guide professionnel et l'expertise de champions pour vous offrir un contenu d'une densité exceptionnelle."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Ces stages en petits groupes (4 à 6 pers.) garantissent un suivi individualisé et une progression rapide. Chaque masterclass se déroule sur 2 jours consécutifs, avec théorie et pratique sur le terrain."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Inscrivez-vous à la newsletter pour être informé en priorité des prochaines dates."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Des stages techniques animés par des experts"
+      },
+      {
+        "_key": "cards-mc",
+        "_type": "sectionCards2",
+        "cards": [
+          {
+            "_key": "c-mc1",
+            "_type": "card",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-057f793ce43a20cfa6199af146e9d7c5cd314e14-810x608-heif",
+                "_type": "reference"
+              }
+            },
+            "lien": "/master-class-peche-en-reservoir",
+            "positionPhoto": "center center",
+            "sousTitre": "avec Grégoire Juglaret, Champion du Monde 2025",
+            "titre": "Master Class \"Pêche en réservoir\""
+          },
+          {
+            "_key": "c-mc2",
+            "_type": "card",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-08ac153c41c35cb285d33c28b45bef14464785f9-998x748-avif",
+                "_type": "reference"
+              },
+              "crop": {
+                "_type": "sanity.imageCrop",
+                "bottom": 0,
+                "left": 0,
+                "right": 0,
+                "top": 0
+              },
+              "hotspot": {
+                "_type": "sanity.imageHotspot",
+                "height": 0.5639295868064603,
+                "width": 0.4607339032732717,
+                "x": 0.5208356992381165,
+                "y": 0.32993265696140417
+              }
+            },
+            "lien": "/master-class-nymphe-au-fil",
+            "positionPhoto": "center center",
+            "sousTitre": "Technique de compétition pour tous",
+            "titre": "Master Class \"Nymphe au fil\""
+          }
+        ],
+        "colonnes": "2",
+        "description": null,
+        "eyebrow": "Nos formules",
+        "fond": "sand",
+        "texte": null,
+        "titre": "Choisissez votre Masterclass"
+      },
+      {
+        "_key": "cta-mc",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Réservez votre Masterclass"
+      }
+    ]
+  },
+  {
+    "id": "prestation-peche-a-la-mouche-en-bretagne",
+    "slug": "peche-a-la-mouche-en-bretagne",
+    "title": "Pêche à la mouche en eau douce",
+    "seoTitle": "Pêche à la mouche en Bretagne avec Jean-Baptiste Vidal",
+    "seoDescription": "Guide de pêche à la mouche en Bretagne : bar, truite, alose, brochet, migrateurs. Stages et guidages professionnels en Finistère et Morbihan.",
+    "sections": [
+      {
+        "_key": "hero211",
+        "_type": "sectionHero",
+        "eyebrow": "Eau douce · Rivières · Bretagne-Sud",
+        "titre": "Pêche à la mouche en Bretagne",
+        "sousTitre": "Truite, alose, saumon et brochet sur les plus belles rivières du Finistère",
+        "btnReserverTexte": "Réserver une sortie"
+      },
+      {
+        "_key": "intro218",
+        "_type": "sectionIntro",
+        "eyebrow": "Eau douce · Bretagne-Sud",
+        "titre": "Les rivières bretonnes : un terrain de jeu exceptionnel",
+        "texte": "La Bretagne possède un réseau hydrographique d'une richesse exceptionnelle : des rivières à truites fario sauvages dans le Finistère, de grandes rivières à migrateurs (Ellé, Aulne, Scorff, Léguer, Elorn), des étangs côtiers pour le brochet... | La pêche est possible toute l'année grâce à la complémentarité des milieux : eau douce, estuaires et côte. Des rivières bretonnes aux étangs et réservoirs, il y a toujours une espèce et une technique adaptée à la saison. | Avec 21 ans de guidage sur ces rivières, je vous emmène sur les meilleurs spots en toute discrétion, pour des sorties mémorables que vous soyez débutant ou pêcheur confirmé.",
+        "niveau": "Tous niveaux · Du débutant à l'expert",
+        "format": "Journée · Demi-journée · Sur mesure",
+        "saison": "Toute l'année",
+        "tarif": "À partir de 150 € / pers.",
+        "boutons": [
+          {
+            "texte": "Me contacter",
+            "lien": "/contact"
+          }
+        ]
+      },
+      {
+        "_key": "bff19b7f2fda",
+        "_type": "sectionProgrammeCartes",
+        "titre": "Stage d'initiation à la pêche à la mouche"
+      },
+      {
+        "_key": "cards220",
+        "_type": "sectionCards2",
+        "titre": "Choisissez votre prestation"
+      },
+      {
+        "_key": "cta227",
+        "_type": "sectionCta",
+        "titre": "Réservez votre sortie eau douce",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn1Lien": "/contact",
+        "btn2Texte": "06 87 30 34 56",
+        "btn2Lien": "tel:0687303456"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero211",
+        "_type": "sectionHero",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Réserver une sortie",
+        "btnTelTexte": "06 87 30 34 56",
+        "description": null,
+        "eyebrow": "Eau douce · Rivières · Bretagne-Sud",
+        "hauteur": "full",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-5bba743225d7f5e212ce1790dccb8e558d3f960e-285x200-jpg",
+            "_type": "reference"
+          }
+        },
+        "sousTitre": "Truite, alose, saumon et brochet sur les plus belles rivières du Finistère",
+        "texte": null,
+        "titre": "Pêche à la mouche en Bretagne"
+      },
+      {
+        "_key": "intro218",
+        "_type": "sectionIntro",
+        "boutons": [
+          {
+            "_key": "btn219",
+            "_type": "bouton",
+            "lien": "/contact",
+            "texte": "Me contacter"
+          }
+        ],
+        "description": null,
+        "eyebrow": "Eau douce · Bretagne-Sud",
+        "fond": "white",
+        "format": "Journée · Demi-journée · Sur mesure",
+        "niveau": "Tous niveaux · Du débutant à l'expert",
+        "saison": "Toute l'année",
+        "showInfoCard": true,
+        "tarif": "À partir de 150 € / pers.",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "La Bretagne possède un réseau hydrographique d'une richesse exceptionnelle : des rivières à truites fario sauvages dans le Finistère, de grandes rivières à migrateurs (Ellé, Aulne, Scorff, Léguer, Elorn), des étangs côtiers pour le brochet..."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "La pêche est possible toute l'année grâce à la complémentarité des milieux : eau douce, estuaires et côte. Des rivières bretonnes aux étangs et réservoirs, il y a toujours une espèce et une technique adaptée à la saison."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Avec 21 ans de guidage sur ces rivières, je vous emmène sur les meilleurs spots en toute discrétion, pour des sorties mémorables que vous soyez débutant ou pêcheur confirmé."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Les rivières bretonnes : un terrain de jeu exceptionnel"
+      },
+      {
+        "_key": "bff19b7f2fda",
+        "_type": "sectionProgrammeCartes",
+        "btnLien": "/initiation-peche-a-la-mouche",
+        "btnTexte": "Découvrir le stage d'initiation",
+        "colonnes": "3",
+        "description": null,
+        "eyebrow": "Vous découvrez la pêche à la mouche?",
+        "fond": "sand",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-2b17132406235d3250ba4ed717f6f9c6a9605eaa-405x304-jpg",
+            "_type": "reference"
+          }
+        },
+        "intro": "En une journée avec Jean-Baptiste, apprenez les bases du lancer, le choix du matériel et la lecture du milieu. Stages pour débutants, toutes especes, en Bretagne-Sud.",
+        "styleMisePage": "photo-gauche",
+        "texte": null,
+        "titre": "Stage d'initiation à la pêche à la mouche"
+      },
+      {
+        "_key": "cards220",
+        "_type": "sectionCards2",
+        "cards": [
+          {
+            "_key": "c221",
+            "_type": "card",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-0554ae07add05fd56a72bf109bb24e155f01bf34-405x304-jpg",
+                "_type": "reference"
+              }
+            },
+            "lien": "/initiation-peche-a-la-mouche",
+            "positionPhoto": "center center",
+            "sousTitre": "Pour débuter · Tous niveaux",
+            "titre": "Initiation pêche à la mouche"
+          },
+          {
+            "_key": "c222",
+            "_type": "card",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-c4cccbe7bf0c495770a8e9f23accf0c325b4f896-452x336-jpg",
+                "_type": "reference"
+              }
+            },
+            "lien": "/peche-de-la-truite-a-la-mouche-en-bretagne",
+            "positionPhoto": "center center",
+            "sousTitre": "Rivières · Finistère",
+            "titre": "Pêche de la truite"
+          },
+          {
+            "_key": "c223",
+            "_type": "card",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-162f045318472c092d105aa007b71644797e6b11-525x336-jpg",
+                "_type": "reference"
+              }
+            },
+            "lien": "/peche-de-l-alose-a-la-mouche",
+            "positionPhoto": "center center",
+            "sousTitre": "Migrateurs · Ellé · Aulne",
+            "titre": "Pêche de l'alose"
+          },
+          {
+            "_key": "c224",
+            "_type": "card",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-b72cd11d71ac81b8d461af2971075a338fc4df2b-314x124-jpg",
+                "_type": "reference"
+              }
+            },
+            "lien": "/peche-du-brochet-a-la-mouche",
+            "positionPhoto": "center center",
+            "sousTitre": "Étangs côtiers · Canal",
+            "titre": "Pêche du brochet"
+          },
+          {
+            "_key": "c225",
+            "_type": "card",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-fb17d2af4ee025303559be636c7c153945e58f21-499x374-png",
+                "_type": "reference"
+              }
+            },
+            "lien": "/peche-de-la-truite-en-reservoir",
+            "positionPhoto": "center center",
+            "sousTitre": "Plans d'eau privés · Bretagne",
+            "titre": "Pêche en réservoir"
+          },
+          {
+            "_key": "c226",
+            "_type": "card",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-2c5ca4e18d655199bae62645da36e14986c3d59f-408x296-jpg",
+                "_type": "reference"
+              }
+            },
+            "lien": "/stage-spey-cast-et-cours-de-lancer",
+            "positionPhoto": "center center",
+            "sousTitre": "Canne deux mains · Saumon",
+            "titre": "Stage Spey Cast"
+          }
+        ],
+        "colonnes": "2",
+        "description": null,
+        "eyebrow": "Nos espèces",
+        "fond": "sand",
+        "texte": null,
+        "titre": "Choisissez votre prestation"
+      },
+      {
+        "_key": "cta227",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Réservez votre sortie eau douce"
+      }
+    ]
+  },
+  {
+    "id": "prestation-peche-de-l-alose-a-la-mouche",
+    "slug": "peche-de-l-alose-a-la-mouche",
+    "title": "Alose",
+    "seoTitle": "Pêche de l'alose à la mouche en Bretagne",
+    "seoDescription": "Venez découvrir la pêche de l'alose à la mouche en Bretagne avec Jean-Baptiste Vidal. L'alose est un fantastique migrateur, très combatif et puissant.",
+    "sections": [
+      {
+        "_key": "hero297",
+        "_type": "sectionHero",
+        "eyebrow": "Alose à la mouche · Aulne · Blavet · Bretagne",
+        "titre": "Pêche de l'alose à la mouche en Bretagne",
+        "sousTitre": "Un migrateur encore confidentiel, d'une puissance et d'une combativité remarquables. Sur l'Aulne, le Blavet et les rivières bretonnes, Jean-Baptiste vous guide à la rencontre de ce prédateur fascinant.",
+        "btnReserverTexte": "Réserver une sortie",
+        "btnMaterielLabel": "Matériel migrateurs"
+      },
+      {
+        "_key": "stats298",
+        "_type": "sectionStats"
+      },
+      {
+        "_key": "intro303",
+        "_type": "sectionIntro",
+        "eyebrow": "Guidage alose · Bretagne-Sud",
+        "titre": "Un migrateur confidentiel et inoubliable",
+        "texte": "L'alose est une espèce en pleine expansion dans les rivières bretonnes après des décennies de déclin. Ce grand migrateur, proche du maquereau et du hareng, rétrograde jusqu'à 100 km des côtes pour se reproduire dans les rivières de première catégorie. | Sa pêche est encore confidentielle en France, mais les initiés connaissent les sensations incomparables que procure la capture d'une grande alose à la mouche. Un poisson de 1,5 à 2,5 kg, combatif, sauteur, pêché en soirée dans des eaux de printemps. | Je propose des sorties guidées sur les meilleurs secteurs de l'Aulne et du Blavet, les deux rivières les plus importantes pour la grande alose en Bretagne, ainsi que sur plusieurs autres cours d'eau côtiers de la région.",
+        "niveau": "Initiés · Maîtrise du lancer requise",
+        "format": "Coup du soir (3–4h) · Journée complète",
+        "saison": "Mi-avril à fin juillet",
+        "tarif": "200 € coup du soir / 320 € journée Aulne / 350 € journée Blavet",
+        "duree": "",
+        "lignesSupp": [
+          {
+            "label": "Rivières",
+            "valeur": "Aulne · Blavet · Ellé · Elorn · Odet · Goyen · Scorf"
+          }
+        ],
+        "boutons": [
+          {
+            "texte": "Vérifier les disponibilités",
+            "lien": "/contact"
+          }
+        ]
+      },
+      {
+        "_key": "vid312",
+        "_type": "sectionVideo",
+        "titre": "Pêche de l'alose à la mouche en Bretagne"
+      },
+      {
+        "_key": "prog-alose-decouverte",
+        "_type": "sectionProgramme",
+        "titre": "Ce qui vous attend"
+      },
+      {
+        "_key": "carr-alose-galerie",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "cta313",
+        "_type": "sectionCta",
+        "titre": "Réservez votre sortie alose",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn1Lien": "/contact",
+        "btn2Texte": "06 87 30 34 56",
+        "btn2Lien": "tel:0687303456"
+      },
+      {
+        "_key": "45433ff25417",
+        "_type": "sectionLienBlog",
+        "titre": "Reportage : pêche de l'alose à la mouche sur les meilleures rivières"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero297",
+        "_type": "sectionHero",
+        "btnMaterielLabel": "Matériel migrateurs",
+        "btnMaterielLien": "/materiel-mouche-migrateur",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Réserver une sortie",
+        "btnTelTexte": "06 87 30 34 56",
+        "description": null,
+        "eyebrow": "Alose à la mouche · Aulne · Blavet · Bretagne",
+        "hauteur": "full",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-b31a9d82e0314ae388e86b19e016cacf762a1349-1050x672-avif",
+            "_type": "reference"
+          }
+        },
+        "sousTitre": "Un migrateur encore confidentiel, d'une puissance et d'une combativité remarquables. Sur l'Aulne, le Blavet et les rivières bretonnes, Jean-Baptiste vous guide à la rencontre de ce prédateur fascinant.",
+        "texte": null,
+        "titre": "Pêche de l'alose à la mouche en Bretagne"
+      },
+      {
+        "_key": "stats298",
+        "_type": "sectionStats",
+        "description": null,
+        "fond": "dark",
+        "stats": [
+          {
+            "_key": "st299",
+            "_type": "stat",
+            "label": "Saison Aulne / Blavet",
+            "nombre": "Mi-avril – fin juin"
+          },
+          {
+            "_key": "st300",
+            "_type": "stat",
+            "label": "Saison autres rivières",
+            "nombre": "Fin mai – fin juillet"
+          },
+          {
+            "_key": "st301",
+            "_type": "stat",
+            "label": "Aulne · Blavet · Ellé",
+            "nombre": "Estuaires bretons"
+          },
+          {
+            "_key": "st302",
+            "_type": "stat",
+            "label": "Tarif coup du soir",
+            "nombre": "200 €"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "intro303",
+        "_type": "sectionIntro",
+        "boutons": [
+          {
+            "_key": "btn311",
+            "_type": "bouton",
+            "lien": "/contact",
+            "texte": "Vérifier les disponibilités"
+          }
+        ],
+        "description": null,
+        "duree": "",
+        "eyebrow": "Guidage alose · Bretagne-Sud",
+        "fond": "white",
+        "format": "Coup du soir (3–4h) · Journée complète",
+        "lignesSupp": [
+          {
+            "_key": "li310",
+            "_type": "ligneInfo",
+            "label": "Rivières",
+            "valeur": "Aulne · Blavet · Ellé · Elorn · Odet · Goyen · Scorf"
+          }
+        ],
+        "niveau": "Initiés · Maîtrise du lancer requise",
+        "saison": "Mi-avril à fin juillet",
+        "showInfoCard": true,
+        "tarif": "200 € coup du soir / 320 € journée Aulne / 350 € journée Blavet",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "L'alose est une espèce en pleine expansion dans les rivières bretonnes après des décennies de déclin. Ce grand migrateur, proche du maquereau et du hareng, rétrograde jusqu'à 100 km des côtes pour se reproduire dans les rivières de première catégorie."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Sa pêche est encore confidentielle en France, mais les initiés connaissent les sensations incomparables que procure la capture d'une grande alose à la mouche. Un poisson de 1,5 à 2,5 kg, combatif, sauteur, pêché en soirée dans des eaux de printemps."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Je propose des sorties guidées sur les meilleurs secteurs de l'Aulne et du Blavet, les deux rivières les plus importantes pour la grande alose en Bretagne, ainsi que sur plusieurs autres cours d'eau côtiers de la région."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Un migrateur confidentiel et inoubliable"
+      },
+      {
+        "_key": "vid312",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Alose à la mouche",
+        "fond": "dark",
+        "texte": null,
+        "titre": "Pêche de l'alose à la mouche en Bretagne",
+        "url": "https://vimeo.com/197506448?fl=pl&fe=vl",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "prog-alose-decouverte",
+        "_type": "sectionProgramme",
+        "description": null,
+        "etapes": [
+          {
+            "_key": "e-alose-1",
+            "_type": "etape",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-4b8fec783c602ca73cd3ce5e13930dc12578b129-688x458-avif",
+                "_type": "reference"
+              }
+            },
+            "tag": "Biologie · Comportement",
+            "texte": [
+              {
+                "_key": "81bbb774ccdd",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "808c0d3fbfa4",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "La grande alose (alosa alosa) de la famille des Clupéidés, est la plus grande des aloses. C'est un poisson migrateur qui remonte nos cours d'eau bretons à partir de la mi-avril et ce jusqu'à la mi-juin, voir mi-juillet sur de plus petits cours d'eau où l'eau se réchauffe plus tardivement."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "c4087a101984",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "bae5ed8e878d",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Les populations d'aloses en Bretagne sont en augmentation depuis une dizaine d'années même si cette espèce au cycle compliqué est très sensible et reste vulnérable."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "cee838f9f159",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "17f0c778d102",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "L'alose est un poisson migrateur agressif, très puissant qui donne du fil à retorde lorsque l'on adapte son matériel en conséquence."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "8e40bc384237",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "32453b747ed7",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "C'est un poisson très combatif qui ne se rend pas facilement, et procure de très bonnes sensations. Un vrai régal pour le pêcheur à la mouche polyvalent!"
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              }
+            ],
+            "titre": "Un migrateur formidable"
+          },
+          {
+            "_key": "e-alose-2",
+            "_type": "etape",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-389cf8819c7e7fefdaf4449c30ba53be5454d58f-682x594-avif",
+                "_type": "reference"
+              }
+            },
+            "tag": "Technique · Mouches · Animation",
+            "texte": [
+              {
+                "_key": "21c412203ef0",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "9fd66c6e38b9",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Les aloses se pêchent généralement à la mouche en dérive 3/4 aval avec des modèles de types nymphe/streamer souvent de couleurs vives comme le orange, jaune, vert chartreuse, rose."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "c538d8f8a100",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "54d6e13bcf0c",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Selon la saison, il faudra pêcher plus ou moins en profondeur avec des pointes intermédiaires à très plongeantes."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "207b53e3d78f",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "ad321e96c785",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Sur l'Aulne et le Blavet ont utilise une canne à mouche de 9 à 10 pieds de puissance 7 à 8 pour le début de saison mais aussi des cannes Switch qui permettent de couvrir rapidement les secteurs où elles se trouvent, alors qu'on préconisera une canne de puissance 6 pour la fin de saison lorsque les niveaux d'eau baissent et le courant ralentit."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "ea4d8c8c3473",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "46d84ef713bc",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "La technique consiste à présenter notre mouche à alose au \"bon étage\" et à la bonne vitesse en fonction des niveaux d'eau, des débits, de la température de l'eau et l'activité des poissons."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "f50b0b9d710c",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "ec02391e3364",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Il faut être très concentré lors de la dérive de la mouche pour ne pas rater les touches et ferrer au bon moment. Une pêche intense."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "b2f0cdd46b28",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "4a53afc7244c",
+                    "_type": "span",
+                    "marks": [],
+                    "text": ""
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "0d735bb9e716",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "2c9cf3b4546f",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "En petite rivière, généralement ont cherche les poissons à vue pour leur présenter de petites nymphes à tête orange que l'on ramènera par saccade devant les poissons repérés."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              }
+            ],
+            "titre": "Sa pêche"
+          },
+          {
+            "_key": "e-alose-3",
+            "_type": "etape",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-4dcde77899cdafdff968474bbae31ef01808fd87-684x588-avif",
+                "_type": "reference"
+              }
+            },
+            "tag": "Matériel · Lancer · Spey Cast",
+            "texte": [
+              {
+                "_key": "02869fb1deaa",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "726c22cf2b9f",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "La pêche de l'alose à la mouche en Bretagne se pratique principalement sur ces deux cours d'eau canalisés qui offrent en Bretagne les plus grandes concentrations d'aloses."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "12366fbd2490",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "04933ae8dfc0",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Chaque années plusieurs milliers de grandes aloses et aloses feintes (alosa fallax) colonisent ces cours d'eau."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "858987c4aa06",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "087b4c1ec1d6",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Les aloses remontent dès la réchauffement des eaux, très souvent à partir de la mi-avril, et ce jusqu'à la fin juin."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "f50991456d06",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "589836b3d644",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Elles se retrouvent au pied des barrages qui ralentissent leur migration. Elles se concentrent sur les premières écluses de ces deux cours d'eau pour le plus grand plaisir des pêcheurs à la mouche."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "4cd4c25f1db8",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "f88356b86709",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "L'Aulne et le Blavet sont des rivières canalisées où l'eau se réchauffent rapidement et sont donc précoces par rapport à d'autres cours d'eau (non canalisés) où celles-ci arrivent plus tardivement."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              }
+            ],
+            "titre": "L'Aulne et le Blavet"
+          },
+          {
+            "_key": "e-alose-5",
+            "_type": "etape",
+            "image": {
+              "_type": "image",
+              "asset": {
+                "_ref": "image-1285efb3c11a191c99930f058ade2fa19cd4b5a7-684x588-avif",
+                "_type": "reference"
+              }
+            },
+            "tag": "À vue · Ellé · Elorn · Odet",
+            "texte": [
+              {
+                "_key": "9a1207750c2d",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "7d3637fd2f4b",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Depuis quelques années, les aloses colonnisent aussi d'autres cours d'eau de taille moins importante comme l'Ellé, l'Elorn, le Goyen, l'Odet, la Penzé, le Scorf, le Trieux..."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "fb66346ff632",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "858e9a36a9e9",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Sur ces cours d'eau aux eaux plus claires il est possible de les repérer à vue et de les rechercher à la mouche avec de petites nymphes très colorées. La technique consiste à trouver un groupe de poissons et de leur faire passer à proximité notre mouche que l'on animera en fonction du comportement des poissons."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "e6324f4e7edf",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "39027c9449f5",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "C'est une pêche 100% à vue, où l'on voit l'alose venir engloutir notre mouche souvent de manière furtive. Il faudra être attentif et très rapide pour les ferrer au bon moment afin de les piquer."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "c9712222f837",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "2180f58df221",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Sur ces petits cours d'eau les combats sont explosifs et les sensations garanties!"
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              }
+            ],
+            "titre": "Mais aussi sur d'autres cours d'eau…"
+          }
+        ],
+        "eyebrow": "Découverte de l'alose",
+        "fond": "sand",
+        "texte": null,
+        "titre": "Ce qui vous attend"
+      },
+      {
+        "_key": "carr-alose-galerie",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "carr-al-7",
+            "_type": "image",
+            "alt": "Pêche de l'alose à la mouche en Bretagne",
+            "asset": {
+              "_ref": "image-640fc9e39fa89619a41ae6bd2b6338ad136d27c7-1015x676-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-8",
+            "_type": "image",
+            "alt": "Alose à la mouche — rivières bretonnes",
+            "asset": {
+              "_ref": "image-0de6a108792ef88540f5560aecdfc4fe3a61d8b4-927x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-9",
+            "_type": "image",
+            "alt": "Guidage alose Jean-Baptiste Vidal",
+            "asset": {
+              "_ref": "image-305cd6b1d01724e3e3f4577ba63d629c789d45b7-676x676-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-10",
+            "_type": "image",
+            "alt": "Alose sur l'Aulne en Bretagne",
+            "asset": {
+              "_ref": "image-51e1d7d8d12bbf16ce4e4aaacd761165607a8e22-926x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-11",
+            "_type": "image",
+            "alt": "Pêche de l'alose — migrateur puissant",
+            "asset": {
+              "_ref": "image-679f12ec344f157913f769c7184219b2520fcae3-1086x724-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-12",
+            "_type": "image",
+            "alt": "Alose et saumon — Bretagne",
+            "asset": {
+              "_ref": "image-32375a3578166a0fa12ba670d104644943dcf071-543x724-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-13",
+            "_type": "image",
+            "alt": "Guidage pêche alose Bretagne-Sud",
+            "asset": {
+              "_ref": "image-18d7ab3b99884eb7618896de27533c22ef5f4c94-1236x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-14",
+            "_type": "image",
+            "alt": "Alose à la mouche — Aulne",
+            "asset": {
+              "_ref": "image-208194852b667e2d0c1e39c2827268a7588d50a4-695x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-15",
+            "_type": "image",
+            "alt": "Pêche du migrateur en Bretagne",
+            "asset": {
+              "_ref": "image-3faaed4d8c63f21f64b1afde493d01cc479bbff8-901x676-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-16",
+            "_type": "image",
+            "alt": "Belle alose prise à la mouche",
+            "asset": {
+              "_ref": "image-85165af832447695dadde0bdca723bc99e37d7f0-927x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-17",
+            "_type": "image",
+            "alt": "Alose à la mouche — Blavet",
+            "asset": {
+              "_ref": "image-ed906acd1e6eefe28f10bc7246eb899b864e4cd5-991x743-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-18",
+            "_type": "image",
+            "alt": "Pêche de l'alose en rivière canalisée",
+            "asset": {
+              "_ref": "image-aa2adda86e1e88d250041b4c2549bdcfe7ca447e-1238x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-19",
+            "_type": "image",
+            "alt": "Guidage alose — rivières bretonnes",
+            "asset": {
+              "_ref": "image-677d14c85f06276e6a6b4314586c3ca20ef7f5ac-1014x676-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-20",
+            "_type": "image",
+            "alt": "Alose capturée à la mouche",
+            "asset": {
+              "_ref": "image-7411ae4be598b97e66de7e6e743992b6d57dd109-965x724-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-21",
+            "_type": "image",
+            "alt": "Pêche de l'alose à la mouche",
+            "asset": {
+              "_ref": "image-7021ee8b0cca099999ae48a986de07ada9ecc5c1-927x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-22",
+            "_type": "image",
+            "alt": "Rivières bretonnes — alose à la mouche",
+            "asset": {
+              "_ref": "image-529773b81384824c88a624b7fb15bdd01f724ffd-991x743-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-23",
+            "_type": "image",
+            "alt": "Alose en Bretagne — guide JBV",
+            "asset": {
+              "_ref": "image-3888b62868267810960a9118c93138a2e221d9cf-927x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-24",
+            "_type": "image",
+            "alt": "Pêche migrateur Bretagne-Sud",
+            "asset": {
+              "_ref": "image-93ba16cf49cd183ad9f76188c3811c0b93c855ba-451x676-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-25",
+            "_type": "image",
+            "alt": "Alose à la mouche — technique en dérive",
+            "asset": {
+              "_ref": "image-5f1d0e36b1e523d3e0e0be8539b486e844cf7eac-901x676-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-26",
+            "_type": "image",
+            "alt": "Guidage pêche de l'alose — Finistère",
+            "asset": {
+              "_ref": "image-bf4050e30342fdab7e57114a1d04d3f597369490-981x695-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "carr-al-27",
+            "_type": "image",
+            "alt": "Belle alose — rivières de Bretagne",
+            "asset": {
+              "_ref": "image-3d6d351a2e02e7d1eca234e022a6106fcde0befa-521x695-avif",
+              "_type": "reference"
+            }
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "cta313",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Réservez votre sortie alose"
+      },
+      {
+        "_key": "45433ff25417",
+        "_type": "sectionLienBlog",
+        "description": null,
+        "eyebrow": "Blog · Enjoy Fishing",
+        "fond": "white",
+        "labelBouton": "Lire l'article",
+        "texte": null,
+        "titre": "Reportage : pêche de l'alose à la mouche sur les meilleures rivières",
+        "urlArticle": "http://www.enjoyfishing.fr/archive/2016/02/08/peche-de-l-alose-a-la-mouche-sur-les-meilleures-rivieres-de-3066155.html#more"
+      }
+    ]
+  },
+  {
+    "id": "prestation-peche-de-la-truite-a-la-mouche-en-bretagne",
+    "slug": "peche-de-la-truite-a-la-mouche-en-bretagne",
+    "title": "Truite",
+    "seoTitle": "Pêche de la truite à la mouche en Bretagne",
+    "seoDescription": "Venez découvrir les belles fario sauvages de rivières de Bretagne en compagnie de Jean-Baptiste Vidal Moniteur-Guide de pêche à la mouche. ",
+    "sections": [
+      {
+        "_key": "hero314",
+        "_type": "sectionHero",
+        "eyebrow": "Truite · Rivières Bretagne-Sud · Finistère & Morbihan",
+        "titre": "Pêche de la truite à la mouche en Bretagne",
+        "sousTitre": "Fario 100 % sauvage sur les plus belles rivières du Finistère et du Morbihan — sèche, nymphe, noyée, streamer depuis 1993",
+        "btnReserverTexte": "Réserver une sortie",
+        "btnMaterielLabel": "Matériel truite"
+      },
+      {
+        "_key": "intro315",
+        "_type": "sectionIntro",
+        "eyebrow": "Guidage truite · Bretagne-Sud",
+        "titre": "La truite fario sauvage sur les plus belles rivières",
+        "texte": "Le Finistère dispose de plus de 4 500 km de rivières de première catégorie, ce qui offre un vaste choix de magnifiques rivières à truites. Sur mon secteur géographique, j'ai sélectionné 7 rivières de taille et configuration différentes qui permettent de varier les plaisirs et de s'adapter à toutes les envies. | La gestion patrimoniale en Bretagne-Sud garantit des truites 100 % sauvages de souche atlantique, combatives et méfiantes. Leurs robes colorées et leurs habitats préservés en font l'une des pêches les plus techniques et les plus gratifiantes qui soit. | Je pratique la pêche à la mouche depuis 1993 en France et à l'étranger. Je propose des sorties adaptées à tous les niveaux : débuter, s'initier, se perfectionner. Les techniques enseignées couvrent la sèche, la noyée, le streamer, la nymphe au fil et la nymphe à vue.",
+        "niveau": "Tous niveaux · Initiation et perfectionnement",
+        "format": "Journée 9h30–18h · 7 à 8 h de guidage",
+        "saison": "Mi-mars à mi-septembre",
+        "tarif": "300 € · 1 pers. / 200 € · 2 pers. / 160 € · 3 pers.",
+        "duree": "",
+        "lignesSupp": [
+          {
+            "label": "Rivières",
+            "valeur": "Scorff · Ellé · Isole · Odet · Jet · Steïr · Aven"
+          }
+        ],
+        "boutons": [
+          {
+            "texte": "Réserver une sortie",
+            "lien": "/contact"
+          }
+        ]
+      },
+      {
+        "_key": "progc324",
+        "_type": "sectionProgrammeCartes",
+        "titre": "Une journée de pêche de la truite"
+      },
+      {
+        "_key": "sel351",
+        "_type": "sectionSelection",
+        "titre": "Les plus belles rivières à truites de Bretagne-Sud"
+      },
+      {
+        "_key": "cta352",
+        "_type": "sectionCta",
+        "titre": "Réservez votre sortie truite",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn1Lien": "/contact",
+        "btn2Texte": "06 87 30 34 56",
+        "btn2Lien": "tel:0687303456"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero314",
+        "_type": "sectionHero",
+        "btnMaterielLabel": "Matériel truite",
+        "btnMaterielLien": "/materiel-mouche-truite",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Réserver une sortie",
+        "btnTelTexte": "06 87 30 34 56",
+        "description": null,
+        "eyebrow": "Truite · Rivières Bretagne-Sud · Finistère & Morbihan",
+        "hauteur": "full",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-c4cccbe7bf0c495770a8e9f23accf0c325b4f896-452x336-jpg",
+            "_type": "reference"
+          }
+        },
+        "sousTitre": "Fario 100 % sauvage sur les plus belles rivières du Finistère et du Morbihan — sèche, nymphe, noyée, streamer depuis 1993",
+        "texte": null,
+        "titre": "Pêche de la truite à la mouche en Bretagne"
+      },
+      {
+        "_key": "intro315",
+        "_type": "sectionIntro",
+        "boutons": [
+          {
+            "_key": "btn323",
+            "_type": "bouton",
+            "lien": "/contact",
+            "texte": "Réserver une sortie"
+          }
+        ],
+        "description": null,
+        "duree": "",
+        "eyebrow": "Guidage truite · Bretagne-Sud",
+        "fond": "white",
+        "format": "Journée 9h30–18h · 7 à 8 h de guidage",
+        "lignesSupp": [
+          {
+            "_key": "li322",
+            "_type": "ligneInfo",
+            "label": "Rivières",
+            "valeur": "Scorff · Ellé · Isole · Odet · Jet · Steïr · Aven"
+          }
+        ],
+        "niveau": "Tous niveaux · Initiation et perfectionnement",
+        "saison": "Mi-mars à mi-septembre",
+        "showInfoCard": true,
+        "tarif": "300 € · 1 pers. / 200 € · 2 pers. / 160 € · 3 pers.",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Le Finistère dispose de plus de 4 500 km de rivières de première catégorie, ce qui offre un vaste choix de magnifiques rivières à truites. Sur mon secteur géographique, j'ai sélectionné 7 rivières de taille et configuration différentes qui permettent de varier les plaisirs et de s'adapter à toutes les envies."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "La gestion patrimoniale en Bretagne-Sud garantit des truites 100 % sauvages de souche atlantique, combatives et méfiantes. Leurs robes colorées et leurs habitats préservés en font l'une des pêches les plus techniques et les plus gratifiantes qui soit."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Je pratique la pêche à la mouche depuis 1993 en France et à l'étranger. Je propose des sorties adaptées à tous les niveaux : débuter, s'initier, se perfectionner. Les techniques enseignées couvrent la sèche, la noyée, le streamer, la nymphe au fil et la nymphe à vue."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "La truite fario sauvage sur les plus belles rivières"
+      },
+      {
+        "_key": "progc324",
+        "_type": "sectionProgrammeCartes",
+        "colonnes": "3",
+        "description": null,
+        "eyebrow": "Programme",
+        "fond": "sand",
+        "intro": "Chaque sortie est adaptée à votre niveau et à vos objectifs. Voici le déroulé type d'une journée de guidage truite en rivière.",
+        "items": [
+          {
+            "_key": "carte325",
+            "_type": "carte",
+            "description": "Identifier les postes : courants, bordures, blocs rocheux, sous-berges. Comprendre où se tient la truite selon l'heure et la saison.",
+            "titre": "Lecture de l'eau"
+          },
+          {
+            "_key": "carte326",
+            "_type": "carte",
+            "description": "Identification des mouches et invertébrés aquatiques présents sur la rivière. Choisir la mouche juste selon l'éclosion du moment.",
+            "titre": "Connaissance entomologique"
+          },
+          {
+            "_key": "carte327",
+            "_type": "carte",
+            "description": "Amélioration du lancer : droit, roulé, revers, courbe. Adaptation aux contraintes de la rivière : végétation, vent, contre-jour.",
+            "titre": "Lancer & technique"
+          },
+          {
+            "_key": "carte328",
+            "_type": "carte",
+            "description": "Sèche, noyée, streamer, tandem, nymphe au fil — selon vos souhaits et votre niveau. Présentation, dérive, ferrage et combat.",
+            "titre": "Pêche par technique"
+          },
+          {
+            "_key": "carte329",
+            "_type": "carte",
+            "description": "Choix de la canne, de la soie, du bas de ligne. Montage des mouches. Conseils personnalisés pour votre équipement.",
+            "titre": "Matériel & bas de ligne"
+          },
+          {
+            "_key": "carte330",
+            "_type": "carte",
+            "description": "Respect du milieu, remise à l'eau dans les règles de l'art, gestion patrimoniale. La truite sauvage mérite qu'on la préserve.",
+            "titre": "Écologie & no-kill"
+          }
+        ],
+        "texte": null,
+        "titre": "Une journée de pêche de la truite"
+      },
+      {
+        "_key": "sel351",
+        "_type": "sectionSelection",
+        "description": null,
+        "eyebrow": "Sélection de rivières",
+        "fond": "white",
+        "intro": "J'ai sélectionné ces cours d'eau pour leur potentiel halieutique, leur beauté et la qualité de leurs populations de truites fario sauvages.",
+        "items": [
+          {
+            "_key": "si331",
+            "_type": "selectionItem",
+            "image": {
+              "_type": "image",
+              "alt": "Le Scorff",
+              "asset": {
+                "_ref": "image-0554ae07add05fd56a72bf109bb24e155f01bf34-405x304-jpg",
+                "_type": "reference"
+              }
+            },
+            "infos": [],
+            "pills": [
+              "Sèche",
+              "Nymphe au fil",
+              "Nymphe à vue"
+            ],
+            "tag": "Morbihan (56)",
+            "texte": [
+              {
+                "_key": "b332",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "s333",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Réputé pour ses saumons, le Scorff s'écoule dans une vallée voisine de l'Ellé, en Morbihan. Entre Pont Callec et Pont-Scorff, des secteurs successifs offrent une grande diversité de parcours peuplés de belles truites fario sauvages."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "b334",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "s335",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "La taille moyenne des truites y est généralement supérieure à la majorité des cours d'eau bretons. Pêche possible en sèche, nymphe à vue ou au fil. À partir de mi-mai jusqu'à fin de saison, de beaux spécimens sortent s'alimenter en surface."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              }
+            ],
+            "titre": "Le Scorff"
+          },
+          {
+            "_key": "si336",
+            "_type": "selectionItem",
+            "image": {
+              "_type": "image",
+              "alt": "L'Ellé et l'Isole",
+              "asset": {
+                "_ref": "image-9e18464323e4bfb8ec50c3bc44b5035f11b2bd59-405x304-jpg",
+                "_type": "reference"
+              }
+            },
+            "infos": [],
+            "pills": [
+              "Sèche",
+              "Nymphe",
+              "Streamer"
+            ],
+            "tag": "Finistère (29)",
+            "texte": [
+              {
+                "_key": "b337",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "s338",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Le secteur de Quimperlé offre un réseau hydrographique vaste avec plusieurs rivières de caractère. L'Ellé propose de beaux secteurs en amont pour la truite en sèche et en nymphe."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "b339",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "s340",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "L'Isole, affluent principal, est un petit paradis pour la pêche de la truite dans une vallée encaissée et sauvage. Grande diversité de paysages et de profils de berges, synonymes d'une pêche variée et de qualité tout au long de la saison."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              }
+            ],
+            "titre": "L'Ellé et l'Isole"
+          },
+          {
+            "_key": "si341",
+            "_type": "selectionItem",
+            "image": {
+              "_type": "image",
+              "alt": "Les rivières de Quimper — Odet, Jet, Steïr",
+              "asset": {
+                "_ref": "image-2b17132406235d3250ba4ed717f6f9c6a9605eaa-405x304-jpg",
+                "_type": "reference"
+              }
+            },
+            "infos": [],
+            "pills": [
+              "Sèche",
+              "Nymphe au fil",
+              "Tandem"
+            ],
+            "tag": "Finistère (29) · Quimper",
+            "texte": [
+              {
+                "_key": "b342",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "s343",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Quimper signifie « confluent » en breton. L'Odet reçoit le Steïr à l'ouest et le Jet à l'est — trois rivières aux profils, largeurs et longueurs bien différents, pour une pêche variée toute la saison."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "b344",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "s345",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Odet : Le parcours du Stangala offre un cours très courant avec de nombreux blocs, parfait pour la sèche en eaux rapides et la nymphe au fil. Jet : Petite rivière de plaine avec trous profonds accueillant de belles truites et parfois des saumons. Steïr : Rivière mixte avec beaux courants et jolies fosses pour une pêche très variée."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              }
+            ],
+            "titre": "Les rivières de Quimper — Odet, Jet, Steïr"
+          },
+          {
+            "_key": "si346",
+            "_type": "selectionItem",
+            "image": {
+              "_type": "image",
+              "alt": "L'Aven et le Ster-Goz",
+              "asset": {
+                "_ref": "image-35e280b8adbd7d6ad622232805a8e3825079ae67-405x304-jpg",
+                "_type": "reference"
+              }
+            },
+            "infos": [],
+            "pills": [
+              "Sèche",
+              "Émergente",
+              "Nymphe au fil"
+            ],
+            "tag": "Finistère (29)",
+            "texte": [
+              {
+                "_key": "b347",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "s348",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "Petite rivière de charme typique des fonds de vallée bretons, l'Aven s'écoule entre Scaër et Pont-Aven. Rapide du fait de sa pente élevée, elle offre des profils très variés avec de belles truites fario sauvages dans chaque recoin."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              },
+              {
+                "_key": "b349",
+                "_type": "block",
+                "children": [
+                  {
+                    "_key": "s350",
+                    "_type": "span",
+                    "marks": [],
+                    "text": "La pêche en sèche y est reine dès avril. La nymphe au fil permet de prendre de nombreuses truites lorsqu'elles sont moins actives en surface. Le Ster-Goz, affluent principal, est très intéressant pour la pêche en émergente et en nymphe."
+                  }
+                ],
+                "markDefs": [],
+                "style": "normal"
+              }
+            ],
+            "titre": "L'Aven et le Ster-Goz"
+          }
+        ],
+        "styleCorps": "white",
+        "texte": null,
+        "titre": "Les plus belles rivières à truites de Bretagne-Sud"
+      },
+      {
+        "_key": "cta352",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Réservez votre sortie truite"
+      }
+    ]
+  }
+]
