@@ -115,7 +115,7 @@ const navPrefix = isEn ? '/en' : ''
 // Prefix a nav href for the current language
 function navHref(href: string) {
   if (!isEn) return href
-  return href === '/' ? '/en' : '/en' + href
+  return href === '/' ? '/en/' : '/en' + href
 }
 
 // Active check: compare against prefixed pathname
