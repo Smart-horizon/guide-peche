@@ -37,6 +37,8 @@ export default defineConfig({
       useCdn: false,
       apiVersion: '2024-01-01',
     }),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.includes('/old/'),
+    }),
   ],
 })
