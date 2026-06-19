@@ -83,6 +83,80 @@ const NAV_FALLBACK = [
   },
 ]
 
+const NAV_FALLBACK_EN = [
+  { label: 'Home', href: '/' },
+  { label: 'The Guide', href: '/jean-baptiste-vidal-moniteur-guide-de-peche' },
+  {
+    label: 'Freshwater',
+    href: '/peche-a-la-mouche-en-bretagne',
+    activePrefix: '/peche-a-la-mouche-en-bretagne',
+    children: [
+      { label: 'Beginners Course', href: '/initiation-peche-a-la-mouche' },
+      { label: 'Trout Improvement', href: '/peche-de-la-truite-a-la-mouche-en-bretagne' },
+      { label: 'Reservoir', href: '/peche-de-la-truite-en-reservoir' },
+      { label: 'Shad', href: '/peche-de-l-alose-a-la-mouche' },
+      { label: 'Pike', href: '/peche-du-brochet-a-la-mouche' },
+    ],
+  },
+  {
+    label: 'Sea Bass',
+    href: '/peche-du-bar-a-la-mouche',
+    activePrefix: '/peche-du-bar',
+    children: [
+      { label: 'Beginners Sea Bass', href: '/initiation-peche-du-bar-a-la-mouche' },
+      { label: 'Sea Bass Improvement', href: '/peche-du-bar-perfectionnement' },
+      { label: 'Sight Fishing', href: '/peche-du-bar-a-vue-a-la-mouche' },
+      { label: 'Sea Bass by Boat', href: '/peche-mouche-bar-bateau-bretagne' },
+      { label: 'Coaching', href: '/peche-du-bar-a-la-mouche-coaching' },
+      { label: 'The Boat', href: '/bateau-bar-a-la-mouche' },
+    ],
+  },
+  {
+    label: 'MasterClass',
+    href: '/masterclass',
+    activePrefix: '/master-class',
+    children: [
+      { label: 'Czech Nymph', href: '/master-class-nymphe-au-fil' },
+      { label: 'Reservoir', href: '/master-class-peche-en-reservoir' },
+    ],
+  },
+  {
+    label: 'Trips',
+    href: '/voyages-peche-mouche',
+    activePrefix: '/voyage',
+    children: [
+      { label: 'All Destinations', href: '/voyages-peche-mouche' },
+      { label: 'Argentina — Rio Grande', href: '/voyage-peche-argentine-rio-grande-truite-de-mer' },
+      { label: 'Cuba — Cayo Cruz', href: '/peche-mouche-cuba-cayo-cruz' },
+      { label: 'Cuba — Santa Maria', href: '/peche-mouche-cuba-cayo-santa-maria' },
+      { label: 'Venezuela — Los Roques', href: '/los-roques-venezuela' },
+      { label: 'Mexico', href: '/voyage-peche-mouche-mexique' },
+    ],
+  },
+  {
+    label: 'More',
+    href: '/partenaires-jeanbaptistevidal',
+    children: [
+      { label: 'Partners', href: '/partenaires-jeanbaptistevidal' },
+      { label: 'Press', href: '/revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche' },
+      { label: 'Videos', href: '/videos-jeanbaptiste-vidal-moniteur-guide-de-peche' },
+      { label: 'Gear', href: '/materiel-jeanbaptistevidal' },
+      { label: 'Fly Patterns', href: '/mouches-de-peche-jeanbaptiste-vidal' },
+    ],
+  },
+  { label: 'Blog', href: '/blog' },
+  {
+    label: 'Contact',
+    href: '/contact',
+    children: [
+      { label: 'Contact', href: '/contact' },
+      { label: 'Gift Voucher', href: '/bon-cadeau-peche-mouche' },
+      { label: 'Rates', href: '/tarifs' },
+      { label: 'Availability Calendar', href: '/disponibilites-guidages' },
+    ],
+  },
+]
+
 // ── Fetch Sanity — si le document n'existe pas encore, on utilise le fallback
 let navLinks = NAV_FALLBACK
 try {
@@ -118,6 +192,9 @@ function navHref(href: string) {
   return href === '/' ? '/en/' : '/en' + href
 }
 
+// EN: always use hardcoded EN fallback (Sanity nav has no EN labels)
+if (isEn) navLinks = NAV_FALLBACK_EN
+
 // Active check: compare against prefixed pathname
 function isActive(href: string, prefix?: string) {
   const p = navHref(href)
@@ -132,16 +209,34 @@ function isActive(href: string, prefix?: string) {
       <img src="/images/logo.svg" alt="Enjoy Fishing" class="logo-img" />
       <span class="logo-text">
         <span class="logo-name">Jean-Baptiste Vidal</span>
-        <span class="logo-tagline">Guide de pêche à la mouche</span>
-        <span class="logo-tagline">Bretagne</span>
+        {isEn ? (
+          <>
+            <span class="logo-tagline">Fly Fishing Guide</span>
+            <span class="logo-tagline">Brittany</span>
+          </>
+        ) : (
+          <>
+            <span class="logo-tagline">Guide de pêche à la mouche</span>
+            <span class="logo-tagline">Bretagne</span>
+          </>
+        )}
       </span>
     </a>
 
     <!-- Titre centré — visible uniquement en mode hamburger (≤1024px) -->
     <a href={navHref('/')} class="header-title" aria-hidden="true" tabindex="-1">
       <span class="ht-name">Jean-Baptiste Vidal</span>
-      <span class="ht-tagline">Guide de pêche à la mouche</span>
-      <span class="ht-tagline">Bretagne</span>
+      {isEn ? (
+        <>
+          <span class="ht-tagline">Fly Fishing Guide</span>
+          <span class="ht-tagline">Brittany</span>
+        </>
+      ) : (
+        <>
+          <span class="ht-tagline">Guide de pêche à la mouche</span>
+          <span class="ht-tagline">Bretagne</span>
+        </>
+      )}
     </a>
 
     <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false">

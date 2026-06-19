@@ -92,9 +92,15 @@ const heroBg = (image: any) => {
 interface Props {
   sections?: any[]
   pageTitle?: string
+  lang?: 'fr' | 'en'
 }
 
-const { sections, pageTitle = '' } = Astro.props
+const { sections, pageTitle = '', lang = 'fr' } = Astro.props
+
+// Prefix internal links with /en when rendering the EN version
+const pfx = (href: string | undefined): string | undefined =>
+  lang === 'en' && href?.startsWith('/') && !href.startsWith('/en')
+    ? '/en' + href : href
 
 const hasPartenaires = (sections ?? []).some((s: any) => s._type === 'sectionPartenaires')
 const partenaires: any[] = hasPartenaires
@@ -207,13 +213,13 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         {s.sousTitre && <p class="pb-hero__sub">{s.sousTitre}</p>}
         <div class="pb-hero__cta">
           {stegaClean(s.btnReserverTexte) && (
-            <a href={s.btnReserverLien || '/contact'} class="btn-prim">{s.btnReserverTexte}</a>
+            <a href={pfx(s.btnReserverLien || '/contact')} class="btn-prim">{s.btnReserverTexte}</a>
           )}
           {stegaClean(s.btnTelTexte) && (
             <a href={`tel:${stegaClean(s.btnTelTexte).replace(/\s/g,'')}`} class="btn-ghost">{s.btnTelTexte}</a>
           )}
           {s.btnMaterielLien && (
-            <MatierielBtn href={s.btnMaterielLien} label={s.btnMaterielLabel || 'Matériel'} />
+            <MatierielBtn href={pfx(s.btnMaterielLien)} label={s.btnMaterielLabel || 'Matériel'} />
           )}
           {stegaClean(s.btnYoutubeLien) && (
             <a href={stegaClean(s.btnYoutubeLien)} class="btn-youtube" target="_blank" rel="noopener noreferrer">
@@ -269,7 +275,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               <p class="info-lbl">Contact</p>
               <p class="info-val">06 87 30 34 56<br/>enjoy.fishing@hotmail.fr</p>
               {s.boutons?.map((btn: any) => (
-                <a href={btn.lien} class="info-card-btn">{btn.texte}</a>
+                <a href={pfx(btn.lien)} class="info-card-btn">{btn.texte}</a>
               ))}
             </div>
           </aside>
@@ -292,7 +298,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             ? `${(hs.x * 100).toFixed(1)}% ${(hs.y * 100).toFixed(1)}%`
             : (stegaClean(c.positionPhoto) || 'center center')
           return (
-            <a href={c.lien||'#'} class:list={['wf-card', isOdd&&isLast&&'wf-card--wide']}>
+            <a href={pfx(c.lien)||'#'} class:list={['wf-card', isOdd&&isLast&&'wf-card--wide']}>
               <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl});background-position:${cardImgPos}` : ''}></div>
               <div class="wf-overlay"></div>
               <div class="wf-body">
@@ -323,7 +329,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             ? `${(hs2.x * 100).toFixed(1)}% ${(hs2.y * 100).toFixed(1)}%`
             : (stegaClean(c.positionPhoto) || 'center center')
           return (
-            <a href={c.lien||'#'} class="wf-card">
+            <a href={pfx(c.lien)||'#'} class="wf-card">
               <div class="wf-card-bg" style={cardImgUrl ? `background-image:url(${cardImgUrl});background-position:${cardImgPos2}` : ''}></div>
               <div class="wf-overlay"></div>
               <div class="wf-body">
@@ -362,7 +368,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               ? `${(hsWf3.x * 100).toFixed(1)}% ${(hsWf3.y * 100).toFixed(1)}%`
               : 'center center'
             return (
-              <a href={stegaClean(c.lien) || '#'} class={`wf3-card${i === 0 ? ' wf3-card--large' : ''}`}>
+              <a href={pfx(stegaClean(c.lien)) || '#'} class={`wf3-card${i === 0 ? ' wf3-card--large' : ''}`}>
                 {img && <div class="wf3-card__bg" style={`background-image:url(${img});background-position:${posWf3}`}></div>}
                 <div class="wf3-overlay"></div>
                 <div class="wf3-body">
@@ -685,7 +691,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         </div>
         {s.btnTexte && s.btnLien && (
           <div class="pb-dates__cta">
-            <a href={s.btnLien} class="btn-prim">{s.btnTexte}</a>
+            <a href={pfx(s.btnLien)} class="btn-prim">{s.btnTexte}</a>
           </div>
         )}
       </div>
@@ -701,8 +707,8 @@ const voyagesForGrid: any[] = hasVoyagesGrid
           {s.texte && <p class="pb-cta__sub">{s.texte}</p>}
         </div>
         <div class="pb-cta__btns">
-          <a href={s.btn1Lien||'/contact'} class="btn-prim">{s.btn1Texte||'Me contacter'}</a>
-          {s.btn2Texte && <a href={s.btn2Lien||'tel:0687303456'} class="btn-ghost-light">{s.btn2Texte}</a>}
+          <a href={pfx(s.btn1Lien)||pfx('/contact')} class="btn-prim">{s.btn1Texte||'Me contacter'}</a>
+          {s.btn2Texte && <a href={pfx(s.btn2Lien)||'tel:0687303456'} class="btn-ghost-light">{s.btn2Texte}</a>}
         </div>
       </div>
     </section>
@@ -738,7 +744,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               <div class="bc-actions">
                 {s.boutons.map((b: any) => (
                   <a
-                    href={stegaClean(b.lien) || '#'}
+                    href={pfx(stegaClean(b.lien)) || '#'}
                     class={`bc-btn bc-btn--${stegaClean(b.style) === 'ghost' ? 'ghost' : 'prim'}`}
                   >
                     {stegaClean(b.texte)}
@@ -757,7 +763,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                   </>
                 ))}
                 {s.infocard.ctaTexte && (
-                  <a href={stegaClean(s.infocard.ctaLien) || '#'} class="bc-card__cta">
+                  <a href={pfx(stegaClean(s.infocard.ctaLien)) || '#'} class="bc-card__cta">
                     {stegaClean(s.infocard.ctaTexte)}
                   </a>
                 )}
@@ -773,7 +779,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
   {s._type === 'sectionBanniere' && (
     <div class={`pb-banniere pb-banniere--${stegaClean(s.style)||'ocean'}`}>
       {s.lien
-        ? <a href={s.lien} class="pb-banniere__inner container">{s.texte}</a>
+        ? <a href={pfx(s.lien)} class="pb-banniere__inner container">{s.texte}</a>
         : <p class="pb-banniere__inner container">{s.texte}</p>
       }
     </div>
@@ -917,12 +923,12 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                           )}
                         </div>
                         {stegaClean(item.lien) && (
-                          <a href={stegaClean(item.lien)} class="tl-expand-link">
+                          <a href={pfx(stegaClean(item.lien))} class="tl-expand-link">
                             {stegaClean(item.lienLabel) || 'Voir →'}
                           </a>
                         )}
                         {stegaClean(item.lien2) && (
-                          <a href={stegaClean(item.lien2)} class="tl-expand-link tl-expand-link--temo">
+                          <a href={pfx(stegaClean(item.lien2))} class="tl-expand-link tl-expand-link--temo">
                             {stegaClean(item.lienLabel2) || 'Témoignage →'}
                           </a>
                         )}
@@ -1106,7 +1112,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
     <section class={`section pb-mat-nav ${bg(s.fond)||'section--sand'}`}>
       <div class="container pb-mat-nav__inner">
         {s.liens?.map((lien: any) => (
-          <a href={stegaClean(lien.url)} class="pb-mat-nav__btn">{lien.label}</a>
+          <a href={pfx(stegaClean(lien.url))} class="pb-mat-nav__btn">{lien.label}</a>
         ))}
       </div>
     </section>
@@ -1160,7 +1166,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         )}
         <div class="pb-hub__grid">
           {s.cartes?.map((carte: any) => (
-            <a href={stegaClean(carte.url)} class="pb-hub__card">
+            <a href={pfx(stegaClean(carte.url))} class="pb-hub__card">
               <div class="pb-hub__card-img-wrap">
                 {carte.image?.asset?.url
                   ? <img src={carte.image.asset.url} alt={stegaClean(carte.image?.alt) || stegaClean(carte.titre) || ''} class="pb-hub__card-img" loading="lazy" />
@@ -1194,7 +1200,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             <div class="ts-divider"></div>
             {stegaClean(s.description) && <p class="ts-desc">{s.description}</p>}
             {stegaClean(s.lienUrl)    && (
-              <a href={stegaClean(s.lienUrl)} class="ts-more">
+              <a href={pfx(stegaClean(s.lienUrl))} class="ts-more">
                 {stegaClean(s.lienLabel) || 'Découvrir →'}
               </a>
             )}
@@ -1210,7 +1216,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                 <div class={`ts-row${isFerme ? ' ts-row--closed' : ''}`}>
                   <div class="ts-row__info">
                     {stegaClean(ligne.lienUrl)
-                      ? <a href={stegaClean(ligne.lienUrl)} class="ts-row__name">{ligne.nom}</a>
+                      ? <a href={pfx(stegaClean(ligne.lienUrl))} class="ts-row__name">{ligne.nom}</a>
                       : <span class="ts-row__name">{ligne.nom}</span>}
                     {stegaClean(ligne.format) && (
                       <span class="ts-row__format">
@@ -1222,7 +1228,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                   </div>
                   <div class={`ts-prices${isContact ? ' ts-prices--contact' : ''}`}>
                     {isContact
-                      ? <a href="/contact" class="ts-contact-price ts-contact-price--link">Nous contacter</a>
+                      ? <a href={pfx('/contact')} class="ts-contact-price ts-contact-price--link">Nous contacter</a>
                       : ligne.prix?.map((p: any) => (
                           <div class={`ts-price${isAccent ? ' ts-price--accent' : ''}`}>
                             <span class="ts-price__val">{p.valeur}</span>
@@ -1323,7 +1329,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         )}
         <div class="vg-grid">
           {featured && (
-            <a href={`/${stegaClean(featured.slug?.current)}`} class="vg-card vg-card--large">
+            <a href={pfx(`/${stegaClean(featured.slug?.current)}`)} class="vg-card vg-card--large">
               {vImg(featured, 1400, 900) && <div class="vg-card__bg" style={`background-image:url(${vImg(featured, 1400, 900)})`}></div>}
               <div class="vg-overlay"></div>
               <div class="vg-body">
@@ -1337,7 +1343,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
           {rest.map((v: any) => {
             const img = vImg(v, 900, 640)
             return (
-              <a href={`/${stegaClean(v.slug?.current)}`} class="vg-card">
+              <a href={pfx(`/${stegaClean(v.slug?.current)}`)} class="vg-card">
                 {img && <div class="vg-card__bg" style={`background-image:url(${img})`}></div>}
                 <div class="vg-overlay"></div>
                 <div class="vg-body">

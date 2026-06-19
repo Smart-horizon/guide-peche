@@ -89,7 +89,7 @@ const ogImg       = doc.ogImage
   hreflangFr={`/${slug}`}
   hreflangEn={`/en/${slug}`}
 >
-  <PageBuilderSections sections={sections} pageTitle={pageTitle} />
+  <PageBuilderSections sections={sections} pageTitle={pageTitle} lang="en" />
 
   {/* Fallback générique pour pages sans pagebuilder */}
   {!sections && (
@@ -110,7 +110,7 @@ const ogImg       = doc.ogImage
             <p class="pb-cta__sub">Availability on request — reply within 24h.</p>
           </div>
           <div class="pb-cta__btns">
-            <a href="/contact" class="btn-prim">Contact Jean-Baptiste</a>
+            <a href="/en/contact" class="btn-prim">Contact Jean-Baptiste</a>
             <a href="tel:0687303456" class="btn-ghost-light">+33 6 87 30 34 56</a>
           </div>
         </div>
