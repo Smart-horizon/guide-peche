@@ -128,7 +128,7 @@ function isActive(href: string, prefix?: string) {
 
 <header class="site-header" id="site-header">
   <div class="header-inner">
-    <a href="/" class="logo" aria-label="Jean-Baptiste Vidal — Accueil">
+    <a href={navHref('/')} class="logo" aria-label="Jean-Baptiste Vidal — Accueil">
       <img src="/images/logo.svg" alt="Enjoy Fishing" class="logo-img" />
       <span class="logo-text">
         <span class="logo-name">Jean-Baptiste Vidal</span>
@@ -138,7 +138,7 @@ function isActive(href: string, prefix?: string) {
     </a>
 
     <!-- Titre centré — visible uniquement en mode hamburger (≤1024px) -->
-    <a href="/" class="header-title" aria-hidden="true" tabindex="-1">
+    <a href={navHref('/')} class="header-title" aria-hidden="true" tabindex="-1">
       <span class="ht-name">Jean-Baptiste Vidal</span>
       <span class="ht-tagline">Guide de pêche à la mouche</span>
       <span class="ht-tagline">Bretagne</span>
