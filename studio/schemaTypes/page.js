@@ -6,8 +6,9 @@ export default {
   type: 'document',
   icon: () => '📄',
   groups: [
-    { name: 'page', title: '🏗️ Page Builder' },
-    { name: 'seo',  title: '🔍 SEO' },
+    { name: 'page',        title: '🏗️ Page Builder' },
+    { name: 'traductions', title: '🇬🇧 Version anglaise' },
+    { name: 'seo',         title: '🔍 SEO' },
   ],
   fields: [
     {
@@ -50,6 +51,31 @@ export default {
       type: 'image',
       group: 'page',
       options: { hotspot: true },
+    },
+
+    // ── Traductions EN ─────────────────────────────────────────────────────
+    {
+      name: 'seoTitleEn',
+      title: 'Titre SEO — English',
+      type: 'string',
+      group: 'traductions',
+      validation: Rule => Rule.max(65).warning('Ideally under 65 characters'),
+    },
+    {
+      name: 'seoDescriptionEn',
+      title: 'Description SEO — English',
+      type: 'text',
+      rows: 3,
+      group: 'traductions',
+      validation: Rule => Rule.max(160).warning('Ideally under 160 characters'),
+    },
+    {
+      name: 'pagebuilderEn',
+      title: '🇬🇧 Sections de la page — English',
+      type: 'array',
+      group: 'traductions',
+      description: 'English version of the page. Leave empty to fall back to French content.',
+      of: allSectionTypes.map(s => ({ type: s.name })),
     },
 
     // ── SEO ────────────────────────────────────────────────────────────────

@@ -107,9 +107,23 @@ try {
 const { pathname } = Astro.url
 
 // Language switch URLs
-const isEn  = lang === 'en'
-const frPath = isEn ? pathname.replace(/^\/en/, '') || '/' : pathname
-const enPath = isEn ? pathname : '/en' + pathname
+const isEn      = lang === 'en'
+const frPath    = isEn ? pathname.replace(/^\/en/, '') || '/' : pathname
+const enPath    = isEn ? pathname : '/en' + pathname
+const navPrefix = isEn ? '/en' : ''
+
+// Prefix a nav href for the current language
+function navHref(href: string) {
+  if (!isEn) return href
+  return href === '/' ? '/en' : '/en' + href
+}
+
+// Active check: compare against prefixed pathname
+function isActive(href: string, prefix?: string) {
+  const p = navHref(href)
+  const ap = prefix ? navPrefix + prefix : null
+  return ap ? pathname.startsWith(ap) : pathname === p
+}
 ---
 
 <header class="site-header" id="site-header">
@@ -140,14 +154,14 @@ const enPath = isEn ? pathname : '/en' + pathname
           <li class:list={[{ 'has-dropdown': children }]}>
             {children ? (
               <>
-                <a href={href} class:list={['nav-link', { active: (activePrefix && pathname.startsWith(activePrefix)) || pathname === href }]}>
+                <a href={navHref(href)} class:list={['nav-link', { active: isActive(href, activePrefix) }]}>
                   {label}
                   <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
                 </a>
                 <ul class="dropdown">
                   {children.map(child => (
                     <li>
-                      <a href={child.href} class:list={['dropdown-link', { active: pathname === child.href }]}>
+                      <a href={navHref(child.href)} class:list={['dropdown-link', { active: isActive(child.href) }]}>
                         {child.label}
                       </a>
                     </li>
@@ -155,7 +169,7 @@ const enPath = isEn ? pathname : '/en' + pathname
                 </ul>
               </>
             ) : (
-              <a href={href} class:list={['nav-link', { active: pathname === href }]}>
+              <a href={navHref(href)} class:list={['nav-link', { active: isActive(href) }]}>
                 {label}
               </a>
             )}

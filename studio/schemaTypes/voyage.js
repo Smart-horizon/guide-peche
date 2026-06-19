@@ -6,9 +6,10 @@ export default {
   type: 'document',
   icon: () => '✈️',
   groups: [
-    { name: 'page',    title: '🏗️ Page Builder' },
-    { name: 'contenu', title: '📝 Infos de base' },
-    { name: 'seo',     title: '🔍 SEO' },
+    { name: 'page',        title: '🏗️ Page Builder' },
+    { name: 'contenu',     title: '📝 Infos de base' },
+    { name: 'traductions', title: '🇬🇧 Version anglaise' },
+    { name: 'seo',         title: '🔍 SEO' },
   ],
   fields: [
     // ── Identité ────────────────────────────────────────────────────────────
@@ -72,6 +73,31 @@ export default {
       description: '✋ Glissez-déposez pour réorganiser · Cliquez "+" pour ajouter une section',
       type: 'array',
       group: 'page',
+      of: allSectionTypes.map(s => ({ type: s.name })),
+    },
+
+    // ── Traductions EN ───────────────────────────────────────────────────────
+    {
+      name: 'seoTitleEn',
+      title: 'Titre SEO — English',
+      type: 'string',
+      group: 'traductions',
+      validation: Rule => Rule.max(65).warning('Ideally under 65 characters'),
+    },
+    {
+      name: 'seoDescriptionEn',
+      title: 'Description SEO — English',
+      type: 'text',
+      rows: 3,
+      group: 'traductions',
+      validation: Rule => Rule.max(160).warning('Ideally under 160 characters'),
+    },
+    {
+      name: 'pagebuilderEn',
+      title: '🇬🇧 Sections de la page — English',
+      type: 'array',
+      group: 'traductions',
+      description: 'English version of the page. Leave empty to fall back to French content.',
       of: allSectionTypes.map(s => ({ type: s.name })),
     },
 
