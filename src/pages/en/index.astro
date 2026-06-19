@@ -160,8 +160,8 @@ const materielSection = {
   hreflangEn="/en/"
 >
 
-  {/* ── Hero fallback */}
-  {!allSections.some((s: any) => s._type === 'sectionHero') && (
+  {/* ── Hero fallback : toujours visible si pas de pagebuilderEn (car la sectionHero FR ne sera pas skippée) */}
+  {(!hasEnContent || !allSections.some((s: any) => s._type === 'sectionHero')) && (
     <section class="hp-hero-fallback">
       <div class="hp-hero-fallback__bg"></div>
       <div class="hp-hero-fallback__overlay"></div>
@@ -312,7 +312,9 @@ const materielSection = {
       </section>
     )
 
-    return <PageBuilderSections sections={[s]} pageTitle={pageTitle} />
+    // Skip FR sectionHero when no pagebuilderEn (EN fallback hero shown above instead)
+    if (!hasEnContent && s._type === 'sectionHero') return null
+    return <PageBuilderSections sections={[s]} pageTitle={pageTitle} lang="en" />
   })}
 
 </BaseLayout>
