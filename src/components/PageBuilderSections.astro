@@ -208,6 +208,13 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         <div class="pb-hero__bg" style={heroBg(s.image)}></div>
       )}
       <div class="pb-hero__content container">
+        {s.badges?.length > 0 && (
+          <div class="pb-hero__badges">
+            {s.badges.map((b: any) => (
+              <span class={`pb-hero__badge${b.style === 'mouche' ? ' pb-hero__badge--mouche' : ''}`}>{b.texte}</span>
+            ))}
+          </div>
+        )}
         {s.eyebrow && <p class="pb-eyebrow">{s.eyebrow}</p>}
         <h1 class="pb-hero__h1">{s.titre}</h1>
         {s.sousTitre && <p class="pb-hero__sub">{s.sousTitre}</p>}
@@ -1597,6 +1604,29 @@ span.ts-row__name { color: var(--color-text, #1a1a1f); }
   position: relative;
   z-index: 1;
   padding-top: var(--header-height);
+}
+.pb-hero__badges {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.pb-hero__badge {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: 2px;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.pb-hero__badge--mouche {
+  background: rgba(126,200,227,0.15);
+  border-color: rgba(126,200,227,0.35);
+  color: var(--color-ocean-light);
 }
 .pb-eyebrow {
   font-size: 0.72rem;

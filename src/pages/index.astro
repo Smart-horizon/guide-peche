@@ -305,6 +305,14 @@ const allSections = hp?.pagebuilder ?? []
       </section>
     )
 
+    // Inject FR badges on sectionHero if not already set in Sanity
+    if (s._type === 'sectionHero') {
+      const withBadges = s.badges?.length ? s : { ...s, badges: [
+        { _key: 'b1', texte: '21 ans de guidage' },
+        { _key: 'b2', texte: '🪶 Exclusivement Mouche', style: 'mouche' },
+      ]}
+      return <PageBuilderSections sections={[withBadges]} pageTitle={pageTitle} />
+    }
     return <PageBuilderSections sections={[s]} pageTitle={pageTitle} />
   })}
 
