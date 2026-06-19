@@ -50,9 +50,26 @@ const ogImg       = heroSection?.image
   ? urlFor(heroSection.image).width(1200).height(630).fit('crop').crop('focalpoint').url()
   : undefined
 
-// ── Use pagebuilderEn if filled in, otherwise fall back to FR pagebuilder
+// ── Hero EN : always use FR sectionHero for visuals (video, image), override text in EN
+const frHeroSection = hp?.pagebuilder?.find((s: any) => s._type === 'sectionHero')
+const enHeroSection = frHeroSection ? {
+  ...frHeroSection,
+  eyebrow: 'Licensed Guide · South Brittany',
+  titre: 'Fly Fishing in Brittany',
+  sousTitre: 'Guided fishing for sea bass, trout, shad and pike. Courses and coaching from beginner to masterclass level.',
+  btnReserverTexte: 'Book a session',
+  btnReserverLien: '/contact',
+  btnTelTexte: '06 87 30 34 56',
+  badges: [
+    { _key: 'b1', texte: '21 years of guiding' },
+    { _key: 'b2', texte: '🪶 Fly fishing only', style: 'mouche' },
+  ],
+} : null
+
+// ── Other sections: use pagebuilderEn if filled, otherwise FR pagebuilder (skip sectionHero, handled above)
 const hasEnContent = hp?.pagebuilderEn?.length > 0
-const allSections  = hasEnContent ? hp.pagebuilderEn : (hp?.pagebuilder ?? [])
+const allSections  = (hasEnContent ? hp.pagebuilderEn : (hp?.pagebuilder ?? []))
+  .filter((s: any) => s._type !== 'sectionHero')
 
 // ── Testimonials
 const allTemoStats = await client.fetch(`*[_type == "temoignage"] { note }`)
@@ -160,26 +177,29 @@ const materielSection = {
   hreflangEn="/en/"
 >
 
-  {/* ── Hero fallback : toujours visible si pas de pagebuilderEn (car la sectionHero FR ne sera pas skippée) */}
-  {(!hasEnContent || !allSections.some((s: any) => s._type === 'sectionHero')) && (
-    <section class="hp-hero-fallback">
-      <div class="hp-hero-fallback__bg"></div>
-      <div class="hp-hero-fallback__overlay"></div>
-      <div class="hp-hero-fallback__content container">
-        <div class="hp-hero-fallback__badges">
-          <span class="hp-hero-fallback__badge">21 years of guiding</span>
-          <span class="hp-hero-fallback__badge hp-hero-fallback__badge--mouche">🪶 Fly fishing only</span>
+  {/* ── Hero EN : same video/visuals as FR, with EN text */}
+  {enHeroSection
+    ? <PageBuilderSections sections={[enHeroSection]} pageTitle={pageTitle} lang="en" />
+    : (
+      <section class="hp-hero-fallback">
+        <div class="hp-hero-fallback__bg"></div>
+        <div class="hp-hero-fallback__overlay"></div>
+        <div class="hp-hero-fallback__content container">
+          <div class="hp-hero-fallback__badges">
+            <span class="hp-hero-fallback__badge">21 years of guiding</span>
+            <span class="hp-hero-fallback__badge hp-hero-fallback__badge--mouche">🪶 Fly fishing only</span>
+          </div>
+          <p class="hp-hero-fallback__eyebrow">Licensed Guide · South Brittany, France</p>
+          <h1 class="hp-hero-fallback__h1">Fly fishing<br/><em>in Brittany</em></h1>
+          <p class="hp-hero-fallback__sub">Guided fishing for sea bass, trout, shad and pike. Courses and coaching from beginner to masterclass level.</p>
+          <div class="hp-hero-fallback__cta">
+            <a href="/en/contact" class="btn-prim">Book a session</a>
+            <a href="tel:0033687303456" class="btn-ghost-hero">+33 6 87 30 34 56</a>
+          </div>
         </div>
-        <p class="hp-hero-fallback__eyebrow">Licensed Guide · South Brittany, France</p>
-        <h1 class="hp-hero-fallback__h1">Fly fishing<br/><em>in Brittany</em></h1>
-        <p class="hp-hero-fallback__sub">Guided fishing for sea bass, trout, shad and pike. Courses and coaching from beginner to masterclass level.</p>
-        <div class="hp-hero-fallback__cta">
-          <a href="/contact" class="btn-prim">Book a session</a>
-          <a href="tel:0033687303456" class="btn-ghost-hero">+33 6 87 30 34 56</a>
-        </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )
+  }
 
   {/* ── Sections in Sanity order */}
   {allSections.map((s: any) => {
@@ -312,16 +332,6 @@ const materielSection = {
       </section>
     )
 
-    // Skip FR sectionHero when no pagebuilderEn (EN fallback hero shown above instead)
-    if (!hasEnContent && s._type === 'sectionHero') return null
-    // Inject EN badges on sectionHero if not already set in Sanity
-    if (s._type === 'sectionHero') {
-      const withBadges = s.badges?.length ? s : { ...s, badges: [
-        { _key: 'b1', texte: '21 years of guiding' },
-        { _key: 'b2', texte: '🪶 Fly fishing only', style: 'mouche' },
-      ]}
-      return <PageBuilderSections sections={[withBadges]} pageTitle={pageTitle} lang="en" />
-    }
     return <PageBuilderSections sections={[s]} pageTitle={pageTitle} lang="en" />
   })}
 
