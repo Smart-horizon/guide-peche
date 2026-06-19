@@ -1,6 +1,6 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro'
-import { client } from '../lib/sanity.js'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { client } from '../../lib/sanity.js'
 
 const params = await client.fetch(
   `*[_id == "siteParametres"][0]{ formspreeId, email, telephone }`
@@ -15,9 +15,9 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
 ---
 
 <BaseLayout
-  title="Contact — Jean-Baptiste Vidal, Guide de pêche à la mouche en Bretagne"
-  description="Contacter Jean-Baptiste Vidal Moniteur-Guide de pêche à la mouche en Bretagne pour organiser votre stage."
-  lang="fr"
+  title="Contact — Jean-Baptiste Vidal, Fly Fishing Guide in Brittany"
+  description="Contact Jean-Baptiste Vidal, licensed fly fishing guide in Brittany, to organise your guided day or fly fishing course."
+  lang="en"
   hreflangFr="/contact"
   hreflangEn="/en/contact"
 >
@@ -27,18 +27,18 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
     <div class="container page-hero-content">
       <p class="eyebrow">Enjoy Fishing</p>
       <h1>Contact</h1>
-      <p class="hero-sub">Moniteur - Guide de pêche à la mouche</p>
+      <p class="hero-sub">Licensed Fly Fishing Guide — Brittany</p>
     </div>
   </section>
 
   <section class="section contact-section">
     <div class="container contact-layout">
 
-      <!-- Formulaire -->
+      <!-- Form -->
       <div class="contact-form-wrap">
         <p class="form-intro">
-          Que ce soit pour une demande de renseignements ou bien pour réserver une prestation, formulez votre demande ici.
-          Je vous répondrai dans les plus brefs délais.
+          Whether you have a question or want to book a session, send your request here.
+          Jean-Baptiste will get back to you as soon as possible.
         </p>
 
         {formAction ? (
@@ -51,69 +51,69 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
         >
           <div class="form-row">
             <div class="form-group">
-              <label for="nom">Nom *</label>
-              <input type="text" id="nom" name="nom" required placeholder="Votre nom" />
+              <label for="nom">Name *</label>
+              <input type="text" id="nom" name="nom" required placeholder="Your name" />
             </div>
             <div class="form-group">
               <label for="email">Email *</label>
-              <input type="email" id="email" name="email" required placeholder="votre@email.fr" />
+              <input type="email" id="email" name="email" required placeholder="your@email.com" />
             </div>
           </div>
 
           <div class="form-group">
-            <label for="telephone">Téléphone</label>
-            <input type="tel" id="telephone" name="telephone" placeholder="06 00 00 00 00" />
+            <label for="telephone">Phone</label>
+            <input type="tel" id="telephone" name="telephone" placeholder="+44 7000 000000" />
           </div>
 
           <div class="form-group">
-            <label for="sujet">Sujet *</label>
+            <label for="sujet">Subject *</label>
             <select id="sujet" name="sujet" required>
-              <option value="" disabled selected>Choisissez une prestation</option>
-              <optgroup label="— Eau douce">
-                <option value="Stage d'initiation à la mouche">Stage d'initiation à la mouche</option>
-                <option value="Pêche de la truite">Pêche de la truite</option>
-                <option value="Pêche du brochet">Pêche du brochet</option>
-                <option value="Pêche de l'alose">Pêche de l'alose</option>
+              <option value="" disabled selected>Choose a programme</option>
+              <optgroup label="— Freshwater">
+                <option value="Fly fishing beginner course">Fly fishing beginner course</option>
+                <option value="Trout fly fishing">Trout fly fishing</option>
+                <option value="Pike fly fishing">Pike fly fishing</option>
+                <option value="Shad fly fishing">Shad fly fishing</option>
               </optgroup>
-              <optgroup label="— Bar (mer)">
-                <option value="Initiation bar à la mouche">Initiation bar à la mouche</option>
-                <option value="Perfectionnement bar">Perfectionnement bar</option>
-                <option value="Bar à vue en estuaire">Bar à vue en estuaire</option>
-                <option value="Bar en bateau">Bar en bateau</option>
-                <option value="Coaching bar">Coaching bar</option>
+              <optgroup label="— Sea bass (saltwater)">
+                <option value="Sea bass — beginner">Sea bass — beginner</option>
+                <option value="Sea bass — intermediate">Sea bass — intermediate</option>
+                <option value="Sea bass — sight fishing">Sea bass — sight fishing</option>
+                <option value="Sea bass — boat">Sea bass — boat</option>
+                <option value="Sea bass — coaching">Sea bass — coaching</option>
               </optgroup>
-              <optgroup label="— Voyages">
-                <option value="Voyage Argentine — Rio Grande">Argentine — Rio Grande</option>
-                <option value="Voyage Cuba — Cayo Cruz">Cuba — Cayo Cruz</option>
-                <option value="Voyage Cuba — Santa Maria">Cuba — Santa Maria</option>
-                <option value="Voyage Venezuela — Los Roques">Venezuela — Los Roques</option>
-                <option value="Voyage Mexique">Mexique</option>
+              <optgroup label="— Expeditions">
+                <option value="Expedition — Argentina Rio Grande">Argentina — Rio Grande</option>
+                <option value="Expedition — Cuba Cayo Cruz">Cuba — Cayo Cruz</option>
+                <option value="Expedition — Cuba Santa Maria">Cuba — Santa Maria</option>
+                <option value="Expedition — Venezuela Los Roques">Venezuela — Los Roques</option>
+                <option value="Expedition — Mexico">Mexico</option>
               </optgroup>
-              <optgroup label="— Autres">
-                <option value="Bon cadeau">Bon cadeau</option>
-                <option value="Renseignements généraux">Renseignements généraux</option>
+              <optgroup label="— Other">
+                <option value="Gift voucher">Gift voucher</option>
+                <option value="General enquiry">General enquiry</option>
               </optgroup>
             </select>
           </div>
 
           <div class="form-group">
             <label for="message">Message *</label>
-            <textarea id="message" name="message" required rows="6" placeholder="Décrivez votre demande, vos dates souhaitées, votre niveau..."></textarea>
+            <textarea id="message" name="message" required rows="6" placeholder="Tell us about your request, preferred dates, your experience level..."></textarea>
           </div>
 
-          <button type="submit" class="btn btn--ocean">Envoyer ma demande</button>
+          <button type="submit" class="btn btn--ocean">Send my request</button>
 
           <p id="form-success" class="form-success" aria-live="polite" hidden>
-            Vos informations ont bien été envoyées !
+            Your message has been sent successfully!
           </p>
           <p id="form-error" class="form-error" aria-live="polite" hidden>
-            Une erreur est survenue. Merci de réessayer ou de nous contacter par téléphone.
+            Something went wrong. Please try again or contact us directly by phone.
           </p>
         </form>
         ) : (
         <div class="form-fallback">
-          <p>Le formulaire en ligne sera disponible très prochainement.</p>
-          <p>En attendant, contactez Jean-Baptiste directement :</p>
+          <p>The online form will be available shortly.</p>
+          <p>In the meantime, contact Jean-Baptiste directly:</p>
           <ul class="fallback-links">
             <li>
               <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
@@ -126,16 +126,16 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
         )}
       </div>
 
-      <!-- Infos contact -->
+      <!-- Contact info -->
       <aside class="contact-info">
         <div class="info-card">
           <h2>Jean-Baptiste Vidal</h2>
-          <p class="info-subtitle">Moniteur-Guide diplômé d'État<br />Pêche à la mouche en Bretagne-Sud</p>
+          <p class="info-subtitle">Licensed Fly Fishing Guide<br />South Brittany, France</p>
 
           <ul class="info-list">
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.6A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"></path></svg>
-              <a href="tel:+33687303456">06 87 30 34 56</a>
+              <a href="tel:+33687303456">+33 6 87 30 34 56</a>
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
@@ -143,21 +143,21 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
             </li>
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <span>Bretagne-Sud, entre Quimper et Quimperlé</span>
+              <span>South Brittany, between Quimper and Quimperlé</span>
             </li>
           </ul>
 
           <div class="info-delai">
-            <strong>Délai de réponse</strong>
-            <p>Je réponds généralement sous 24 à 48 heures en semaine.</p>
+            <strong>Response time</strong>
+            <p>Jean-Baptiste usually replies within 24 to 48 hours on weekdays.</p>
           </div>
 
           <div class="info-certif">
             <strong>Certifications</strong>
             <ul>
-              <li>BP JEPS « Pêche de Loisir » (2005)</li>
-              <li>UCC « Pêche de loisir en milieu maritime »</li>
-              <li>Carte pro n° 02913ED0228</li>
+              <li>BP JEPS "Recreational Fishing" (2005)</li>
+              <li>UCC "Coastal recreational fishing"</li>
+              <li>Pro licence n° 02913ED0228</li>
               <li>SIRET 789 636 313</li>
             </ul>
           </div>
@@ -178,7 +178,7 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
     e.preventDefault()
     const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement
     submitBtn.disabled = true
-    submitBtn.textContent = 'Envoi en cours…'
+    submitBtn.textContent = 'Sending…'
 
     try {
       const res = await fetch(form.action, {
@@ -197,7 +197,7 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
       errorMsg.hidden = false
       successMsg.hidden = true
       submitBtn.disabled = false
-      submitBtn.textContent = 'Envoyer ma demande'
+      submitBtn.textContent = 'Send my request'
     }
   })
 </script>
@@ -235,7 +235,7 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
     font-weight: 500;
   }
 
-  /* Layout contact */
+  /* Layout */
   .contact-section { padding: 5rem 0; }
   .contact-layout {
     display: grid;
@@ -244,7 +244,7 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
     align-items: start;
   }
 
-  /* Formulaire */
+  /* Form */
   .form-intro {
     font-size: 1rem;
     color: var(--color-text-muted);
@@ -426,7 +426,6 @@ const contactPhone  = params?.telephone || '06 87 30 34 56'
     color: var(--color-text-muted);
   }
 
-  /* Fallback formulaire non configuré */
   .form-fallback {
     background: var(--color-sand);
     border: 1px solid #e0ddd8;

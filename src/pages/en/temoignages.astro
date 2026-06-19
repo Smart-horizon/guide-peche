@@ -1,165 +1,157 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro'
-import { stegaClient } from '../lib/sanity.js'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { stegaClient } from '../../lib/sanity.js'
 import { stegaClean } from '@sanity/client/stega'
 
-const seoTitle = "Témoignages & Avis — Jean-Baptiste Vidal, Guide de Pêche à la Mouche"
-const seoDescription = "Témoignages et avis de stagiaires et clients de Jean-Baptiste Vidal, moniteur-guide de pêche à la mouche en Bretagne-Sud. Bar, saumon, alose, Spey Cast, truite et voyages."
+const seoTitle = "Testimonials & Reviews — Jean-Baptiste Vidal, Fly Fishing Guide"
+const seoDescription = "Read testimonials and reviews from Jean-Baptiste Vidal's clients — sea bass fly fishing, Atlantic salmon, Spey casting, trout and international fly fishing expeditions in Brittany."
 
-// ── Textes éditables depuis Sanity (singleton pageTemoignages) ──────────────
-const pt = await stegaClient.fetch(`*[_id == "pageTemoignages"][0]{ _id, ... }`) ?? {}
-
-// Fallbacks vers les valeurs originales si le champ Sanity est vide
+// ── EN strings (hardcoded — pageTemoignages singleton has no EN fields yet) ──
 const hero = {
-  eyebrow:  pt.heroEyebrow?.trim()  || '21 ans de guidage',
-  titre:    pt.heroTitre?.trim()    || 'Témoignages & Avis',
-  intro:    pt.heroIntro?.trim()    || "Sur cette page vous pourrez trouver certains témoignages de personnes qui m'ont fait confiance et qui ont participé à une journée de pêche en France ou été guidé par mes soins lors d'un voyage à l'étranger :",
+  eyebrow:  '21 years of guiding',
+  titre:    'Testimonials & Reviews',
+  intro:    "Here you'll find testimonials from clients who have trusted me for a guided day in France or on one of my international fly fishing expeditions:",
 }
 const bar = {
-  onglet:   pt.barOnglet?.trim()    || 'Bar à la mouche',
-  titre:    pt.barTitre?.trim()     || 'Bar à la mouche',
-  sousTitre:pt.barSousTitre?.trim() || 'Pêche du bar en Bretagne-Sud, bar à vue, en bateau, en estuaire',
-  ctaTexte: pt.barCtaTexte?.trim()  || 'Découvrir la pêche du bar à la mouche →',
-  ctaUrl:   pt.barCtaUrl?.trim()    || '/peche-du-bar-a-la-mouche',
+  onglet:   'Sea bass',
+  titre:    'Sea Bass Fly Fishing',
+  sousTitre:'Sea bass fly fishing in South Brittany — sight fishing, boat and estuary',
+  ctaTexte: 'Discover sea bass fly fishing →',
+  ctaUrl:   '/en/peche-du-bar-a-la-mouche',
 }
 const saumon = {
-  onglet:   pt.saumonOnglet?.trim()    || 'Saumon & Spey Cast',
-  titre:    pt.saumonTitre?.trim()     || 'Saumon, Alose & Spey Cast',
-  sousTitre:pt.saumonSousTitre?.trim() || 'Guidage migrateurs sur les rivières bretonnes : Ellé, Scorff, Aulne, Aven, Elorn',
-  ctaTexte: pt.saumonCtaTexte?.trim()  || 'Découvrir le Spey Cast →',
-  ctaUrl:   pt.saumonCtaUrl?.trim()    || '/stage-spey-cast-et-cours-de-lancer',
+  onglet:   'Salmon & Spey',
+  titre:    'Atlantic Salmon, Shad & Spey Cast',
+  sousTitre:"Migratory fish guiding on Brittany's rivers: Ellé, Scorff, Aulne, Aven, Elorn",
+  ctaTexte: 'Discover Spey casting →',
+  ctaUrl:   '/en/stage-spey-cast-et-cours-de-lancer',
 }
 const truite = {
-  onglet:   pt.truiteOnglet?.trim()    || 'Truite & Initiation',
-  titre:    pt.truiteTitre?.trim()     || 'Truite & Initiation',
-  sousTitre:pt.truiteSousTitre?.trim() || 'Initiation, perfectionnement truite en rivière : Scorff, Ellé, Isole',
-  ctaTexte: pt.truiteCtaTexte?.trim()  || 'Découvrir la pêche en eau douce →',
-  ctaUrl:   pt.truiteCtaUrl?.trim()    || '/peche-a-la-mouche-en-bretagne',
+  onglet:   'Trout & Beginners',
+  titre:    'Trout & Beginners',
+  sousTitre:'Beginner courses and trout river guiding: Scorff, Ellé, Isole',
+  ctaTexte: 'Discover freshwater fly fishing →',
+  ctaUrl:   '/en/peche-a-la-mouche-en-bretagne',
 }
 const voyages = {
-  onglet:   pt.voyagesOnglet?.trim()    || 'Voyages',
-  titre:    pt.voyagesTitre?.trim()     || 'Voyages internationaux',
-  sousTitre:pt.voyagesSousTitre?.trim() || 'Argentine · Bolivie · Cuba · Venezuela · Mexique',
-  ctaTexte: pt.voyagesCtaTexte?.trim()  || 'Découvrir les voyages →',
-  ctaUrl:   pt.voyagesCtaUrl?.trim()    || '/voyages-peche-mouche',
+  onglet:   'Expeditions',
+  titre:    'International Fly Fishing Expeditions',
+  sousTitre:'Argentina · Bolivia · Cuba · Venezuela · Mexico',
+  ctaTexte: 'Discover the expeditions →',
+  ctaUrl:   '/en/voyages-peche-mouche',
 }
 const cta = {
-  titre:    pt.ctaTitre?.trim()     || 'Prêt à vivre votre expérience ?',
-  texte:    pt.ctaTexte?.trim()     || 'Rejoignez les centaines de pêcheurs qui ont fait confiance à Jean-Baptiste depuis 2004.',
-  btn1Texte:pt.ctaBtn1Texte?.trim() || 'Réserver une sortie',
-  btn1Url:  pt.ctaBtn1Url?.trim()   || '/contact',
-  btn2Texte:pt.ctaBtn2Texte?.trim() || 'Voir les prestations',
-  btn2Url:  pt.ctaBtn2Url?.trim()   || '/stage-peche-mouche',
+  titre:    'Ready for your own experience?',
+  texte:    'Join the hundreds of anglers who have trusted Jean-Baptiste since 2004.',
+  btn1Texte:'Book a session',
+  btn1Url:  '/en/contact',
+  btn2Texte:'View programmes',
+  btn2Url:  '/en/stage-peche-mouche',
 }
 
-// ── Témoignages depuis Sanity, ordonnés par orderRank ──────────────────────
-// On utilise stegaClient pour activer le Visual Editing (clic → Studio).
-// Les comparaisons sur prestation utilisent stegaClean() pour retirer les
-// caractères invisibles stega avant de comparer les chaînes.
+// ── Testimonials from Sanity (shown in their original language) ──────────────
 const allTemos = await stegaClient.fetch(
   `*[_type == "temoignage"] | order(orderRank asc) { _id, nom, note, prestation, texte }`
 )
 
-// ── Photos associées (chemins locaux public/images/) ───────────────────────
-// Les photos ne sont pas encore dans Sanity — elles sont servies depuis /public/images
+// ── Associated photos (local /public/images/) ─────────────────────────────────
 const photoMap: Record<string, { src: string; alt: string; style?: string }[]> = {
   'temo-malcolm': [
-    { src: '/images/temo-malcolm-1.jpg', alt: 'Malcolm avec un beau bar — pêche à vue en Bretagne-Sud' },
-    { src: '/images/temo-malcolm-2.png', alt: 'Malcolm en action — lancer fly fishing bar à la mouche' },
-    { src: '/images/temo-malcolm-3.png', alt: 'Malcolm avec un bar capturé en pêche à vue' },
+    { src: '/images/temo-malcolm-1.jpg', alt: 'Malcolm with a fine sea bass — sight fishing in South Brittany' },
+    { src: '/images/temo-malcolm-2.png', alt: 'Malcolm casting — sea bass fly fishing on the Breton coast' },
+    { src: '/images/temo-malcolm-3.png', alt: 'Malcolm with a sea bass caught on a sight fishing session' },
   ],
   'temo-vincent': [
-    { src: '/images/temo-vincent-1.png', alt: 'Vincent avec un bar capturé à la mouche en Bretagne' },
-    { src: '/images/temo-vincent-2.png', alt: 'Vincent — bar à la mouche en bord de côte bretonne' },
+    { src: '/images/temo-vincent-1.png', alt: 'Vincent with a sea bass caught on the fly in Brittany' },
+    { src: '/images/temo-vincent-2.png', alt: 'Vincent — sea bass fly fishing along the Breton coastline' },
   ],
   'temo-marc': [
-    { src: '/images/temo-marc-1.jpg', alt: 'Marc avec un bar capturé en bateau — pêche mouche Bretagne' },
+    { src: '/images/temo-marc-1.jpg', alt: 'Marc with a sea bass from the boat — fly fishing in Brittany' },
   ],
   'temo-diego': [
-    { src: '/images/temo-diego-1.png', alt: 'Diego guidé par Jean-Baptiste — saumon à la mouche en Bretagne' },
-    { src: '/images/temo-diego-2.png', alt: 'Rivière bretonne — session saumon et Spey Cast avec JBV' },
+    { src: '/images/temo-diego-1.png', alt: 'Diego guided by Jean-Baptiste — Atlantic salmon fly fishing in Brittany' },
+    { src: '/images/temo-diego-2.png', alt: 'Breton river — salmon and Spey Cast session with JBV' },
   ],
   'temo-patrice': [
-    { src: '/images/temo-patrice-1.jpg', alt: 'Patrice et Jean-Baptiste avec un beau saumon — rivière bretonne' },
+    { src: '/images/temo-patrice-1.jpg', alt: 'Patrice and Jean-Baptiste with a fine Atlantic salmon on a Breton river' },
   ],
   'temo-patrice58': [
-    { src: '/images/temo-patrice58-1.jpg', alt: 'Patrice en Spey Cast sur rivière bretonne' },
-    { src: '/images/temo-patrice58-3.jpg', alt: 'Patrice — stage de pêche des migrateurs en Bretagne' },
+    { src: '/images/temo-patrice58-1.jpg', alt: 'Patrice Spey casting on a Breton river' },
+    { src: '/images/temo-patrice58-3.jpg', alt: 'Patrice — migratory fish guiding course in Brittany' },
   ],
   'temo-patrick-alain': [
-    { src: '/images/temo-patrick-1.jpg', alt: 'Patrick — migrateurs à la mouche sur rivières bretonnes', style: 'object-fit:contain' },
+    { src: '/images/temo-patrick-1.jpg', alt: 'Patrick — migratory fish fly fishing on Breton rivers', style: 'object-fit:contain' },
   ],
   'temo-mathieu-philippe': [
-    { src: '/images/temo-mathieu-1.png', alt: 'Philippe avec un saumon capturé — guidage JBV Bretagne' },
-    { src: '/images/temo-mathieu-2.png', alt: 'Mathieu — saumon à la mouche en rivière bretonne' },
-    { src: '/images/temo-mathieu-3.png', alt: 'Mathieu et Philippe — séjour saumon avec Jean-Baptiste Vidal' },
+    { src: '/images/temo-mathieu-1.png', alt: 'Philippe with an Atlantic salmon — JBV guided trip in Brittany' },
+    { src: '/images/temo-mathieu-2.png', alt: 'Mathieu — salmon fly fishing on a Breton river' },
+    { src: '/images/temo-mathieu-3.png', alt: 'Mathieu and Philippe — salmon trip with Jean-Baptiste Vidal' },
   ],
   'temo-antoine': [
-    { src: '/images/temo-antoine-1.jpg', alt: "Antoine — guidage saumon sur l'Elorn avec Jean-Baptiste Vidal" },
+    { src: '/images/temo-antoine-1.jpg', alt: 'Antoine — salmon guiding on the Elorn river with Jean-Baptiste Vidal' },
   ],
   'temo-jerome-veyret': [
-    { src: '/images/temo-jeromev-1.jpg', alt: "Jérôme Veyret — alose à la mouche avec JBV sur l'Aulne" },
-    { src: '/images/temo-jeromev-2.jpg', alt: "Jérôme Veyret — Spey Cast et pêche de l'alose en Bretagne" },
+    { src: '/images/temo-jeromev-1.jpg', alt: 'Jérôme Veyret — shad on the fly with JBV on the Aulne river' },
+    { src: '/images/temo-jeromev-2.jpg', alt: 'Jérôme Veyret — Spey Cast and shad fly fishing in Brittany' },
   ],
   'temo-yann-leprevost': [
-    { src: '/images/temo-yann-2.png', alt: 'Yann Le Prevost — Spey Cast sur les rivières bretonnes' },
-    { src: '/images/temo-yann-1.jpg', alt: 'Yann Le Prevost — saumon et alose avec Jean-Baptiste Vidal' },
+    { src: '/images/temo-yann-2.png', alt: 'Yann Le Prevost — Spey casting on Breton rivers' },
+    { src: '/images/temo-yann-1.jpg', alt: 'Yann Le Prevost — salmon and shad with Jean-Baptiste Vidal' },
   ],
   'temo-guy-bonel': [
-    { src: '/images/temo-guy-1.jpg', alt: 'Guy Bonel — saumon à la mouche sur les rivières du Finistère' },
-    { src: '/images/temo-guy-2.jpg', alt: 'Guy Bonel guidé par Jean-Baptiste Vidal — rivières bretonnes' },
+    { src: '/images/temo-guy-1.jpg', alt: 'Guy Bonel — Atlantic salmon fly fishing on rivers of Finistère' },
+    { src: '/images/temo-guy-2.jpg', alt: 'Guy Bonel guided by Jean-Baptiste Vidal on Breton rivers' },
   ],
   'temo-michael-arraitz': [
-    { src: '/images/temo-michael-1.jpg', alt: 'Michael Arraitz — Spey Cast et migrateurs avec JBV en Bretagne' },
-    { src: '/images/temo-michael-2.jpg', alt: 'Michael Arraitz — session migrateurs sur rivière bretonne' },
+    { src: '/images/temo-michael-1.jpg', alt: 'Michael Arraitz — Spey Cast and migratory fish with JBV in Brittany' },
+    { src: '/images/temo-michael-2.jpg', alt: 'Michael Arraitz — migratory fish session on a Breton river' },
   ],
   'temo-jean-daniel-pilotto': [
-    { src: '/images/temo-jeandaniel-1.jpg', alt: 'Jean-Daniel Pilotto — saumon atlantique en Bretagne avec JBV' },
-    { src: '/images/temo-jeandaniel-2.jpg', alt: "Jean-Daniel Pilotto — guidage saumon sur l'Ellé ou le Scorff" },
+    { src: '/images/temo-jeandaniel-1.jpg', alt: 'Jean-Daniel Pilotto — Atlantic salmon in Brittany with JBV' },
+    { src: '/images/temo-jeandaniel-2.jpg', alt: 'Jean-Daniel Pilotto — salmon guiding on the Ellé or Scorff' },
   ],
   'temo-woestelandt': [
-    { src: '/images/temo-woestelandt-1.jpg', alt: 'Mr et Mme Woestelandt — Spey Cast et saumon sur rivières bretonnes' },
+    { src: '/images/temo-woestelandt-1.jpg', alt: 'Mr and Mrs Woestelandt — Spey Cast and salmon on Breton rivers' },
   ],
   'temo-yann-leprevost-2': [
-    { src: '/images/temo-yann2-1.jpg', alt: "Yann Le Prevost — Spey Cast et saumon sur l'Ellé avec JBV" },
+    { src: '/images/temo-yann2-1.jpg', alt: 'Yann Le Prevost — Spey Cast and salmon on the Ellé with JBV' },
   ],
   'temo-pierre-sabourin': [
-    { src: '/images/temo-pierre-1.jpg', alt: 'Pierre Sabourin — saumon à la mouche en Bretagne avec JBV' },
+    { src: '/images/temo-pierre-1.jpg', alt: 'Pierre Sabourin — Atlantic salmon fly fishing in Brittany with JBV' },
   ],
   'temo-cedric-goh': [
-    { src: '/images/temo-cedric-1.jpg', alt: 'Cédric Goh — initiation saumon et Spey Cast avec Jean-Baptiste Vidal' },
+    { src: '/images/temo-cedric-1.jpg', alt: 'Cédric Goh — salmon beginner course and Spey Cast with Jean-Baptiste Vidal' },
   ],
   'temo-christophe': [
-    { src: '/images/temo-christophe-1.png', alt: 'Christophe relâchant une truite sur le Scorff — guidage JBV' },
+    { src: '/images/temo-christophe-1.png', alt: 'Christophe releasing a trout on the Scorff — JBV guided session' },
   ],
   'temo-christian': [
-    { src: '/images/temo-christian-2.jpg', alt: 'Christian — beau fario capturé en rivière bretonne' },
-    { src: '/images/temo-christian-1.jpg', alt: 'Christian — perfectionnement pêche à la mouche avec JBV' },
+    { src: '/images/temo-christian-2.jpg', alt: 'Christian — fine wild trout caught on a Breton river' },
+    { src: '/images/temo-christian-1.jpg', alt: 'Christian — fly fishing improvement course with JBV' },
   ],
   'temo-jerome': [
-    { src: '/images/temo-jerome-1.jpg', alt: "Jérome — initiation pêche à la mouche sur le Scorff et l'Ellé" },
-    { src: '/images/temo-jerome-2.jpg', alt: 'Jérome en action — lancer mouche sous la guidance de JBV' },
+    { src: '/images/temo-jerome-1.jpg', alt: 'Jérome — beginner fly fishing course on the Scorff and Ellé' },
+    { src: '/images/temo-jerome-2.jpg', alt: 'Jérome casting — learning fly fishing under JBV coaching' },
   ],
   'temo-christian-chris-ferrier': [
-    { src: '/images/temo-christianchris-1.jpg', alt: 'Christian et Chris Ferrier — initiation père-fils pêche à la mouche' },
+    { src: '/images/temo-christianchris-1.jpg', alt: 'Christian and Chris Ferrier — father-and-son beginner fly fishing course' },
   ],
   'temo-fiona-romain': [
-    { src: '/images/temo-antoine-2.jpg', alt: 'Fiona et Romain — journée découverte pêche à la mouche en rivière bretonne' },
-    { src: '/images/temo-fiona-1.jpg', alt: 'Fiona et Romain — découverte de la pêche à la mouche avec JBV' },
+    { src: '/images/temo-antoine-2.jpg', alt: 'Fiona and Romain — introductory fly fishing day on a Breton river' },
+    { src: '/images/temo-fiona-1.jpg', alt: 'Fiona and Romain — discovering fly fishing with JBV' },
   ],
   'temo-mary-ann': [
-    { src: '/images/temo-maryann-1.jpg', alt: 'Mary-Ann — dorado en Argentine avec Jean-Baptiste Vidal, Pira Lodge' },
+    { src: '/images/temo-maryann-1.jpg', alt: 'Mary-Ann — dorado in Argentina with Jean-Baptiste Vidal, Pira Lodge' },
   ],
   'temo-jean-pierre': [
-    { src: '/images/temo-jeanpierre-1.jpg', alt: 'Jean-Pierre — pêche à la mouche en mer, grande distance' },
+    { src: '/images/temo-jeanpierre-1.jpg', alt: 'Jean-Pierre — saltwater fly fishing, long-distance casting' },
   ],
   'temo-cary-pugh': [
-    { src: '/images/temo-cary-1.jpg', alt: 'Cary Pugh — dorado à la mouche en Bolivie avec JBV, Tsimane Lodge' },
+    { src: '/images/temo-cary-1.jpg', alt: 'Cary Pugh — dorado on the fly in Bolivia with JBV, Tsimane Lodge' },
   ],
 }
 
-// ── Regroupement par catégorie ──────────────────────────────────────────────
-// stegaClean() retire les caractères stega invisibles avant toute comparaison
+// ── Group by category ─────────────────────────────────────────────────────────
 const temoBar     = allTemos.filter((t: any) => stegaClean(t.prestation) === 'Bar à la mouche')
 const temoSaumon  = allTemos.filter((t: any) =>
   ['Saumon', 'Alose', 'Spey Cast'].includes(stegaClean(t.prestation))
@@ -168,8 +160,6 @@ const temoTruite  = allTemos.filter((t: any) =>
   ['Truite en rivière', 'Initiation pêche à la mouche', 'Brochet', 'Masterclass'].includes(stegaClean(t.prestation))
 )
 const temoVoyages = allTemos.filter((t: any) => stegaClean(t.prestation) === 'Voyage')
-
-// Témoignages ajoutés dans Sanity sans catégorie connue (futur)
 const temoAutres  = allTemos.filter((t: any) =>
   !['Bar à la mouche', 'Saumon', 'Alose', 'Spey Cast',
     'Truite en rivière', 'Initiation pêche à la mouche', 'Brochet', 'Masterclass', 'Voyage']
@@ -183,11 +173,10 @@ const sections = [
   { id: 'voyages', label: voyages.onglet, count: temoVoyages.length },
 ]
 
-// Seuil à partir duquel on affiche "Lire la suite" (~3 lignes = ~250 chars)
 const EXTRAIT_MAX = 260
 ---
 
-<BaseLayout title={seoTitle} description={seoDescription} lang="fr" hreflangFr="/temoignages" hreflangEn="/en/temoignages">
+<BaseLayout title={seoTitle} description={seoDescription} lang="en" hreflangFr="/temoignages" hreflangEn="/en/temoignages">
 
   <!-- ══════════════════════════ HERO ══════════════════════════ -->
   <section class="temo-hero">
@@ -199,7 +188,7 @@ const EXTRAIT_MAX = 260
   </section>
 
   <!-- ══════════════════════════ NAV SECTIONS ══════════════════ -->
-  <nav class="temo-nav" aria-label="Catégories de témoignages">
+  <nav class="temo-nav" aria-label="Testimonial categories">
     <ul class="temo-nav__list">
       <span class="temo-nav__slider" aria-hidden="true"></span>
       {sections.map(s => (
@@ -234,8 +223,8 @@ const EXTRAIT_MAX = 260
                       <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
                     ))}
                   </div>
-                  <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
-                  <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
+                  <button class="carousel__btn carousel__btn--prev" aria-label="Previous photo">‹</button>
+                  <button class="carousel__btn carousel__btn--next" aria-label="Next photo">›</button>
                   <div class="carousel__dots">
                     {photos.map((_: any, i: number) => (
                       <span class={i === 0 ? 'dot dot--active' : 'dot'} />
@@ -253,8 +242,8 @@ const EXTRAIT_MAX = 260
               <blockquote class:list={['temo-card__quote', { 'clamped': long }]}>
                 {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
               </blockquote>
-              {long && <button class="quote-toggle" type="button">Lire la suite</button>}
-              <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
+              {long && <button class="quote-toggle" type="button">Read more</button>}
+              <div class="temo-card__stars" aria-label="5 stars">★★★★★</div>
             </article>
           )
         })}
@@ -287,8 +276,8 @@ const EXTRAIT_MAX = 260
                       <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
                     ))}
                   </div>
-                  <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
-                  <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
+                  <button class="carousel__btn carousel__btn--prev" aria-label="Previous photo">‹</button>
+                  <button class="carousel__btn carousel__btn--next" aria-label="Next photo">›</button>
                   <div class="carousel__dots">
                     {photos.map((_: any, i: number) => (
                       <span class={i === 0 ? 'dot dot--active' : 'dot'} />
@@ -306,8 +295,8 @@ const EXTRAIT_MAX = 260
               <blockquote class:list={['temo-card__quote', { 'clamped': long }]}>
                 {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
               </blockquote>
-              {long && <button class="quote-toggle" type="button">Lire la suite</button>}
-              <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
+              {long && <button class="quote-toggle" type="button">Read more</button>}
+              <div class="temo-card__stars" aria-label="5 stars">★★★★★</div>
             </article>
           )
         })}
@@ -340,8 +329,8 @@ const EXTRAIT_MAX = 260
                       <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
                     ))}
                   </div>
-                  <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
-                  <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
+                  <button class="carousel__btn carousel__btn--prev" aria-label="Previous photo">‹</button>
+                  <button class="carousel__btn carousel__btn--next" aria-label="Next photo">›</button>
                   <div class="carousel__dots">
                     {photos.map((_: any, i: number) => (
                       <span class={i === 0 ? 'dot dot--active' : 'dot'} />
@@ -359,8 +348,8 @@ const EXTRAIT_MAX = 260
               <blockquote class:list={['temo-card__quote', { 'clamped': long }]}>
                 {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
               </blockquote>
-              {long && <button class="quote-toggle" type="button">Lire la suite</button>}
-              <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
+              {long && <button class="quote-toggle" type="button">Read more</button>}
+              <div class="temo-card__stars" aria-label="5 stars">★★★★★</div>
             </article>
           )
         })}
@@ -393,8 +382,8 @@ const EXTRAIT_MAX = 260
                       <img src={p.src} alt={p.alt} loading="lazy" style={p.style} />
                     ))}
                   </div>
-                  <button class="carousel__btn carousel__btn--prev" aria-label="Photo précédente">‹</button>
-                  <button class="carousel__btn carousel__btn--next" aria-label="Photo suivante">›</button>
+                  <button class="carousel__btn carousel__btn--prev" aria-label="Previous photo">‹</button>
+                  <button class="carousel__btn carousel__btn--next" aria-label="Next photo">›</button>
                   <div class="carousel__dots">
                     {photos.map((_: any, i: number) => (
                       <span class={i === 0 ? 'dot dot--active' : 'dot'} />
@@ -412,8 +401,8 @@ const EXTRAIT_MAX = 260
               <blockquote class:list={['temo-card__quote temo-card__quote--light', { 'clamped': long }]}>
                 {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
               </blockquote>
-              {long && <button class="quote-toggle quote-toggle--light" type="button">Lire la suite</button>}
-              <div class="temo-card__stars" aria-label="5 étoiles">★★★★★</div>
+              {long && <button class="quote-toggle quote-toggle--light" type="button">Read more</button>}
+              <div class="temo-card__stars" aria-label="5 stars">★★★★★</div>
             </article>
           )
         })}
@@ -424,14 +413,14 @@ const EXTRAIT_MAX = 260
     </div>
   </section>
 
-  <!-- ══════════════ AUTRES (nouveaux témoignages sans catégorie) ══════════ -->
+  <!-- ══════════════ AUTRES (recent additions without category) ══════════════ -->
   {temoAutres.length > 0 && (
     <section class="temo-section section section--mist">
       <div class="container">
         <div class="temo-section__header">
           <div>
-            <p class="temo-eyebrow">✦ Nouveaux témoignages</p>
-            <h2>Récemment ajoutés</h2>
+            <p class="temo-eyebrow">✦ Recent additions</p>
+            <h2>Recently added</h2>
           </div>
         </div>
         <div class="temo-grid">
@@ -449,8 +438,8 @@ const EXTRAIT_MAX = 260
                 <blockquote class:list={['temo-card__quote', { 'clamped': long }]}>
                   {t.texte.split('\n\n').map((p: string) => <p>{p}</p>)}
                 </blockquote>
-                {long && <button class="quote-toggle" type="button">Lire la suite</button>}
-                <div class="temo-card__stars" aria-label={`${t.note || 5} étoiles`}>
+                {long && <button class="quote-toggle" type="button">Read more</button>}
+                <div class="temo-card__stars" aria-label={`${t.note || 5} stars`}>
                   {'★'.repeat(t.note || 5)}{'☆'.repeat(5 - (t.note || 5))}
                 </div>
               </article>
@@ -461,7 +450,7 @@ const EXTRAIT_MAX = 260
     </section>
   )}
 
-  <!-- ══════════════════════════ CTA RÉSERVATION ══════════════ -->
+  <!-- ══════════════════════════ CTA ══════════════════════════ -->
   <section class="temo-cta section">
     <div class="container">
       <h2>{cta.titre}</h2>
@@ -608,7 +597,7 @@ const EXTRAIT_MAX = 260
     box-shadow: none;
   }
 
-  /* ── CARROUSEL ── */
+  /* ── CAROUSEL ── */
   .carousel {
     position: relative;
     width: 100%;
@@ -718,7 +707,7 @@ const EXTRAIT_MAX = 260
   }
   .temo-card__type--light { color: rgba(255,255,255,0.5); }
 
-  /* ── QUOTE + TRONCATURE ── */
+  /* ── QUOTE + TRUNCATION ── */
   .temo-card__quote {
     font-size: 0.9rem;
     color: var(--color-text);
@@ -734,7 +723,6 @@ const EXTRAIT_MAX = 260
   }
   .temo-card__quote p + p { margin-top: 0.65em; }
 
-  /* État tronqué — ~3 lignes */
   .temo-card__quote.clamped {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -742,7 +730,6 @@ const EXTRAIT_MAX = 260
     overflow: hidden;
   }
 
-  /* Bouton "Lire la suite" */
   .quote-toggle {
     background: none;
     border: none;
@@ -838,7 +825,6 @@ const EXTRAIT_MAX = 260
     .carousel { aspect-ratio: 4/3; }
   }
 
-  /* Nav 2×2 sur mobile */
   @media (max-width: 580px) {
     .temo-nav__list {
       display: grid;
@@ -865,7 +851,6 @@ const EXTRAIT_MAX = 260
 </style>
 
 <script>
-  // ── CARROUSELS ────────────────────────────────────────────────────────────
   document.querySelectorAll('.carousel').forEach(carousel => {
     const track = carousel.querySelector('.carousel__track');
     const imgs  = carousel.querySelectorAll('img');
@@ -894,16 +879,14 @@ const EXTRAIT_MAX = 260
     }, { passive: true });
   });
 
-  // ── LIRE LA SUITE ─────────────────────────────────────────────────────────
   document.querySelectorAll('.quote-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       const quote = btn.previousElementSibling;
       const isClamped = quote.classList.toggle('clamped');
-      btn.textContent = isClamped ? 'Lire la suite' : 'Lire moins';
+      btn.textContent = isClamped ? 'Read more' : 'Read less';
     });
   });
 
-  // ── SCROLL SPY + TRAIT GLISSANT ──────────────────────────────────────────
   (() => {
     const sectionIds = ['bar', 'saumon', 'truite', 'voyages'];
     const navLinks   = {};
