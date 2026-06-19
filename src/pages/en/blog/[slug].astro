@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import { createClient } from '@sanity/client'
+import imageUrlBuilder from '@sanity/image-url'
+
+export async function getStaticPaths() {
+  const client = createClient({
+    projectId: 'uievv97s',
+    dataset: 'production',
+    useCdn: false,
+    apiVersion: '2024-01-01',
+  })
+  const articles = await client.fetch(
+    `*[_type == "article" && defined(slug.current)]{ "slug": slug.current }`
+  )
+  return articles.map((a: any) => ({ params: { slug: a.slug } }))
+}
+
+const { slug } = Astro.params
+
+const client = createClient({
+  projectId: 'uievv97s',
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2024-01-01',
+})
+
+const builder = imageUrlBuilder(client)
+const urlFor = (source: any) => { const b = builder.image(source); const hs = source?.hotspot; return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b }
+
+const article = await client.fetch(
+  `*[_type == "article" && slug.current == $slug][0]{
+    title, titleEn, slug, date, image, extrait, extraitEn,
+    contenu, contenuEn, tags, espece, seoTitle, seoTitleEn, seoDescription, seoDescriptionEn
+  }`,
+  { slug }
+)
+
+if (!article) return Astro.redirect('/en/blog')
+
+const especeLabel: Record<string, string> = {
+  bar: 'Sea bass', truite: 'Trout', saumon: 'Salmon',
+  alose: 'Shad', brochet: 'Pike', exotique: 'Saltwater',
+}
+
+const heroImg = article.image ? urlFor(article.image).width(1400).height(600).fit('crop').crop('focalpoint').url() : null
+const dateFormatee = article.date
+  ? new Date(article.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  : null
+
+const pageTitle  = article.seoTitleEn || article.titleEn || article.seoTitle || article.title
+const pageDesc   = article.seoDescriptionEn || article.extraitEn || article.seoDescription || article.extrait || ''
+const displayTitle  = article.titleEn  || article.title
+const displayExtrait = article.extraitEn || article.extrait
+const content    = article.contenuEn?.length ? article.contenuEn : article.contenu
+---
+
+<BaseLayout
+  title={`${pageTitle} — Jean-Baptiste Vidal`}
+  description={pageDesc}
+  lang="en"
+  hreflangFr={`/blog/${slug}`}
+  hreflangEn={`/en/blog/${slug}`}
+>
+
+  <section class="article-hero">
+    <div class="article-hero-bg" style={heroImg ? `background-image: url(${heroImg})` : ''}></div>
+    <div class="container article-hero-content">
+      <div class="article-meta">
+        {article.espece && <span class="badge">{especeLabel[article.espece] ?? article.espece}</span>}
+        {dateFormatee && <time datetime={article.date}>{dateFormatee}</time>}
+      </div>
+      <h1>{displayTitle}</h1>
+      {displayExtrait && <p class="article-extrait">{displayExtrait}</p>}
+    </div>
+  </section>
+
+  <article class="section">
+    <div class="container article-body">
+      {content?.map((block: any) => {
+        if (block._type !== 'block') return null
+        const text = block.children?.map((c: any) => c.text).join('') ?? ''
+        if (!text.trim()) return null
+        const style = block.style ?? 'normal'
+        if (style === 'h2') return <h2>{text}</h2>
+        if (style === 'h3') return <h3>{text}</h3>
+        if (style === 'blockquote') return <blockquote>{text}</blockquote>
+        return <p>{text}</p>
+      })}
+      {article.tags?.length > 0 && (
+        <div class="article-tags">
+          {article.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+    </div>
+  </article>
+
+  <div class="article-nav container">
+    <a href="/en/blog" class="retour">← Back to the blog</a>
+  </div>
+
+  <section class="section--sand article-cta">
+    <div class="container" style="text-align:center">
+      <h2>Want to experience this for real?</h2>
+      <p>Contact Jean-Baptiste to book a guided day on his favourite rivers and coastlines.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
+        <a href="/contact" class="btn btn--ocean">Contact Jean-Baptiste</a>
+        <a href="tel:+33687303456" class="btn btn--outline">+33 6 87 30 34 56</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .article-hero { position: relative; min-height: 55vh; display: flex; align-items: flex-end; padding-bottom: 3.5rem; color: white; }
+  .article-hero-bg { position: absolute; inset: 0; background: linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 100%), var(--color-ocean) center / cover no-repeat; }
+  .article-hero-content { position: relative; z-index: 1; max-width: 820px; padding-top: var(--header-height); }
+  .article-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .badge { background: var(--color-ocean-main); color: white; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2px; font-weight: 500; }
+  .article-meta time { font-size: 0.78rem; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; }
+  .article-hero h1 { color: white; margin-bottom: 1rem; }
+  .article-extrait { font-size: 1.05rem; color: rgba(255,255,255,0.75); line-height: 1.65; max-width: 640px; }
+  .article-body { max-width: 720px; }
+  .article-body p { color: var(--color-text-muted); line-height: 1.85; margin-bottom: 1.4rem; font-size: 1.025rem; }
+  .article-body h2 { margin: 2.5rem 0 1rem; color: var(--color-ocean); }
+  .article-body h3 { margin: 2rem 0 0.75rem; color: var(--color-text); }
+  .article-body blockquote { border-left: 3px solid var(--color-ocean-main); margin: 2rem 0; padding: 0.75rem 1.5rem; font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; color: var(--color-ocean); background: var(--color-mist); border-radius: 0 3px 3px 0; }
+  .article-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--color-mist); }
+  .tag { padding: 0.3rem 0.75rem; background: var(--color-mist); color: var(--color-ocean-main); font-size: 0.72rem; border-radius: 2px; letter-spacing: 0.06em; }
+  .article-nav { padding: 1.5rem 2rem; }
+  .retour { font-size: 0.8rem; color: var(--color-ocean-main); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+  .retour:hover { text-decoration: underline; }
+  .article-cta { padding: 4rem 0; }
+  .article-cta h2 { margin-bottom: 0.75rem; }
+  .article-cta p { color: var(--color-text-muted); }
+  .btn { display: inline-block; padding: 0.8rem 1.75rem; border-radius: 2px; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.2s; }
+  .btn--ocean { background: var(--color-ocean); color: white; }
+  .btn--ocean:hover { background: var(--color-ocean-main); }
+  .btn--outline { border: 1.5px solid var(--color-ocean-main); color: var(--color-ocean-main); }
+  .btn--outline:hover { background: var(--color-ocean-main); color: white; }
+</style>

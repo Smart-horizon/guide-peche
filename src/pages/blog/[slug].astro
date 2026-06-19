@@ -51,6 +51,9 @@ const dateFormatee = article.date
 <BaseLayout
   title={`${article.seoTitle || article.title} — Jean-Baptiste Vidal`}
   description={article.seoDescription || article.extrait || ''}
+  lang="fr"
+  hreflangFr={`/blog/${slug}`}
+  hreflangEn={`/en/blog/${slug}`}
 >
 
   <!-- Hero article -->

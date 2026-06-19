@@ -4,9 +4,10 @@ export default {
   type: 'document',
   icon: () => '✍️',
   groups: [
-    { name: 'contenu', title: '📝 Contenu' },
-    { name: 'classement', title: '🏷️ Classement' },
-    { name: 'seo', title: '🔍 SEO' },
+    { name: 'contenu',     title: '📝 Contenu' },
+    { name: 'traductions', title: '🇬🇧 Version anglaise' },
+    { name: 'classement',  title: '🏷️ Classement' },
+    { name: 'seo',         title: '🔍 SEO' },
   ],
   fields: [
     {
@@ -78,6 +79,51 @@ export default {
         },
       ],
     },
+    // ── Traductions EN ──────────────────────────────────────────────────────
+    {
+      name: 'titleEn',
+      title: 'Titre — English',
+      type: 'string',
+      group: 'traductions',
+    },
+    {
+      name: 'extraitEn',
+      title: 'Extrait — English',
+      type: 'text',
+      rows: 3,
+      group: 'traductions',
+    },
+    {
+      name: 'contenuEn',
+      title: '🇬🇧 Contenu de l\'article — English',
+      type: 'array',
+      group: 'traductions',
+      description: 'English version of the article body. Leave empty to fall back to French.',
+      of: [
+        { type: 'block' },
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [{ name: 'alt', title: 'Image description (SEO)', type: 'string' }],
+        },
+      ],
+    },
+    {
+      name: 'seoTitleEn',
+      title: 'Titre SEO — English',
+      type: 'string',
+      group: 'traductions',
+      validation: Rule => Rule.max(65).warning('Ideally under 65 characters'),
+    },
+    {
+      name: 'seoDescriptionEn',
+      title: 'Description SEO — English',
+      type: 'text',
+      rows: 3,
+      group: 'traductions',
+      validation: Rule => Rule.max(160).warning('Ideally under 160 characters'),
+    },
+
     {
       name: 'espece',
       title: 'Espèce',

@@ -1,0 +1,5529 @@
+[
+  {
+    "id": "page-bon-cadeau",
+    "slug": "bon-cadeau",
+    "title": "Bon cadeau",
+    "seoTitle": "Bon cadeau pêche à la mouche en Bretagne — Jean-Baptiste Vidal",
+    "seoDescription": "Offrez un bon cadeau de pêche à la mouche en Bretagne avec Jean-Baptiste Vidal, guide professionnel. Bar, truite, alose, brochet — stage personnalisé à partir de 150 €.",
+    "sections": [
+      {
+        "_key": "1gebot80",
+        "_type": "sectionHero",
+        "eyebrow": "Idée cadeau originale · Bretagne-Sud",
+        "titre": "Offrez une journée de pêche à la mouche en Bretagne",
+        "sousTitre": "Bon cadeau personnalisé pour un anniversaire, Noël, un départ en retraite ou toute occasion spéciale. Pêcheurs débutants ou confirmés, Jean-Baptiste adapte chaque sortie.",
+        "btnReserverTexte": "Demander mon bon cadeau"
+      },
+      {
+        "_key": "s9484pcq",
+        "_type": "sectionIntro",
+        "eyebrow": "Bon cadeau 2026",
+        "titre": "Un cadeau unique et sur mesure",
+        "texte": "Pour vos proches pêcheurs ou souhaitant découvrir la pêche à la mouche, le bon cadeau est la solution idéale. Une journée, un week-end ou un séjour sur plusieurs jours — tout peut être organisé selon vos souhaits. | Offrez une immersion dans les rivières, estuaires et côtes de Bretagne-Sud avec Jean-Baptiste Vidal, guide professionnel depuis 21 ans.",
+        "duree": "7 à 8 heures (journée complète)",
+        "lignesSupp": [
+          {
+            "label": "Niveaux",
+            "valeur": "Débutants · Confirmés · Experts"
+          },
+          {
+            "label": "Espèces",
+            "valeur": "Bar · Truite · Alose · Brochet · Réservoir"
+          },
+          {
+            "label": "Zone",
+            "valeur": "Bretagne-Sud, Finistère · Morbihan"
+          }
+        ],
+        "boutons": [
+          {
+            "texte": "06 87 30 34 56"
+          },
+          {
+            "texte": "enjoy.fishing@hotmail.fr"
+          }
+        ]
+      },
+      {
+        "_key": "hrq6azl4",
+        "_type": "sectionProgrammeCartes",
+        "titre": "Choisissez votre bon cadeau",
+        "eyebrow": "Les formules"
+      },
+      {
+        "_key": "ddqlzxer",
+        "_type": "sectionProgrammeTexte",
+        "eyebrow": "Contenu du bon cadeau",
+        "titre": "Ce qui est inclus",
+        "colonnes": [
+          {
+            "label": "Inclus dans votre bon cadeau",
+            "items": [
+              {
+                "texte": "Encadrement et guidage professionnel (7-8h environ)"
+              },
+              {
+                "texte": "Prêt de matériel haut de gamme si nécessaire (cannes, moulinets, soies)"
+              },
+              {
+                "texte": "Mouches et matériel consommable"
+              },
+              {
+                "texte": "Bon cadeau personnalisé au format JPEG imprimable, sous 24h"
+              },
+              {
+                "texte": "Aide à l'organisation logistique sur demande (hébergement, restaurants…)"
+              },
+              {
+                "texte": "Boissons"
+              }
+            ]
+          },
+          {
+            "label": "Non inclus",
+            "items": [
+              {
+                "texte": "Permis de pêche"
+              },
+              {
+                "texte": "Waders et bottes de pêche"
+              },
+              {
+                "texte": "Repas et restauration"
+              },
+              {
+                "texte": "Transport et hébergement"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "_key": "4ga7yqe7",
+        "_type": "sectionProgrammeCartes",
+        "titre": "Comment commander ?",
+        "eyebrow": "Simple et rapide"
+      },
+      {
+        "_key": "v0pqwlf9",
+        "_type": "sectionBanniere"
+      },
+      {
+        "_key": "dsjcf9sm",
+        "_type": "sectionCta",
+        "titre": "Commander votre bon cadeau",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn2Texte": "06 87 30 34 56"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "1gebot80",
+        "_type": "sectionHero",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Demander mon bon cadeau",
+        "btnTelTexte": "06 87 30 34 56",
+        "description": null,
+        "eyebrow": "Idée cadeau originale · Bretagne-Sud",
+        "hauteur": "moyen",
+        "sousTitre": "Bon cadeau personnalisé pour un anniversaire, Noël, un départ en retraite ou toute occasion spéciale. Pêcheurs débutants ou confirmés, Jean-Baptiste adapte chaque sortie.",
+        "texte": null,
+        "titre": "Offrez une journée de pêche à la mouche en Bretagne"
+      },
+      {
+        "_key": "s9484pcq",
+        "_type": "sectionIntro",
+        "boutons": [
+          {
+            "_key": "xmhcz79m",
+            "_type": "object",
+            "lien": "tel:0687303456",
+            "texte": "06 87 30 34 56"
+          },
+          {
+            "_key": "f7lg85de",
+            "_type": "object",
+            "lien": "mailto:enjoy.fishing@hotmail.fr",
+            "texte": "enjoy.fishing@hotmail.fr"
+          }
+        ],
+        "description": null,
+        "duree": "7 à 8 heures (journée complète)",
+        "eyebrow": "Bon cadeau 2026",
+        "fond": "white",
+        "lignesSupp": [
+          {
+            "_key": "7pcgl6s7",
+            "_type": "object",
+            "label": "Niveaux",
+            "valeur": "Débutants · Confirmés · Experts"
+          },
+          {
+            "_key": "gsfvyh8l",
+            "_type": "object",
+            "label": "Espèces",
+            "valeur": "Bar · Truite · Alose · Brochet · Réservoir"
+          },
+          {
+            "_key": "fretu9vj",
+            "_type": "object",
+            "label": "Zone",
+            "valeur": "Bretagne-Sud, Finistère · Morbihan"
+          }
+        ],
+        "showInfoCard": true,
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pour vos proches pêcheurs ou souhaitant découvrir la pêche à la mouche, le bon cadeau est la solution idéale. Une journée, un week-end ou un séjour sur plusieurs jours — tout peut être organisé selon vos souhaits."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Offrez une immersion dans les rivières, estuaires et côtes de Bretagne-Sud avec Jean-Baptiste Vidal, guide professionnel depuis 21 ans."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Un cadeau unique et sur mesure"
+      },
+      {
+        "_key": "hrq6azl4",
+        "_type": "sectionProgrammeCartes",
+        "colonnes": "3",
+        "description": null,
+        "eyebrow": "Les formules",
+        "fond": "sand",
+        "intro": "Tous les bons cadeaux sont personnalisables selon vos envies et votre budget. Contactez Jean-Baptiste pour en discuter.",
+        "items": [
+          {
+            "_key": "7eveiwk0",
+            "_type": "object",
+            "description": "Idéal pour offrir une première expérience de la pêche à la mouche. Bar en estuaire, truite en rivière ou initiation technique sur un réservoir — à personnaliser selon le souhait du bénéficiaire.",
+            "sousTitre": "Pour les débutants",
+            "titre": "Découverte & initiation"
+          },
+          {
+            "_key": "kchwa61r",
+            "_type": "object",
+            "description": "Une journée entière aux côtés de Jean-Baptiste sur ses spots secrets. Perfectionnement technique, pêche à vue, travail des postes... Une journée de pêche inoubliable.",
+            "sousTitre": "Pour les pêcheurs passionnés",
+            "titre": "Journée de guidage"
+          },
+          {
+            "_key": "xlkx4yc1",
+            "_type": "object",
+            "description": "Plusieurs jours de guidage avec organisation possible de l'hébergement et des activités pour les accompagnants. Bar en bateau, rivières de Bretagne, réservoir — le cadeau ultime pour un pêcheur.",
+            "sousTitre": "L'expérience complète",
+            "titre": "Week-end ou séjour"
+          }
+        ],
+        "texte": null,
+        "titre": "Choisissez votre bon cadeau"
+      },
+      {
+        "_key": "ddqlzxer",
+        "_type": "sectionProgrammeTexte",
+        "colonnes": [
+          {
+            "_key": "u4mowzdx",
+            "_type": "object",
+            "items": [
+              {
+                "_key": "3gdnx800",
+                "_type": "object",
+                "inclus": true,
+                "texte": "Encadrement et guidage professionnel (7-8h environ)"
+              },
+              {
+                "_key": "24kthkbp",
+                "_type": "object",
+                "inclus": true,
+                "texte": "Prêt de matériel haut de gamme si nécessaire (cannes, moulinets, soies)"
+              },
+              {
+                "_key": "moq6djhc",
+                "_type": "object",
+                "inclus": true,
+                "texte": "Mouches et matériel consommable"
+              },
+              {
+                "_key": "ihbjcpmd",
+                "_type": "object",
+                "inclus": true,
+                "texte": "Bon cadeau personnalisé au format JPEG imprimable, sous 24h"
+              },
+              {
+                "_key": "4i4a6bm7",
+                "_type": "object",
+                "inclus": true,
+                "texte": "Aide à l'organisation logistique sur demande (hébergement, restaurants…)"
+              },
+              {
+                "_key": "u9u6c6cp",
+                "_type": "object",
+                "inclus": true,
+                "texte": "Boissons"
+              }
+            ],
+            "label": "Inclus dans votre bon cadeau",
+            "style": "check"
+          },
+          {
+            "_key": "p694jski",
+            "_type": "object",
+            "items": [
+              {
+                "_key": "m9t6mhso",
+                "_type": "object",
+                "inclus": false,
+                "texte": "Permis de pêche"
+              },
+              {
+                "_key": "p1dfhjcl",
+                "_type": "object",
+                "inclus": false,
+                "texte": "Waders et bottes de pêche"
+              },
+              {
+                "_key": "9tecusv2",
+                "_type": "object",
+                "inclus": false,
+                "texte": "Repas et restauration"
+              },
+              {
+                "_key": "12ppz7c7",
+                "_type": "object",
+                "inclus": false,
+                "texte": "Transport et hébergement"
+              }
+            ],
+            "label": "Non inclus",
+            "style": "check"
+          }
+        ],
+        "description": null,
+        "eyebrow": "Contenu du bon cadeau",
+        "fond": "white",
+        "texte": null,
+        "titre": "Ce qui est inclus"
+      },
+      {
+        "_key": "4ga7yqe7",
+        "_type": "sectionProgrammeCartes",
+        "colonnes": "3",
+        "description": null,
+        "eyebrow": "Simple et rapide",
+        "fond": "sand",
+        "items": [
+          {
+            "_key": "rbwn6aur",
+            "_type": "object",
+            "description": "Contactez Jean-Baptiste par formulaire, mail ou téléphone pour lui décrire votre projet de cadeau.",
+            "sousTitre": "Étape 1",
+            "titre": "Prenez contact"
+          },
+          {
+            "_key": "b77owiix",
+            "_type": "object",
+            "description": "Précisez la nature de la prestation (espèce, durée, nombre de personnes) et consultez les tarifs si besoin.",
+            "sousTitre": "Étape 2",
+            "titre": "Choisissez la prestation"
+          },
+          {
+            "_key": "iswk21mf",
+            "_type": "object",
+            "description": "Donnez le nom du bénéficiaire et des offreurs. Le bon cadeau sera personnalisé à votre image.",
+            "sousTitre": "Étape 3",
+            "titre": "Personnalisez le bon"
+          },
+          {
+            "_key": "23n74igt",
+            "_type": "object",
+            "description": "Envoyez le règlement correspondant à la prestation choisie. Retrouvez les tarifs sur la page dédiée.",
+            "sousTitre": "Étape 4",
+            "titre": "Réglez le montant"
+          },
+          {
+            "_key": "mu3hiiqi",
+            "_type": "object",
+            "description": "Dès réception, Jean-Baptiste vous envoie le bon cadeau au format JPEG imprimable sous 24h (parfois avant si urgent).",
+            "sousTitre": "Étape 5",
+            "titre": "Recevez le document"
+          },
+          {
+            "_key": "nc70y01l",
+            "_type": "object",
+            "description": "Le bénéficiaire contacte le guide pour fixer la date ensemble. Le bon est valable pour toute la saison en cours.",
+            "sousTitre": "Étape 6",
+            "titre": "Profitez !"
+          }
+        ],
+        "texte": null,
+        "titre": "Comment commander ?"
+      },
+      {
+        "_key": "v0pqwlf9",
+        "_type": "sectionBanniere",
+        "description": null,
+        "style": "ocean",
+        "texte": null
+      },
+      {
+        "_key": "dsjcf9sm",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Commander votre bon cadeau"
+      }
+    ]
+  },
+  {
+    "id": "page-jean-baptiste-vidal-moniteur-guide-de-peche",
+    "slug": "jean-baptiste-vidal-moniteur-guide-de-peche",
+    "title": "Le Guide",
+    "seoTitle": "Jean-Baptiste Vidal — Moniteur-Guide de Pêche à la Mouche en Bretagne",
+    "seoDescription": "Découvrez Jean-Baptiste Vidal, moniteur-guide de pêche à la mouche diplômé d'État en Bretagne-Sud. 21 ans d'expérience de guidage, expert bar, truite et migrateurs.",
+    "sections": [
+      {
+        "_key": "hero1",
+        "_type": "sectionHero",
+        "eyebrow": "Votre guide",
+        "titre": "Jean-Baptiste Vidal",
+        "sousTitre": "Moniteur-Guide diplômé d'État · Bretagne-Sud",
+        "stats": [
+          {
+            "nombre": "21",
+            "label": "ans de guidage"
+          },
+          {
+            "nombre": "33",
+            "label": "ans de pratique"
+          },
+          {
+            "nombre": "12+",
+            "label": "pays visités"
+          }
+        ]
+      },
+      {
+        "_key": "ti5",
+        "_type": "sectionTexteImage",
+        "titre": "Un professionnel à votre service",
+        "texte": "On ne choisit pas de faire le métier de guide de pêche sur un coup de tête. C'est une vocation, une passion que l'on souhaite partager, une envie de transmettre ses connaissances, son savoir-faire, sa technique, mais aussi sa sensibilité pour les milieux aquatiques et l'environnement. | Après avoir beaucoup pêché en France depuis mon plus jeune âge, j'ai rapidement su qu'il fallait que je travaille de cette passion dévorante. J'ai commencé mon parcours professionnel au sein de la Fédération de Pêche du Finistère à Quimper pendant 5 ans, avant d'obtenir le BP JEPS « Pêche de Loisir » en 2004. | Dès 2005, je pars guider en Islande, une première expérience internationale qui ouvre la porte à une longue carrière de guide et manager de lodge dans plusieurs pays : Argentine, Russie, Bolivie, Irlande… | Depuis 2014, j'ai choisi de m'installer définitivement en Bretagne pour y proposer mes services et partager avec vous cette passion qui nous unit.",
+        "eyebrow": "Le Guide"
+      },
+      {
+        "_key": "frise14",
+        "_type": "sectionFriseChronologique",
+        "titre": "Un parcours de guide international",
+        "eyebrow": "Expérience"
+      },
+      {
+        "_key": "carr32",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "liste33",
+        "_type": "sectionListe",
+        "titre": "Qualifications & certifications",
+        "eyebrow": "Diplômes"
+      },
+      {
+        "_key": "dest42",
+        "_type": "sectionProgrammeTexte",
+        "eyebrow": "Voyages",
+        "titre": "Pêche dans 12 pays à travers le monde",
+        "intro": "Chaque voyage enrichit la technique et la lecture de l'eau. Cette expérience internationale est au service de ses clients en Bretagne.",
+        "colonnes": [
+          {
+            "label": "Eau douce",
+            "items": [
+              {
+                "texte": "Argentine — Terre de Feu, Patagonie, Corrientes"
+              },
+              {
+                "texte": "Islande — East & West Ranga, Varma, Jokla…"
+              },
+              {
+                "texte": "Russie — Ponoi River"
+              },
+              {
+                "texte": "Bolivie — Tsimane Lodge"
+              },
+              {
+                "texte": "Irlande — Connemara, Lough Sheelin…"
+              },
+              {
+                "texte": "Norvège — Gaula, Rena, Glomma"
+              },
+              {
+                "texte": "Grand Ouest U.S. (Montana, Idaho, Wyoming)"
+              },
+              {
+                "texte": "Québec — Lac St Pierre, Massawippi…"
+              }
+            ]
+          },
+          {
+            "label": "Saltwater · Mer",
+            "items": [
+              {
+                "texte": "Venezuela — Los Roques (4 séjours)"
+              },
+              {
+                "texte": "Cuba — Cayo Cruz & Cayo Santa Maria"
+              },
+              {
+                "texte": "Mexique — Punta Allen, Xcalak"
+              },
+              {
+                "texte": "Bahamas — Abaco Lodge, Bair's Lodge"
+              },
+              {
+                "texte": "Seychelles — St Joseph, Poivre"
+              },
+              {
+                "texte": "Nouvelle-Calédonie (2 séjours)"
+              },
+              {
+                "texte": "Floride — Islamorada, Biscayne Key"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "_key": "ti260",
+        "_type": "sectionTexteImage",
+        "titre": "Guide de pêche à la mouche en Bretagne depuis 2006",
+        "texte": "Établi en Bretagne-Sud depuis 2000, entre Quimper et Quimperlé, Jean-Baptiste propose ses services de moniteur-guide indépendant sur les plus beaux estuaires et côtes du Finistère. | Bar en estuaire et en bateau (Carolina Skiff), truite en rivière et en lac, alose, brochet, stages Spey Cast et Masterclass, une offre complète, adaptée à tous les niveaux.",
+        "eyebrow": "Aujourd'hui"
+      },
+      {
+        "_key": "cta65",
+        "_type": "sectionCta",
+        "titre": "Partez pêcher avec Jean-Baptiste",
+        "texte": null,
+        "btn1Texte": "Voir les prestations",
+        "btn2Texte": "Réserver une sortie"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero1",
+        "_type": "sectionHero",
+        "description": null,
+        "eyebrow": "Votre guide",
+        "hauteur": "full",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-747bb7980ac5b59035182f4c8439fba359ff5f58-1225x695-avif",
+            "_type": "reference"
+          }
+        },
+        "sousTitre": "Moniteur-Guide diplômé d'État · Bretagne-Sud",
+        "statsHero": [
+          {
+            "_key": "sh2",
+            "label": "ans de guidage",
+            "nombre": "21"
+          },
+          {
+            "_key": "sh3",
+            "label": "ans de pratique",
+            "nombre": "33"
+          },
+          {
+            "_key": "sh4",
+            "label": "pays visités",
+            "nombre": "12+"
+          }
+        ],
+        "texte": null,
+        "titre": "Jean-Baptiste Vidal"
+      },
+      {
+        "_key": "ti5",
+        "_type": "sectionTexteImage",
+        "description": null,
+        "eyebrow": "Le Guide",
+        "fond": "white",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-45a3dacd2e22e71a5786adde1f8e887a7ef3d034-364x273-jpg",
+            "_type": "reference"
+          }
+        },
+        "imagePosition": "right",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "On ne choisit pas de faire le métier de guide de pêche sur un coup de tête. C'est une vocation, une passion que l'on souhaite partager, une envie de transmettre ses connaissances, son savoir-faire, sa technique, mais aussi sa sensibilité pour les milieux aquatiques et l'environnement."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Après avoir beaucoup pêché en France depuis mon plus jeune âge, j'ai rapidement su qu'il fallait que je travaille de cette passion dévorante. J'ai commencé mon parcours professionnel au sein de la Fédération de Pêche du Finistère à Quimper pendant 5 ans, avant d'obtenir le BP JEPS « Pêche de Loisir » en 2004."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Dès 2005, je pars guider en Islande, une première expérience internationale qui ouvre la porte à une longue carrière de guide et manager de lodge dans plusieurs pays : Argentine, Russie, Bolivie, Irlande…"
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Depuis 2014, j'ai choisi de m'installer définitivement en Bretagne pour y proposer mes services et partager avec vous cette passion qui nous unit."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Un professionnel à votre service"
+      },
+      {
+        "_key": "frise14",
+        "_type": "sectionFriseChronologique",
+        "citation": "« Chaque destination m'a appris quelque chose d'unique, une lecture de l'eau, une technique. »",
+        "description": null,
+        "eyebrow": "Expérience",
+        "fond": "sand",
+        "items": [
+          {
+            "_key": "fi18",
+            "detail": "Technicien à la Fédération de Pêche et de Protection du Milieu Aquatique du Finistère",
+            "lien": null,
+            "lienLabel": null,
+            "lieu": "Finistère, France",
+            "periode": "2001–2005",
+            "photos": []
+          },
+          {
+            "_key": "fi19",
+            "detail": "Lax-A Angling Club — Saumons, truites de mer, truites fario, ombles arctiques",
+            "lien": null,
+            "lienLabel": null,
+            "lieu": "Islande",
+            "periode": "2005",
+            "photos": []
+          },
+          {
+            "_key": "fi20",
+            "detail": "Pira Lodge — Guide pêche du dorado",
+            "lien": "/voyage-peche-argentine-rio-grande-truite-de-mer",
+            "lienLabel": "Voir le voyage Argentine",
+            "lieu": "Argentine — Corrientes",
+            "periode": "2006–2007",
+            "photos": [
+              {
+                "_key": "2cd0eba0a387",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-a1455e60e220347b7cde093ec313f3c7bf012f89-442x255-png",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "f639b18f53ec",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-7eabbe22e5e37bfeee6137e02b6086a906e726eb-379x254-png",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "63db68bd26d9",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-6b0d0b28cf42c4bcf486930eed52503392d58e45-339x254-png",
+                  "_type": "reference"
+                }
+              }
+            ]
+          },
+          {
+            "_key": "fi21",
+            "detail": "Guide pêche du brochet et de la truite",
+            "lien": null,
+            "lienLabel": null,
+            "lieu": "Irlande",
+            "periode": "2006",
+            "photos": []
+          },
+          {
+            "_key": "fi22",
+            "detail": "Ponoi River Company, Ryabaga Camp — Saumon atlantique",
+            "lien": null,
+            "lienLabel": null,
+            "lieu": "Russie — Péninsule de Kola",
+            "periode": "2007",
+            "photos": []
+          },
+          {
+            "_key": "fi23",
+            "detail": "Rio Grande — Truite de mer · Manager de lodge Toon Ken",
+            "lien": "/voyage-peche-argentine-rio-grande-truite-de-mer",
+            "lienLabel": "Voir le voyage Argentine",
+            "lieu": "Argentine — Terre de Feu",
+            "periode": "2008–2009",
+            "photos": [
+              {
+                "_key": "909233686d6f",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-a1455e60e220347b7cde093ec313f3c7bf012f89-442x255-png",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "e111568d812e",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-7eabbe22e5e37bfeee6137e02b6086a906e726eb-379x254-png",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "19297e720b5e",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-6b0d0b28cf42c4bcf486930eed52503392d58e45-339x254-png",
+                  "_type": "reference"
+                }
+              }
+            ]
+          },
+          {
+            "_key": "fi24",
+            "detail": "Tsimane Lodge — Dorados et pacus en eau claire",
+            "lien": "/voyages-peche-mouche",
+            "lien2": "/temoignages",
+            "lienLabel": "Découvrir les voyages",
+            "lienLabel2": "Témoignages du voyage",
+            "lieu": "Bolivie",
+            "periode": "2010–2012",
+            "photos": [
+              {
+                "_key": "bac7b7b8037d",
+                "_type": "image"
+              },
+              {
+                "_key": "4ada79b58b37",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-a157cefc0624b7b3feb02c2fa531ce882dc04422-1400x934-jpg",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "d1a1d079288c",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-e9550c9093f0b7267341b0192d029f0d6d490475-1400x934-jpg",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "bf68f9c7b06a",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-c243277d783f53627bacb7953e09387e2fd7bab4-1400x934-jpg",
+                  "_type": "reference"
+                }
+              }
+            ]
+          },
+          {
+            "_key": "fi25",
+            "detail": "Premier séjour · Bonefish, permit et tarpon · Parc National des Caraïbes",
+            "lien": "/los-roques-venezuela",
+            "lienLabel": "Voir la destination Venezuela",
+            "lieu": "Venezuela — Los Roques",
+            "periode": "2011",
+            "photos": [
+              {
+                "_key": "6948feb1b56a",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-8ff5d60d71d6e06004e5c58b8a1e88a3ba2a3c84-1176x535-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "1044fc88ac56",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-0322f6e5696e895157019bf1585e1273e5e1c268-678x508-heif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "539ae81da7dc",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-5b7c5a96ccd26d8a074f773cde90732cf80c0ac4-758x508-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "d805f85d7eec",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-25ea45a395358e448346c1b03694eb0c180c6bb6-1206x828-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "7f211214d37c",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-e48f7f682e05405cb2ceb959e237e36f3962e9b8-1324x743-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "020b46f3f571",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-4481483c01e67a766b2342848bc6698ba7a61734-852x597-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "f64280d05205",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-1593986f679bd72175f0c9dbc23b034781f3b8a3-1249x683-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "52d6fa481abe",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-a2d9e7d08ec721c31bc76605768781c49ca36d6b-540x354-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "01ecfee986da",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-6760df98a694c4427182a941070f1689744d42e9-1201x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "f0c9a7837fbe",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-51495e41137c190fc31b399814488b3e021e95cd-1168x651-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "77e17f25cc4b",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-82ae04c3f4176bf9dcadedb43eeb1fd2b0fda48e-1209x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "df4b8c5559bb",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-449dadc898283307815e562449a10181314f9f0f-1241x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "54b944435078",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-2ae77d286a1fe34e6486d76876561c5e1c527dfd-1324x743-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "c898c8376987",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-95621ff006af94c13c48e77ae171614b7a308524-1094x630-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "d6737aabc212",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-cf054cc7544e015f032d2f77a3f0c5a36370b1b0-1145x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "638afb8be99f",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-3fec82f9031333d124e1a34fb686abcb5cbe0c22-1241x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "d55df53eeba9",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-3f4376118235dbd1d48049448ce44f72f99b4a76-946x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "47fb7a94b66e",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-ab1e131599e9ae141844555c6c7e78fec640274d-1246x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "3ba227972818",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-608e42573bf0980ac008fd74987c9bcfc7812354-1238x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "a21906287947",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-6982c9a13311a8a7aa827f3831284d5c82de3c75-989x557-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "d6dd7bb6bd4c",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-b9cf1fd77d29b54fec435089ab8ba25d79e63345-869x560-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "3ec3cff4b07a",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-a4293e986fc51e84221d168d92c2069ba24c39ce-1065x593-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "3618de0a7d8f",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-631b688e31634c145c51dd4a5cbb9ebc5d5902e7-1241x695-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "939e89e54e1d",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-4eea6f4bb6c44a7593a61283210cbb0f040ca046-1043x586-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "1396926cbc57",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-c51609c20d1469e0ca87b179e981a739c49cd451-837x541-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "549ed12b9ed3",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-e917b3df13ba75a3080d050eb0accbcbac49e2f1-1043x577-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "ea13ddd70d07",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-2a3bec734c9a00d816e3eb7eeb7b1cd714741c5c-1038x580-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "94fc1db268d3",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-eda7ee98f584260020f4804b9eb70306b1f8edfa-1068x550-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "0ff0424965b3",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-b052db8edc6edc595fb7bc076bfe5502cf1c9f05-856x585-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "5917b8edfc40",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-3b064923b8234f9d8723b60bfff65f58dde85e00-1006x580-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "035237550426",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-e85c0de221cb1104009c3122f8492ff687edb062-1046x585-avif",
+                  "_type": "reference"
+                }
+              },
+              {
+                "_key": "7d44e4bfb3f2",
+                "_type": "image",
+                "asset": {
+                  "_ref": "image-5718b2a0f6b3594694994e9a2bc8b5d11bd822f5-1238x695-avif",
+                  "_type": "reference"
+                }
+              }
+            ]
+          },
+          {
+            "_key": "fi26",
+            "detail": "Rio Grande — Manager de lodge Kau Tapen (Nervous Waters)",
+            "lien": "/voyage-peche-argentine-rio-grande-truite-de-mer",
+            "lienLabel": "Voir le voyage Argentine",
+            "lieu": "Argentine — Terre de Feu",
+            "periode": "2011–2013",
+            "photos": []
+          },
+          {
+            "_key": "fi27",
+            "detail": "Moniteur-Guide indépendant · Bar, truite, migrateurs, Spey Cast · Stages et voyages",
+            "lien": "/stage-peche-mouche",
+            "lien2": "/temoignages",
+            "lienLabel": "Voir les prestations",
+            "lienLabel2": "Lire les témoignages",
+            "lieu": "Bretagne-Sud, France",
+            "periode": "2014–auj.",
+            "photos": []
+          },
+          {
+            "_key": "fi28",
+            "detail": "Séjour accompagné · Permit, bonefish et Grand Slam sur les flats de Cayo Cruz",
+            "lien": "/peche-mouche-cuba-cayo-cruz",
+            "lienLabel": "Voir le voyage Cuba Cayo Cruz",
+            "lieu": "Cuba — Cayo Cruz",
+            "periode": "Mars 2015",
+            "photos": []
+          },
+          {
+            "_key": "fi29",
+            "detail": "Séjour accompagné · Tarpons et bonefish aux Jardins du Roi",
+            "lien": "/peche-mouche-cuba-cayo-santa-maria",
+            "lienLabel": "Voir le voyage Cuba Santa Maria",
+            "lieu": "Cuba — Cayo Santa Maria",
+            "periode": "Mars 2016",
+            "photos": []
+          },
+          {
+            "_key": "fi30",
+            "detail": "2 séjours accompagnés · Permit, bonefish et tarpon · Quintana Roo",
+            "lien": "/voyage-peche-mouche-mexique",
+            "lienLabel": "Voir le voyage Mexique",
+            "lieu": "Mexique — Xcalak",
+            "periode": "2018–2019",
+            "photos": []
+          },
+          {
+            "_key": "fi31",
+            "detail": "Séjours accompagnés · Bonefish, tarpon et permit dans le plus grand parc naturel des Caraïbes",
+            "lien": "/los-roques-venezuela",
+            "lienLabel": "Voir la destination Venezuela",
+            "lieu": "Venezuela — Los Roques",
+            "periode": "2023–2025",
+            "photos": []
+          }
+        ],
+        "sousTitre": "De l'Islande à la Terre de Feu, de la Russie à la Bolivie : des années de guidage aux quatre coins du monde avant de poser les cannes en Bretagne.",
+        "statsBar": [
+          {
+            "_key": "sb15",
+            "label": "pays guidés",
+            "nombre": "10+"
+          },
+          {
+            "_key": "sb16",
+            "label": "lodges managés",
+            "nombre": "8"
+          },
+          {
+            "_key": "sb17",
+            "label": "ans à l'international",
+            "nombre": "15"
+          }
+        ],
+        "texte": null,
+        "titre": "Un parcours de guide international"
+      },
+      {
+        "_key": "carr32",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "c45f23eda0a2",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-e9550c9093f0b7267341b0192d029f0d6d490475-1400x934-jpg",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "b111c9f8ac72",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-a2222f442667774505d90d5f6f3663fa65e13679-728x546-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "ea83230dba8d",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-bdf7bfeba0c9a6202ea970740723bb1fcec7e10c-1369x913-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "90e2e4649e34",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-bd7fe7eaa589c863b9c742f3b215e6ca8ab348a0-1369x913-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "9cef0c0a2cd5",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-25ea45a395358e448346c1b03694eb0c180c6bb6-1206x828-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "c5f7fe960679",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-e85c0de221cb1104009c3122f8492ff687edb062-1046x585-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "4db29ca4632b",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-dd69230ce9bae57c57c16e1f9618076b453f3990-678x510-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "dce6cb94f78c",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-b8cd3118b611c09030018652362e24c584cc2a20-698x1042-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "b07a37f46ce3",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-925a6c662a5920f0fcc1544832254da9d7b2b197-1217x913-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "853ebc2051b5",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-08f88720957a06dd75415de03983b1acbc783d77-1369x913-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "6325eec120f6",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-5026f7d5fe48e3dbd7f4e368d98bddcb3928572e-1217x913-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "d768d00e404c",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-04f711db9ca2080bb9586a5e7580e2cecad4b20a-1217x913-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "a5cfca11eab2",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-464af9d0abb3fa83c89f9d0a50f2f941f9916e5b-1369x913-avif",
+              "_type": "reference"
+            }
+          },
+          {
+            "_key": "62a844432e82",
+            "_type": "image",
+            "asset": {
+              "_ref": "image-a157cefc0624b7b3feb02c2fa531ce882dc04422-1400x934-jpg",
+              "_type": "reference"
+            }
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "liste33",
+        "_type": "sectionListe",
+        "description": null,
+        "eyebrow": "Diplômes",
+        "fond": "white",
+        "intro": "Titulaire du BP JEPS « Pêche de Loisir », Jean-Baptiste est habilité à enseigner la pêche à la mouche et à encadrer des sorties en milieu maritime. Il est également membre du Pro Guide Team Rio, SAGE et Simms.",
+        "items": [
+          {
+            "_key": "li34",
+            "annee": "1999",
+            "label": "BTS Gestion et Protection de la Nature"
+          },
+          {
+            "_key": "li35",
+            "annee": "2004",
+            "label": "BP JEPS « Pêche de Loisir », Moniteur-Guide de Pêche"
+          },
+          {
+            "_key": "li36",
+            "annee": "2004",
+            "label": "UCC « Pêche de loisir en milieu maritime »"
+          },
+          {
+            "_key": "li37",
+            "annee": "2004",
+            "label": "Brevet de Surveillant de Baignade"
+          },
+          {
+            "_key": "li38",
+            "annee": "2004",
+            "label": "Attestation aux Premiers Secours"
+          },
+          {
+            "_key": "li39",
+            "annee": "2001–",
+            "label": "Technicien à la Fédération de Pêche du Finistère"
+          },
+          {
+            "_key": "li40",
+            "annee": "Presse",
+            "label": "Journaliste halieutique, magazine Pêche Mouche (depuis 2011)"
+          },
+          {
+            "_key": "li41",
+            "annee": "Sponsors",
+            "label": "Pro Guide Team : Rio, SAGE, Simms, Redington, Loon, CF Design"
+          }
+        ],
+        "texte": null,
+        "titre": "Qualifications & certifications"
+      },
+      {
+        "_key": "dest42",
+        "_type": "sectionProgrammeTexte",
+        "colonnes": [
+          {
+            "_key": "col43",
+            "items": [
+              {
+                "_key": "i44",
+                "texte": "Argentine — Terre de Feu, Patagonie, Corrientes"
+              },
+              {
+                "_key": "i45",
+                "texte": "Islande — East & West Ranga, Varma, Jokla…"
+              },
+              {
+                "_key": "i46",
+                "texte": "Russie — Ponoi River"
+              },
+              {
+                "_key": "i47",
+                "texte": "Bolivie — Tsimane Lodge"
+              },
+              {
+                "_key": "i48",
+                "texte": "Irlande — Connemara, Lough Sheelin…"
+              },
+              {
+                "_key": "i49",
+                "texte": "Norvège — Gaula, Rena, Glomma"
+              },
+              {
+                "_key": "i50",
+                "texte": "Grand Ouest U.S. (Montana, Idaho, Wyoming)"
+              },
+              {
+                "_key": "i51",
+                "texte": "Québec — Lac St Pierre, Massawippi…"
+              }
+            ],
+            "label": "Eau douce",
+            "style": "default"
+          },
+          {
+            "_key": "col52",
+            "items": [
+              {
+                "_key": "i53",
+                "texte": "Venezuela — Los Roques (4 séjours)"
+              },
+              {
+                "_key": "i54",
+                "texte": "Cuba — Cayo Cruz & Cayo Santa Maria"
+              },
+              {
+                "_key": "i55",
+                "texte": "Mexique — Punta Allen, Xcalak"
+              },
+              {
+                "_key": "i56",
+                "texte": "Bahamas — Abaco Lodge, Bair's Lodge"
+              },
+              {
+                "_key": "i57",
+                "texte": "Seychelles — St Joseph, Poivre"
+              },
+              {
+                "_key": "i58",
+                "texte": "Nouvelle-Calédonie (2 séjours)"
+              },
+              {
+                "_key": "i59",
+                "texte": "Floride — Islamorada, Biscayne Key"
+              }
+            ],
+            "label": "Saltwater · Mer",
+            "style": "default"
+          }
+        ],
+        "description": null,
+        "eyebrow": "Voyages",
+        "fond": "dark",
+        "intro": "Chaque voyage enrichit la technique et la lecture de l'eau. Cette expérience internationale est au service de ses clients en Bretagne.",
+        "texte": null,
+        "titre": "Pêche dans 12 pays à travers le monde"
+      },
+      {
+        "_key": "ti260",
+        "_type": "sectionTexteImage",
+        "description": null,
+        "eyebrow": "Aujourd'hui",
+        "fond": "sand",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-384e6d166d226759b696bbd77b78fd0a422478cf-942x598-avif",
+            "_type": "reference"
+          }
+        },
+        "imagePosition": "left",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Établi en Bretagne-Sud depuis 2000, entre Quimper et Quimperlé, Jean-Baptiste propose ses services de moniteur-guide indépendant sur les plus beaux estuaires et côtes du Finistère."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Bar en estuaire et en bateau (Carolina Skiff), truite en rivière et en lac, alose, brochet, stages Spey Cast et Masterclass, une offre complète, adaptée à tous les niveaux."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Guide de pêche à la mouche en Bretagne depuis 2006"
+      },
+      {
+        "_key": "cta65",
+        "_type": "sectionCta",
+        "btn1Lien": "/stage-peche-mouche",
+        "btn1Texte": "Voir les prestations",
+        "btn2Lien": "/contact",
+        "btn2Texte": "Réserver une sortie",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Partez pêcher avec Jean-Baptiste"
+      }
+    ]
+  },
+  {
+    "id": "page-materiel-jeanbaptistevidal",
+    "slug": "materiel-jeanbaptistevidal",
+    "title": "Mon matériel de pêche à la mouche",
+    "seoTitle": "Matériel de pêche à la mouche — Jean-Baptiste Vidal",
+    "seoDescription": "Cannes SAGE & Redington, soies RIO & Royal Wulff, accessoires Loon — le matériel utilisé par Jean-Baptiste Vidal, 33 ans d'expérience.",
+    "sections": [
+      {
+        "_key": "hero-1-1mll97",
+        "_type": "sectionHero",
+        "eyebrow": "Équipement · Recommandations · Partenaires",
+        "titre": "Mon matériel de pêche à la mouche",
+        "sousTitre": "Le matériel que j'utilise pour mes pêches en France et à l'étranger, 33 ans d'expérience au service de vos choix"
+      },
+      {
+        "_key": "mati-8-1a1cxq",
+        "_type": "sectionMaterielIntro",
+        "texte": "Après plus de 33 ans de pêche à la mouche et 21 ans de guidage professionnel en France et dans le monde entier, j'ai testé et sélectionné le matériel que j'utilise au quotidien. | Je travaille en partenariat avec des marques qui partagent mes valeurs : SAGE, Redington, RIO, Royal Wulff, Loon Outdoors, Adams Built. Je ne recommande que ce que j'utilise personnellement. | Retrouvez ci-dessous mes recommandations organisées par type de pêche, avec des liens vers mon revendeur de confiance, Ardent Pêche à Pontivy."
+      },
+      {
+        "_key": "hub-9-1cfopf",
+        "_type": "sectionGrilleSubPages",
+        "titre": "Choisir son matériel",
+        "eyebrow": "Par type de pêche"
+      },
+      {
+        "_key": "part-a-i7we4",
+        "_type": "sectionPartenaires",
+        "titre": "Les marques que j'utilise et recommande",
+        "eyebrow": "Mes partenaires"
+      },
+      {
+        "_key": "carr-b-13v1uk",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "cta-c-ektrd",
+        "_type": "sectionCta",
+        "titre": "Des questions sur le matériel ?",
+        "texte": null
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-1-1mll97",
+        "_type": "sectionHero",
+        "description": null,
+        "eyebrow": "Équipement · Recommandations · Partenaires",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-14106cb0a0bc96157cb14c711567f16a097f5a61-1600x1067-jpg",
+            "_type": "reference"
+          }
+        },
+        "label1": "Réserver une sortie",
+        "label2": "06 87 30 34 56",
+        "lien1": "/contact",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Le matériel que j'utilise pour mes pêches en France et à l'étranger, 33 ans d'expérience au service de vos choix",
+        "texte": null,
+        "titre": "Mon matériel de pêche à la mouche"
+      },
+      {
+        "_key": "mati-8-1a1cxq",
+        "_type": "sectionMaterielIntro",
+        "description": null,
+        "specs": [
+          {
+            "_key": "sp-d-m18ep",
+            "label": "Cannes",
+            "valeur": "SAGE · Redington"
+          },
+          {
+            "_key": "sp-e-vj2ni",
+            "label": "Soies",
+            "valeur": "RIO · Royal Wulff"
+          },
+          {
+            "_key": "sp-f-3zo38",
+            "label": "Accessoires",
+            "valeur": "Loon Outdoors · Adams Built"
+          },
+          {
+            "_key": "sp-g-19297o",
+            "label": "Revendeur",
+            "valeur": "Ardent Pêche, Pontivy"
+          },
+          {
+            "_key": "sp-h-zhxu6",
+            "label": "Contact",
+            "valeur": "06 87 30 34 56"
+          }
+        ],
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Après plus de 33 ans de pêche à la mouche et 21 ans de guidage professionnel en France et dans le monde entier, j'ai testé et sélectionné le matériel que j'utilise au quotidien."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Je travaille en partenariat avec des marques qui partagent mes valeurs : SAGE, Redington, RIO, Royal Wulff, Loon Outdoors, Adams Built. Je ne recommande que ce que j'utilise personnellement."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Retrouvez ci-dessous mes recommandations organisées par type de pêche, avec des liens vers mon revendeur de confiance, Ardent Pêche à Pontivy."
+              }
+            ],
+            "style": "normal"
+          }
+        ]
+      },
+      {
+        "_key": "hub-9-1cfopf",
+        "_type": "sectionGrilleSubPages",
+        "cartes": [
+          {
+            "_key": "c-i-i3ev9",
+            "description": "Cannes Spey, soies Skagit et heads pour la pêche des migrateurs en Bretagne.",
+            "image": {
+              "_type": "image",
+              "alt": "Matériel pêche des migrateurs",
+              "asset": {
+                "_ref": "image-695fe8e2624442264ee3cadbff557d0a7efa7954-1600x1067-jpg",
+                "_type": "reference"
+              }
+            },
+            "tag": "Saumon · Alose",
+            "titre": "Matériel migrateurs",
+            "url": "/materiel-mouche-migrateur"
+          },
+          {
+            "_key": "c-j-peexy",
+            "description": "Soies légères et cannes fines pour la truite en rivière et en réservoir.",
+            "image": {
+              "_type": "image",
+              "alt": "Matériel pêche de la truite",
+              "asset": {
+                "_ref": "image-aa46cebe15c0661e217ff507f855d380f44d36cb-1600x1067-jpg",
+                "_type": "reference"
+              }
+            },
+            "tag": "Eau douce",
+            "titre": "Matériel truite",
+            "url": "/materiel-mouche-truite"
+          },
+          {
+            "_key": "c-k-1bi7h5",
+            "description": "Cannes puissantes 9-12#, soies Shooting Head pour la chasse au bar à la mouche.",
+            "image": {
+              "_type": "image",
+              "alt": "Matériel pêche du bar",
+              "asset": {
+                "_ref": "image-b378571e93a75d944c6cec626d0691b462b4dc44-1600x1067-jpg",
+                "_type": "reference"
+              }
+            },
+            "tag": "Côte · Bretagne",
+            "titre": "Matériel bar",
+            "url": "/materiel-mouche-bar"
+          },
+          {
+            "_key": "c-l-1jjmaq",
+            "description": "Soies plongeantes et cannes intermédiaires pour les réservoirs à truites.",
+            "image": {
+              "_type": "image",
+              "alt": "Matériel pêche en réservoir",
+              "asset": {
+                "_ref": "image-2600f13d80e1cbb09c155096cb1989052f5da67e-405x304-jpg",
+                "_type": "reference"
+              }
+            },
+            "tag": "Lac · Plan d'eau",
+            "titre": "Matériel réservoir",
+            "url": "/materiel-mouche-reservoir"
+          },
+          {
+            "_key": "c-m-177oje",
+            "description": "Cannes 9-10#, grosses mouches articuées pour la traque du brochet.",
+            "image": {
+              "_type": "image",
+              "alt": "Matériel pêche du brochet",
+              "asset": {
+                "_ref": "image-37c62c20195f652ef05b06e656838d094c26f9f8-1400x933-jpg",
+                "_type": "reference"
+              }
+            },
+            "tag": "Eau douce",
+            "titre": "Matériel brochet",
+            "url": "/materiel-mouche-brochet"
+          },
+          {
+            "_key": "c-n-1j4xbj",
+            "description": "Équipement tropicaux pour la pêche en eaux chaudes : tarpon, permit, GT.",
+            "image": {
+              "_type": "image",
+              "alt": "Matériel pêche exotique",
+              "asset": {
+                "_ref": "image-905803c7996f6682ed06e61efb5d8b2194b72a86-1600x1067-jpg",
+                "_type": "reference"
+              }
+            },
+            "tag": "International",
+            "titre": "Matériel exotique",
+            "url": "/materiel-mouche-peche-exotique"
+          }
+        ],
+        "description": null,
+        "eyebrow": "Par type de pêche",
+        "fond": "sand",
+        "texte": null,
+        "titre": "Choisir son matériel"
+      },
+      {
+        "_key": "part-a-i7we4",
+        "_type": "sectionPartenaires",
+        "description": null,
+        "eyebrow": "Mes partenaires",
+        "fond": "white",
+        "texte": null,
+        "titre": "Les marques que j'utilise et recommande"
+      },
+      {
+        "_key": "carr-b-13v1uk",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "img-o-10m5vk",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-562186650c43f1c1d9e78d402a10f965d398697b-1600x1120-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-p-11hdeb",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-7c085728bbaf0a4f1ebaf5d0ed34c331aab3f0d5-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-q-sf3qt",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-bcbdfec80387b63c6f4516c2cd6bda93d6f7c1d7-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-r-kq6nq",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-14106cb0a0bc96157cb14c711567f16a097f5a61-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "cta-c-ektrd",
+        "_type": "sectionCta",
+        "description": null,
+        "fond": "dark",
+        "label1": "Me contacter",
+        "label2": "06 87 30 34 56",
+        "lien1": "/contact",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Jean-Baptiste vous conseille sur le meilleur équipement pour votre pratique.",
+        "texte": null,
+        "titre": "Des questions sur le matériel ?"
+      }
+    ]
+  },
+  {
+    "id": "page-materiel-mouche-bar",
+    "slug": "materiel-mouche-bar",
+    "title": "Matériel pêche du bar à la mouche",
+    "seoTitle": "Matériel de pêche à la mouche pour le bar — Jean-Baptiste Vidal",
+    "seoDescription": "Cannes puissantes, soies et mouches pour la pêche du bar à la mouche en Bretagne. Cannes SAGE R8 Salt, SAGE Maverick, soies RIO Striper.",
+    "sections": [
+      {
+        "_key": "hero-s-1k1gfk",
+        "_type": "sectionHero",
+        "eyebrow": "Bar · Eau salée · Estuaires",
+        "titre": "Matériel de pêche à la mouche pour le bar",
+        "sousTitre": "Cannes puissances #8-10, moulinets étanches et soies RIO Striper pour la pêche du bar en Bretagne"
+      },
+      {
+        "_key": "mati-1b-pl4e2",
+        "_type": "sectionMaterielIntro",
+        "titre": "Matériel de pêche à la mouche pour le bar en Bretagne",
+        "texte": "La pêche du bar à la mouche en Bretagne est une pêche exigeante, exposée aux éléments marins. Le matériel doit être robuste et résistant à la corrosion. | Cannes (Rods) | SAGE R8 Salt 9 pieds #8 — bar à vue en conditions calmes. SAGE Maverick 9 pieds #9 — bateau et vent fort. Redington Predator 9 pieds #9 — excellent rapport qualité/prix. | Moulinets (Reels) | SAGE Spectrum — frein précis. SAGE 2280 — robuste taille 7/8. Redington Behemoth 7/8 — puissant et abordable. | Soies (Lines) | Rio Striper flottante — surface et eaux peu profondes. Rio Striper intermédiaire — 90% des situations en estuaire. Rio Striper plongeante — fosses profondes. | Bas de ligne | Fluorocarbone 27° à 40° selon la méthode. Longueur 1,5 à 2 m."
+      },
+      {
+        "_key": "equi-1c-yx66y",
+        "_type": "sectionEquipement",
+        "titre": "Mouches pour le bar"
+      },
+      {
+        "_key": "carr-1d-1h6o1a",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "nav-1k-1hnshq",
+        "_type": "sectionMaterielNav"
+      },
+      {
+        "_key": "cta-1l-1jlljw",
+        "_type": "sectionCta",
+        "titre": "Sortie bar à la mouche",
+        "texte": null
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-s-1k1gfk",
+        "_type": "sectionHero",
+        "description": null,
+        "eyebrow": "Bar · Eau salée · Estuaires",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-b378571e93a75d944c6cec626d0691b462b4dc44-1600x1067-jpg",
+            "_type": "reference"
+          }
+        },
+        "label1": "Pêche du bar à la mouche",
+        "label2": "← Tout le matériel",
+        "lien1": "/peche-du-bar-a-la-mouche",
+        "lien2": "/materiel-jeanbaptistevidal",
+        "sousTitre": "Cannes puissances #8-10, moulinets étanches et soies RIO Striper pour la pêche du bar en Bretagne",
+        "texte": null,
+        "titre": "Matériel de pêche à la mouche pour le bar"
+      },
+      {
+        "_key": "mati-1b-pl4e2",
+        "_type": "sectionMaterielIntro",
+        "description": null,
+        "specs": [
+          {
+            "_key": "sp-1m-jb0mu",
+            "label": "Espèce cible",
+            "valeur": "Bar (Loup · Dicentrarchus labrax)"
+          },
+          {
+            "_key": "sp-1n-fftgo",
+            "label": "Terrain de jeu",
+            "valeur": "Estuaires · Côtes rocheuses · Embouchures · Plages"
+          },
+          {
+            "_key": "sp-1o-apmm3",
+            "label": "Cannes recommandées",
+            "valeur": "SAGE R8 Salt · SAGE Maverick · Redington Predator"
+          },
+          {
+            "_key": "sp-1p-vo82k",
+            "label": "Soies",
+            "valeur": "Rio Striper flottante · intermédiaire · plongeante"
+          },
+          {
+            "_key": "sp-1q-1l4m7g",
+            "label": "Moulinets",
+            "valeur": "SAGE Spectrum · SAGE 2280 · Redington Behemoth"
+          },
+          {
+            "_key": "sp-1r-1ym93",
+            "label": "Puissances",
+            "valeur": "#8 à #10 selon les conditions"
+          }
+        ],
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "La pêche du bar à la mouche en Bretagne est une pêche exigeante, exposée aux éléments marins. Le matériel doit être robuste et résistant à la corrosion."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Cannes (Rods)"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "SAGE R8 Salt 9 pieds #8 — bar à vue en conditions calmes. SAGE Maverick 9 pieds #9 — bateau et vent fort. Redington Predator 9 pieds #9 — excellent rapport qualité/prix."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Moulinets (Reels)"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "SAGE Spectrum — frein précis. SAGE 2280 — robuste taille 7/8. Redington Behemoth 7/8 — puissant et abordable."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Soies (Lines)"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Rio Striper flottante — surface et eaux peu profondes. Rio Striper intermédiaire — 90% des situations en estuaire. Rio Striper plongeante — fosses profondes."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Bas de ligne"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Fluorocarbone 27° à 40° selon la méthode. Longueur 1,5 à 2 m."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Matériel de pêche à la mouche pour le bar en Bretagne"
+      },
+      {
+        "_key": "equi-1c-yx66y",
+        "_type": "sectionEquipement",
+        "description": null,
+        "fond": "sand",
+        "items": [
+          {
+            "_key": "it-1s-mddok",
+            "description": "Gurglers, poppers, sliders — prises visuelles en estuaires peu profonds et hauts fonds.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Mouches de surface"
+          },
+          {
+            "_key": "it-1t-17om3d",
+            "description": "Imitations de blanchaille, lançons. Coloris : blanc/chartreuse, blanc/olive, blanc/bleu. Tailles 2/0 à 3/0.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Streamers"
+          },
+          {
+            "_key": "it-1u-154ahf",
+            "description": "Crevettes et crabes fluo, clouser minnows plombés, squirmies. Efficaces sur les spots rocheux.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Mouches de fond"
+          }
+        ],
+        "texte": null,
+        "titre": "Mouches pour le bar"
+      },
+      {
+        "_key": "carr-1d-1h6o1a",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "img-1v-1csgjj",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-b378571e93a75d944c6cec626d0691b462b4dc44-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-1w-14snzt",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-c377670db284a54b573bb0da8aabe15883cc5cec-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-1x-17xo3p",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-d44226ab12caee1d7e241b6b76a4ef48a1aea667-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "nav-1k-1hnshq",
+        "_type": "sectionMaterielNav",
+        "description": null,
+        "fond": "sand",
+        "liens": [
+          {
+            "_key": "nl-1e-h4haa",
+            "label": "Matériel migrateurs",
+            "url": "/materiel-mouche-migrateur"
+          },
+          {
+            "_key": "nl-1f-1793fe",
+            "label": "Matériel truite",
+            "url": "/materiel-mouche-truite"
+          },
+          {
+            "_key": "nl-1h-rbmjj",
+            "label": "Matériel réservoir",
+            "url": "/materiel-mouche-reservoir"
+          },
+          {
+            "_key": "nl-1i-bf9kv",
+            "label": "Matériel brochet",
+            "url": "/materiel-mouche-brochet"
+          },
+          {
+            "_key": "nl-1j-1firn1",
+            "label": "Matériel exotique",
+            "url": "/materiel-mouche-peche-exotique"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "cta-1l-1jlljw",
+        "_type": "sectionCta",
+        "description": null,
+        "fond": "dark",
+        "label1": "Voir les formules",
+        "label2": "06 87 30 34 56",
+        "lien1": "/peche-du-bar-a-la-mouche",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Guidage bar à vue, initiation et perfectionnement en Bretagne-Sud.",
+        "texte": null,
+        "titre": "Sortie bar à la mouche"
+      }
+    ]
+  },
+  {
+    "id": "page-materiel-mouche-brochet",
+    "slug": "materiel-mouche-brochet",
+    "title": "Matériel pêche du brochet à la mouche",
+    "seoTitle": "Matériel de pêche à la mouche pour le brochet — Jean-Baptiste Vidal",
+    "seoDescription": "Cannes puissantes, soies et grosses mouches pour la pêche du brochet à la mouche. SAGE Payload, Rio Elite Predator.",
+    "sections": [
+      {
+        "_key": "hero-23-blvw5",
+        "_type": "sectionHero",
+        "eyebrow": "Matériel · Brochet · Prédateur",
+        "titre": "Matériel de pêche à la mouche pour le brochet",
+        "sousTitre": "Cannes puissance #9–10, soies prédateurs et grosses mouches volumineuses pour le grand brochet en lac et en étang"
+      },
+      {
+        "_key": "equi-24-ez7xc",
+        "_type": "sectionEquipement",
+        "titre": "Ce qu'il faut dans la boîte",
+        "eyebrow": "Équipement recommandé"
+      },
+      {
+        "_key": "equi-25-w30mr",
+        "_type": "sectionEquipement",
+        "titre": "Les patterns indispensables",
+        "eyebrow": "Mouches à brochet"
+      },
+      {
+        "_key": "carr-26-pi9sg",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "nav-2d-q6abk",
+        "_type": "sectionMaterielNav"
+      },
+      {
+        "_key": "cta-2e-1ncc3s",
+        "_type": "sectionCta",
+        "titre": "Sortie brochet à la mouche",
+        "texte": null
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-23-blvw5",
+        "_type": "sectionHero",
+        "description": null,
+        "eyebrow": "Matériel · Brochet · Prédateur",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-766a95dd101d1c57fe729d06c1844b7d41196b4e-960x666-avif",
+            "_type": "reference"
+          }
+        },
+        "label1": "Pêche du brochet",
+        "label2": "← Tout le matériel",
+        "lien1": "/peche-du-brochet-a-la-mouche",
+        "lien2": "/materiel-jeanbaptistevidal",
+        "sousTitre": "Cannes puissance #9–10, soies prédateurs et grosses mouches volumineuses pour le grand brochet en lac et en étang",
+        "texte": null,
+        "titre": "Matériel de pêche à la mouche pour le brochet"
+      },
+      {
+        "_key": "equi-24-ez7xc",
+        "_type": "sectionEquipement",
+        "description": null,
+        "eyebrow": "Équipement recommandé",
+        "fond": "sand",
+        "items": [
+          {
+            "_key": "it-2f-d26jq",
+            "description": "SAGE Payload — spécialement conçue pour les grosses mouches, action en boucle ouverte. SAGE Maverick — puissante et polyvalente.",
+            "labelLien": "Acheter la SAGE Payload sur Ardent →",
+            "lien": "https://www.ardentflyfishing.com/fr/p/28552-canne-a-mouche-sage-payload-89-soie-9.html",
+            "titre": "La canne, puissance 9 à 10"
+          },
+          {
+            "_key": "it-2g-902gt",
+            "description": "Rio Elite Predator — tête courte, profil optimisé contre le vent. 3 densités : flottante / intermédiaire / plongeante rapide.",
+            "labelLien": "Acheter la Rio Elite Predator sur Ardent →",
+            "lien": "https://www.ardentflyfishing.com/fr/p/29497-soie-rio-elite-predator-wf-f.html",
+            "titre": "La soie, fuseau décentré"
+          },
+          {
+            "_key": "it-2h-1m9tm3",
+            "description": "1 ou 2 brins maximum. Avançon acier ou titane obligatoire. Rio gamme acier tressé multi-brin. Fluorocarbone 60°+ pour petits sujets.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Le bas de ligne"
+          }
+        ],
+        "labelBoutique": "Mouches brochet sur Ardent",
+        "lienBoutique": "https://www.ardentflyfishing.com/fr/c/1094-brochet",
+        "texte": null,
+        "titre": "Ce qu'il faut dans la boîte"
+      },
+      {
+        "_key": "equi-25-w30mr",
+        "_type": "sectionEquipement",
+        "description": null,
+        "eyebrow": "Mouches à brochet",
+        "fond": "sand",
+        "items": [
+          {
+            "_key": "it-2i-1exj61",
+            "description": "Gurglers, poppers, sliders — bordure dans les herbiers et sous frondaisons, printemps/début été.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Mouches de surface"
+          },
+          {
+            "_key": "it-2j-9sy2b",
+            "description": "Imitations de perches, gardons. Marabou et craft fur. Tailles 3/0 à 6/0.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Streamers imitatifs"
+          },
+          {
+            "_key": "it-2k-qxong",
+            "description": "Couleurs vives (chartreuse, orange, rouge/blanc) pour eaux colorées. Deceiver et Clouser géants.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Streamers attractants"
+          }
+        ],
+        "labelBoutique": "Mouches brochet sur Ardent",
+        "lienBoutique": "https://www.ardentflyfishing.com/fr/c/1094-brochet",
+        "texte": null,
+        "titre": "Les patterns indispensables"
+      },
+      {
+        "_key": "carr-26-pi9sg",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "img-2l-1jkbxr",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-e22a35f965f455c10750a0811e10e69e239958e2-1218x913-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-2m-11t1bu",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-4bf833a9b9c76ea7a1fe12d9ec4ea1114be84686-1217x912-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-2n-1bq2h3",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-778459cf3b09912e9e1a17c1ff96ee19e3b7d838-1217x912-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-2o-19wjyc",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-ef5cf935164471a8f50004625787282803a9adc8-1217x912-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-2p-1a2hxa",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-0aa243d0270946b40dee32f4f38b8edc572554d8-1217x912-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-2q-uc9z9",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-06c4b3e0f13bf1003efed0b22612d0df6475cda9-1217x913-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-2r-1l3f4u",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-a0678705912f5907af159ce146f1b695f63f838d-1217x912-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-2s-quw4m",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-6ab703707142fcbd2ca75324c8ee6fa6a959bbb3-1217x913-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-2t-1mm6y9",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-97d302b46a333e643036feb6e26c09b1313bf4bb-1369x913-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "nav-2d-q6abk",
+        "_type": "sectionMaterielNav",
+        "description": null,
+        "fond": "sand",
+        "liens": [
+          {
+            "_key": "nl-27-1i53ao",
+            "label": "Matériel migrateurs",
+            "url": "/materiel-mouche-migrateur"
+          },
+          {
+            "_key": "nl-28-7rrey",
+            "label": "Matériel truite",
+            "url": "/materiel-mouche-truite"
+          },
+          {
+            "_key": "nl-29-15vuuh",
+            "label": "Matériel bar",
+            "url": "/materiel-mouche-bar"
+          },
+          {
+            "_key": "nl-2a-eut6t",
+            "label": "Matériel réservoir",
+            "url": "/materiel-mouche-reservoir"
+          },
+          {
+            "_key": "nl-2c-16ktb4",
+            "label": "Matériel exotique",
+            "url": "/materiel-mouche-peche-exotique"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "cta-2e-1ncc3s",
+        "_type": "sectionCta",
+        "description": null,
+        "fond": "dark",
+        "label1": "Me contacter",
+        "label2": "06 87 30 34 56",
+        "lien1": "/contact",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Guidage spécialisé brochet, disponibilités et tarifs sur demande.",
+        "texte": null,
+        "titre": "Sortie brochet à la mouche"
+      }
+    ]
+  },
+  {
+    "id": "page-materiel-mouche-migrateur",
+    "slug": "materiel-mouche-migrateur",
+    "title": "Matériel pêche des migrateurs à la mouche",
+    "seoTitle": "Matériel pour la pêche des migrateurs à la mouche — Jean-Baptiste Vidal",
+    "seoDescription": "Cannes, soies, polyleaders et mouches pour pêcher le saumon, l'alose et la truite de mer en Bretagne.",
+    "sections": [
+      {
+        "_key": "hero-2z-ewlz3",
+        "_type": "sectionHero",
+        "eyebrow": "Saumon · Alose · Truite de mer",
+        "titre": "Matériel pour la pêche des migrateurs",
+        "sousTitre": "Cannes à deux mains, soies Spey, polyleaders et mouches adaptés aux rivières de Bretagne"
+      },
+      {
+        "_key": "mati-3g-1j92k0",
+        "_type": "sectionMaterielIntro",
+        "titre": "Matériel pour les poissons migrateurs en Bretagne",
+        "texte": "Petites et moyennes rivières | Canne à une main 9-10 pieds soie #8 pour saumon de printemps. Canne 9 pieds soie #6-7 pour individus plus petits en mi-saison. Rivières : Elorn, Aven, Penzé, Goyen, Odet. | Moyennes et grandes rivières — cannes Spey | SAGE R8 Spey ou SAGE SONIC — deux mains 12-13 pieds soie #7-8. REDINGTON CLAYMORE — excellent rapport qualité/prix. Rivières : Ellé, Scorff, Léguer, Aulne, Blavet. | Soies pour le Spey casting | Shooting Head (SH) — tête 10-15m, grandes distances. Scandi — tête 8-10m, nymphes et mouches légères. Skagit — tête ~6m, grosses mouches et pointes plongeantes. WF medium — rivières étroites. | Versileaders et polyleaders | Versileaders RIO ou polyleaders en tailles 6, 10, 12, 15 pieds. 4 densités : flottant, intermédiaire, plongeant lent, plongeant rapide."
+      },
+      {
+        "_key": "equi-3h-kwkki",
+        "_type": "sectionEquipement",
+        "titre": "Mouches pour les migrateurs"
+      },
+      {
+        "_key": "carr-3i-18m23t",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "nav-3p-pg4zm",
+        "_type": "sectionMaterielNav"
+      },
+      {
+        "_key": "cta-3q-9gu9h",
+        "_type": "sectionCta",
+        "titre": "Réservez votre sortie migrateurs",
+        "texte": null
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-2z-ewlz3",
+        "_type": "sectionHero",
+        "description": null,
+        "eyebrow": "Saumon · Alose · Truite de mer",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-695fe8e2624442264ee3cadbff557d0a7efa7954-1600x1067-jpg",
+            "_type": "reference"
+          }
+        },
+        "label1": "Stages Spey Cast",
+        "label2": "← Tout le matériel",
+        "lien1": "/stage-spey-cast-et-cours-de-lancer",
+        "lien2": "/materiel-jeanbaptistevidal",
+        "sousTitre": "Cannes à deux mains, soies Spey, polyleaders et mouches adaptés aux rivières de Bretagne",
+        "texte": null,
+        "titre": "Matériel pour la pêche des migrateurs"
+      },
+      {
+        "_key": "mati-3g-1j92k0",
+        "_type": "sectionMaterielIntro",
+        "description": null,
+        "specs": [
+          {
+            "_key": "sp-3r-wehvp",
+            "label": "Espèces cibles",
+            "valeur": "Saumon atlantique · Alose feinte · Truite de mer"
+          },
+          {
+            "_key": "sp-3s-1c0eyg",
+            "label": "Rivières Bretagne",
+            "valeur": "Ellé · Scorff · Aulne · Blavet · Léguer · Elorn · Aven"
+          },
+          {
+            "_key": "sp-3t-rykjm",
+            "label": "Cannes recommandées",
+            "valeur": "SAGE R8 Spey · SAGE SONIC · Redington Claymore"
+          },
+          {
+            "_key": "sp-3u-1ae3xd",
+            "label": "Soies",
+            "valeur": "Shooting Head · Skagit · Scandi · WF"
+          },
+          {
+            "_key": "sp-3v-upb0i",
+            "label": "Versileaders",
+            "valeur": "RIO 6, 10, 12, 15 pieds — 4 densités"
+          }
+        ],
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Petites et moyennes rivières"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Canne à une main 9-10 pieds soie #8 pour saumon de printemps. Canne 9 pieds soie #6-7 pour individus plus petits en mi-saison. Rivières : Elorn, Aven, Penzé, Goyen, Odet."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Moyennes et grandes rivières — cannes Spey"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "SAGE R8 Spey ou SAGE SONIC — deux mains 12-13 pieds soie #7-8. REDINGTON CLAYMORE — excellent rapport qualité/prix. Rivières : Ellé, Scorff, Léguer, Aulne, Blavet."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Soies pour le Spey casting"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Shooting Head (SH) — tête 10-15m, grandes distances. Scandi — tête 8-10m, nymphes et mouches légères. Skagit — tête ~6m, grosses mouches et pointes plongeantes. WF medium — rivières étroites."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Versileaders et polyleaders"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Versileaders RIO ou polyleaders en tailles 6, 10, 12, 15 pieds. 4 densités : flottant, intermédiaire, plongeant lent, plongeant rapide."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Matériel pour les poissons migrateurs en Bretagne"
+      },
+      {
+        "_key": "equi-3h-kwkki",
+        "_type": "sectionEquipement",
+        "description": null,
+        "fond": "sand",
+        "items": [
+          {
+            "_key": "it-3w-ko5za",
+            "description": "Ally's Shrimp, Cascade, mouches orangées en début de saison. Mouches noires par temps clair. Green Highlander, Gary Dog. Tubes fly de plus en plus populaires.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Saumon"
+          },
+          {
+            "_key": "it-3x-1gdbem",
+            "description": "Mouches légères et brillantes, tailles 8-12. Imitations de petits crustacés, mouches argentées ou cuivrées sur Ellé et Aulne au printemps.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Alose"
+          },
+          {
+            "_key": "it-3y-12la30",
+            "description": "En milieu de saison : mouches sobres et discrètes. La nuit : mouches de surface ou streamers sombres.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Truite de mer"
+          }
+        ],
+        "texte": null,
+        "titre": "Mouches pour les migrateurs"
+      },
+      {
+        "_key": "carr-3i-18m23t",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "img-3z-1foro4",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-695fe8e2624442264ee3cadbff557d0a7efa7954-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-40-mkny3",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-1a132ebeb82f4026b98df1087d59b5d9077e705d-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-41-1ib5x8",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-56a1772369a94e347203293cb2a18596459473a4-975x649-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "nav-3p-pg4zm",
+        "_type": "sectionMaterielNav",
+        "description": null,
+        "fond": "sand",
+        "liens": [
+          {
+            "_key": "nl-3k-1a9ppz",
+            "label": "Matériel truite",
+            "url": "/materiel-mouche-truite"
+          },
+          {
+            "_key": "nl-3l-1l6tj9",
+            "label": "Matériel bar",
+            "url": "/materiel-mouche-bar"
+          },
+          {
+            "_key": "nl-3m-1i6pp7",
+            "label": "Matériel réservoir",
+            "url": "/materiel-mouche-reservoir"
+          },
+          {
+            "_key": "nl-3n-j13t1",
+            "label": "Matériel brochet",
+            "url": "/materiel-mouche-brochet"
+          },
+          {
+            "_key": "nl-3o-8z4p5",
+            "label": "Matériel exotique",
+            "url": "/materiel-mouche-peche-exotique"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "cta-3q-9gu9h",
+        "_type": "sectionCta",
+        "description": null,
+        "fond": "dark",
+        "label1": "Me contacter",
+        "label2": "06 87 30 34 56",
+        "lien1": "/contact",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Stages Spey Cast, guidages saumon et alose, disponibilités sur demande.",
+        "texte": null,
+        "titre": "Réservez votre sortie migrateurs"
+      }
+    ]
+  },
+  {
+    "id": "page-materiel-mouche-peche-exotique",
+    "slug": "materiel-mouche-peche-exotique",
+    "title": "Matériel pêche exotique à la mouche",
+    "seoTitle": "Matériel pour la pêche à la mouche en exotique — Jean-Baptiste Vidal",
+    "seoDescription": "Cannes, soies et mouches pour la pêche exotique : bonefish, permit, tarpon, dorado. SAGE R8 Salt, SAGE Maverick, SAGE Enforcer.",
+    "sections": [
+      {
+        "_key": "hero-47-1abds2",
+        "_type": "sectionHero",
+        "eyebrow": "Bonefish · Permit · Tarpon · Dorado",
+        "titre": "Matériel pour la pêche exotique à la mouche",
+        "sousTitre": "Équipement haute performance pour les grands voyages de pêche : Cuba, Venezuela, Argentine, Mexique",
+        "btnReserverTexte": "Voyage de pêche"
+      },
+      {
+        "_key": "mati-4q-5x5dx",
+        "_type": "sectionMaterielIntro",
+        "titre": "Matériel pour la pêche à la mouche en exotique",
+        "texte": "Après avoir pêché dans plus de 20 pays, j'ai affiné mon matériel pour chaque espèce. La chaleur, l'humidité, les poissons puissants et l'eau de mer corrosive exigent un équipement sans compromis. | Bonefish | SAGE R8 SALT 9 pieds #8 — précision sur poissons en déplacement. SAGE MAVERICK 9 pieds #8 — robuste par vent. Moulinet : SAGE ENFORCER ou Redington Grande. Mouches : crevettes, crabes, Mini-Puf, Gotcha, Crazy Charlie. | Permit | Canne 9 pieds #9 ou #10. Backing : 200m minimum. Moulinet : SAGE ENFORCER ou Redington Grande. Mouches : crevettes, crabes, Del's Merkin, Spawning Shrimp. | Tarpon | Petits tarpons (2-10 kg) : canne #8. Grands tarpons : SAGE XI3, SAGE R8 SALT ou SAGE Maverick en #10 à #12. Mouches : Black Death, Cockroach, patterns Toad. | Dorado | Petits sujets (2-5 kg) : canne #8. Gros sujets (8 kg+) : canne #9-10. Avançon acier ou titane 30 livres obligatoire. Mouches : Andino Deceiver, EP Baitfish, Gurglers, Poppers."
+      },
+      {
+        "_key": "carr-4r-lmgq3",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "vidS-4s-w550g",
+        "_type": "sectionVideo",
+        "titre": "Préparer son voyage exotique de pêche à la mouche"
+      },
+      {
+        "_key": "c2-4x-rfavg",
+        "_type": "sectionCards2",
+        "eyebrow": "Destinations",
+        "titre": "Voyages organisés par Jean-Baptiste Vidal",
+        "cards": [
+          {
+            "titre": "Argentine — Rio Grande",
+            "sousTitre": "La Mecque de la truite de mer à la mouche. Rio Grande en Terre de Feu."
+          },
+          {
+            "titre": "Cuba — Cayo Cruz",
+            "sousTitre": "Bonefish, permit et tarpon sur les magnifiques flats cubains."
+          },
+          {
+            "titre": "Venezuela — Los Roques",
+            "sousTitre": "Paradis des flats avec bonefish géants dans un cadre de rêve."
+          },
+          {
+            "titre": "Mexique",
+            "sousTitre": "Bonefish et permit dans les eaux turquoise du Yucatan."
+          }
+        ]
+      },
+      {
+        "_key": "nav-54-1kc3l",
+        "_type": "sectionMaterielNav"
+      },
+      {
+        "_key": "cta-55-1ldgub",
+        "_type": "sectionCta",
+        "titre": "Préparez votre voyage de pêche",
+        "texte": null
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-47-1abds2",
+        "_type": "sectionHero",
+        "btnMaterielLabel": "Tous le matériel",
+        "btnMaterielLien": "/materiel-jeanbaptistevidal/",
+        "btnReserverLien": "/voyages-peche-mouche/",
+        "btnReserverTexte": "Voyage de pêche",
+        "description": null,
+        "eyebrow": "Bonefish · Permit · Tarpon · Dorado",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-905803c7996f6682ed06e61efb5d8b2194b72a86-1600x1067-jpg",
+            "_type": "reference"
+          },
+          "crop": {
+            "_type": "sanity.imageCrop",
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "hotspot": {
+            "_type": "sanity.imageHotspot",
+            "height": 0.5908974686780875,
+            "width": 1,
+            "x": 0.5,
+            "y": 0.379996590812239
+          }
+        },
+        "label1": "Voyages de pêche",
+        "label2": "← Tout le matériel",
+        "lien1": "/voyages-peche-mouche",
+        "lien2": "/materiel-jeanbaptistevidal",
+        "sousTitre": "Équipement haute performance pour les grands voyages de pêche : Cuba, Venezuela, Argentine, Mexique",
+        "texte": null,
+        "titre": "Matériel pour la pêche exotique à la mouche"
+      },
+      {
+        "_key": "mati-4q-5x5dx",
+        "_type": "sectionMaterielIntro",
+        "description": null,
+        "fond": "white",
+        "specs": [
+          {
+            "_key": "sp-56-18y24d",
+            "label": "Espèces",
+            "valeur": "Bonefish · Permit · Tarpon · Dorado · GT"
+          },
+          {
+            "_key": "sp-57-92905",
+            "label": "Destinations",
+            "valeur": "Cuba · Venezuela · Argentine · Mexique · Bolivie"
+          },
+          {
+            "_key": "sp-58-ocvim",
+            "label": "Cannes",
+            "valeur": "SAGE R8 Salt · SAGE Maverick · SAGE XI3"
+          },
+          {
+            "_key": "sp-59-1cpkn9",
+            "label": "Moulinets",
+            "valeur": "SAGE Enforcer · Redington Grande"
+          },
+          {
+            "_key": "sp-5a-yifm1",
+            "label": "Puissances",
+            "valeur": "#8 bonefish · #9-10 permit/dorado · #10-12 tarpon"
+          }
+        ],
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Après avoir pêché dans plus de 20 pays, j'ai affiné mon matériel pour chaque espèce. La chaleur, l'humidité, les poissons puissants et l'eau de mer corrosive exigent un équipement sans compromis."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Bonefish"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "SAGE R8 SALT 9 pieds #8 — précision sur poissons en déplacement. SAGE MAVERICK 9 pieds #8 — robuste par vent. Moulinet : SAGE ENFORCER ou Redington Grande. Mouches : crevettes, crabes, Mini-Puf, Gotcha, Crazy Charlie."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Permit"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Canne 9 pieds #9 ou #10. Backing : 200m minimum. Moulinet : SAGE ENFORCER ou Redington Grande. Mouches : crevettes, crabes, Del's Merkin, Spawning Shrimp."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Tarpon"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Petits tarpons (2-10 kg) : canne #8. Grands tarpons : SAGE XI3, SAGE R8 SALT ou SAGE Maverick en #10 à #12. Mouches : Black Death, Cockroach, patterns Toad."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Dorado"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Petits sujets (2-5 kg) : canne #8. Gros sujets (8 kg+) : canne #9-10. Avançon acier ou titane 30 livres obligatoire. Mouches : Andino Deceiver, EP Baitfish, Gurglers, Poppers."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Matériel pour la pêche à la mouche en exotique"
+      },
+      {
+        "_key": "carr-4r-lmgq3",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "img-5b-1lr2yg",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-905803c7996f6682ed06e61efb5d8b2194b72a86-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-5c-p8zs0",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-35408a2d9d83252d2461c6b13bfe9ac9e3596194-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-5d-151cs9",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-a212399651a59edfdf92fcdd1cf582482c7f76bc-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "vidS-4s-w550g",
+        "_type": "sectionVideo",
+        "description": null,
+        "fond": "sand",
+        "texte": null,
+        "titre": "Préparer son voyage exotique de pêche à la mouche",
+        "url": "https://www.youtube.com/watch?v=A9ov6VSGnVE"
+      },
+      {
+        "_key": "c2-4x-rfavg",
+        "_type": "sectionCards2",
+        "cards": [
+          {
+            "_key": "cd-4t-kay6d",
+            "lien": "/voyage-peche-argentine-rio-grande-truite-de-mer",
+            "sousTitre": "La Mecque de la truite de mer à la mouche. Rio Grande en Terre de Feu.",
+            "titre": "Argentine — Rio Grande"
+          },
+          {
+            "_key": "cd-4u-cgemz",
+            "lien": "/peche-mouche-cuba-cayo-cruz",
+            "sousTitre": "Bonefish, permit et tarpon sur les magnifiques flats cubains.",
+            "titre": "Cuba — Cayo Cruz"
+          },
+          {
+            "_key": "cd-4v-pnljh",
+            "lien": "/los-roques-venezuela",
+            "sousTitre": "Paradis des flats avec bonefish géants dans un cadre de rêve.",
+            "titre": "Venezuela — Los Roques"
+          },
+          {
+            "_key": "cd-4w-1941tc",
+            "lien": "/voyage-peche-mouche-mexique",
+            "sousTitre": "Bonefish et permit dans les eaux turquoise du Yucatan.",
+            "titre": "Mexique"
+          }
+        ],
+        "description": null,
+        "eyebrow": "Destinations",
+        "fond": "sand",
+        "texte": null,
+        "titre": "Voyages organisés par Jean-Baptiste Vidal"
+      },
+      {
+        "_key": "nav-54-1kc3l",
+        "_type": "sectionMaterielNav",
+        "description": null,
+        "fond": "sand",
+        "liens": [
+          {
+            "_key": "nl-4y-jpe8f",
+            "label": "Matériel migrateurs",
+            "url": "/materiel-mouche-migrateur"
+          },
+          {
+            "_key": "nl-4z-1fd7xi",
+            "label": "Matériel truite",
+            "url": "/materiel-mouche-truite"
+          },
+          {
+            "_key": "nl-50-rkilc",
+            "label": "Matériel bar",
+            "url": "/materiel-mouche-bar"
+          },
+          {
+            "_key": "nl-51-2yvks",
+            "label": "Matériel réservoir",
+            "url": "/materiel-mouche-reservoir"
+          },
+          {
+            "_key": "nl-52-g4w38",
+            "label": "Matériel brochet",
+            "url": "/materiel-mouche-brochet"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "cta-55-1ldgub",
+        "_type": "sectionCta",
+        "description": null,
+        "fond": "dark",
+        "label1": "Voir les voyages",
+        "label2": "06 87 30 34 56",
+        "lien1": "/voyages-peche-mouche",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Jean-Baptiste vous conseille sur le matériel adapté à votre destination.",
+        "texte": null,
+        "titre": "Préparez votre voyage de pêche"
+      }
+    ]
+  },
+  {
+    "id": "page-materiel-mouche-reservoir",
+    "slug": "materiel-mouche-reservoir",
+    "title": "Matériel pêche en réservoir à la mouche",
+    "seoTitle": "Matériel pour la pêche à la mouche en réservoir — Jean-Baptiste Vidal",
+    "seoDescription": "Cannes, soies et mouches pour la pêche de la truite en réservoir. SAGE Sonic, Redington Crux, soies RIO en différentes densités.",
+    "sections": [
+      {
+        "_key": "hero-5j-1c2vpx",
+        "_type": "sectionHero",
+        "eyebrow": "Truite arc-en-ciel · Réservoir · Plan d'eau",
+        "titre": "Matériel pour la pêche en réservoir",
+        "sousTitre": "Cannes puissances #6-8, soies en 3 densités et mouches spécifiques pour la pêche en réservoir"
+      },
+      {
+        "_key": "mati-62-11b2um",
+        "_type": "sectionMaterielIntro",
+        "titre": "Matériel pour la pêche à la mouche en réservoir",
+        "texte": "Le réservoir est le terrain de jeu idéal pour progresser à la pêche à la mouche. Drennec, Saint-Michel, Toul Dour — lancer loin, sonder différentes profondeurs. | Cannes | SAGE SONIC — polyvalente et rapide, lancers longue distance. REDINGTON Crux — légère et précise, pêche à vue en réservoir. Puissances #6 à #8. | Soies — 3 densités | Flottante — Rio Gold ou Rio Grand (surface, nymphe sous indicateur). Intermédiaire — Rio Camolux (50cm à 2m de profondeur, la plus polyvalente). Plongeante — Rio Phantom ou Rio Outbound (couches profondes). | Moulinets | SAGE Spectrum — précis et solide. SAGE 2280 — classique et fiable. Redington Behemoth 7/8 — puissant et économique. | Bas de ligne | Maxima Chameleon ou Rio Powerflex. Pointes 12° à 22° selon la méthode de pêche."
+      },
+      {
+        "_key": "equi-63-bejea",
+        "_type": "sectionEquipement",
+        "titre": "Mouches pour le réservoir"
+      },
+      {
+        "_key": "carr-64-brxao",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "nav-6b-4wsx6",
+        "_type": "sectionMaterielNav"
+      },
+      {
+        "_key": "cta-6c-y02yj",
+        "_type": "sectionCta",
+        "titre": "Masterclass réservoir",
+        "texte": null
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-5j-1c2vpx",
+        "_type": "sectionHero",
+        "description": null,
+        "eyebrow": "Truite arc-en-ciel · Réservoir · Plan d'eau",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-2600f13d80e1cbb09c155096cb1989052f5da67e-405x304-jpg",
+            "_type": "reference"
+          }
+        },
+        "label1": "Stages réservoir",
+        "label2": "← Tout le matériel",
+        "lien1": "/peche-de-la-truite-en-reservoir",
+        "lien2": "/materiel-jeanbaptistevidal",
+        "sousTitre": "Cannes puissances #6-8, soies en 3 densités et mouches spécifiques pour la pêche en réservoir",
+        "texte": null,
+        "titre": "Matériel pour la pêche en réservoir"
+      },
+      {
+        "_key": "mati-62-11b2um",
+        "_type": "sectionMaterielIntro",
+        "description": null,
+        "specs": [
+          {
+            "_key": "sp-6d-13pf4z",
+            "label": "Espèce cible",
+            "valeur": "Truite arc-en-ciel · Fario en réservoir"
+          },
+          {
+            "_key": "sp-6e-uxbx1",
+            "label": "Sites Bretagne",
+            "valeur": "Drennec · Saint-Michel · Toul Dour"
+          },
+          {
+            "_key": "sp-6f-1biese",
+            "label": "Cannes recommandées",
+            "valeur": "SAGE Sonic · Redington Crux"
+          },
+          {
+            "_key": "sp-6g-ug11g",
+            "label": "Soies",
+            "valeur": "Rio Gold · Rio Camolux · Rio Phantom"
+          },
+          {
+            "_key": "sp-6h-zwo1r",
+            "label": "Moulinets",
+            "valeur": "SAGE Spectrum · SAGE 2280 · Redington Behemoth"
+          },
+          {
+            "_key": "sp-6i-1a0528",
+            "label": "Puissances",
+            "valeur": "#6 à #8 selon la technique"
+          }
+        ],
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Le réservoir est le terrain de jeu idéal pour progresser à la pêche à la mouche. Drennec, Saint-Michel, Toul Dour — lancer loin, sonder différentes profondeurs."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Cannes"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "SAGE SONIC — polyvalente et rapide, lancers longue distance. REDINGTON Crux — légère et précise, pêche à vue en réservoir. Puissances #6 à #8."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Soies — 3 densités"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Flottante — Rio Gold ou Rio Grand (surface, nymphe sous indicateur). Intermédiaire — Rio Camolux (50cm à 2m de profondeur, la plus polyvalente). Plongeante — Rio Phantom ou Rio Outbound (couches profondes)."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Moulinets"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "SAGE Spectrum — précis et solide. SAGE 2280 — classique et fiable. Redington Behemoth 7/8 — puissant et économique."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Bas de ligne"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Maxima Chameleon ou Rio Powerflex. Pointes 12° à 22° selon la méthode de pêche."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Matériel pour la pêche à la mouche en réservoir"
+      },
+      {
+        "_key": "equi-63-bejea",
+        "_type": "sectionEquipement",
+        "description": null,
+        "fond": "sand",
+        "items": [
+          {
+            "_key": "it-6j-1lz1e1",
+            "description": "Sédges, tipules (daddy long legs), chironomes en surface. Très efficaces le soir lors des émergences estivales.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Mouches sèches & émergentes"
+          },
+          {
+            "_key": "it-6k-1iu8z0",
+            "description": "Nymphes de chironome, de sédge, buzzers. Pêche en nymphe suspendue sous indicateur. Nymphe plombée pour eaux froides.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Nymphes"
+          },
+          {
+            "_key": "it-6l-19hjxo",
+            "description": "Streamers pour imiter les alevins. Boobies (nageant tête en bas) redoutables sur soies plongeantes rapides.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Streamers & boobies"
+          }
+        ],
+        "texte": null,
+        "titre": "Mouches pour le réservoir"
+      },
+      {
+        "_key": "carr-64-brxao",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "img-6m-ptsfb",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-2600f13d80e1cbb09c155096cb1989052f5da67e-405x304-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-6n-4rrtm",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-a1c6140f257004a2dfff95f638e263b018ef1db4-499x374-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-6o-ygx99",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-94e161fe22c2b19c794e3ca9873abb12775bef7f-405x367-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "nav-6b-4wsx6",
+        "_type": "sectionMaterielNav",
+        "description": null,
+        "fond": "sand",
+        "liens": [
+          {
+            "_key": "nl-65-1f5d7z",
+            "label": "Matériel migrateurs",
+            "url": "/materiel-mouche-migrateur"
+          },
+          {
+            "_key": "nl-66-mmnsf",
+            "label": "Matériel truite",
+            "url": "/materiel-mouche-truite"
+          },
+          {
+            "_key": "nl-67-8salw",
+            "label": "Matériel bar",
+            "url": "/materiel-mouche-bar"
+          },
+          {
+            "_key": "nl-69-1gm6fc",
+            "label": "Matériel brochet",
+            "url": "/materiel-mouche-brochet"
+          },
+          {
+            "_key": "nl-6a-1jpr6m",
+            "label": "Matériel exotique",
+            "url": "/materiel-mouche-peche-exotique"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "cta-6c-y02yj",
+        "_type": "sectionCta",
+        "description": null,
+        "fond": "dark",
+        "label1": "Voir la masterclass",
+        "label2": "06 87 30 34 56",
+        "lien1": "/master-class-peche-en-reservoir",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Progressez rapidement avec une journée de masterclass en réservoir.",
+        "texte": null,
+        "titre": "Masterclass réservoir"
+      }
+    ]
+  },
+  {
+    "id": "page-materiel-mouche-truite",
+    "slug": "materiel-mouche-truite",
+    "title": "Matériel pêche de la truite à la mouche",
+    "seoTitle": "Matériel pour la pêche de la truite à la mouche — Jean-Baptiste Vidal",
+    "seoDescription": "Cannes légères, soies et mouches pour la pêche de la truite fario en rivière et en réservoir en Bretagne.",
+    "sections": [
+      {
+        "_key": "hero-6u-11djv8",
+        "_type": "sectionHero",
+        "eyebrow": "Truite fario · Truite de mer · Réservoir",
+        "titre": "Matériel pour la pêche de la truite",
+        "sousTitre": "Cannes légères 7 à 9 pieds, soies RIO et mouches sèches pour les rivières de Bretagne"
+      },
+      {
+        "_key": "mati-7d-si0bk",
+        "_type": "sectionMaterielIntro",
+        "titre": "Matériel pour la pêche de la truite à la mouche en Bretagne",
+        "texte": "Rivières bretonnes : Odet, Jet, Steïr, Elorn, Ster Goz, Aven, Penzé, Queffleuth — généralement étroites à moyennes, souvent boisées. | Cannes pour la rivière (7 à 9 pieds) | SAGE Sonic 8,6 pieds #4 — polyvalence et précision. SAGE TROUT LL 8,6 pieds #4 — ultra-légère, pêche sèche. SAGE R8 Core 8,6 pieds #4 — technique et précis. SAGE DART 7,6 pieds #3 — petits ruisseaux. | Soies pour la truite en rivière | Rio Gold — référence polyvalente, sèche et nymphe légère. Rio Trout Intouch — sensibilité et détection des touches. Rio Technical Trout Elite — pêcheurs avancés. Rio Creek — courtes distances avec SAGE DART. | Bas de ligne et fil | Longueur 3,5 à 4,5 mètres. Pointes 16° à 10° selon la mouche. Rio Powerflex nylon recommandé. | Pêche en réservoir | Cannes 9 pieds #6 à #8, gamme SONIC. 3 soies nécessaires : flottante / flottante à pointe intermédiaire / plongeante. Réservoirs : Drennec, Saint-Michel, Toul Dour."
+      },
+      {
+        "_key": "equi-7e-ooogm",
+        "_type": "sectionEquipement",
+        "titre": "Mouches pour la truite"
+      },
+      {
+        "_key": "carr-7f-159akt",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "nav-7m-1fbefr",
+        "_type": "sectionMaterielNav"
+      },
+      {
+        "_key": "cta-7n-1hir6b",
+        "_type": "sectionCta",
+        "titre": "Réservez votre stage truite",
+        "texte": null
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-6u-11djv8",
+        "_type": "sectionHero",
+        "description": null,
+        "eyebrow": "Truite fario · Truite de mer · Réservoir",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-aa46cebe15c0661e217ff507f855d380f44d36cb-1600x1067-jpg",
+            "_type": "reference"
+          }
+        },
+        "label1": "Stages truite",
+        "label2": "← Tout le matériel",
+        "lien1": "/peche-de-la-truite-a-la-mouche-en-bretagne",
+        "lien2": "/materiel-jeanbaptistevidal",
+        "sousTitre": "Cannes légères 7 à 9 pieds, soies RIO et mouches sèches pour les rivières de Bretagne",
+        "texte": null,
+        "titre": "Matériel pour la pêche de la truite"
+      },
+      {
+        "_key": "mati-7d-si0bk",
+        "_type": "sectionMaterielIntro",
+        "description": null,
+        "specs": [
+          {
+            "_key": "sp-7o-18let7",
+            "label": "Espèces cibles",
+            "valeur": "Truite fario · Truite de mer · Arc-en-ciel"
+          },
+          {
+            "_key": "sp-7p-r0llm",
+            "label": "Rivières Bretagne",
+            "valeur": "Odet · Jet · Steïr · Elorn · Aven · Penzé · Queffleuth"
+          },
+          {
+            "_key": "sp-7q-ytnom",
+            "label": "Cannes recommandées",
+            "valeur": "SAGE Sonic · SAGE TROUT LL · SAGE R8 Core · SAGE DART"
+          },
+          {
+            "_key": "sp-7r-1jwlyb",
+            "label": "Soies",
+            "valeur": "Rio Gold · Rio Technical Trout · Rio Creek"
+          },
+          {
+            "_key": "sp-7s-xvu38",
+            "label": "Bas de ligne",
+            "valeur": "3,5 à 4,5 m, pointe 16° à 10°"
+          }
+        ],
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Rivières bretonnes : Odet, Jet, Steïr, Elorn, Ster Goz, Aven, Penzé, Queffleuth — généralement étroites à moyennes, souvent boisées."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Cannes pour la rivière (7 à 9 pieds)"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "SAGE Sonic 8,6 pieds #4 — polyvalence et précision. SAGE TROUT LL 8,6 pieds #4 — ultra-légère, pêche sèche. SAGE R8 Core 8,6 pieds #4 — technique et précis. SAGE DART 7,6 pieds #3 — petits ruisseaux."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Soies pour la truite en rivière"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Rio Gold — référence polyvalente, sèche et nymphe légère. Rio Trout Intouch — sensibilité et détection des touches. Rio Technical Trout Elite — pêcheurs avancés. Rio Creek — courtes distances avec SAGE DART."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Bas de ligne et fil"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Longueur 3,5 à 4,5 mètres. Pointes 16° à 10° selon la mouche. Rio Powerflex nylon recommandé."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêche en réservoir"
+              }
+            ],
+            "style": "h3"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Cannes 9 pieds #6 à #8, gamme SONIC. 3 soies nécessaires : flottante / flottante à pointe intermédiaire / plongeante. Réservoirs : Drennec, Saint-Michel, Toul Dour."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Matériel pour la pêche de la truite à la mouche en Bretagne"
+      },
+      {
+        "_key": "equi-7e-ooogm",
+        "_type": "sectionEquipement",
+        "description": null,
+        "fond": "sand",
+        "items": [
+          {
+            "_key": "it-7t-18h6mo",
+            "description": "Sédges, Baetis rhodanis, March Brown, éphémères de mai. Imitations d'éphéméroptères tailles 14-16, printemps et début d'été.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Mouches sèches"
+          },
+          {
+            "_key": "it-7u-157cr5",
+            "description": "Duck tail emergers, patterns à corps de lièvre, imitations d'Ignita. Nymphe au fil dans courants rapides et fosses.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Nymphes et émergentes"
+          },
+          {
+            "_key": "it-7v-1mbowd",
+            "description": "Streamers, imitations de sédges, terrestrials (tipules), chironomes. Boobies et nymphes plombées en profondeur.",
+            "labelLien": null,
+            "lien": null,
+            "titre": "Réservoir"
+          }
+        ],
+        "texte": null,
+        "titre": "Mouches pour la truite"
+      },
+      {
+        "_key": "carr-7f-159akt",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "img-7w-t6iej",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-aa46cebe15c0661e217ff507f855d380f44d36cb-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-7x-188cgr",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-51b337250b55c81dd81a5c543bedaf47593ea345-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-7y-rjtnj",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-5317e097fe0b3ee123a4e80f7d3764aa3b340ec6-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-7z-j2na8",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-b4d0011f53f3fa2ecb40ab6f6e38233c9e56ca4a-1600x1067-jpg",
+              "_type": "reference"
+            },
+            "legende": ""
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "nav-7m-1fbefr",
+        "_type": "sectionMaterielNav",
+        "description": null,
+        "fond": "sand",
+        "liens": [
+          {
+            "_key": "nl-7g-1idilm",
+            "label": "Matériel migrateurs",
+            "url": "/materiel-mouche-migrateur"
+          },
+          {
+            "_key": "nl-7i-1ezdca",
+            "label": "Matériel bar",
+            "url": "/materiel-mouche-bar"
+          },
+          {
+            "_key": "nl-7j-1lb6ny",
+            "label": "Matériel réservoir",
+            "url": "/materiel-mouche-reservoir"
+          },
+          {
+            "_key": "nl-7k-1dxak8",
+            "label": "Matériel brochet",
+            "url": "/materiel-mouche-brochet"
+          },
+          {
+            "_key": "nl-7l-192zsu",
+            "label": "Matériel exotique",
+            "url": "/materiel-mouche-peche-exotique"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "cta-7n-1hir6b",
+        "_type": "sectionCta",
+        "description": null,
+        "fond": "dark",
+        "label1": "Me contacter",
+        "label2": "06 87 30 34 56",
+        "lien1": "/contact",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Initiation et perfectionnement à la pêche de la truite à la mouche en Bretagne.",
+        "texte": null,
+        "titre": "Réservez votre stage truite"
+      }
+    ]
+  },
+  {
+    "id": "page-mouches-de-peche-jeanbaptiste-vidal",
+    "slug": "mouches-de-peche-jeanbaptiste-vidal",
+    "title": "Mes mouches de pêche",
+    "seoTitle": "Mes mouches de pêche — Jean-Baptiste Vidal, Guide Bretagne",
+    "seoDescription": "Mouches à saumon, nymphes, streamers bar et mouches à alose — les patterns montés et utilisés par Jean-Baptiste Vidal.",
+    "sections": [
+      {
+        "_key": "hero-85-zpyc4",
+        "_type": "sectionHero",
+        "eyebrow": "Saumon · Truite · Bar · Alose · Réservoir",
+        "titre": "Mes mouches de pêche",
+        "sousTitre": "Je monte toutes mes mouches personnellement, pour la France et l'étranger. Patterns testés saison après saison sur mes rivières et estuaires de Bretagne."
+      },
+      {
+        "_key": "mati-8c-49gyy",
+        "_type": "sectionMaterielIntro",
+        "titre": "L'art du montage",
+        "texte": "Ah les mouches ! C'est bien sûr grâce à elles que nous arrivons à leurrer et attraper nos poissons. | Pour toutes mes pêches, que ce soit en France ou à l'étranger, je monte toutes mes mouches personnellement. | Voici une sélection de mes mouches à saumons, truites, brochets et aloses. Je mettrai la liste à jour en y ajoutant mes nouveaux modèles."
+      },
+      {
+        "_key": "carr-8d-1ysqs",
+        "_type": "sectionCarrousel3Images"
+      },
+      {
+        "_key": "vid-8e-1ejapz",
+        "_type": "sectionVideos",
+        "titre": "Tutoriels de montage",
+        "description": null,
+        "items": [
+          {
+            "titre": "Montage d'une mouche à alose",
+            "description": "La mouche à alose doit être légère, vive et bien visible dans le courant. Pattern argenté utilisé sur les estuaires bretons."
+          },
+          {
+            "titre": "Montage d'une mouche à bar",
+            "description": "Streamer côtier monté sur hameçon simple, imitation de sand-eel efficace sur les estuaires et pointes rocheuses de Bretagne."
+          },
+          {
+            "titre": "Montage d'une mouche à saumon",
+            "description": "Pattern classique pour le saumon atlantique, adapté aux rivières bretonnes et aux eaux colorées de printemps."
+          },
+          {
+            "titre": "Montage Blob Tequila",
+            "description": "Le Blob Tequila est une valeur sûre pour la truite de réservoir : couleur vive, matière pulsante."
+          },
+          {
+            "titre": "Montage Blob",
+            "description": "Version épurée du Blob, montée en chenille UV. Attractor incontournable pour plans d'eau et réservoirs."
+          },
+          {
+            "titre": "Montage Shipman Buzzer",
+            "description": "Imitation de chironome en surface, pêché en nymphe suspendue dans le film."
+          },
+          {
+            "titre": "Montage Chironome",
+            "description": "Nymphe de chironome en thorax sur hameçon courbe. L'imitation la plus réaliste lors des éclosions."
+          },
+          {
+            "titre": "Montage nymphe de Chironome",
+            "description": "Variante de nymphe de chironome avec corps segmenté et thorax en dubbing."
+          }
+        ]
+      },
+      {
+        "_key": "cta-8f-168jh2",
+        "_type": "sectionCta",
+        "titre": "Sortie guidée avec les bonnes mouches",
+        "texte": null
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero-85-zpyc4",
+        "_type": "sectionHero",
+        "description": null,
+        "eyebrow": "Saumon · Truite · Bar · Alose · Réservoir",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-733502b22a8cac5e611ae18d17f438a79ba59f61-1158x653-avif",
+            "_type": "reference"
+          }
+        },
+        "label1": "Réserver une sortie",
+        "label2": "Tout le matériel",
+        "lien1": "/contact",
+        "lien2": "/materiel-jeanbaptistevidal",
+        "sousTitre": "Je monte toutes mes mouches personnellement, pour la France et l'étranger. Patterns testés saison après saison sur mes rivières et estuaires de Bretagne.",
+        "texte": null,
+        "titre": "Mes mouches de pêche"
+      },
+      {
+        "_key": "mati-8c-49gyy",
+        "_type": "sectionMaterielIntro",
+        "description": null,
+        "specs": [
+          {
+            "_key": "sp-8g-fexko",
+            "label": "Saumon atlantique",
+            "valeur": "Ally's Shrimp · Cascade · Mouches noires · Green Highlander"
+          },
+          {
+            "_key": "sp-8h-d72xb",
+            "label": "Truite & Réservoir",
+            "valeur": "Nymphes · Chironomes · Blob · Shipman Buzzer"
+          },
+          {
+            "_key": "sp-8i-a80pt",
+            "label": "Bar à la mouche",
+            "valeur": "Streamers · Deceivers · Clousers · Poppers"
+          },
+          {
+            "_key": "sp-8j-ifk0n",
+            "label": "Alose feinte",
+            "valeur": "Mouches légères argentées et cuivrées"
+          },
+          {
+            "_key": "sp-8k-t4ww8",
+            "label": "Brochet",
+            "valeur": "Gros streamers · Pike flies · Tube flies"
+          },
+          {
+            "_key": "sp-8l-16xinf",
+            "label": "Photos",
+            "valeur": "Droits réservés ENJOYFISHING · JB Vidal · Erwan Balanca"
+          }
+        ],
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Ah les mouches ! C'est bien sûr grâce à elles que nous arrivons à leurrer et attraper nos poissons."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pour toutes mes pêches, que ce soit en France ou à l'étranger, je monte toutes mes mouches personnellement."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Voici une sélection de mes mouches à saumons, truites, brochets et aloses. Je mettrai la liste à jour en y ajoutant mes nouveaux modèles."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "L'art du montage"
+      },
+      {
+        "_key": "carr-8d-1ysqs",
+        "_type": "sectionCarrousel3Images",
+        "description": null,
+        "fond": "dark",
+        "images": [
+          {
+            "_key": "img-8m-13d8ai",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-fe927439d6a54b995ed6935dfa8966758f863fec-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8n-1dg0h1",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-3490a2d7ce6851cb53479793344c619536001837-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8o-dd18y",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-733502b22a8cac5e611ae18d17f438a79ba59f61-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8p-pwjm",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-c4c88cc120744327ecec63922b510095a00588b3-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8q-39uy8",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-69bd3ab9c9adc783ba91dfb78568308878ca63b8-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8r-ajjva",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-17344cc4dc6c8f937ae548e1d2a6abef28122d10-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8s-yx2df",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-ccceac450dc1f499e8a0d9a4cd281b2db19abe21-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8t-10w3wv",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-e33d1777c5f993cb71406d918af58ddd4a7e45c6-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8u-5qjuf",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-e5ed3e03eb79b88f95ff774421c425e1cc8c36b5-1158x653-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8v-ccq0l",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-cea3926c61f510a7efb213561f664b1d8d2ee46d-927x695-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8w-16wcmg",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-482e10a74467bc23ed988a2eafbb9976ef584f38-836x497-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8x-kujd6",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-1d10cdaac1f541093e0a9aa5c9081ab7df6fa884-927x695-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8y-1b0xo8",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-39653b897e4a3acbf55fcb77b1671df75ebba98c-671x458-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-8z-1i6csm",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-203eb68a24dfbe8fcebe78fbf38df4df83524907-927x695-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-90-16o3dg",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-54db789143a25bd27f025ab8c0f9ac1438d38ec3-927x695-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-91-os5xe",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-ae91936979b2f0a14473c4d9d6913b8e649a5d2c-927x695-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-92-13qov5",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-3fe75f1bf4e7333e403fb1c46059d11e85f45ff6-927x695-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          },
+          {
+            "_key": "img-93-10g003",
+            "_type": "image",
+            "alt": "",
+            "asset": {
+              "_ref": "image-af2f161bb4bdc9f4938d963243ad27ee4c021ff0-927x695-avif",
+              "_type": "reference"
+            },
+            "legende": ""
+          }
+        ],
+        "ratio": "3/2",
+        "texte": null
+      },
+      {
+        "_key": "vid-8e-1ejapz",
+        "_type": "sectionVideos",
+        "description": null,
+        "fond": "white",
+        "items": [
+          {
+            "_key": "it-94-i67i",
+            "description": "La mouche à alose doit être légère, vive et bien visible dans le courant. Pattern argenté utilisé sur les estuaires bretons.",
+            "espece": "Alose",
+            "titre": "Montage d'une mouche à alose",
+            "youtubeId": "9x2h5ezHV1Q"
+          },
+          {
+            "_key": "it-95-tancv",
+            "description": "Streamer côtier monté sur hameçon simple, imitation de sand-eel efficace sur les estuaires et pointes rocheuses de Bretagne.",
+            "espece": "Bar",
+            "titre": "Montage d'une mouche à bar",
+            "youtubeId": "oPICIIxRAOs"
+          },
+          {
+            "_key": "it-96-6v6dn",
+            "description": "Pattern classique pour le saumon atlantique, adapté aux rivières bretonnes et aux eaux colorées de printemps.",
+            "espece": "Saumon",
+            "titre": "Montage d'une mouche à saumon",
+            "youtubeId": "lmozx1gYlrE"
+          },
+          {
+            "_key": "it-97-1me2fh",
+            "description": "Le Blob Tequila est une valeur sûre pour la truite de réservoir : couleur vive, matière pulsante.",
+            "espece": "Réservoir",
+            "titre": "Montage Blob Tequila",
+            "youtubeId": "OIY4fU5CCJY"
+          },
+          {
+            "_key": "it-98-aws24",
+            "description": "Version épurée du Blob, montée en chenille UV. Attractor incontournable pour plans d'eau et réservoirs.",
+            "espece": "Réservoir",
+            "titre": "Montage Blob",
+            "youtubeId": "t0f7sUPtd4k"
+          },
+          {
+            "_key": "it-99-185seh",
+            "description": "Imitation de chironome en surface, pêché en nymphe suspendue dans le film.",
+            "espece": "Réservoir",
+            "titre": "Montage Shipman Buzzer",
+            "youtubeId": "_bkGYL2fT2E"
+          },
+          {
+            "_key": "it-9a-a8hez",
+            "description": "Nymphe de chironome en thorax sur hameçon courbe. L'imitation la plus réaliste lors des éclosions.",
+            "espece": "Truite",
+            "titre": "Montage Chironome",
+            "youtubeId": "kfSsPhmB1NM"
+          },
+          {
+            "_key": "it-9b-1ikp6n",
+            "description": "Variante de nymphe de chironome avec corps segmenté et thorax en dubbing.",
+            "espece": "Truite",
+            "titre": "Montage nymphe de Chironome",
+            "youtubeId": "YgRwUQWw5Qo"
+          }
+        ],
+        "labelChaine": "Toutes les vidéos Enjoy Fishing",
+        "lienChaine": "https://www.youtube.com/@EnjoyFishing29",
+        "texte": null,
+        "titre": "Tutoriels de montage"
+      },
+      {
+        "_key": "cta-8f-168jh2",
+        "_type": "sectionCta",
+        "description": null,
+        "fond": "dark",
+        "label1": "Me contacter",
+        "label2": "06 87 30 34 56",
+        "lien1": "/contact",
+        "lien2": "tel:0687303456",
+        "sousTitre": "Lors de chaque guidage, vous bénéficiez de mes sélections testées sur le terrain.",
+        "texte": null,
+        "titre": "Sortie guidée avec les bonnes mouches"
+      }
+    ]
+  },
+  {
+    "id": "page-partenaires-jeanbaptistevidal",
+    "slug": "partenaires-jeanbaptistevidal",
+    "title": "Mes partenaires",
+    "seoTitle": "Partenaires — Jean-Baptiste Vidal, Guide de pêche à la mouche Bretagne",
+    "seoDescription": "Découvrez les marques et partenaires qui accompagnent Jean-Baptiste Vidal : SAGE, SIMMS, RIO, Costa del Mar, DHD LAIKA et bien d'autres.",
+    "sections": [
+      {
+        "_key": "part-hero",
+        "_type": "sectionHero",
+        "eyebrow": "Matériel · Partenaires · Voyages",
+        "titre": "Mes partenaires",
+        "sousTitre": "Des partenariats construits sur la confiance et l'exigence : les marques que j'utilise au quotidien sur le terrain, en Bretagne et à l'étranger.",
+        "btnReserverTexte": "Réserver une sortie"
+      },
+      {
+        "_key": "part-intro",
+        "_type": "sectionTexte",
+        "texte": "Au fil des années, j'ai noué des partenariats solides avec des marques qui partagent ma vision de la pêche à la mouche : l'exigence du matériel, le respect des milieux naturels et la passion du poisson sauvage. Retrouvez ci-dessous toutes les marques et organisations avec lesquelles je collabore, du matériel que j'utilise chaque jour à l'agence qui organise mes voyages de pêche exotique."
+      },
+      {
+        "_key": "part-grid",
+        "_type": "sectionPartenaires"
+      },
+      {
+        "_key": "part-cta",
+        "_type": "sectionCta",
+        "titre": "Testez le matériel avec moi",
+        "texte": null,
+        "btn1Texte": "Réserver une sortie",
+        "btn2Texte": "Voir tout le matériel"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "part-hero",
+        "_type": "sectionHero",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Réserver une sortie",
+        "description": null,
+        "eyebrow": "Matériel · Partenaires · Voyages",
+        "hauteur": "medium",
+        "sousTitre": "Des partenariats construits sur la confiance et l'exigence : les marques que j'utilise au quotidien sur le terrain, en Bretagne et à l'étranger.",
+        "texte": null,
+        "titre": "Mes partenaires"
+      },
+      {
+        "_key": "part-intro",
+        "_type": "sectionTexte",
+        "description": null,
+        "fond": "sand",
+        "largeur": "normal",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Au fil des années, j'ai noué des partenariats solides avec des marques qui partagent ma vision de la pêche à la mouche : l'exigence du matériel, le respect des milieux naturels et la passion du poisson sauvage. Retrouvez ci-dessous toutes les marques et organisations avec lesquelles je collabore, du matériel que j'utilise chaque jour à l'agence qui organise mes voyages de pêche exotique."
+              }
+            ],
+            "style": "normal"
+          }
+        ]
+      },
+      {
+        "_key": "part-grid",
+        "_type": "sectionPartenaires",
+        "description": null,
+        "fond": "white",
+        "texte": null
+      },
+      {
+        "_key": "part-cta",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Réserver une sortie",
+        "btn2Lien": "/materiel-jeanbaptistevidal",
+        "btn2Texte": "Voir tout le matériel",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Testez le matériel avec moi"
+      }
+    ]
+  },
+  {
+    "id": "page-revue-de-presse-jbvidal",
+    "slug": "revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche",
+    "title": "Revue de presse",
+    "seoTitle": "Revue de presse — Jean-Baptiste Vidal, Moniteur-Guide de pêche à la mouche",
+    "seoDescription": "Revue de presse de Jean-Baptiste Vidal : articles dans Pêche Mouche, Voyages de Pêche, Fly Life Australie, Field & Stream USA et bien d'autres publications françaises et étrangères.",
+    "sections": [
+      {
+        "_key": "press-hero",
+        "_type": "sectionHero",
+        "eyebrow": "Pêche Mouche · Voyages de Pêche · Field & Stream · Fly Life",
+        "titre": "Revue de presse",
+        "sousTitre": "Plus de 15 ans de collaboration avec la presse spécialisée, en France et à l'étranger. Articles techniques, portraits, reportages de voyage et une couverture internationale.",
+        "btnReserverTexte": "Réserver une sortie"
+      },
+      {
+        "_key": "press-stats",
+        "_type": "sectionStats"
+      },
+      {
+        "_key": "press-intro",
+        "_type": "sectionTexte",
+        "texte": "Depuis novembre 2011 j'écrivais dans le magazine Pêche Mouche, qui a malheureusement été arrêté en janvier 2025. J'y ai collaboré pour différents articles : \"coins de pêche\", \"portraits\", \"technique de Pro\", et j'y ai créé puis animé pendant plusieurs années la rubrique de montage \"Mouches du moment\", puis \"Votre boîte à mouches\". | J'écris également ponctuellement pour le magazine des Voyages de Pêche sur différents séjours à l'étranger, et j'ai pu apparaître dans des magazines étrangers, dont une couverture en Australie ! Ces dernières années, j'écris aussi très régulièrement sur le site Pêche.com, dont je gère toute la partie pêche à la mouche."
+      },
+      {
+        "_key": "press-grid",
+        "_type": "sectionRevuePresse"
+      },
+      {
+        "_key": "press-pechecom",
+        "_type": "sectionCta",
+        "titre": "Pêche.com — Toute la partie mouche",
+        "texte": null,
+        "btn1Texte": "Lire mes articles sur Pêche.com",
+        "btn2Texte": ""
+      },
+      {
+        "_key": "press-cta",
+        "_type": "sectionCta",
+        "titre": "Journalistes & photographes",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn2Texte": "Voir les vidéos"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "press-hero",
+        "_type": "sectionHero",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Réserver une sortie",
+        "description": null,
+        "eyebrow": "Pêche Mouche · Voyages de Pêche · Field & Stream · Fly Life",
+        "hauteur": "medium",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-4fd9f4a36c485f1445981ce56cd0e5a0de0fe3dc-1024x673-avif",
+            "_type": "reference"
+          },
+          "crop": {
+            "_type": "sanity.imageCrop",
+            "bottom": 0,
+            "left": 0,
+            "right": 0,
+            "top": 0
+          },
+          "hotspot": {
+            "_type": "sanity.imageHotspot",
+            "height": 0.47156277899924226,
+            "width": 0.47282494642006995,
+            "x": 0.6292679316622533,
+            "y": 0.3059729293432864
+          }
+        },
+        "sousTitre": "Plus de 15 ans de collaboration avec la presse spécialisée, en France et à l'étranger. Articles techniques, portraits, reportages de voyage et une couverture internationale.",
+        "texte": null,
+        "titre": "Revue de presse"
+      },
+      {
+        "_key": "press-stats",
+        "_type": "sectionStats",
+        "description": null,
+        "fond": "dark",
+        "stats": [
+          {
+            "_key": "stat-1",
+            "_type": "stat",
+            "label": "ans dans Pêche Mouche",
+            "nombre": "14+"
+          },
+          {
+            "_key": "stat-2",
+            "_type": "stat",
+            "label": "magazines étrangers",
+            "nombre": "4"
+          },
+          {
+            "_key": "stat-3",
+            "_type": "stat",
+            "label": "couverture internationale",
+            "nombre": "1"
+          },
+          {
+            "_key": "stat-4",
+            "_type": "stat",
+            "label": "période de publication",
+            "nombre": "2007–2025"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "press-intro",
+        "_type": "sectionTexte",
+        "description": null,
+        "fond": "sand",
+        "largeur": "normal",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Depuis novembre 2011 j'écrivais dans le magazine "
+              },
+              {
+                "_type": "span",
+                "marks": [
+                  "strong"
+                ],
+                "text": "Pêche Mouche"
+              },
+              {
+                "_type": "span",
+                "marks": [],
+                "text": ", qui a malheureusement été arrêté en janvier 2025. J'y ai collaboré pour différents articles : \"coins de pêche\", \"portraits\", \"technique de Pro\", et j'y ai créé puis animé pendant plusieurs années la rubrique de montage \"Mouches du moment\", puis \"Votre boîte à mouches\"."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "J'écris également ponctuellement pour le "
+              },
+              {
+                "_type": "span",
+                "marks": [
+                  "strong"
+                ],
+                "text": "magazine des Voyages de Pêche"
+              },
+              {
+                "_type": "span",
+                "marks": [],
+                "text": " sur différents séjours à l'étranger, et j'ai pu apparaître dans des magazines étrangers, dont une couverture en Australie ! Ces dernières années, j'écris aussi très régulièrement sur le site "
+              },
+              {
+                "_type": "span",
+                "marks": [
+                  "strong"
+                ],
+                "text": "Pêche.com"
+              },
+              {
+                "_type": "span",
+                "marks": [],
+                "text": ", dont je gère toute la partie pêche à la mouche."
+              }
+            ],
+            "style": "normal"
+          }
+        ]
+      },
+      {
+        "_key": "press-grid",
+        "_type": "sectionRevuePresse",
+        "description": null,
+        "fond": "white",
+        "texte": null
+      },
+      {
+        "_key": "press-pechecom",
+        "_type": "sectionCta",
+        "btn1Lien": "https://www.peche.com/",
+        "btn1Texte": "Lire mes articles sur Pêche.com",
+        "btn2Lien": "",
+        "btn2Texte": "",
+        "description": null,
+        "style": "sand",
+        "texte": null,
+        "titre": "Pêche.com — Toute la partie mouche"
+      },
+      {
+        "_key": "press-cta",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact-jeanbaptiste-vidal-guide-de-peche",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "/videos-jeanbaptiste-vidal-moniteur-guide-de-peche",
+        "btn2Texte": "Voir les vidéos",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Journalistes & photographes"
+      }
+    ]
+  },
+  {
+    "id": "page-tarifs",
+    "slug": "tarifs",
+    "title": "Tarifs",
+    "seoTitle": "Tarifs stages et guidages 2026 — Jean-Baptiste Vidal, Guide de pêche Bretagne",
+    "seoDescription": "Tarifs 2026 des stages et guidages pêche à la mouche en Bretagne avec Jean-Baptiste Vidal : bar, truite, alose, brochet, réservoir, Spey Cast. À partir de 150 €/personne.",
+    "sections": [
+      {
+        "_key": "t0zb37ew",
+        "_type": "sectionHero",
+        "eyebrow": "Bretagne-Sud · 2026",
+        "titre": "Tarifs des stages & guidages",
+        "sousTitre": "Enseignements et guidages pour pêcheurs débutants, confirmés et experts : eau douce, bar, migrateurs, technique.",
+        "btnReserverTexte": "Demander un renseignement"
+      },
+      {
+        "_key": "8iojt39d",
+        "_type": "sectionIntro",
+        "eyebrow": "Tarifs 2026",
+        "titre": "Prix par personne",
+        "texte": "Sur cette page, vous trouverez le tarif de mes stages de pêche à la mouche et de mes prestations pour la pêche en Bretagne. N'hésitez pas à me contacter si vous souhaitez d'autres renseignements.",
+        "duree": "7 à 8 heures environ",
+        "lignesSupp": [
+          {
+            "label": "Niveaux",
+            "valeur": "Débutants · Confirmés · Experts"
+          },
+          {
+            "label": "Zone",
+            "valeur": "Bretagne-Sud, Finistère · Morbihan"
+          },
+          {
+            "label": "Contact",
+            "valeur": "06 87 30 34 56"
+          }
+        ],
+        "boutons": [
+          {
+            "texte": "06 87 30 34 56"
+          },
+          {
+            "texte": "enjoy.fishing@hotmail.fr"
+          }
+        ]
+      },
+      {
+        "_key": "ixt3b0yx",
+        "_type": "sectionTarifs",
+        "titre": "Bar à la mouche",
+        "eyebrow": "Estuaires · Bretagne-Sud"
+      },
+      {
+        "_key": "j6xx2zhw",
+        "_type": "sectionTarifs",
+        "titre": "Eau douce & migrateurs",
+        "eyebrow": "Rivières · Réservoirs"
+      },
+      {
+        "_key": "v1082hxv",
+        "_type": "sectionTarifs",
+        "titre": "Stages & technique",
+        "eyebrow": "Technique · Perfectionnement"
+      },
+      {
+        "_key": "5z9avd1c",
+        "_type": "sectionCta",
+        "titre": "Ce qui est inclus",
+        "texte": null,
+        "btn1Texte": "Réserver",
+        "btn2Texte": "06 87 30 34 56"
+      },
+      {
+        "_key": "a2b2bvls",
+        "_type": "sectionCta",
+        "titre": "Réservez votre stage",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn2Texte": "06 87 30 34 56"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "t0zb37ew",
+        "_type": "sectionHero",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Demander un renseignement",
+        "btnTelTexte": "06 87 30 34 56",
+        "description": null,
+        "eyebrow": "Bretagne-Sud · 2026",
+        "hauteur": "moyen",
+        "sousTitre": "Enseignements et guidages pour pêcheurs débutants, confirmés et experts : eau douce, bar, migrateurs, technique.",
+        "texte": null,
+        "titre": "Tarifs des stages & guidages"
+      },
+      {
+        "_key": "8iojt39d",
+        "_type": "sectionIntro",
+        "boutons": [
+          {
+            "_key": "k00d6p2p",
+            "_type": "object",
+            "lien": "tel:0687303456",
+            "texte": "06 87 30 34 56"
+          },
+          {
+            "_key": "gwoi1vhu",
+            "_type": "object",
+            "lien": "mailto:enjoy.fishing@hotmail.fr",
+            "texte": "enjoy.fishing@hotmail.fr"
+          }
+        ],
+        "description": null,
+        "duree": "7 à 8 heures environ",
+        "eyebrow": "Tarifs 2026",
+        "fond": "white",
+        "lignesSupp": [
+          {
+            "_key": "5luo9i1k",
+            "_type": "object",
+            "label": "Niveaux",
+            "valeur": "Débutants · Confirmés · Experts"
+          },
+          {
+            "_key": "hey0ud7b",
+            "_type": "object",
+            "label": "Zone",
+            "valeur": "Bretagne-Sud, Finistère · Morbihan"
+          },
+          {
+            "_key": "cca3fcrm",
+            "_type": "object",
+            "label": "Contact",
+            "valeur": "06 87 30 34 56"
+          }
+        ],
+        "showInfoCard": true,
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Sur cette page, vous trouverez le tarif de mes stages de pêche à la mouche et de mes prestations pour la pêche en Bretagne. N'hésitez pas à me contacter si vous souhaitez d'autres renseignements."
+              }
+            ],
+            "style": "normal"
+          }
+        ],
+        "titre": "Prix par personne"
+      },
+      {
+        "_key": "ixt3b0yx",
+        "_type": "sectionTarifs",
+        "couleurPanel": "bar",
+        "description": null,
+        "eyebrow": "Estuaires · Bretagne-Sud",
+        "fond": "white",
+        "lienLabel": "Découvrir les prestations →",
+        "lienUrl": "/peche-du-bar-a-la-mouche",
+        "lignes": [
+          {
+            "_key": "0czfobl2",
+            "_type": "object",
+            "format": "1 journée",
+            "lienUrl": "/initiation-peche-du-bar-a-la-mouche",
+            "nom": "Initiation bar à la mouche",
+            "prix": [
+              {
+                "_key": "n4uauwy5",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "320 €"
+              },
+              {
+                "_key": "v2booowg",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "225 €"
+              }
+            ],
+            "statut": "normal"
+          },
+          {
+            "_key": "l2tb5h9i",
+            "_type": "object",
+            "format": "1 journée",
+            "lienUrl": "/peche-du-bar-perfectionnement",
+            "nom": "Perfectionnement bar",
+            "prix": [
+              {
+                "_key": "d8rleiuf",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "320 €"
+              },
+              {
+                "_key": "3cypobrz",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "225 €"
+              }
+            ],
+            "statut": "normal"
+          },
+          {
+            "_key": "opco2sgw",
+            "_type": "object",
+            "format": "1 session",
+            "lienUrl": "/peche-du-bar-a-vue-a-la-mouche",
+            "nom": "Bar à vue en estuaire",
+            "prix": [
+              {
+                "_key": "aow665i9",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "320 €"
+              },
+              {
+                "_key": "jw7hyuoy",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "225 €"
+              }
+            ],
+            "statut": "accentue"
+          },
+          {
+            "_key": "k2m3iddm",
+            "_type": "object",
+            "format": "1 session · Carolina Skiff",
+            "lienUrl": "/peche-mouche-bar-bateau-bretagne",
+            "nom": "Bar en bateau « spécial mouche »",
+            "prix": [
+              {
+                "_key": "23mcyzqz",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "350 €"
+              },
+              {
+                "_key": "q3ktfe4x",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "250 €"
+              }
+            ],
+            "statut": "accentue"
+          },
+          {
+            "_key": "3i498phc",
+            "_type": "object",
+            "format": "Journée · Sur vos spots · Sur votre bateau",
+            "lienUrl": "/peche-du-bar-a-la-mouche-coaching",
+            "nom": "Coaching bar à la mouche",
+            "prix": [
+              {
+                "_key": "f8ovib0e",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "320 €"
+              },
+              {
+                "_key": "01rkcvwv",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "225 €"
+              }
+            ],
+            "statut": "normal"
+          }
+        ],
+        "matrices": [],
+        "texte": null,
+        "titre": "Bar à la mouche"
+      },
+      {
+        "_key": "j6xx2zhw",
+        "_type": "sectionTarifs",
+        "couleurPanel": "eau",
+        "description": null,
+        "eyebrow": "Rivières · Réservoirs",
+        "fond": "sand",
+        "lienLabel": "Découvrir les prestations →",
+        "lienUrl": "/peche-a-la-mouche-en-bretagne",
+        "lignes": [
+          {
+            "_key": "p373hrj2",
+            "_type": "object",
+            "format": "1 journée",
+            "lienUrl": "/peche-a-la-mouche-en-bretagne",
+            "nom": "Initiation pêche à la mouche",
+            "prix": [
+              {
+                "_key": "7rgufqlc",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "280 €"
+              },
+              {
+                "_key": "5hms05lq",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "180 €"
+              },
+              {
+                "_key": "s3b8fk9g",
+                "_type": "object",
+                "label": "3 pers.",
+                "valeur": "150 €"
+              }
+            ],
+            "statut": "normal"
+          },
+          {
+            "_key": "a348qqwn",
+            "_type": "object",
+            "format": "1 journée",
+            "lienUrl": "/peche-de-la-truite-a-la-mouche-en-bretagne",
+            "nom": "Perfectionnement truite en rivière",
+            "prix": [
+              {
+                "_key": "nisdxtrp",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "300 €"
+              },
+              {
+                "_key": "6axcr0al",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "200 €"
+              },
+              {
+                "_key": "q7u69v8f",
+                "_type": "object",
+                "label": "3 pers.",
+                "valeur": "160 €"
+              }
+            ],
+            "statut": "normal"
+          },
+          {
+            "_key": "mkd3zlru",
+            "_type": "object",
+            "format": "1 journée · permis non inclus",
+            "lienUrl": "/peche-de-la-truite-en-reservoir",
+            "nom": "Truite en réservoir",
+            "prix": [
+              {
+                "_key": "uxq4lec8",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "320 €"
+              },
+              {
+                "_key": "ic6btkbr",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "200 €"
+              },
+              {
+                "_key": "j7givzmn",
+                "_type": "object",
+                "label": "3 pers.",
+                "valeur": "150 €"
+              }
+            ],
+            "statut": "normal"
+          },
+          {
+            "_key": "b4w3je78",
+            "_type": "object",
+            "format": "1 journée",
+            "lienUrl": "/peche-du-brochet-a-la-mouche",
+            "nom": "Brochet, du bord",
+            "prix": [
+              {
+                "_key": "8zsvq8ro",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "300 €"
+              },
+              {
+                "_key": "s7z5cl2e",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "200 €"
+              }
+            ],
+            "statut": "normal"
+          },
+          {
+            "_key": "ipx9ensl",
+            "_type": "object",
+            "format": "1 journée",
+            "lienUrl": "/peche-du-brochet-a-la-mouche",
+            "nom": "Brochet, en bateau",
+            "prix": [
+              {
+                "_key": "3heefb54",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "320 €"
+              },
+              {
+                "_key": "1rm5nrav",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "200 €"
+              }
+            ],
+            "statut": "normal"
+          },
+          {
+            "_key": "ukl6104v",
+            "_type": "object",
+            "format": "Fermée en 2026",
+            "lienUrl": null,
+            "nom": "Pêche du saumon (salmo salar)",
+            "prix": [
+              {
+                "_key": "0z6ucm6h",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "300 €"
+              },
+              {
+                "_key": "nhnsr7b0",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "200 €"
+              },
+              {
+                "_key": "64o39lgy",
+                "_type": "object",
+                "label": "3 pers.",
+                "valeur": "160 €"
+              }
+            ],
+            "statut": "ferme"
+          }
+        ],
+        "matrices": [
+          {
+            "_key": "y0ipimt2",
+            "_type": "object",
+            "colonnes": [
+              "Coup du soir",
+              "1 j. Aulne",
+              "1 j. Blavet"
+            ],
+            "lignes": [
+              {
+                "_key": "wj75qj7g",
+                "_type": "object",
+                "label": "1 personne",
+                "valeurs": [
+                  "200 €",
+                  "320 €",
+                  "350 €"
+                ]
+              },
+              {
+                "_key": "4wlzsqeh",
+                "_type": "object",
+                "label": "2 personnes",
+                "valeurs": [
+                  "180 €",
+                  "200 €",
+                  "250 €"
+                ]
+              },
+              {
+                "_key": "g1sxqhfi",
+                "_type": "object",
+                "label": "3 personnes",
+                "valeurs": [
+                  "150 €",
+                  "170 €",
+                  "180 €"
+                ]
+              }
+            ],
+            "note": "tarif selon le format de sortie",
+            "titre": "Grande alose (alosa alosa)",
+            "titreUrl": "/peche-de-l-alose-a-la-mouche"
+          }
+        ],
+        "texte": null,
+        "titre": "Eau douce & migrateurs"
+      },
+      {
+        "_key": "v1082hxv",
+        "_type": "sectionTarifs",
+        "couleurPanel": "stage",
+        "description": null,
+        "eyebrow": "Technique · Perfectionnement",
+        "fond": "white",
+        "lienLabel": "Découvrir les stages →",
+        "lienUrl": "/stage-spey-cast-et-cours-de-lancer",
+        "lignes": [
+          {
+            "_key": "oahhe9en",
+            "_type": "object",
+            "format": "1 journée · canne une & deux mains",
+            "lienUrl": "/stage-spey-cast-et-cours-de-lancer",
+            "nom": "Cours de lancer dont Spey Cast",
+            "prix": [
+              {
+                "_key": "uj8b2j3x",
+                "_type": "object",
+                "label": "1 pers.",
+                "valeur": "300 €"
+              },
+              {
+                "_key": "ide42x3b",
+                "_type": "object",
+                "label": "2 pers.",
+                "valeur": "200 €"
+              },
+              {
+                "_key": "iiu4awp0",
+                "_type": "object",
+                "label": "3 pers.",
+                "valeur": "160 €"
+              }
+            ],
+            "statut": "normal"
+          },
+          {
+            "_key": "rabfgso3",
+            "_type": "object",
+            "format": "Format sur mesure",
+            "lienUrl": "/master-class-peche-en-reservoir",
+            "nom": "Masterclass réservoir",
+            "prix": [],
+            "statut": "contact"
+          },
+          {
+            "_key": "mw50mlhe",
+            "_type": "object",
+            "format": "Format sur mesure",
+            "lienUrl": "/master-class-nymphe-au-fil",
+            "nom": "Masterclass nymphe au fil",
+            "prix": [],
+            "statut": "contact"
+          }
+        ],
+        "matrices": [
+          {
+            "_key": "kxvdcgez",
+            "_type": "object",
+            "colonnes": [
+              "½ journée",
+              "1 journée"
+            ],
+            "lignes": [
+              {
+                "_key": "rtslji45",
+                "_type": "object",
+                "label": "Père et 1 enfant",
+                "valeurs": [
+                  "230 €",
+                  "350 €"
+                ]
+              },
+              {
+                "_key": "ye9pjk6l",
+                "_type": "object",
+                "label": "Père et 2 enfants",
+                "valeurs": [
+                  "250 €",
+                  "400 €"
+                ]
+              }
+            ],
+            "note": null,
+            "titre": "Stage Père / enfant (– de 16 ans)",
+            "titreUrl": "/contact"
+          }
+        ],
+        "texte": null,
+        "titre": "Stages & technique"
+      },
+      {
+        "_key": "5z9avd1c",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Réserver",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Ce qui est inclus"
+      },
+      {
+        "_key": "a2b2bvls",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "ocean",
+        "texte": null,
+        "titre": "Réservez votre stage"
+      }
+    ]
+  },
+  {
+    "id": "page-videos-jeanbaptiste-vidal-moniteur-guide-de-peche",
+    "slug": "videos-jeanbaptiste-vidal-moniteur-guide-de-peche",
+    "title": "Vidéos de Jean-Baptiste Vidal Moniteur Guide de pêche à la mouchee",
+    "seoTitle": "Vidéos pêche à la mouche — Jean-Baptiste Vidal",
+    "seoDescription": "Vidéos de pêche à la mouche en Bretagne et en voyage : bar, truite, alose, dorado. Montage de mouches et techniques de lancer.",
+    "sections": [
+      {
+        "_key": "hero293",
+        "_type": "sectionHero",
+        "titre": "Mes vidéos",
+        "btnYoutubeTexte": "S'abonner à la chaîne"
+      },
+      {
+        "_key": "txt294",
+        "_type": "sectionTexte",
+        "texte": "Retrouvez sur cette page mes vidéos de pêche à la mouche : reportages sur les estuaires bretons, sessions de bar à vue, tutoriels de montage et aventures de guidage à l'étranger. Abonnez-vous à ma chaîne YouTube pour ne rien manquer."
+      },
+      {
+        "_key": "vid1297",
+        "_type": "sectionVideo",
+        "titre": "Mon interview sur la chaine \" Tous des Tom Sawyer\""
+      },
+      {
+        "_key": "vid2298",
+        "_type": "sectionVideo",
+        "titre": "Montage d'une nymphe de chiro pour le réservoir"
+      },
+      {
+        "_key": "vid3299",
+        "_type": "sectionVideo",
+        "titre": "Le matériel pour la pêche en \"exo\""
+      },
+      {
+        "_key": "vid4300",
+        "_type": "sectionVideo",
+        "titre": "Pêche du bar à la mouche"
+      },
+      {
+        "_key": "bae41b389e80",
+        "_type": "sectionVideo",
+        "titre": "Apprendre le lancer roulé en pêche à la mouche"
+      },
+      {
+        "_key": "9b2709781c35",
+        "_type": "sectionVideo",
+        "titre": "Apprendre le lancer revers en pêche à la mouche"
+      },
+      {
+        "_key": "3a728b17b594",
+        "_type": "sectionVideo",
+        "titre": "Apprendre les bases du lancer mouche"
+      },
+      {
+        "_key": "110b47d8a059",
+        "_type": "sectionVideo",
+        "titre": "Montage d'une mouche à saumon"
+      },
+      {
+        "_key": "ded714789c25",
+        "_type": "sectionVideo",
+        "titre": "Pêche du saumon à la mouche en Bretagne"
+      },
+      {
+        "_key": "bf0803472395",
+        "_type": "sectionVideo",
+        "titre": "Montage d'une mouche à bar"
+      },
+      {
+        "_key": "6a10d9e37d5e",
+        "_type": "sectionVideo",
+        "titre": "Pêche du bar en bateau \"spécial mouche\" en estuaire - Bretagne"
+      },
+      {
+        "_key": "ec8247c910f1",
+        "_type": "sectionVideo",
+        "titre": "Pêche du bar à vue en estuaire - Bretagne"
+      },
+      {
+        "_key": "d4805be070da",
+        "_type": "sectionVideo",
+        "titre": "Montage d'une mouche à alose"
+      },
+      {
+        "_key": "6a6473ed6a8a",
+        "_type": "sectionVideo",
+        "titre": "Pêche de l'alose à la mouche en Bretagne - Mai 2016"
+      },
+      {
+        "_key": "006547f97032",
+        "_type": "sectionVideo",
+        "titre": "Initiation à la pêche à la mouche en Bretagne - Juillet 2015"
+      },
+      {
+        "_key": "f44bee8adacc",
+        "_type": "sectionVideo",
+        "titre": "Pêche du dorado dans la jungle bolivienne"
+      },
+      {
+        "_key": "cta301",
+        "_type": "sectionCta",
+        "titre": "Abonnez-vous à la chaîne YouTube",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn2Texte": "06 87 30 34 56"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "hero293",
+        "_type": "sectionHero",
+        "btnYoutubeLien": "https://www.youtube.com/@jean-baptiste-vidal",
+        "btnYoutubeTexte": "S'abonner à la chaîne",
+        "description": null,
+        "hauteur": "full",
+        "texte": null,
+        "titre": "Mes vidéos",
+        "videoYoutubeDebut": 0,
+        "videoYoutubeFin": 27,
+        "videoYoutubeUrl": "https://www.youtube.com/watch?v=iq9lzlg3__I&t=4s"
+      },
+      {
+        "_key": "txt294",
+        "_type": "sectionTexte",
+        "description": null,
+        "fond": "white",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Retrouvez sur cette page mes vidéos de pêche à la mouche : reportages sur les estuaires bretons, sessions de bar à vue, tutoriels de montage et aventures de guidage à l'étranger. Abonnez-vous à ma chaîne YouTube pour ne rien manquer."
+              }
+            ],
+            "style": "normal"
+          }
+        ]
+      },
+      {
+        "_key": "vid1297",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Les podcast de Yann Nabusset",
+        "fond": "white",
+        "texte": null,
+        "titre": "Mon interview sur la chaine \" Tous des Tom Sawyer\"",
+        "url": "https://www.youtube.com/watch?v=X7Oh8tjakvQ",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "vid2298",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Chironome · Réservoir",
+        "fond": "white",
+        "texte": null,
+        "titre": "Montage d'une nymphe de chiro pour le réservoir",
+        "url": "https://www.youtube.com/watch?v=kfSsPhmB1NM&t=21s",
+        "videoPosition": "right"
+      },
+      {
+        "_key": "vid3299",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Matériel · Exotique · Voyage",
+        "fond": "white",
+        "texte": null,
+        "titre": "Le matériel pour la pêche en \"exo\"",
+        "url": "https://www.youtube.com/watch?v=A9ov6VSGnVE",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "vid4300",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Bar · Bretagne",
+        "fond": "white",
+        "texte": null,
+        "titre": "Pêche du bar à la mouche",
+        "url": "https://www.youtube.com/watch?v=iq9lzlg3__I",
+        "videoPosition": "right"
+      },
+      {
+        "_key": "bae41b389e80",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Lancer roulé",
+        "fond": "white",
+        "texte": null,
+        "titre": "Apprendre le lancer roulé en pêche à la mouche",
+        "url": "https://www.youtube.com/watch?v=rKOy281vwE8",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "9b2709781c35",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "lancer revers",
+        "fond": "white",
+        "texte": null,
+        "titre": "Apprendre le lancer revers en pêche à la mouche",
+        "url": "https://www.youtube.com/watch?v=Bi5flcQmq5U",
+        "videoPosition": "right"
+      },
+      {
+        "_key": "3a728b17b594",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Bases du lancer",
+        "fond": "white",
+        "texte": null,
+        "titre": "Apprendre les bases du lancer mouche",
+        "url": "https://www.youtube.com/watch?v=d1SjTIJaQFs",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "110b47d8a059",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Mouche à saumon",
+        "fond": "white",
+        "texte": null,
+        "titre": "Montage d'une mouche à saumon",
+        "url": "https://www.youtube.com/watch?v=lmozx1gYlrE",
+        "videoPosition": "right"
+      },
+      {
+        "_key": "ded714789c25",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Saumon à la mouche",
+        "fond": "white",
+        "texte": null,
+        "titre": "Pêche du saumon à la mouche en Bretagne",
+        "url": "https://www.youtube.com/watch?v=y2EpbTF1Bzc",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "bf0803472395",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Deceiver",
+        "fond": "white",
+        "texte": null,
+        "titre": "Montage d'une mouche à bar",
+        "url": "https://www.youtube.com/watch?v=oPICIIxRAOs",
+        "videoPosition": "right"
+      },
+      {
+        "_key": "6a10d9e37d5e",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Bar en bateau",
+        "fond": "white",
+        "texte": null,
+        "titre": "Pêche du bar en bateau \"spécial mouche\" en estuaire - Bretagne",
+        "url": "https://www.youtube.com/watch?v=Qnwlz4MA5q0",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "ec8247c910f1",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Bar à vue",
+        "fond": "white",
+        "texte": null,
+        "titre": "Pêche du bar à vue en estuaire - Bretagne",
+        "url": "https://vimeo.com/256914976?fl=pl&fe=vl",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "d4805be070da",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Alose",
+        "fond": "white",
+        "texte": null,
+        "titre": "Montage d'une mouche à alose",
+        "url": "https://www.youtube.com/watch?v=9x2h5ezHV1Q",
+        "videoPosition": "right"
+      },
+      {
+        "_key": "6a6473ed6a8a",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Pêche Alose",
+        "fond": "white",
+        "texte": null,
+        "titre": "Pêche de l'alose à la mouche en Bretagne - Mai 2016",
+        "url": "https://vimeo.com/197506448?fl=pl&fe=vl",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "006547f97032",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Initiation",
+        "fond": "white",
+        "texte": null,
+        "titre": "Initiation à la pêche à la mouche en Bretagne - Juillet 2015",
+        "url": "https://vimeo.com/148213725?fl=pl&fe=vl",
+        "videoPosition": "right"
+      },
+      {
+        "_key": "f44bee8adacc",
+        "_type": "sectionVideo",
+        "description": null,
+        "eyebrow": "Bolivie - Dorado",
+        "fond": "white",
+        "texte": null,
+        "titre": "Pêche du dorado dans la jungle bolivienne",
+        "url": "https://www.youtube.com/watch?v=THORv1d29Oc",
+        "videoPosition": "left"
+      },
+      {
+        "_key": "cta301",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Abonnez-vous à la chaîne YouTube"
+      }
+    ]
+  },
+  {
+    "id": "page-voyages-peche-mouche",
+    "slug": "voyages-peche-mouche",
+    "title": "Voyages de pêche à la mouche",
+    "seoTitle": "Voyages de pêche à la mouche — Jean-Baptiste Vidal, Guide accompagnateur",
+    "seoDescription": "Voyages de pêche à la mouche accompagnés par Jean-Baptiste Vidal : Argentine, Cuba, Venezuela, Mexique. Truite de mer, permit, bonefish et tarpon dans les plus beaux spots du monde.",
+    "sections": [
+      {
+        "_key": "voy-hero",
+        "_type": "sectionHero",
+        "eyebrow": "Voyages accompagnés · Monde entier",
+        "titre": "Voyages de pêche à la mouche",
+        "sousTitre": "Argentine, Cuba, Venezuela, Mexique : des destinations d'exception pour traquer le permit, le bonefish, le tarpon et la truite de mer dans des environnements sauvages préservés.",
+        "btnReserverTexte": "Me contacter"
+      },
+      {
+        "_key": "voy-stats",
+        "_type": "sectionStats"
+      },
+      {
+        "_key": "voy-intro-text",
+        "_type": "sectionTexte",
+        "texte": "Pêcher avec un guide qui connaît les spots | Depuis 2005, Jean-Baptiste a parcouru les plus grandes destinations de pêche à la mouche au monde : Argentine, Bolivie, Russie, Islande, Cuba, Venezuela, Mexique. Ces voyages accompagnés, c'est l'assurance d'arriver sur des terrains connus, avec un guide qui a déjà pêché là-bas et qui connaît les spots, les guides locaux et les bonnes saisons. | Petit groupe, rythme adapté, ambiance décontractée. On pêche, on rigole, on rentre avec des souvenirs."
+      },
+      {
+        "_key": "voy-pourquoi",
+        "_type": "sectionAvantages",
+        "titre": "Pourquoi partir avec Jean-Baptiste ?",
+        "eyebrow": "Hosted trips"
+      },
+      {
+        "_key": "voy-grid",
+        "_type": "sectionVoyagesGrid",
+        "titre": "Choisissez votre aventure",
+        "eyebrow": "Destinations"
+      },
+      {
+        "_key": "voy-cta",
+        "_type": "sectionCta",
+        "titre": "Un projet de voyage ?",
+        "texte": null,
+        "btn1Texte": "Me contacter",
+        "btn2Texte": "06 87 30 34 56"
+      }
+    ],
+    "_pagebuilder": [
+      {
+        "_key": "voy-hero",
+        "_type": "sectionHero",
+        "btnReserverLien": "/contact",
+        "btnReserverTexte": "Me contacter",
+        "btnTelTexte": "06 87 30 34 56",
+        "description": null,
+        "eyebrow": "Voyages accompagnés · Monde entier",
+        "hauteur": "full",
+        "image": {
+          "_type": "image",
+          "asset": {
+            "_ref": "image-3f4376118235dbd1d48049448ce44f72f99b4a76-946x695-avif",
+            "_type": "reference"
+          }
+        },
+        "sousTitre": "Argentine, Cuba, Venezuela, Mexique : des destinations d'exception pour traquer le permit, le bonefish, le tarpon et la truite de mer dans des environnements sauvages préservés.",
+        "texte": null,
+        "titre": "Voyages de pêche à la mouche"
+      },
+      {
+        "_key": "voy-stats",
+        "_type": "sectionStats",
+        "description": null,
+        "fond": "dark",
+        "stats": [
+          {
+            "_key": "stat-dest",
+            "label": "destinations",
+            "nombre": "5"
+          },
+          {
+            "_key": "stat-pays",
+            "label": "pays de pêche",
+            "nombre": "12+"
+          },
+          {
+            "_key": "stat-ans",
+            "label": "ans d'expérience exotique",
+            "nombre": "20+"
+          }
+        ],
+        "texte": null
+      },
+      {
+        "_key": "voy-intro-text",
+        "_type": "sectionTexte",
+        "description": null,
+        "fond": "white",
+        "largeur": "normal",
+        "texte": [
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Pêcher avec un guide qui connaît les spots"
+              }
+            ],
+            "style": "h2"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Depuis 2005, Jean-Baptiste a parcouru les plus grandes destinations de pêche à la mouche au monde : Argentine, Bolivie, Russie, Islande, Cuba, Venezuela, Mexique. Ces voyages accompagnés, c'est l'assurance d'arriver sur des terrains connus, avec un guide qui a déjà pêché là-bas et qui connaît les spots, les guides locaux et les bonnes saisons."
+              }
+            ],
+            "style": "normal"
+          },
+          {
+            "_type": "block",
+            "children": [
+              {
+                "_type": "span",
+                "marks": [],
+                "text": "Petit groupe, rythme adapté, ambiance décontractée. On pêche, on rigole, on rentre avec des souvenirs."
+              }
+            ],
+            "style": "normal"
+          }
+        ]
+      },
+      {
+        "_key": "voy-pourquoi",
+        "_type": "sectionAvantages",
+        "description": null,
+        "eyebrow": "Hosted trips",
+        "fond": "white",
+        "items": [
+          {
+            "_key": "avt-1",
+            "icone": "🎯",
+            "texte": "Jean-Baptiste effectue systématiquement un voyage de reconnaissance avant de proposer une destination. Vous arrivez sur des terrains connus, avec un guide qui a déjà pêché là-bas.",
+            "titre": "Destinations testées en avant-première"
+          },
+          {
+            "_key": "avt-2",
+            "icone": "🤝",
+            "texte": "Des partenariats établis de longue date avec Nervous Waters (Argentine), Avalon Fishing (Cuba Cruz), Fly Fish The Run (Cuba Santa Maria) et DHD Laika (Venezuela, Mexique).",
+            "titre": "Réseau international"
+          },
+          {
+            "_key": "avt-3",
+            "icone": "🎣",
+            "texte": "Jean-Baptiste est présent sur l'eau avec vous, en plus du guide local. Coaching technique, lecture de l'eau, adaptation des mouches — pour maximiser vos chances de capture.",
+            "titre": "Guidage en plus du guide local"
+          },
+          {
+            "_key": "avt-4",
+            "icone": "🌎",
+            "texte": "Organisation complète : vols internes, transferts, hébergement, guides, logistique sur place. Vous n'avez qu'à préparer vos cannes et partir l'esprit libre.",
+            "titre": "Tout géré pour vous"
+          }
+        ],
+        "texte": null,
+        "titre": "Pourquoi partir avec Jean-Baptiste ?"
+      },
+      {
+        "_key": "voy-grid",
+        "_type": "sectionVoyagesGrid",
+        "description": null,
+        "eyebrow": "Destinations",
+        "texte": null,
+        "titre": "Choisissez votre aventure",
+        "voyageFeaturedSlug": "los-roques-venezuela"
+      },
+      {
+        "_key": "voy-cta",
+        "_type": "sectionCta",
+        "btn1Lien": "/contact",
+        "btn1Texte": "Me contacter",
+        "btn2Lien": "tel:0687303456",
+        "btn2Texte": "06 87 30 34 56",
+        "description": null,
+        "style": "dark",
+        "texte": null,
+        "titre": "Un projet de voyage ?"
+      }
+    ]
+  }
+]
