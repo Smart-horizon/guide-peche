@@ -86,7 +86,7 @@ const pagebuilderEn = [
         isLarge: false,
         label: 'Gift Voucher',
         sousTitre: "Give a day's fishing",
-        lien: '/bon-cadeau-peche-mouche',
+        lien: '/bon-cadeau',
         image: {
           _type: 'image',
           asset: { _ref: 'image-15d99f85e68a03a4b9a16d784cc8bab695474756-686x522-avif', _type: 'reference' },
