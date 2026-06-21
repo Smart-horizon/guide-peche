@@ -78,18 +78,42 @@ const content    = article.contenuEn?.length ? article.contenuEn : article.conte
   <article class="section">
     <div class="container article-body">
       {content?.map((block: any) => {
+        // ── Image ──
+        if (block._type === 'image') {
+          const imgUrl = block.asset ? urlFor(block).width(860).fit('max').url() : null
+          if (!imgUrl) return null
+          return (
+            <figure class="article-image">
+              <img src={imgUrl} alt={block.alt || ''} loading="lazy" />
+            </figure>
+          )
+        }
+        // ── Bloc texte ──
         if (block._type !== 'block') return null
-        const text = block.children?.map((c: any) => c.text).join('') ?? ''
-        if (!text.trim()) return null
-        const style = block.style ?? 'normal'
-        if (style === 'h2') return <h2>{text}</h2>
-        if (style === 'h3') return <h3>{text}</h3>
-        if (style === 'blockquote') return <blockquote>{text}</blockquote>
-        return <p>{text}</p>
+        const { children = [], markDefs = [], style = 'normal' } = block
+        if (!children.some((c: any) => c.text?.trim())) return null
+        const innerHtml = children.map((span: any) => {
+          if (!span.text) return ''
+          let txt = span.text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          const marks = span.marks ?? []
+          const linkMark = marks.find((mk: string) => markDefs.some((md: any) => md._key === mk))
+          const href = linkMark ? markDefs.find((md: any) => md._key === linkMark)?.href : null
+          if (marks.includes('strong')) txt = `<strong>${txt}</strong>`
+          if (marks.includes('em'))     txt = `<em>${txt}</em>`
+          if (marks.includes('underline')) txt = `<u>${txt}</u>`
+          if (href) txt = `<a href="${href}" target="_blank" rel="noopener">${txt}</a>`
+          return txt
+        }).join('')
+        if (style === 'h2')         return <h2 set:html={innerHtml} />
+        if (style === 'h3')         return <h3 set:html={innerHtml} />
+        if (style === 'blockquote') return <blockquote set:html={innerHtml} />
+        return <p set:html={innerHtml} />
       })}
       {article.tags?.length > 0 && (
         <div class="article-tags">
-          {article.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+          {article.tags.map((tag: string) => (
+            <a href={`/en/blog?tag=${encodeURIComponent(tag)}`} class="tag">{tag}</a>
+          ))}
         </div>
       )}
     </div>
@@ -126,8 +150,13 @@ const content    = article.contenuEn?.length ? article.contenuEn : article.conte
   .article-body h2 { margin: 2.5rem 0 1rem; color: var(--color-ocean); }
   .article-body h3 { margin: 2rem 0 0.75rem; color: var(--color-text); }
   .article-body blockquote { border-left: 3px solid var(--color-ocean-main); margin: 2rem 0; padding: 0.75rem 1.5rem; font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; color: var(--color-ocean); background: var(--color-mist); border-radius: 0 3px 3px 0; }
+  .article-image { margin: 2rem 0; }
+  .article-image img { width: 100%; height: auto; border-radius: 3px; display: block; }
+  .article-body a { color: var(--color-ocean-main); text-decoration: underline; }
+  .article-body a:hover { color: var(--color-ocean); }
   .article-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--color-mist); }
-  .tag { padding: 0.3rem 0.75rem; background: var(--color-mist); color: var(--color-ocean-main); font-size: 0.72rem; border-radius: 2px; letter-spacing: 0.06em; }
+  .tag { display: inline-block; padding: 0.3rem 0.75rem; background: var(--color-mist); color: var(--color-ocean-main); font-size: 0.72rem; border-radius: 2px; letter-spacing: 0.06em; text-decoration: none; transition: background 0.15s; }
+  .tag:hover { background: var(--color-ocean-main); color: white; }
   .article-nav { padding: 1.5rem 2rem; }
   .retour { font-size: 0.8rem; color: var(--color-ocean-main); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
   .retour:hover { text-decoration: underline; }

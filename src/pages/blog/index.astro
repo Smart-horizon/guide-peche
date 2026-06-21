@@ -49,10 +49,10 @@ const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean)
     <div class="container">
 
       {especesPresentes.length > 0 && (
-        <nav class="filtres">
-          <a href="/blog" class="filtre filtre--actif">Tous</a>
+        <nav class="filtres" id="filtres-nav">
+          <a href="/blog" class="filtre filtre--tous">Tous</a>
           {especesPresentes.map(esp => (
-            <a href={`/blog?espece=${esp}`} class="filtre">{especeLabel[esp] ?? esp}</a>
+            <a href={`/blog?espece=${esp}`} class="filtre" data-espece={esp}>{especeLabel[esp] ?? esp}</a>
           ))}
         </nav>
       )}
@@ -60,7 +60,9 @@ const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean)
       {articles.length > 0 ? (
         <div class="articles-grid">
           {articles.map(article => (
-            <a href={`/blog/${article.slug?.current}`} class="article-card">
+            <a href={`/blog/${article.slug?.current}`} class="article-card"
+               data-espece={article.espece || ''}
+               data-tags={article.tags?.join(',') || ''}>
               <div class="article-img" style={article.image
                 ? `background-image: url(${urlFor(article.image).width(600).height(380).fit('crop').crop('focalpoint').url()})`
                 : ''}>
@@ -238,7 +240,59 @@ const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean)
     font-size: 1.2rem;
     font-style: italic;
   }
+  .filtre--tag-actif {
+    background: var(--color-ocean);
+    color: white;
+    border-color: var(--color-ocean);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .filtre--tag-actif .tag-close {
+    color: rgba(255,255,255,0.7);
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+  }
+  .filtre--tag-actif .tag-close:hover { color: white; }
 
   @media (max-width: 1024px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px)  { .articles-grid { grid-template-columns: 1fr; } }
 </style>
+
+<script>
+  const params   = new URLSearchParams(location.search)
+  const activeE  = params.get('espece')
+  const activeT  = params.get('tag')
+
+  // ── Filtrage des cartes ──
+  if (activeE || activeT) {
+    document.querySelectorAll('.article-card').forEach(card => {
+      const el = card as HTMLElement
+      const matchE = !activeE || el.dataset.espece === activeE
+      const cardTags = (el.dataset.tags || '').split(',').map(t => t.trim())
+      const matchT = !activeT || cardTags.includes(decodeURIComponent(activeT))
+      el.style.display = (matchE && matchT) ? '' : 'none'
+    })
+  }
+
+  // ── État actif des filtres espèce ──
+  const tousEl = document.querySelector('.filtre--tous') as HTMLElement | null
+  if (tousEl) tousEl.classList.toggle('filtre--actif', !activeE && !activeT)
+
+  document.querySelectorAll<HTMLElement>('.filtre[data-espece]').forEach(f => {
+    f.classList.toggle('filtre--actif', f.dataset.espece === activeE)
+  })
+
+  // ── Pill "tag actif" ──
+  if (activeT) {
+    const nav = document.getElementById('filtres-nav')
+    if (nav) {
+      const pill = document.createElement('span')
+      pill.className = 'filtre filtre--tag-actif'
+      const label = decodeURIComponent(activeT)
+      pill.innerHTML = `${label} <a href="/blog" class="tag-close" title="Retirer le filtre">×</a>`
+      nav.appendChild(pill)
+    }
+  }
+</script>

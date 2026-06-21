@@ -48,7 +48,9 @@ const especeLabel = {
       {articles.length > 0 ? (
         <div class="articles-grid">
           {articles.map(article => (
-            <a href={`/en/blog/${article.slug?.current}`} class="article-card">
+            <a href={`/en/blog/${article.slug?.current}`} class="article-card"
+               data-espece={article.espece || ''}
+               data-tags={article.tags?.join(',') || ''}>
               <div class="article-img" style={article.image
                 ? `background-image: url(${urlFor(article.image).width(600).height(380).fit('crop').crop('focalpoint').url()})`
                 : ''}>
@@ -122,3 +124,15 @@ const especeLabel = {
   @media (max-width: 1024px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px)  { .articles-grid { grid-template-columns: 1fr; } }
 </style>
+
+<script>
+  const params  = new URLSearchParams(location.search)
+  const activeT = params.get('tag')
+  if (activeT) {
+    document.querySelectorAll('.article-card').forEach(card => {
+      const el = card as HTMLElement
+      const cardTags = (el.dataset.tags || '').split(',').map(t => t.trim())
+      el.style.display = cardTags.includes(decodeURIComponent(activeT)) ? '' : 'none'
+    })
+  }
+</script>

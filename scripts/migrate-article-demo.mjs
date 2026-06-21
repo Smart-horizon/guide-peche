@@ -220,16 +220,54 @@ async function bodyToBlocks(bodyEl, $) {
   return blocks
 }
 
-// ─── Détection de l'espèce principale ──────────────────────────────────────
+// ─── Tags enrichis et détection d'espèce ──────────────────────────────────
+
+const ESPECE_MAP = [
+  { re: /\bbar\b/i,                                                       val: 'bar',      tag: 'Bar' },
+  { re: /\balose/i,                                                       val: 'alose',    tag: 'Alose' },
+  { re: /\bsaumon/i,                                                      val: 'saumon',   tag: 'Saumon' },
+  { re: /\btruite/i,                                                      val: 'truite',   tag: 'Truite' },
+  { re: /\bbrochet/i,                                                     val: 'brochet',  tag: 'Brochet' },
+  { re: /dorado|bonefish|bolivie|cuba|venezuela|mexique|tarpon|permit/i,  val: 'exotique', tag: 'Exotique' },
+]
+
+const TECHNIQUE_MAP = [
+  { re: /spey.?cast/i,             tag: 'Spey Cast' },
+  { re: /nymph/i,                  tag: 'Nymphe' },
+  { re: /streamer/i,               tag: 'Streamer' },
+  { re: /s[eè]che|dry.?fly/i,      tag: 'Mouche sèche' },
+  { re: /r[eé]servoir/i,           tag: 'Réservoir' },
+  { re: /lancer|casting/i,         tag: 'Lancer' },
+  { re: /masterclass/i,            tag: 'Masterclass' },
+  { re: /voyage|rio.grande|bolivie|cuba|venezuela|mexique|roques/i, tag: 'Voyage' },
+  { re: /montage|tying/i,          tag: 'Montage de mouche' },
+]
+
+// Tags génériques à exclure (trop vagues pour filtrer)
+const GENERIC_RE = /^(jean.baptiste|enjoy fishing|guide de p[eê]che en bretagne|j\.b\. vidal|guide de la mouche)/i
+
+function buildTags(title, originalTags) {
+  const corpus = (title + ' ' + originalTags.join(' ')).toLowerCase()
+
+  const especeTags  = ESPECE_MAP   .filter(({ re }) => re.test(corpus)).map(({ tag }) => tag)
+  const technTags   = TECHNIQUE_MAP.filter(({ re }) => re.test(corpus)).map(({ tag }) => tag)
+  const cleanedOrig = originalTags.filter(t => !GENERIC_RE.test(t))
+
+  // Dédupliquer (insensible à la casse) — tags courts en premier
+  const seen = new Set()
+  return [...especeTags, ...technTags, ...cleanedOrig].filter(t => {
+    const k = t.toLowerCase()
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
+}
 
 function detectEspece(title, tags) {
   const text = (title + ' ' + tags.join(' ')).toLowerCase()
-  if (/\bbar\b/.test(text))                                                  return 'bar'
-  if (/\balose/.test(text))                                                   return 'alose'
-  if (/\bsaumon/.test(text))                                                  return 'saumon'
-  if (/\btruite/.test(text))                                                  return 'truite'
-  if (/\bbrochet/.test(text))                                                 return 'brochet'
-  if (/dorado|bonefish|bolivie|cuba|venezuela|mexique|tarpon|permit/.test(text)) return 'exotique'
+  for (const { re, val } of ESPECE_MAP) {
+    if (re.test(text)) return val
+  }
   return null
 }
 
@@ -254,12 +292,13 @@ async function main() {
   const seoDescription = ($('meta[name="description"]').attr('content') || '').slice(0, 160)
   const extrait        = ($('meta[name="description"]').attr('content') || '').slice(0, 300)
 
-  const tags = $('span.box-article-tags a, span[itemprop="keywords"] a')
+  const rawTags = $('span.box-article-tags a, span[itemprop="keywords"] a')
     .map((_, el) => $(el).text().trim())
     .get()
-    .filter(t => t && !/jean.baptiste vidal|enjoy fishing/i.test(t))
+    .filter(Boolean)
 
-  const espece = detectEspece(title, tags)
+  const tags   = buildTags(title, rawTags)
+  const espece = detectEspece(title, rawTags)
 
   // Image principale : 1er <a href> qui contient un <img> (= lightbox grande image)
   // ou <section.featured-image img> (articles récents), sinon og:image CDN
