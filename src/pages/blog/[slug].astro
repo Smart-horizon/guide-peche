@@ -74,14 +74,41 @@ const dateFormatee = article.date
     <div class="container article-body">
 
       {article.contenu?.map((block) => {
+        // ── Image ──
+        if (block._type === 'image') {
+          const imgUrl = block.asset ? urlFor(block).width(860).fit('max').url() : null
+          if (!imgUrl) return null
+          return (
+            <figure class="article-image">
+              <img src={imgUrl} alt={block.alt || ''} loading="lazy" />
+            </figure>
+          )
+        }
+
+        // ── Bloc texte ──
         if (block._type !== 'block') return null
-        const text = block.children?.map(c => c.text).join('') ?? ''
-        if (!text.trim()) return null
-        const style = block.style ?? 'normal'
-        if (style === 'h2') return <h2>{text}</h2>
-        if (style === 'h3') return <h3>{text}</h3>
-        if (style === 'blockquote') return <blockquote>{text}</blockquote>
-        return <p>{text}</p>
+        const { children = [], markDefs = [], style = 'normal' } = block
+        if (!children.some(c => c.text?.trim())) return null
+
+        // Construit le HTML du paragraphe avec marks (bold, em, liens)
+        const innerHtml = children.map(span => {
+          if (!span.text) return ''
+          let txt = span.text
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          const marks = span.marks ?? []
+          const linkMark = marks.find(mk => markDefs.some(md => md._key === mk))
+          const href = linkMark ? markDefs.find(md => md._key === linkMark)?.href : null
+          if (marks.includes('strong')) txt = `<strong>${txt}</strong>`
+          if (marks.includes('em'))     txt = `<em>${txt}</em>`
+          if (marks.includes('underline')) txt = `<u>${txt}</u>`
+          if (href) txt = `<a href="${href}" target="_blank" rel="noopener">${txt}</a>`
+          return txt
+        }).join('')
+
+        if (style === 'h2')         return <h2 set:html={innerHtml} />
+        if (style === 'h3')         return <h3 set:html={innerHtml} />
+        if (style === 'blockquote') return <blockquote set:html={innerHtml} />
+        return <p set:html={innerHtml} />
       })}
 
       {article.tags?.length > 0 && (
@@ -169,6 +196,20 @@ const dateFormatee = article.date
   .article-body {
     max-width: 720px;
   }
+  .article-image {
+    margin: 2rem 0;
+  }
+  .article-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    display: block;
+  }
+  .article-body a {
+    color: var(--color-ocean-main);
+    text-decoration: underline;
+  }
+  .article-body a:hover { color: var(--color-ocean); }
   .article-body p {
     color: var(--color-text-muted);
     line-height: 1.85;
