@@ -117,10 +117,13 @@ const voyagesForGrid: any[] = hasVoyagesGrid
   ? await client.fetch(`
     *[_type == "voyage"] {
       _id, title, slug, pays, periode, especes,
-      "displayTitle": coalesce(pagebuilder[_type == "sectionHero"][0].titre, title),
-      "tagline": coalesce(pagebuilder[_type == "sectionHero"][0].sousTitre, especes),
-      "region": pagebuilder[_type == "sectionHero"][0].eyebrow,
-      "heroImage": pagebuilder[_type == "sectionHero"][0].image { _type, hotspot, crop, asset->{ _id, url } }
+      "displayTitle":   coalesce(pagebuilder[_type == "sectionHero"][0].titre, title),
+      "tagline":        coalesce(pagebuilder[_type == "sectionHero"][0].sousTitre, especes),
+      "region":         pagebuilder[_type == "sectionHero"][0].eyebrow,
+      "heroImage":      pagebuilder[_type == "sectionHero"][0].image { _type, hotspot, crop, asset->{ _id, url } },
+      "displayTitleEn": coalesce(pagebuilderEn[_type == "sectionHero"][0].titre, title),
+      "taglineEn":      coalesce(pagebuilderEn[_type == "sectionHero"][0].sousTitre, especes),
+      "regionEn":       pagebuilderEn[_type == "sectionHero"][0].eyebrow,
     }
   `)
   : []
@@ -271,11 +274,11 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         {s.showInfoCard !== false && (
           <aside>
             <div class="info-card">
-              {s.niveau && <><p class="info-lbl">Niveau</p><p class="info-val">{s.niveau}</p></>}
-              {s.format && <><p class="info-lbl">Format</p><p class="info-val">{s.format}</p></>}
-              {s.saison && <><p class="info-lbl">Saison</p><p class="info-val">{s.saison}</p></>}
-              {s.tarif  && <><p class="info-lbl">Tarif</p> <p class="info-val">{s.tarif}</p></>}
-              {s.duree  && <><p class="info-lbl">Durée</p> <p class="info-val">{s.duree}</p></>}
+              {s.niveau && <><p class="info-lbl">{lang === 'en' ? 'Level'    : 'Niveau'}</p><p class="info-val">{s.niveau}</p></>}
+              {s.format && <><p class="info-lbl">Format</p>                                     <p class="info-val">{s.format}</p></>}
+              {s.saison && <><p class="info-lbl">{lang === 'en' ? 'Season'   : 'Saison'}</p><p class="info-val">{s.saison}</p></>}
+              {s.tarif  && <><p class="info-lbl">{lang === 'en' ? 'Rate'     : 'Tarif'}</p> <p class="info-val">{s.tarif}</p></>}
+              {s.duree  && <><p class="info-lbl">{lang === 'en' ? 'Duration' : 'Durée'}</p> <p class="info-val">{s.duree}</p></>}
               {s.lignesSupp?.map((l: any) => l.label && (
                 <><p class="info-lbl">{l.label}</p><p class="info-val">{l.valeur}</p></>
               ))}
@@ -679,7 +682,9 @@ const voyagesForGrid: any[] = hasVoyagesGrid
           {s.sejours?.map((sej: any) => {
             const statut = stegaClean(sej.statut) || 'disponible'
             const icons = { disponible: '🟢', 'peu-de-places': '🟡', complet: '🔴', 'liste-attente': '⏳' } as const
-            const labels = { disponible: 'Disponible', 'peu-de-places': 'Quelques places', complet: 'Complet', 'liste-attente': "Liste d'attente" } as const
+            const labels = lang === 'en'
+              ? { disponible: 'Available', 'peu-de-places': 'Limited places', complet: 'Fully booked', 'liste-attente': 'Waitlist' } as const
+              : { disponible: 'Disponible', 'peu-de-places': 'Quelques places', complet: 'Complet', 'liste-attente': "Liste d'attente" } as const
             return (
               <div class="pb-dates__card">
                 <div class="pb-dates__card-header">
@@ -1320,9 +1325,19 @@ const voyagesForGrid: any[] = hasVoyagesGrid
       })
 
     const vRegion = (v: any): string => {
-      const raw = stegaClean(v.region) || stegaClean(v.pays) || ''
-      return raw.replace(/^Voyage\s*[·•]\s*/i, '')
+      const raw = lang === 'en'
+        ? (stegaClean(v.regionEn) || stegaClean(v.region) || stegaClean(v.pays) || '')
+        : (stegaClean(v.region)   || stegaClean(v.pays) || '')
+      return raw
+        .replace(/^Voyage\s*[·•]\s*/i, '')
+        .replace(/^Fly\s+Fishing\s+Trip\s*[·•]\s*/i, '')
     }
+    const vTitle  = (v: any): string => lang === 'en'
+      ? (stegaClean(v.displayTitleEn) || stegaClean(v.displayTitle) || v.title)
+      : (stegaClean(v.displayTitle)   || v.title)
+    const vTag    = (v: any): string => lang === 'en'
+      ? (stegaClean(v.taglineEn) || stegaClean(v.tagline) || v.especes || '')
+      : (stegaClean(v.tagline)   || v.especes || '')
     const vImg = (v: any, w: number, h: number): string | null =>
       v.heroImage?.asset ? urlFor(v.heroImage).width(w).height(h).fit('crop').crop('focalpoint').url() : null
 
@@ -1341,8 +1356,8 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               <div class="vg-overlay"></div>
               <div class="vg-body">
                 {vRegion(featured) && <span class="vg-sub">{vRegion(featured)}</span>}
-                <strong class="vg-label">{stegaClean(featured.displayTitle) || featured.title}</strong>
-                {(stegaClean(featured.tagline) || featured.especes) && <span class="vg-tagline">{stegaClean(featured.tagline) || featured.especes}</span>}
+                <strong class="vg-label">{vTitle(featured)}</strong>
+                {vTag(featured) && <span class="vg-tagline">{vTag(featured)}</span>}
                 {stegaClean(featured.periode) && <span class="vg-saison">{stegaClean(featured.periode)}</span>}
               </div>
             </a>
@@ -1355,8 +1370,8 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                 <div class="vg-overlay"></div>
                 <div class="vg-body">
                   {vRegion(v) && <span class="vg-sub">{vRegion(v)}</span>}
-                  <strong class="vg-label">{stegaClean(v.displayTitle) || v.title}</strong>
-                  {(stegaClean(v.tagline) || v.especes) && <span class="vg-tagline">{stegaClean(v.tagline) || v.especes}</span>}
+                  <strong class="vg-label">{vTitle(v)}</strong>
+                  {vTag(v) && <span class="vg-tagline">{vTag(v)}</span>}
                   {stegaClean(v.periode) && <span class="vg-saison">{stegaClean(v.periode)}</span>}
                 </div>
               </a>
