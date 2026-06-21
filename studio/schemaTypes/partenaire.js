@@ -28,6 +28,12 @@ export default {
       description: 'Ex: Canne & moulinet, Vêtements de pêche, Organisme professionnel',
     },
     {
+      name: 'tagEn',
+      title: 'Catégorie (English)',
+      type: 'string',
+      description: 'Ex: Rod & reel, Fishing clothing, Professional body',
+    },
+    {
       name: 'description',
       title: 'Description',
       type: 'text',
