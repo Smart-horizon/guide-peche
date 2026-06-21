@@ -60,10 +60,13 @@ const enHeroSection = frHeroSection ? {
   btnReserverTexte: 'Book a session',
   btnReserverLien: '/contact',
   btnTelTexte: '06 87 30 34 56',
-  badges: [
-    { _key: 'b1', texte: '21 years of guiding' },
-    { _key: 'b2', texte: '🪶 Fly fishing only', style: 'mouche' },
-  ],
+  // Badges EN depuis Sanity (badgesEn), sinon fallback hardcodé
+  badges: frHeroSection.badgesEn?.length
+    ? frHeroSection.badgesEn
+    : [
+        { _key: 'b1', texte: '21 years of guiding' },
+        { _key: 'b2', texte: '🪶 Fly fishing only', style: 'mouche' },
+      ],
 } : null
 
 // ── Other sections: use pagebuilderEn if filled, otherwise FR pagebuilder (skip sectionHero, handled above)

@@ -163,6 +163,77 @@ export const sectionHero = {
       initialValue: "S'abonner à ma chaîne",
       description: 'Texte du bouton YouTube (affiché avec le logo YouTube)',
     },
+    // ── Badges hero (chips au-dessus du titre) ──
+    {
+      name: 'badges',
+      title: '🏷 Badges (au-dessus du titre)',
+      type: 'array',
+      description: 'Petits chips affichés au-dessus du titre. Ex : "21 ans de guidage", "🪶 Exclusivement Mouche"',
+      of: [{
+        type: 'object',
+        name: 'badge',
+        title: 'Badge',
+        fields: [
+          {
+            name: 'texte', title: 'Texte du badge', type: 'string',
+            validation: R => R.required(),
+          },
+          {
+            name: 'style', title: 'Style visuel', type: 'string',
+            options: {
+              list: [
+                { title: 'Discret (fond blanc translucide)', value: 'default' },
+                { title: '🪶 Mouche (bleu cyan — Exclusivement Mouche)', value: 'mouche' },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'default',
+          },
+        ],
+        preview: {
+          select: { texte: 'texte', style: 'style' },
+          prepare: ({ texte, style }) => ({
+            title: texte,
+            subtitle: style === 'mouche' ? '🪶 Style Mouche' : 'Style discret',
+          }),
+        },
+      }],
+    },
+    {
+      name: 'badgesEn',
+      title: '🏷 Badges EN (version anglaise)',
+      type: 'array',
+      description: 'Badges pour la version anglaise du hero. Si vide, les badges FR sont utilisés.',
+      of: [{
+        type: 'object',
+        name: 'badgeEn',
+        title: 'Badge EN',
+        fields: [
+          {
+            name: 'texte', title: 'Texte du badge (EN)', type: 'string',
+            validation: R => R.required(),
+          },
+          {
+            name: 'style', title: 'Style visuel', type: 'string',
+            options: {
+              list: [
+                { title: 'Discret (fond blanc translucide)', value: 'default' },
+                { title: '🪶 Mouche (bleu cyan)', value: 'mouche' },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'default',
+          },
+        ],
+        preview: {
+          select: { texte: 'texte', style: 'style' },
+          prepare: ({ texte, style }) => ({
+            title: texte,
+            subtitle: style === 'mouche' ? '🪶 Style Mouche' : 'Style discret',
+          }),
+        },
+      }],
+    },
     // ── Stats hero (optionnel — remplace les boutons CTA) ──
     {
       name: 'statsHero',
