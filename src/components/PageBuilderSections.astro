@@ -104,7 +104,7 @@ const pfx = (href: string | undefined): string | undefined =>
 
 const hasPartenaires = (sections ?? []).some((s: any) => s._type === 'sectionPartenaires')
 const partenaires: any[] = hasPartenaires
-  ? await client.fetch(`*[_type == "partenaire"] | order(orderRank asc) { _id, nom, nomComplet, tag, description, url, labelLien, logo { asset->{ url } } }`)
+  ? await client.fetch(`*[_type == "partenaire"] | order(orderRank asc) { _id, nom, nomComplet, tag, description, descriptionEn, url, labelLien, logo { asset->{ url } } }`)
   : []
 
 const hasRevuePresse = (sections ?? []).some((s: any) => s._type === 'sectionRevuePresse')
@@ -1051,7 +1051,9 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               <div class="pb-part-card__body">
                 {p.tag && <span class="pb-part-card__tag">{p.tag}</span>}
                 <h3 class="pb-part-card__name">{p.nom}</h3>
-                {p.description && <p class="pb-part-card__desc">{p.description}</p>}
+                {(lang === 'en' ? (stegaClean(p.descriptionEn) || p.description) : p.description) && (
+                  <p class="pb-part-card__desc">{lang === 'en' ? (stegaClean(p.descriptionEn) || p.description) : p.description}</p>
+                )}
               </div>
               {p.url && (
                 <a href={p.url} target="_blank" rel="noopener noreferrer" class="pb-part-card__link" aria-label={`Visiter le site ${p.nom}`}>
@@ -1158,7 +1160,9 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             <div class="pb-video-row__body">
               {item.espece && <span class="pb-video-row__tag">{item.espece}</span>}
               <h3 class="pb-video-row__titre">{item.titre}</h3>
-              {item.description && <p class="pb-video-row__desc">{item.description}</p>}
+              {(lang === 'en' ? (stegaClean(item.descriptionEn) || item.description) : item.description) && (
+                <p class="pb-video-row__desc">{lang === 'en' ? (stegaClean(item.descriptionEn) || item.description) : item.description}</p>
+              )}
             </div>
           </div>
         ))}

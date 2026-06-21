@@ -2337,6 +2337,7 @@ export const sectionVideos = {
           { name: 'youtubeId', title: 'Lien YouTube', type: 'string', description: 'Collez l\'URL complète de la vidéo. Ex : https://www.youtube.com/watch?v=d1SjTIJaQFs — l\'ID sera extrait automatiquement.' },
           { name: 'espece', title: 'Espèce / Tag (ex: Alose, Bar, Réservoir)', type: 'string' },
           { name: 'description', title: 'Description', type: 'text', rows: 4 },
+          { name: 'descriptionEn', title: 'Description (English)', type: 'text', rows: 4, description: 'Version anglaise — affichée sur /en/...' },
         ],
         preview: {
           select: { title: 'titre', subtitle: 'youtubeId' },

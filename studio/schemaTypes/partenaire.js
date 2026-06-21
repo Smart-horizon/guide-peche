@@ -34,6 +34,13 @@ export default {
       rows: 4,
     },
     {
+      name: 'descriptionEn',
+      title: 'Description (English)',
+      type: 'text',
+      rows: 4,
+      description: 'Version anglaise de la description — affichée sur /en/partenaires',
+    },
+    {
       name: 'url',
       title: 'URL du site',
       type: 'url',
