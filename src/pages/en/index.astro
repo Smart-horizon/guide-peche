@@ -44,7 +44,7 @@ const hp = await stegaClient.fetch(`
 
 // ── SEO (EN first, fallback FR then hardcoded)
 const heroSection = hp?.pagebuilder?.find((s: any) => s._type === 'sectionHero')
-const pageTitle   = hp?.seoTitleEn || hp?.seoTitle || heroSection?.titre || 'Jean-Baptiste Vidal — Fly Fishing Guide in Brittany, France'
+const pageTitle   = hp?.seoTitleEn || 'Jean-Baptiste Vidal — Fly Fishing Guide in Brittany, France'
 const pageDesc    = hp?.seoDescriptionEn || hp?.seoDescription || 'Licensed fly fishing guide, 21 years of guiding. Guided fishing for sea bass, trout, shad and pike in South Brittany, France.'
 const ogImg       = heroSection?.image
   ? urlFor(heroSection.image).width(1200).height(630).fit('crop').crop('focalpoint').url()
@@ -113,8 +113,9 @@ const cadeauBtn1L  = '/en/bon-cadeau'
 const cadeauBtn2T  = 'Ask a question'
 const cadeauBtn2L  = '/contact'
 
-// ── Guide section
-const guideHP = hp?.pagebuilder?.find((s: any) => s._type === 'sectionGuideHP')
+// ── Guide section (EN first, fallback FR)
+const guideHP = hp?.pagebuilderEn?.find((s: any) => s._type === 'sectionGuideHP')
+             || hp?.pagebuilder?.find((s: any) => s._type === 'sectionGuideHP')
 const guidePhotoUrl  = guideHP?.photo?.asset
   ? urlFor(guideHP.photo).width(600).height(800).fit('crop').crop('focalpoint').url()
   : null
@@ -133,8 +134,9 @@ const guideStats: { valeur: string; label: string }[] = (guideHP?.stats ?? []).l
       { valeur: 'Trips',    label: 'Fishing travel organisation' },
     ]
 
-// ── Gear section
-const materielHP = hp?.pagebuilder?.find((s: any) => s._type === 'sectionMaterielHP')
+// ── Gear section (EN first, fallback FR)
+const materielHP = hp?.pagebuilderEn?.find((s: any) => s._type === 'sectionMaterielHP')
+                || hp?.pagebuilder?.find((s: any) => s._type === 'sectionMaterielHP')
 const MATERIEL_CARDS_FALLBACK = [
   { eyebrow: 'Streamers · Nymphs · Dry flies', titre: 'My flies',  lien: '/en/mouches-de-peche-jeanbaptiste-vidal', imageUrl: '/images/A1.avif' },
   { eyebrow: 'Carolina Skiff · Flat-bottomed',  titre: 'The boat', lien: '/en/bateau-bar-a-la-mouche',            imageUrl: '/images/bateau-3.jpg' },

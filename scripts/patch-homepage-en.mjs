@@ -9,7 +9,8 @@ const client = createClient({
   token: process.env.SANITY_TOKEN,
 })
 
-const DOC_ID = 'drafts.page-accueil'
+// Patch les deux documents : brouillon ET publié
+const DOC_IDS = ['drafts.page-accueil', 'page-accueil']
 
 const pagebuilderEn = [
   {
@@ -195,10 +196,14 @@ const pagebuilderEn = [
   },
 ]
 
-const result = await client
-  .patch(DOC_ID)
-  .set({ pagebuilderEn })
-  .commit()
-
-console.log('✅ pagebuilderEn patched on', result._id)
-console.log('   Sections:', result.pagebuilderEn?.length)
+for (const DOC_ID of DOC_IDS) {
+  try {
+    const result = await client
+      .patch(DOC_ID)
+      .set({ pagebuilderEn })
+      .commit()
+    console.log('✅ pagebuilderEn patched on', result._id, '— Sections:', result.pagebuilderEn?.length)
+  } catch (e) {
+    console.warn('⚠️  Impossible de patcher', DOC_ID, '—', e.message)
+  }
+}
