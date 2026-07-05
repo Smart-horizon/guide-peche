@@ -258,6 +258,18 @@ const customStructure = (S, context) =>
               S.listItem()
                 .title('🎥 Vidéos')
                 .child(S.document().schemaType('page').documentId('page-videos-jeanbaptiste-vidal-moniteur-guide-de-peche').title('Vidéos')),
+
+              S.divider(),
+
+              // 📧 Newsletter (singleton)
+              S.listItem()
+                .title('📧 Newsletter')
+                .child(
+                  S.document()
+                    .schemaType('newsletter')
+                    .documentId('newsletter-config')
+                    .title('Newsletter — configuration')
+                ),
             ])
         ),
 

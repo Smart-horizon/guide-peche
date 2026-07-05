@@ -1,3 +1,4 @@
+import newsletter from './newsletter'
 import page from './page'
 import disponibilite from './disponibilite'
 import navigation from './navigation'
@@ -27,6 +28,7 @@ import {
 
 export const schemaTypes = [
   // Documents
+  newsletter,
   disponibilite,
   navigation,
   accueil,

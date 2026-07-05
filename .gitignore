@@ -30,3 +30,6 @@ pnpm-debug.log*
 
 # Images scrapées brutes (source non nécessaire en prod)
 scraped/images/
+
+# fichiers temporaires de debug
+tmp_*.html

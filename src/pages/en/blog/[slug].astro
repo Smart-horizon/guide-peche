@@ -3,6 +3,8 @@ import BaseLayout from '../../../layouts/BaseLayout.astro'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
+export const prerender = true
+
 export async function getStaticPaths() {
   const client = createClient({
     projectId: 'uievv97s',
@@ -21,7 +23,7 @@ const { slug } = Astro.params
 const client = createClient({
   projectId: 'uievv97s',
   dataset: 'production',
-  useCdn: true,
+  useCdn: false,
   apiVersion: '2024-01-01',
 })
 
@@ -52,7 +54,22 @@ const pageTitle  = article.seoTitleEn || article.titleEn || article.seoTitle || 
 const pageDesc   = article.seoDescriptionEn || article.extraitEn || article.seoDescription || article.extrait || ''
 const displayTitle  = article.titleEn  || article.title
 const displayExtrait = article.extraitEn || article.extrait
-const content    = article.contenuEn?.length ? article.contenuEn : article.contenu
+// Merge: EN text blocks + FR images/videos at their original positions
+function mergedContent(fr: any[], en: any[]) {
+  if (!en?.length) return fr ?? []
+  let textIdx = 0
+  return (fr ?? []).map((block: any) => {
+    if (block._type === 'block') {
+      // Use EN text block at same position if available, else fall back to FR
+      const enBlock = en.filter((b: any) => b._type === 'block')[textIdx]
+      textIdx++
+      return enBlock ?? block
+    }
+    // Images and videos always come from FR
+    return block
+  })
+}
+const content = mergedContent(article.contenu, article.contenuEn)
 ---
 
 <BaseLayout
@@ -64,7 +81,9 @@ const content    = article.contenuEn?.length ? article.contenuEn : article.conte
 >
 
   <section class="article-hero">
-    <div class="article-hero-bg" style={heroImg ? `background-image: url(${heroImg})` : ''}></div>
+    <div class="article-hero-bg" style={heroImg
+      ? `background-image: linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 100%), url(${heroImg}); background-size: cover; background-position: center; background-repeat: no-repeat;`
+      : ''}></div>
     <div class="container article-hero-content">
       <div class="article-meta">
         {article.espece && <span class="badge">{especeLabel[article.espece] ?? article.espece}</span>}
@@ -86,6 +105,36 @@ const content    = article.contenuEn?.length ? article.contenuEn : article.conte
             <figure class="article-image">
               <img src={imgUrl} alt={block.alt || ''} loading="lazy" />
             </figure>
+          )
+        }
+        // ── YouTube ──
+        if (block._type === 'youtube') {
+          if (!block.videoId) return null
+          return (
+            <div class="article-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${block.videoId}`}
+                title="YouTube video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              />
+            </div>
+          )
+        }
+        // ── Vimeo ──
+        if (block._type === 'vimeo') {
+          if (!block.videoId) return null
+          return (
+            <div class="article-video">
+              <iframe
+                src={`https://player.vimeo.com/video/${block.videoId}`}
+                title="Vimeo video"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              />
+            </div>
           )
         }
         // ── Bloc texte ──
@@ -138,7 +187,7 @@ const content    = article.contenuEn?.length ? article.contenuEn : article.conte
 
 <style>
   .article-hero { position: relative; min-height: 55vh; display: flex; align-items: flex-end; padding-bottom: 3.5rem; color: white; }
-  .article-hero-bg { position: absolute; inset: 0; background: linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 100%), var(--color-ocean) center / cover no-repeat; }
+  .article-hero-bg { position: absolute; inset: 0; background: linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 100%), var(--color-ocean); }
   .article-hero-content { position: relative; z-index: 1; max-width: 820px; padding-top: var(--header-height); }
   .article-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
   .badge { background: var(--color-ocean-main); color: white; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2px; font-weight: 500; }
@@ -152,6 +201,8 @@ const content    = article.contenuEn?.length ? article.contenuEn : article.conte
   .article-body blockquote { border-left: 3px solid var(--color-ocean-main); margin: 2rem 0; padding: 0.75rem 1.5rem; font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; color: var(--color-ocean); background: var(--color-mist); border-radius: 0 3px 3px 0; }
   .article-image { margin: 2rem 0; }
   .article-image img { width: 100%; height: auto; border-radius: 3px; display: block; }
+  .article-video { margin: 2rem 0; aspect-ratio: 16 / 9; border-radius: 3px; overflow: hidden; }
+  .article-video iframe { width: 100%; height: 100%; border: none; display: block; }
   .article-body a { color: var(--color-ocean-main); text-decoration: underline; }
   .article-body a:hover { color: var(--color-ocean); }
   .article-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--color-mist); }

@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import PageBuilderSections from '../components/PageBuilderSections.astro'
+import NewsletterSection from '../components/NewsletterSection.astro'
+import NewsletterPopup from '../components/NewsletterPopup.astro'
 import { client, stegaClient } from '../lib/sanity.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
@@ -142,6 +144,33 @@ const materielSection = {
 
 // ── Toutes les sections dans l'ordre Sanity ───────────────────────────────────
 const allSections = hp?.pagebuilder ?? []
+
+// ── Newsletter ────────────────────────────────────────────────────────────────
+const nl = await client.fetch(`*[_type == "newsletter"][0]{
+  sectionTitre, sectionSousTitre, sectionAvantages, sectionBoutonTexte, sectionPlaceholder,
+  popupActif, popupDelai, popupTitre, popupTexte, popupBoutonTexte, popupIgnorerTexte, formAction,
+  popupImage{ asset->{ _id, url } }
+}`)
+
+const nlSectionTitre   = stegaClean(nl?.sectionTitre)   || 'Les carnets du guide, dans votre boîte mail'
+const nlSectionSous    = stegaClean(nl?.sectionSousTitre) || "Conseils de pêche à la mouche, récits de sorties, annonces de stages et voyages. Pas de spam — seulement du contenu qui vaut le coup."
+const nlAvantages      = nl?.sectionAvantages?.map((a: any) => ({
+  emoji: stegaClean(a.emoji) || '', label: stegaClean(a.label) || ''
+})) ?? [
+  { emoji: '🎣', label: 'Conseils et techniques exclusifs' },
+  { emoji: '🎬', label: 'Récits de sorties et vidéos' },
+  { emoji: '🌍', label: 'Voyages et destinations pêche' },
+]
+const nlBoutonTexte    = stegaClean(nl?.sectionBoutonTexte)  || "S'inscrire gratuitement"
+const nlPlaceholder    = stegaClean(nl?.sectionPlaceholder)  || 'votre@email.fr'
+const nlFormAction     = stegaClean(nl?.formAction)          || '/newsletter'
+const nlPopupActif     = nl?.popupActif  ?? true
+const nlPopupDelai     = nl?.popupDelai  ?? 15
+const nlPopupTitre     = stegaClean(nl?.popupTitre)         || "Une lettre du bord de l'eau"
+const nlPopupTexte     = stegaClean(nl?.popupTexte)         || "Rejoignez les pêcheurs qui reçoivent les conseils, récits et vidéos de Jean-Baptiste."
+const nlPopupBtn       = stegaClean(nl?.popupBoutonTexte)   || "Je m'inscris"
+const nlPopupIgnorer   = stegaClean(nl?.popupIgnorerTexte)  || 'Non merci'
+const nlPopupImageUrl  = nl?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'
 ---
 
 <BaseLayout
@@ -315,6 +344,28 @@ const allSections = hp?.pagebuilder ?? []
     }
     return <PageBuilderSections sections={[s]} pageTitle={pageTitle} />
   })}
+
+  <!-- ── Section newsletter (toujours en dernier) ── -->
+  <NewsletterSection
+    titre={nlSectionTitre}
+    sousTitre={nlSectionSous}
+    avantages={nlAvantages}
+    boutonTexte={nlBoutonTexte}
+    placeholder={nlPlaceholder}
+    formAction={nlFormAction}
+  />
+
+  <!-- ── Popup newsletter (apparaît après délai) ── -->
+  <NewsletterPopup
+    actif={nlPopupActif}
+    delai={nlPopupDelai}
+    titre={nlPopupTitre}
+    texte={nlPopupTexte}
+    imageUrl={nlPopupImageUrl}
+    boutonTexte={nlPopupBtn}
+    ignorerTexte={nlPopupIgnorer}
+    formAction={nlFormAction}
+  />
 
 </BaseLayout>
 

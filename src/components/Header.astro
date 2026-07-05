@@ -505,21 +505,28 @@ function isActive(href: string, prefix?: string) {
 
   /* ── Réduction progressive — desktop intermédiaire ── */
 
-  /* 1400px : taglines disparaissent, logo réduit, nav légèrement plus compact */
-  @media (max-width: 1400px) {
+  /* 1600px : taglines disparaissent pour libérer de la place à la nav */
+  @media (max-width: 1600px) {
     .logo-tagline { display: none; }
+  }
+
+  /* 1400px : padding réduit, logo réduit, nav légèrement plus compact */
+  @media (max-width: 1400px) {
+    .header-inner { padding: 0 2rem; }
     .logo-img { height: 120px; }
     .nav-link { padding: 0.5rem 0.65rem; font-size: 0.73rem; }
   }
 
   /* 1300px : nom du logo disparaît, logo encore réduit */
   @media (max-width: 1300px) {
+    .header-inner { padding: 0 1.5rem; }
     .logo-name { display: none; }
     .logo-img { height: 90px; }
   }
 
   /* 1150px : nav ultra-compact pour tenir dans l'espace restant */
   @media (max-width: 1150px) {
+    .header-inner { padding: 0 1rem; }
     .nav-link { padding: 0.4rem 0.5rem; font-size: 0.7rem; }
   }
 

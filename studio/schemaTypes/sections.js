@@ -5,6 +5,10 @@
  * des schemas prestation, voyage, page, etc.
  */
 
+// ── Images grisées dans les sections EN (partagées depuis le FR) ──────────
+// Renvoie true si le champ est à l'intérieur d'un pagebuilderEn → readOnly
+const enRO = ({ path }) => Array.isArray(path) && path.some(p => p === 'pagebuilderEn')
+
 // ── Portable Text partagé ─────────────────────────────────────────────────
 const richText = (name = 'texte', title = 'Texte') => ({
   name,
@@ -34,7 +38,7 @@ const richText = (name = 'texte', title = 'Texte') => ({
     },
     {
       type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }, readOnly: enRO ,
       fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
     },
   ],
@@ -66,7 +70,7 @@ export const sectionHero = {
   fields: [
     {
       name: 'image', title: 'Photo de fond', type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }, readOnly: enRO ,
       description: 'Grande photo en arrière-plan du hero',
     },
     {
@@ -480,7 +484,7 @@ export const sectionCards = {
             { name: 'titre',     title: 'Titre',              type: 'string' },
             { name: 'sousTitre', title: 'Sous-titre / accroche', type: 'string' },
             { name: 'lien',      title: 'URL cible',           type: 'string' },
-            { name: 'image',     title: 'Photo de fond',       type: 'image', options: { hotspot: true } },
+            { name: 'image',     title: 'Photo de fond',       type: 'image', options: { hotspot: true } , readOnly: enRO },
             {
               name: 'positionPhoto',
               title: 'Position de la photo',
@@ -554,7 +558,7 @@ export const sectionCards2 = {
             { name: 'titre',     title: 'Titre',               type: 'string' },
             { name: 'sousTitre', title: 'Sous-titre / accroche', type: 'string' },
             { name: 'lien',      title: 'URL cible',            type: 'string' },
-            { name: 'image',     title: 'Photo de fond',        type: 'image', options: { hotspot: true } },
+            { name: 'image',     title: 'Photo de fond',        type: 'image', options: { hotspot: true } , readOnly: enRO },
             {
               name: 'positionPhoto',
               title: 'Position de la photo',
@@ -637,7 +641,7 @@ export const sectionTexteImage = {
     richText('texte', 'Texte'),
     {
       name: 'image', title: 'Image (optionnel)', type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }, readOnly: enRO ,
       fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
     },
     {
@@ -685,10 +689,11 @@ export const sectionGalerie = {
     {
       name: 'photos', title: 'Photos',
       type: 'array',
+      readOnly: enRO,
       of: [
         {
           type: 'image',
-          options: { hotspot: true },
+          options: { hotspot: true }, readOnly: enRO ,
           fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
         },
       ],
@@ -912,12 +917,13 @@ export const sectionCarrousel3Images = {
     {
       name: 'images', title: 'Images',
       type: 'array',
+      readOnly: enRO,
       description: 'Ajoutez autant d\'images que souhaité — 3 s\'affichent à la fois',
       validation: Rule => Rule.min(1).warning('Ajoutez au moins 3 images pour un rendu optimal'),
       of: [
         {
           type: 'image',
-          options: { hotspot: true },
+          options: { hotspot: true }, readOnly: enRO ,
           fields: [
             { name: 'alt',     title: 'Description (SEO)', type: 'string' },
             { name: 'legende', title: 'Légende (optionnel)', type: 'string' },
@@ -1008,7 +1014,7 @@ export const sectionProgramme = {
             {
               name: 'image', title: 'Photo',
               type: 'image',
-              options: { hotspot: true },
+              options: { hotspot: true }, readOnly: enRO ,
               fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
             },
           ],
@@ -1159,7 +1165,7 @@ export const sectionProgrammeCartes = {
     {
       name: 'image', title: 'Image (optionnel)',
       type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }, readOnly: enRO ,
       fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
       description: 'Requise pour les styles A et B',
     },
@@ -1315,7 +1321,7 @@ export const sectionSelection = {
           {
             name: 'image', title: 'Photo',
             type: 'image',
-            options: { hotspot: true },
+            options: { hotspot: true }, readOnly: enRO ,
             fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
             validation: Rule => Rule.required(),
           },
@@ -1399,7 +1405,7 @@ export const sectionBilan = {
     {
       name: 'image', title: 'Photo du séjour (optionnel)',
       type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }, readOnly: enRO ,
       fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
     },
     fondField('sand'),
@@ -1541,7 +1547,7 @@ export const sectionChoix = {
           { name: 'description', title: 'Description', type: 'text', rows: 4 },
           {
             name: 'image', title: 'Photo du lodge',
-            type: 'image', options: { hotspot: true },
+            type: 'image', options: { hotspot: true }, readOnly: enRO ,
             fields: [{ name: 'alt', type: 'string', title: 'Description' }],
           },
         ],
@@ -1557,7 +1563,7 @@ export const sectionChoix = {
       type: 'array',
       description: '2 à 4 photos de l\'hébergement (intérieur, salle à manger...)',
       of: [{
-        type: 'image', options: { hotspot: true },
+        type: 'image', options: { hotspot: true }, readOnly: enRO ,
         fields: [{ name: 'alt', type: 'string', title: 'Description' }],
       }],
     },
@@ -1617,9 +1623,10 @@ export const sectionFriseChronologique = {
           {
             name: 'photos', title: '📸 Photos (ouvre un mini-carrousel au survol)',
             type: 'array',
+      readOnly: enRO,
             description: 'Si présentes, le point de la frise devient cliquable et affiche les photos',
             of: [{
-              type: 'image', options: { hotspot: true },
+              type: 'image', options: { hotspot: true }, readOnly: enRO ,
               fields: [
                 { name: 'alt',     type: 'string', title: 'Description (SEO / accessibilité)' },
                 { name: 'caption', type: 'string', title: 'Légende (affichée sur la photo)' },
@@ -1689,7 +1696,7 @@ export const sectionListe = {
     },
     {
       name: 'image', title: 'Photo (côté droit)',
-      type: 'image', options: { hotspot: true },
+      type: 'image', options: { hotspot: true }, readOnly: enRO ,
       fields: [{ name: 'alt', type: 'string', title: 'Description (SEO)' }],
     },
   ],
@@ -1784,7 +1791,7 @@ export const sectionGuideHP = {
     },
     {
       name: 'photo', title: 'Photo du guide', type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }, readOnly: enRO ,
     },
     {
       name: 'boutonTexte', title: 'Texte du bouton', type: 'string',
@@ -1903,7 +1910,7 @@ export const sectionBanniereCard = {
       name: 'image',
       title: 'Photo de fond',
       type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }, readOnly: enRO ,
       description: 'Photo affichée en arrière-plan (plein cadre)',
     },
     {
@@ -2031,7 +2038,7 @@ export const sectionCards3 = {
         fields: [
           {
             name: 'image', title: 'Photo de fond', type: 'image',
-            options: { hotspot: true },
+            options: { hotspot: true }, readOnly: enRO ,
           },
           { name: 'label', title: 'Titre de la carte', type: 'string' },
           {
@@ -2105,7 +2112,7 @@ export const sectionMaterielHP = {
       name: 'featuredImage',
       title: 'Carte principale — image de fond',
       type: 'image',
-      options: { hotspot: true },
+      options: { hotspot: true }, readOnly: enRO ,
     },
     {
       name: 'sousLiens',
@@ -2142,7 +2149,7 @@ export const sectionMaterielHP = {
               name: 'image',
               title: 'Image de fond',
               type: 'image',
-              options: { hotspot: true },
+              options: { hotspot: true }, readOnly: enRO ,
             },
           ],
           preview: {
@@ -2376,7 +2383,7 @@ export const sectionGrilleSubPages = {
           { name: 'url', title: 'URL interne', type: 'string' },
           {
             name: 'image', title: 'Image', type: 'image',
-            options: { hotspot: true },
+            options: { hotspot: true }, readOnly: enRO ,
             fields: [{ name: 'alt', title: 'Description', type: 'string' }],
           },
         ],

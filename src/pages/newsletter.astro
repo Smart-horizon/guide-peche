@@ -1,0 +1,481 @@
+---
+export const prerender = true
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { client } from '../lib/sanity.js'
+import imageUrlBuilder from '@sanity/image-url'
+
+const builder = imageUrlBuilder(client)
+const urlFor = (source: any) => {
+  const b = builder.image(source)
+  const hs = source?.hotspot
+  return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b
+}
+
+const nl = await client.fetch(`*[_type == "newsletter"][0]`)
+
+const heroImageUrl = nl?.pageHeroImage?.asset
+  ? urlFor(nl.pageHeroImage).width(1800).height(900).fit('crop').crop('focalpoint').url()
+  : '/images/bar-bateau-hq-1.jpg'
+
+const titre       = nl?.pageTitre       || "L'école buissonnière de la mouche"
+const sousTitre   = nl?.pageSousTitre   || "La newsletter de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne. Une fois par mois, les secrets du terrain dans votre boîte mail."
+const socialProof = nl?.pageSocialProof || "Rejoignez des centaines de pêcheurs qui reçoivent déjà la lettre."
+const frequence   = nl?.pageFrequence   || "1 à 2 fois par mois · Zéro spam · Désabonnement en 1 clic"
+const formAction  = nl?.formAction      || ''
+const placeholder = nl?.sectionPlaceholder || 'votre@email.fr'
+const boutonTexte = nl?.sectionBoutonTexte || "S'inscrire gratuitement"
+const seoTitle    = nl?.seoTitle        || 'Newsletter — Conseils pêche mouche | Jean-Baptiste Vidal'
+const seoDesc     = nl?.seoDescription  || "Recevez les conseils, récits de sorties et annonces de stages de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne."
+
+const benefices: { emoji: string; titre: string; description: string }[] = nl?.pageBenefices?.length
+  ? nl.pageBenefices
+  : [
+      { emoji: '🎣', titre: 'Techniques & conseils', description: "Les astuces que Jean-Baptiste donne à ses clients en guidage. Mouches, postes, conditions — du contenu pratique tiré du terrain." },
+      { emoji: '📖', titre: 'Récits de sorties', description: "Des histoires vraies, des rivières bretonnes aux flats de Los Roques. Les réussites, les galères, les rencontres avec des poissons extraordinaires." },
+      { emoji: '🗓️', titre: 'Stages & voyages en avant-première', description: "Les dates de stages et voyages annoncées aux abonnés avant toute publication. La priorité pour les places limitées." },
+    ]
+---
+
+<BaseLayout
+  title={seoTitle}
+  description={seoDesc}
+  lang="fr"
+>
+
+  <!-- ── HERO ── -->
+  <section class="nl-hero" style={`background-image: url('${heroImageUrl}')`}>
+    <div class="nl-hero__overlay"></div>
+    <div class="container nl-hero__content">
+      <p class="nl-hero__eyebrow">📧 Newsletter gratuite</p>
+      <h1 class="nl-hero__titre">{titre}</h1>
+      <p class="nl-hero__sous">{sousTitre}</p>
+      <a href="#nl-page-form" class="nl-hero__cta">S'inscrire maintenant</a>
+    </div>
+    <div class="nl-hero__wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="var(--color-beige, #f8f7f4)"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ── BÉNÉFICES ── -->
+  <section class="nl-benefices">
+    <div class="container">
+      <p class="nl-benefices__lead">Chaque lettre contient…</p>
+      <div class="nl-benefices__grid">
+        {benefices.map(b => (
+          <div class="nl-benefice-card">
+            <div class="nl-benefice-card__emoji" aria-hidden="true">{b.emoji}</div>
+            <h3 class="nl-benefice-card__titre">{b.titre}</h3>
+            <p class="nl-benefice-card__desc">{b.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FORMULAIRE ── -->
+  <section class="nl-page-form-section" id="nl-page-form">
+    <div class="container nl-page-form-inner">
+
+      <div class="nl-page-form-box">
+        <div class="nl-page-form-box__deco" aria-hidden="true">
+          <svg viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 100 Q100 40 200 100 Q300 160 400 100" stroke="#1B5E8A" stroke-width="1.5" fill="none" opacity="0.15"/>
+            <path d="M0 120 Q100 60 200 120 Q300 180 400 120" stroke="#1B5E8A" stroke-width="1" fill="none" opacity="0.08"/>
+            <circle cx="50" cy="85" r="3" fill="#7EC8E3" opacity="0.3"/>
+            <circle cx="200" cy="110" r="2" fill="#7EC8E3" opacity="0.25"/>
+            <circle cx="350" cy="90" r="3" fill="#7EC8E3" opacity="0.3"/>
+          </svg>
+        </div>
+
+        <p class="nl-page-form-box__social">{socialProof}</p>
+
+        <form class="nl-page-form" id="nl-page-form-el" data-action={formAction}>
+          <label for="nl-page-email" class="nl-page-form__label">Votre adresse e-mail</label>
+          <div class="nl-page-form__row">
+            <input
+              id="nl-page-email"
+              type="email"
+              name="email"
+              placeholder={placeholder}
+              required
+              class="nl-page-form__input"
+            />
+            <button type="submit" class="nl-page-form__btn">
+              {boutonTexte} →
+            </button>
+          </div>
+          <p class="nl-page-form__mention">{frequence}</p>
+          <div class="nl-page-form__success" id="nl-page-success" aria-live="polite">
+            <span class="nl-page-form__success-icon">✅</span>
+            <span>Inscription confirmée ! À très vite dans votre boîte mail.</span>
+          </div>
+        </form>
+
+      </div>
+
+      <!-- Aside -->
+      <div class="nl-page-aside">
+        <blockquote class="nl-page-aside__quote">
+          <p>« J'essaie de partager dans cette lettre ce que je dis à mes clients sur le terrain. Le genre de détails qui font vraiment la différence. »</p>
+          <footer>— Jean-Baptiste Vidal</footer>
+        </blockquote>
+        <div class="nl-page-aside__signature" aria-hidden="true">
+          <svg viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="nl-page-aside__fish">
+            <path d="M20 30 C40 10 80 10 100 30 C80 50 40 50 20 30Z" fill="none" stroke="#1B5E8A" stroke-width="1.5" opacity="0.4"/>
+            <path d="M100 30 L115 20 M100 30 L115 40" stroke="#1B5E8A" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+            <circle cx="38" cy="27" r="2.5" fill="#1B5E8A" opacity="0.5"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CTA BAS ── -->
+  <section class="nl-bottom-cta">
+    <div class="container nl-bottom-cta__inner">
+      <p>Curieux de voir à quoi ça ressemble ?</p>
+      <a href="/blog/" class="nl-bottom-cta__link">Lire les derniers articles du blog →</a>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('nl-page-form-el') as HTMLFormElement | null
+  const success = document.getElementById('nl-page-success')
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const email = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value
+    const action = form.dataset.action || ''
+
+    if (action.startsWith('http')) {
+      const fd = new FormData()
+      fd.append('email', email)
+      try {
+        await fetch(action, { method: 'POST', body: fd, mode: 'no-cors' })
+      } catch {}
+    }
+
+    if (success) {
+      success.style.display = 'flex'
+      form.querySelector('.nl-page-form__row')?.setAttribute('style', 'display:none')
+      form.querySelector('.nl-page-form__label')?.setAttribute('style', 'display:none')
+    }
+  })
+</script>
+
+<style>
+  /* ══════ HERO ══════ */
+  .nl-hero {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 5rem;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  .nl-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.92) 0%, rgba(13,43,62,0.6) 50%, rgba(13,43,62,0.3) 100%);
+  }
+
+  .nl-hero__content {
+    position: relative;
+    z-index: 1;
+    max-width: 740px;
+  }
+
+  .nl-hero__eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light, #7EC8E3);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .nl-hero__titre {
+    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+
+  .nl-hero__sous {
+    color: rgba(255,255,255,0.7);
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    max-width: 580px;
+  }
+
+  .nl-hero__cta {
+    display: inline-block;
+    padding: 0.9rem 2rem;
+    background: var(--color-ocean, #1B5E8A);
+    color: #fff;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .nl-hero__cta:hover { background: var(--color-ocean-mid, #5BA3C9); }
+
+  .nl-hero__wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 80px;
+  }
+
+  .nl-hero__wave svg { width: 100%; height: 100%; }
+
+  /* ══════ BÉNÉFICES ══════ */
+  .nl-benefices {
+    background: var(--color-beige, #f8f7f4);
+    padding: 5rem 0 4rem;
+  }
+
+  .nl-benefices__lead {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ocean, #1B5E8A);
+    font-weight: 600;
+    margin-bottom: 3rem;
+  }
+
+  .nl-benefices__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .nl-benefice-card {
+    background: #fff;
+    border: 1px solid rgba(27,94,138,0.1);
+    border-radius: 4px;
+    padding: 2rem 1.75rem;
+    transition: box-shadow 0.2s;
+  }
+
+  .nl-benefice-card:hover {
+    box-shadow: 0 8px 30px rgba(27,94,138,0.12);
+  }
+
+  .nl-benefice-card__emoji {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .nl-benefice-card__titre {
+    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--color-dark, #1a1a1f);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .nl-benefice-card__desc {
+    font-size: 0.88rem;
+    color: rgba(26,26,31,0.65);
+    line-height: 1.65;
+  }
+
+  /* ══════ FORMULAIRE ══════ */
+  .nl-page-form-section {
+    background: var(--color-beige, #f8f7f4);
+    padding: 2rem 0 5rem;
+  }
+
+  .nl-page-form-inner {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .nl-page-form-box {
+    background: #fff;
+    border: 1px solid rgba(27,94,138,0.12);
+    border-radius: 6px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nl-page-form-box__deco {
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .nl-page-form-box__social {
+    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-size: 1.05rem;
+    color: var(--color-dark, #1a1a1f);
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .nl-page-form__label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(26,26,31,0.5);
+    margin-bottom: 0.6rem;
+  }
+
+  .nl-page-form__row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .nl-page-form__input {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid rgba(27,94,138,0.25);
+    border-radius: 3px;
+    font-size: 0.9rem;
+    font-family: var(--font-sans, 'DM Sans', sans-serif);
+    color: var(--color-dark, #1a1a1f);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 0;
+  }
+
+  .nl-page-form__input:focus { border-color: var(--color-ocean, #1B5E8A); }
+
+  .nl-page-form__btn {
+    padding: 0.85rem 1.5rem;
+    background: var(--color-ocean, #1B5E8A);
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: var(--font-sans, 'DM Sans', sans-serif);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .nl-page-form__btn:hover { background: var(--color-ocean-mid, #5BA3C9); }
+
+  .nl-page-form__mention {
+    margin-top: 0.75rem;
+    font-size: 0.72rem;
+    color: rgba(26,26,31,0.4);
+    letter-spacing: 0.03em;
+  }
+
+  .nl-page-form__success {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    color: #1B5E8A;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .nl-page-form__success-icon { font-size: 1.25rem; }
+
+  /* ── Aside ── */
+  .nl-page-aside {
+    padding-top: 0.5rem;
+  }
+
+  .nl-page-aside__quote {
+    border-left: 3px solid var(--color-ocean-light, #7EC8E3);
+    padding-left: 1.25rem;
+    margin: 0 0 2rem;
+  }
+
+  .nl-page-aside__quote p {
+    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--color-dark, #1a1a1f);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+
+  .nl-page-aside__quote footer {
+    font-size: 0.8rem;
+    color: rgba(26,26,31,0.5);
+    font-weight: 500;
+  }
+
+  .nl-page-aside__fish {
+    width: 120px;
+    height: auto;
+    opacity: 0.7;
+  }
+
+  /* ══════ CTA BAS ══════ */
+  .nl-bottom-cta {
+    background: var(--color-beige-dark, #f0eff0);
+    padding: 2.5rem 0;
+  }
+
+  .nl-bottom-cta__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .nl-bottom-cta p {
+    font-size: 0.95rem;
+    color: rgba(26,26,31,0.65);
+    margin: 0;
+  }
+
+  .nl-bottom-cta__link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-ocean, #1B5E8A);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nl-bottom-cta__link:hover { color: var(--color-ocean-mid, #5BA3C9); }
+
+  /* ══════ RESPONSIVE ══════ */
+  @media (max-width: 900px) {
+    .nl-benefices__grid { grid-template-columns: 1fr; gap: 1rem; }
+    .nl-page-form-inner { grid-template-columns: 1fr; }
+    .nl-page-aside { display: none; }
+    .nl-page-form-box { padding: 2rem 1.5rem; }
+  }
+
+  @media (max-width: 550px) {
+    .nl-page-form__row { flex-direction: column; }
+    .nl-bottom-cta__inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>

@@ -77,6 +77,30 @@ export default {
           options: { hotspot: true },
           fields: [{ name: 'alt', title: "Description de l'image (SEO)", type: 'string' }],
         },
+        {
+          type: 'object',
+          name: 'youtube',
+          title: 'Vidéo YouTube',
+          fields: [
+            { name: 'videoId', title: 'ID YouTube (ex: dQw4w9WgXcQ)', type: 'string' },
+          ],
+          preview: {
+            select: { title: 'videoId' },
+            prepare({ title }) { return { title: `▶ YouTube : ${title || '(sans ID)'}` } },
+          },
+        },
+        {
+          type: 'object',
+          name: 'vimeo',
+          title: 'Vidéo Vimeo',
+          fields: [
+            { name: 'videoId', title: 'ID Vimeo (ex: 202750783)', type: 'string' },
+          ],
+          preview: {
+            select: { title: 'videoId' },
+            prepare({ title }) { return { title: `▶ Vimeo : ${title || '(sans ID)'}` } },
+          },
+        },
       ],
     },
     // ── Traductions EN ──────────────────────────────────────────────────────
@@ -98,14 +122,9 @@ export default {
       title: '🇬🇧 Contenu de l\'article — English',
       type: 'array',
       group: 'traductions',
-      description: 'English version of the article body. Leave empty to fall back to French.',
+      description: 'Texte anglais uniquement — photos et vidéos reprises automatiquement depuis la version française.',
       of: [
         { type: 'block' },
-        {
-          type: 'image',
-          options: { hotspot: true },
-          fields: [{ name: 'alt', title: 'Image description (SEO)', type: 'string' }],
-        },
       ],
     },
     {

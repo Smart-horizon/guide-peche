@@ -4,30 +4,52 @@ interface Props {
   telephone?: string
   email?:     string
   adresse?:   string | null
-  footerBio?: string
+  footerBio?: string | null
   instagram?: string | null
   facebook?:  string | null
   youtube?:   string | null
   vimeo?:     string | null
+  lang?:      'fr' | 'en'
 }
 
 const {
   telephone = '06 87 30 34 56',
   email     = 'enjoy.fishing@hotmail.fr',
   adresse   = null,
-  footerBio = "Moniteur-Guide diplômé d'État.\nPêche à la mouche en rivières de Bretagne.",
+  footerBio: _footerBio = null,
   instagram = null,
   facebook  = null,
   youtube   = null,
   vimeo     = null,
+  lang      = 'fr',
 } = Astro.props
+
+const isEn = lang === 'en'
+
+const footerBio = _footerBio ?? (isEn
+  ? "State-certified fly fishing guide.\nFly fishing on Brittany's rivers and coastline."
+  : "Moniteur-Guide diplômé d'État.\nPêche à la mouche en rivières de Bretagne.")
 
 const year      = new Date().getFullYear()
 const phone     = telephone
 const phoneHref = 'tel:+33' + phone.replace(/\s/g, '').replace(/^0/, '')
 const hasSocial = instagram || facebook || youtube || vimeo
 
-const navLinks = [
+const navLinks = isEn ? [
+  { label: 'Home',                href: '/en/' },
+  { label: 'Services',            href: '/en/stage-peche-mouche' },
+  { label: 'Sea bass fly fishing', href: '/en/peche-du-bar-a-la-mouche' },
+  { label: 'Freshwater rivers',   href: '/en/peche-a-la-mouche-en-bretagne' },
+  { label: 'Masterclass',         href: '/en/masterclass' },
+  { label: 'Spey Cast & casting', href: '/en/stage-spey-cast-et-cours-de-lancer' },
+  { label: 'Fishing trips',       href: '/en/voyages-peche-mouche' },
+  { label: 'Gear',                href: '/en/materiel-jeanbaptistevidal' },
+  { label: 'My flies',            href: '/en/mouches-de-peche-jeanbaptiste-vidal' },
+  { label: 'Testimonials',        href: '/en/temoignages' },
+  { label: 'Blog',                href: '/en/blog' },
+  { label: 'About',               href: '/en/jean-baptiste-vidal-moniteur-guide-de-peche' },
+  { label: 'Contact',             href: '/en/contact' },
+] : [
   { label: 'Accueil',             href: '/' },
   { label: 'Prestations',         href: '/stage-peche-mouche' },
   { label: 'Bar à la mouche',     href: '/peche-du-bar-a-la-mouche' },
@@ -48,7 +70,7 @@ const navLinks = [
   <div class="footer-inner">
 
     <div class="footer-brand">
-      <a href="/" class="footer-logo">Jean-Baptiste Vidal</a>
+      <a href={isEn ? '/en/' : '/'} class="footer-logo">Jean-Baptiste Vidal</a>
       <p class="footer-bio" set:html={footerBio.replace(/\n/g, '<br />')} />
       <address class="footer-contact">
         <a href={phoneHref}>{phone}</a>
@@ -81,7 +103,7 @@ const navLinks = [
       )}
     </div>
 
-    <nav class="footer-nav" aria-label="Navigation secondaire">
+    <nav class="footer-nav" aria-label={isEn ? 'Secondary navigation' : 'Navigation secondaire'}>
       <h3>Navigation</h3>
       <ul>
         {navLinks.map(({ label, href }) => (
@@ -103,7 +125,7 @@ const navLinks = [
 
   <div class="footer-bottom">
     <p>© {year} Jean-Baptiste Vidal · ENJOY FISHING · Siret 789636313</p>
-    <p>Tous droits réservés</p>
+    <p>{isEn ? 'All rights reserved' : 'Tous droits réservés'}</p>
   </div>
 </footer>
 

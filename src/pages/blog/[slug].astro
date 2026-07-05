@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
+export const prerender = true
+
 export async function getStaticPaths() {
   const client = createClient({
     projectId: 'uievv97s',
@@ -21,7 +23,7 @@ const { slug } = Astro.params
 const client = createClient({
   projectId: 'uievv97s',
   dataset: 'production',
-  useCdn: true,
+  useCdn: false,
   apiVersion: '2024-01-01',
 })
 
@@ -58,7 +60,9 @@ const dateFormatee = article.date
 
   <!-- Hero article -->
   <section class="article-hero">
-    <div class="article-hero-bg" style={heroImg ? `background-image: url(${heroImg})` : ''}></div>
+    <div class="article-hero-bg" style={heroImg
+      ? `background-image: linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 100%), url(${heroImg}); background-size: cover; background-position: center; background-repeat: no-repeat;`
+      : ''}></div>
     <div class="container article-hero-content">
       <div class="article-meta">
         {article.espece && <span class="badge">{especeLabel[article.espece] ?? article.espece}</span>}
@@ -82,6 +86,38 @@ const dateFormatee = article.date
             <figure class="article-image">
               <img src={imgUrl} alt={block.alt || ''} loading="lazy" />
             </figure>
+          )
+        }
+
+        // ── YouTube ──
+        if (block._type === 'youtube') {
+          if (!block.videoId) return null
+          return (
+            <div class="article-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${block.videoId}`}
+                title="Vidéo YouTube"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              />
+            </div>
+          )
+        }
+
+        // ── Vimeo ──
+        if (block._type === 'vimeo') {
+          if (!block.videoId) return null
+          return (
+            <div class="article-video">
+              <iframe
+                src={`https://player.vimeo.com/video/${block.videoId}`}
+                title="Vidéo Vimeo"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              />
+            </div>
           )
         }
 
@@ -153,9 +189,7 @@ const dateFormatee = article.date
   .article-hero-bg {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 100%),
-      var(--color-ocean) center / cover no-repeat;
+    background: linear-gradient(to top, rgba(7,24,31,0.88) 0%, rgba(13,43,62,0.45) 100%), var(--color-ocean);
   }
   .article-hero-content {
     position: relative;
@@ -205,6 +239,18 @@ const dateFormatee = article.date
     width: 100%;
     height: auto;
     border-radius: 3px;
+    display: block;
+  }
+  .article-video {
+    margin: 2rem 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .article-video iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
     display: block;
   }
   .article-body a {

@@ -1,0 +1,279 @@
+---
+interface Props {
+  titre?: string
+  sousTitre?: string
+  avantages?: { emoji: string; label: string }[]
+  boutonTexte?: string
+  placeholder?: string
+  formAction?: string
+}
+
+const {
+  titre      = 'Les carnets du guide, dans votre boîte mail',
+  sousTitre  = "Conseils de pêche à la mouche, récits de sorties, annonces de stages et voyages. Pas de spam — seulement du contenu qui vaut le coup.",
+  avantages  = [
+    { emoji: '🎣', label: 'Conseils et techniques exclusifs' },
+    { emoji: '🎬', label: 'Récits de sorties et vidéos' },
+    { emoji: '🌍', label: 'Voyages et destinations pêche' },
+  ],
+  boutonTexte = "S'inscrire gratuitement",
+  placeholder = 'votre@email.fr',
+  formAction  = '/newsletter',
+} = Astro.props
+---
+
+<section class="nl-section" id="newsletter">
+  <div class="nl-section__inner container">
+
+    <div class="nl-section__left">
+      <p class="nl-section__eyebrow">📧 Newsletter</p>
+      <h2 class="nl-section__titre">{titre}</h2>
+      <p class="nl-section__sous">{sousTitre}</p>
+      <ul class="nl-section__avantages">
+        {avantages.map(a => (
+          <li class="nl-section__av">
+            <span class="nl-section__av-icon">{a.emoji}</span>
+            <span>{a.label}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="nl-section__right">
+      <div class="nl-section__card">
+        <p class="nl-section__card-titre">Une lettre du bord de l'eau</p>
+        <form class="nl-form" id="nl-section-form" data-action={formAction}>
+          <div class="nl-form__row">
+            <input
+              type="email"
+              name="email"
+              placeholder={placeholder}
+              required
+              class="nl-form__input"
+              aria-label="Votre adresse e-mail"
+            />
+            <button type="submit" class="nl-form__btn">
+              <span class="nl-form__btn-text">{boutonTexte}</span>
+              <span class="nl-form__btn-icon">→</span>
+            </button>
+          </div>
+          <p class="nl-form__mention">1 à 2 fois par mois · Zéro spam · Désabonnement en 1 clic</p>
+          <div class="nl-form__success" id="nl-section-success" aria-live="polite">
+            ✅ Inscription confirmée — à très vite dans votre boîte mail !
+          </div>
+        </form>
+        <div class="nl-section__deco" aria-hidden="true">
+          <svg viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 20 Q25 5 50 20 Q75 35 100 20 Q125 5 150 20 Q175 35 200 20" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"/>
+            <path d="M0 28 Q25 13 50 28 Q75 43 100 28 Q125 13 150 28 Q175 43 200 28" stroke="currentColor" stroke-width="1" fill="none" opacity="0.15"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('nl-section-form') as HTMLFormElement | null
+  const success = document.getElementById('nl-section-success')
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const email = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value
+    const action = form.dataset.action || '/newsletter'
+
+    // Si l'action est une URL externe (Mailchimp, Brevo), on soumet vers elle
+    if (action.startsWith('http')) {
+      const fd = new FormData()
+      fd.append('email', email)
+      try {
+        await fetch(action, { method: 'POST', body: fd, mode: 'no-cors' })
+      } catch {}
+    }
+
+    // Toujours montrer le succès
+    if (success) {
+      success.style.display = 'block'
+      form.querySelector('.nl-form__row')?.setAttribute('style', 'display:none')
+      form.querySelector('.nl-form__mention')?.setAttribute('style', 'display:none')
+    }
+  })
+</script>
+
+<style>
+  .nl-section {
+    background: var(--color-footer, #07181f);
+    padding: 5rem 0 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nl-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-ocean-light, #7EC8E3), transparent);
+    opacity: 0.4;
+  }
+
+  .nl-section__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  /* ── Left ── */
+  .nl-section__eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light, #7EC8E3);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .nl-section__titre {
+    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+  }
+
+  .nl-section__sous {
+    color: rgba(255,255,255,0.62);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    max-width: 480px;
+  }
+
+  .nl-section__avantages {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .nl-section__av {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.9rem;
+  }
+
+  .nl-section__av-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    width: 1.8rem;
+    text-align: center;
+  }
+
+  /* ── Right / Card ── */
+  .nl-section__card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nl-section__card-titre {
+    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 1.75rem;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  /* ── Form ── */
+  .nl-form__row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .nl-form__input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: var(--font-sans, 'DM Sans', sans-serif);
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 0;
+  }
+
+  .nl-form__input::placeholder { color: rgba(255,255,255,0.35); }
+  .nl-form__input:focus { border-color: var(--color-ocean-light, #7EC8E3); }
+
+  .nl-form__btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.8rem 1.25rem;
+    background: var(--color-ocean, #1B5E8A);
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-family: var(--font-sans, 'DM Sans', sans-serif);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .nl-form__btn:hover { background: var(--color-ocean-mid, #5BA3C9); }
+
+  .nl-form__mention {
+    margin-top: 0.75rem;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.03em;
+  }
+
+  .nl-form__success {
+    display: none;
+    margin-top: 1rem;
+    color: var(--color-ocean-light, #7EC8E3);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  /* ── Déco vagues ── */
+  .nl-section__deco {
+    margin-top: 1.5rem;
+    color: var(--color-ocean-light, #7EC8E3);
+    height: 40px;
+  }
+
+  .nl-section__deco svg { width: 100%; height: 40px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .nl-section__inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .nl-section__sous { max-width: 100%; }
+    .nl-section__card { padding: 2rem 1.5rem; }
+  }
+
+  @media (max-width: 500px) {
+    .nl-form__row { flex-direction: column; }
+    .nl-form__btn { justify-content: center; }
+  }
+</style>

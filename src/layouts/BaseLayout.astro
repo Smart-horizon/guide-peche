@@ -49,11 +49,12 @@ const footerProps = {
   telephone: stegaClean(params?.telephone) || '06 87 30 34 56',
   email:     stegaClean(params?.email)     || 'enjoy.fishing@hotmail.fr',
   adresse:   params?.adresse   || null,
-  footerBio: params?.footerTexte || "Moniteur-Guide diplômé d'État.\nPêche à la mouche en rivières de Bretagne.",
+  footerBio: params?.footerTexte || null,
   instagram: stegaClean(params?.instagram) || null,
   facebook:  stegaClean(params?.facebook)  || null,
   youtube:   stegaClean(params?.youtube)   || null,
   vimeo:     stegaClean(params?.vimeo)     || null,
+  lang,
 }
 ---
 

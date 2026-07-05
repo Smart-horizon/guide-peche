@@ -177,6 +177,14 @@ async function bodyToBlocks(bodyEl, $) {
         continue
       }
 
+      // Supprimer les paragraphes qui renvoient vers l'ancien site Wix (remplacé par ce site)
+      const hasWixRef = $el.find('a[href*="jeanbaptistevidalguidepeche.com"]').length > 0
+        || /jeanbaptistevidalguidepeche\.com/i.test($el.text())
+      if (hasWixRef) {
+        console.log('  ↓ Supprimé : référence ancien site Wix')
+        continue
+      }
+
       // Paragraphe texte (peut contenir inline img — peu probable ici)
       const md = []
       const block = makeBlock(nodeToSpans(el, $, md), md)

@@ -1,0 +1,218 @@
+export default {
+  name: 'newsletter',
+  title: 'Newsletter',
+  type: 'document',
+  icon: () => '📧',
+  __experimental_actions: ['create', 'update', 'publish'],
+  groups: [
+    { name: 'section',    title: '🏠 Section accueil' },
+    { name: 'popup',      title: '💬 Popup' },
+    { name: 'page',       title: '📄 Page newsletter' },
+    { name: 'technique',  title: '⚙️ Technique' },
+  ],
+  fields: [
+
+    // ── Section homepage ─────────────────────────────────────────────────────
+    {
+      name: 'sectionTitre',
+      title: 'Titre de la section',
+      type: 'string',
+      group: 'section',
+      initialValue: 'Les carnets du guide, dans votre boîte mail',
+    },
+    {
+      name: 'sectionSousTitre',
+      title: 'Sous-titre / description',
+      type: 'text',
+      rows: 3,
+      group: 'section',
+      initialValue: 'Conseils de pêche à la mouche, récits de sorties, annonces de stages et voyages. Pas de spam — seulement du contenu qui vaut le coup.',
+    },
+    {
+      name: 'sectionAvantages',
+      title: 'Avantages (3 points)',
+      type: 'array',
+      group: 'section',
+      of: [{
+        type: 'object',
+        name: 'avantage',
+        fields: [
+          { name: 'emoji', title: 'Icône (emoji)', type: 'string' },
+          { name: 'label', title: 'Texte', type: 'string' },
+        ],
+        preview: {
+          select: { title: 'label', subtitle: 'emoji' },
+          prepare({ title, subtitle }) { return { title: `${subtitle} ${title}` } },
+        },
+      }],
+      initialValue: [
+        { _key: 'av1', emoji: '🎣', label: 'Conseils et techniques exclusifs' },
+        { _key: 'av2', emoji: '🎬', label: 'Récits de sorties et vidéos' },
+        { _key: 'av3', emoji: '🌍', label: 'Voyages et destinations pêche' },
+      ],
+    },
+    {
+      name: 'sectionBoutonTexte',
+      title: 'Texte du bouton',
+      type: 'string',
+      group: 'section',
+      initialValue: "S'inscrire gratuitement",
+    },
+    {
+      name: 'sectionPlaceholder',
+      title: 'Placeholder du champ email',
+      type: 'string',
+      group: 'section',
+      initialValue: 'votre@email.fr',
+    },
+
+    // ── Popup ─────────────────────────────────────────────────────────────────
+    {
+      name: 'popupActif',
+      title: 'Afficher le popup',
+      type: 'boolean',
+      group: 'popup',
+      initialValue: true,
+    },
+    {
+      name: 'popupDelai',
+      title: 'Délai avant apparition (secondes)',
+      type: 'number',
+      group: 'popup',
+      initialValue: 15,
+      description: 'Le popup apparaît X secondes après le chargement de la page. Minimum 5s recommandé.',
+      validation: Rule => Rule.min(0).max(120),
+    },
+    {
+      name: 'popupTitre',
+      title: 'Titre du popup',
+      type: 'string',
+      group: 'popup',
+      initialValue: 'Une lettre du bord de l\'eau',
+    },
+    {
+      name: 'popupTexte',
+      title: 'Texte du popup',
+      type: 'text',
+      rows: 2,
+      group: 'popup',
+      initialValue: 'Rejoignez les pêcheurs qui reçoivent les conseils, récits et vidéos de Jean-Baptiste.',
+    },
+    {
+      name: 'popupImage',
+      title: 'Image de fond du popup',
+      type: 'image',
+      group: 'popup',
+      options: { hotspot: true },
+      description: 'Photo affichée sur la moitié gauche du popup',
+    },
+    {
+      name: 'popupBoutonTexte',
+      title: 'Texte du bouton popup',
+      type: 'string',
+      group: 'popup',
+      initialValue: "Je m'inscris",
+    },
+    {
+      name: 'popupIgnorerTexte',
+      title: 'Texte du lien "ignorer"',
+      type: 'string',
+      group: 'popup',
+      initialValue: 'Non merci',
+    },
+
+    // ── Page dédiée ───────────────────────────────────────────────────────────
+    {
+      name: 'pageTitre',
+      title: 'Page — Titre principal',
+      type: 'string',
+      group: 'page',
+      initialValue: 'L\'école buissonnière de la mouche',
+    },
+    {
+      name: 'pageSousTitre',
+      title: 'Page — Accroche',
+      type: 'text',
+      rows: 2,
+      group: 'page',
+      initialValue: 'La newsletter de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne. Une fois par mois, les secrets du terrain dans votre boîte mail.',
+    },
+    {
+      name: 'pageHeroImage',
+      title: 'Page — Image hero',
+      type: 'image',
+      group: 'page',
+      options: { hotspot: true },
+    },
+    {
+      name: 'pageBenefices',
+      title: 'Page — Ce que vous recevrez (3 blocs)',
+      type: 'array',
+      group: 'page',
+      of: [{
+        type: 'object',
+        name: 'benefice',
+        fields: [
+          { name: 'emoji',       title: 'Icône (emoji)',   type: 'string' },
+          { name: 'titre',       title: 'Titre du bloc',   type: 'string' },
+          { name: 'description', title: 'Description',     type: 'text', rows: 2 },
+        ],
+        preview: {
+          select: { title: 'titre', subtitle: 'emoji' },
+          prepare({ title, subtitle }) { return { title: `${subtitle} ${title}` } },
+        },
+      }],
+      initialValue: [
+        { _key: 'b1', emoji: '🎣', titre: 'Techniques & conseils', description: "Les astuces que Jean-Baptiste donne à ses clients en guidage. Mouches, postes, conditions — du contenu pratique tiré du terrain." },
+        { _key: 'b2', emoji: '📖', titre: 'Récits de sorties', description: "Des histoires vraies, des rivières bretonnes aux flats de Los Roques. Les réussites, les galères, les rencontres avec des poissons extraordinaires." },
+        { _key: 'b3', emoji: '🗓️', titre: 'Stages & voyages en avant-première', description: "Les dates de stages et voyages annoncées aux abonnés avant toute publication. La priorité pour les places limitées." },
+      ],
+    },
+    {
+      name: 'pageSocialProof',
+      title: 'Page — Preuve sociale (ex: "Rejoignez 500 pêcheurs…")',
+      type: 'string',
+      group: 'page',
+      initialValue: 'Rejoignez des centaines de pêcheurs qui reçoivent déjà la lettre.',
+    },
+    {
+      name: 'pageFrequence',
+      title: 'Page — Fréquence d\'envoi',
+      type: 'string',
+      group: 'page',
+      initialValue: '1 à 2 fois par mois · Zéro spam · Désabonnement en 1 clic',
+    },
+
+    // ── Technique ─────────────────────────────────────────────────────────────
+    {
+      name: 'formAction',
+      title: 'URL du formulaire (Mailchimp / Brevo / autre)',
+      type: 'url',
+      group: 'technique',
+      description: "Laissez vide pour utiliser l'URL par défaut (/api/newsletter). Renseignez l'URL Mailchimp ou Brevo une fois votre compte configuré.",
+    },
+    {
+      name: 'seoTitle',
+      title: 'Titre SEO',
+      type: 'string',
+      group: 'technique',
+      initialValue: 'Newsletter — Conseils pêche mouche | Jean-Baptiste Vidal',
+      validation: Rule => Rule.max(65).warning('Idéalement moins de 65 caractères'),
+    },
+    {
+      name: 'seoDescription',
+      title: 'Description SEO',
+      type: 'text',
+      rows: 2,
+      group: 'technique',
+      initialValue: 'Recevez les conseils, récits de sorties et annonces de stages de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne.',
+      validation: Rule => Rule.max(160).warning('Idéalement moins de 160 caractères'),
+    },
+  ],
+
+  preview: {
+    prepare() {
+      return { title: '📧 Newsletter — configuration unique' }
+    },
+  },
+}

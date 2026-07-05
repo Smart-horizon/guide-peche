@@ -6,7 +6,7 @@ import imageUrlBuilder from '@sanity/image-url'
 const client = createClient({
   projectId: 'uievv97s',
   dataset: 'production',
-  useCdn: true,
+  useCdn: false,
   apiVersion: '2024-01-01',
 })
 
@@ -24,8 +24,9 @@ const especeLabel = {
   alose: 'Alose', brochet: 'Brochet', exotique: 'Exotique',
 }
 
-// Espèces présentes dans les articles pour le filtre
-const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean))]
+// Tags de filtrage présents dans les articles (par ordre d'importance)
+const FILTER_TAGS_ORDER = ['Bar', 'Alose', 'Saumon', 'Truite', 'Brochet', 'Exotique', 'Voyage', 'Réservoir', 'Spey Cast', 'Masterclass']
+const filtresPresents = FILTER_TAGS_ORDER.filter(tag => articles.some(a => (a.tags || []).includes(tag)))
 ---
 
 <BaseLayout
@@ -48,26 +49,32 @@ const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean)
   <section class="section blog-section">
     <div class="container">
 
-      {especesPresentes.length > 0 && (
+      {filtresPresents.length > 0 && (
         <nav class="filtres" id="filtres-nav">
           <a href="/blog" class="filtre filtre--tous">Tous</a>
-          {especesPresentes.map(esp => (
-            <a href={`/blog?espece=${esp}`} class="filtre" data-espece={esp}>{especeLabel[esp] ?? esp}</a>
+          {filtresPresents.map(tag => (
+            <a href={`/blog?tag=${encodeURIComponent(tag)}`} class="filtre" data-tag={tag}>{tag}</a>
           ))}
         </nav>
       )}
 
       {articles.length > 0 ? (
         <div class="articles-grid">
-          {articles.map(article => (
+          {articles.map(article => {
+            const shortTags = (article.tags || []).filter(t => t.length < 26).slice(0, 4)
+            return (
             <a href={`/blog/${article.slug?.current}`} class="article-card"
                data-espece={article.espece || ''}
                data-tags={article.tags?.join(',') || ''}>
               <div class="article-img" style={article.image
                 ? `background-image: url(${urlFor(article.image).width(600).height(380).fit('crop').crop('focalpoint').url()})`
                 : ''}>
-                {article.espece && (
-                  <span class="article-espece">{especeLabel[article.espece] ?? article.espece}</span>
+                {shortTags.length > 0 ? (
+                  <div class="article-badges">
+                    {shortTags.map(t => <span class="article-badge">{t}</span>)}
+                  </div>
+                ) : (
+                  article.espece && <span class="article-badge">{especeLabel[article.espece] ?? article.espece}</span>
                 )}
               </div>
               <div class="article-body">
@@ -81,7 +88,8 @@ const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean)
                 <span class="article-lire">Lire l'article →</span>
               </div>
             </a>
-          ))}
+            )
+          })}
         </div>
       ) : (
         <div class="blog-vide">
@@ -178,6 +186,26 @@ const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean)
     background: var(--color-ocean) center / cover no-repeat;
   }
 
+  .article-badges {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+  .article-badge {
+    background: var(--color-ocean-main);
+    color: white;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.55rem;
+    border-radius: 2px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  /* fallback legacy class (plus utilisé mais par sécurité) */
   .article-espece {
     position: absolute;
     top: 0.75rem;
@@ -261,27 +289,24 @@ const especesPresentes = [...new Set(articles.map(a => a.espece).filter(Boolean)
 </style>
 
 <script>
-  const params   = new URLSearchParams(location.search)
-  const activeE  = params.get('espece')
-  const activeT  = params.get('tag')
+  const params  = new URLSearchParams(location.search)
+  const activeT = params.get('tag')
 
   // ── Filtrage des cartes ──
-  if (activeE || activeT) {
+  if (activeT) {
     document.querySelectorAll('.article-card').forEach(card => {
       const el = card as HTMLElement
-      const matchE = !activeE || el.dataset.espece === activeE
       const cardTags = (el.dataset.tags || '').split(',').map(t => t.trim())
-      const matchT = !activeT || cardTags.includes(decodeURIComponent(activeT))
-      el.style.display = (matchE && matchT) ? '' : 'none'
+      el.style.display = cardTags.includes(decodeURIComponent(activeT)) ? '' : 'none'
     })
   }
 
-  // ── État actif des filtres espèce ──
+  // ── État actif des filtres ──
   const tousEl = document.querySelector('.filtre--tous') as HTMLElement | null
-  if (tousEl) tousEl.classList.toggle('filtre--actif', !activeE && !activeT)
+  if (tousEl) tousEl.classList.toggle('filtre--actif', !activeT)
 
-  document.querySelectorAll<HTMLElement>('.filtre[data-espece]').forEach(f => {
-    f.classList.toggle('filtre--actif', f.dataset.espece === activeE)
+  document.querySelectorAll<HTMLElement>('.filtre[data-tag]').forEach(f => {
+    f.classList.toggle('filtre--actif', f.dataset.tag === decodeURIComponent(activeT || ''))
   })
 
   // ── Pill "tag actif" ──

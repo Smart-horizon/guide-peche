@@ -1,4 +1,6 @@
 ---
+export const prerender = true
+
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
@@ -6,7 +8,7 @@ import imageUrlBuilder from '@sanity/image-url'
 const client = createClient({
   projectId: 'uievv97s',
   dataset: 'production',
-  useCdn: true,
+  useCdn: false,
   apiVersion: '2024-01-01',
 })
 
@@ -24,6 +26,9 @@ const especeLabel = {
   bar: 'Sea bass', truite: 'Trout', saumon: 'Salmon',
   alose: 'Shad', brochet: 'Pike', exotique: 'Saltwater',
 }
+
+const FILTER_TAGS_ORDER = ['Bar', 'Alose', 'Saumon', 'Truite', 'Brochet', 'Exotique', 'Voyage', 'Réservoir', 'Spey Cast', 'Masterclass']
+const filtresPresents = FILTER_TAGS_ORDER.filter(tag => articles.some(a => (a.tags || []).includes(tag)))
 ---
 
 <BaseLayout
@@ -45,17 +50,33 @@ const especeLabel = {
 
   <section class="section blog-section">
     <div class="container">
+
+      {filtresPresents.length > 0 && (
+        <nav class="filtres" id="filtres-nav">
+          <a href="/en/blog" class="filtre filtre--tous">All</a>
+          {filtresPresents.map(tag => (
+            <a href={`/en/blog?tag=${encodeURIComponent(tag)}`} class="filtre" data-tag={tag}>{tag}</a>
+          ))}
+        </nav>
+      )}
+
       {articles.length > 0 ? (
         <div class="articles-grid">
-          {articles.map(article => (
+          {articles.map(article => {
+            const shortTags = (article.tags || []).filter(t => t.length < 26).slice(0, 4)
+            return (
             <a href={`/en/blog/${article.slug?.current}`} class="article-card"
                data-espece={article.espece || ''}
                data-tags={article.tags?.join(',') || ''}>
               <div class="article-img" style={article.image
                 ? `background-image: url(${urlFor(article.image).width(600).height(380).fit('crop').crop('focalpoint').url()})`
                 : ''}>
-                {article.espece && (
-                  <span class="article-espece">{especeLabel[article.espece] ?? article.espece}</span>
+                {shortTags.length > 0 ? (
+                  <div class="article-badges">
+                    {shortTags.map(t => <span class="article-badge">{t}</span>)}
+                  </div>
+                ) : (
+                  article.espece && <span class="article-badge">{especeLabel[article.espece] ?? article.espece}</span>
                 )}
               </div>
               <div class="article-body">
@@ -71,7 +92,8 @@ const especeLabel = {
                 <span class="article-lire">Read the article →</span>
               </div>
             </a>
-          ))}
+            )
+          })}
         </div>
       ) : (
         <div class="blog-vide">
@@ -109,10 +131,19 @@ const especeLabel = {
   .hero-sub { color: rgba(255,255,255,0.75); font-size: 1rem; }
   .eyebrow { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-ocean-light); font-weight: 500; }
 
+  .filtres { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 3rem; }
+  .filtre { padding: 0.4rem 1rem; border: 1.5px solid var(--color-ocean-main); border-radius: 2px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ocean-main); transition: all 0.2s; }
+  .filtre:hover, .filtre--actif { background: var(--color-ocean-main); color: white; }
+  .filtre--tag-actif { background: var(--color-ocean); color: white; border-color: var(--color-ocean); display: inline-flex; align-items: center; gap: 0.4rem; }
+  .filtre--tag-actif .tag-close { color: rgba(255,255,255,0.7); font-weight: 700; line-height: 1; text-decoration: none; }
+  .filtre--tag-actif .tag-close:hover { color: white; }
+
   .articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
   .article-card { display: block; text-decoration: none; color: var(--color-text); border-radius: 3px; overflow: hidden; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.25s ease, box-shadow 0.25s ease; }
   .article-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
   .article-img { position: relative; aspect-ratio: 16/10; background: var(--color-ocean) center / cover no-repeat; }
+  .article-badges { position: absolute; top: 0.75rem; left: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .article-badge { background: var(--color-ocean-main); color: white; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.22rem 0.55rem; border-radius: 2px; font-weight: 500; white-space: nowrap; }
   .article-espece { position: absolute; top: 0.75rem; left: 0.75rem; background: var(--color-ocean-main); color: white; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 2px; font-weight: 500; }
   .article-body { padding: 1.25rem 1.5rem 1.5rem; }
   .article-date { display: block; font-size: 0.72rem; color: var(--color-text-muted); letter-spacing: 0.05em; margin-bottom: 0.5rem; }
@@ -128,11 +159,30 @@ const especeLabel = {
 <script>
   const params  = new URLSearchParams(location.search)
   const activeT = params.get('tag')
+
   if (activeT) {
     document.querySelectorAll('.article-card').forEach(card => {
       const el = card as HTMLElement
       const cardTags = (el.dataset.tags || '').split(',').map(t => t.trim())
       el.style.display = cardTags.includes(decodeURIComponent(activeT)) ? '' : 'none'
     })
+  }
+
+  const tousEl = document.querySelector('.filtre--tous') as HTMLElement | null
+  if (tousEl) tousEl.classList.toggle('filtre--actif', !activeT)
+
+  document.querySelectorAll<HTMLElement>('.filtre[data-tag]').forEach(f => {
+    f.classList.toggle('filtre--actif', f.dataset.tag === decodeURIComponent(activeT || ''))
+  })
+
+  if (activeT) {
+    const nav = document.getElementById('filtres-nav')
+    if (nav) {
+      const pill = document.createElement('span')
+      pill.className = 'filtre filtre--tag-actif'
+      const label = decodeURIComponent(activeT)
+      pill.innerHTML = `${label} <a href="/en/blog" class="tag-close" title="Remove filter">×</a>`
+      nav.appendChild(pill)
+    }
   }
 </script>

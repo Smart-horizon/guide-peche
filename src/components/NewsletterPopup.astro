@@ -1,0 +1,357 @@
+---
+interface Props {
+  actif?: boolean
+  delai?: number
+  titre?: string
+  texte?: string
+  imageUrl?: string
+  boutonTexte?: string
+  ignorerTexte?: string
+  formAction?: string
+}
+
+const {
+  actif       = true,
+  delai       = 15,
+  titre       = "Une lettre du bord de l'eau",
+  texte       = "Rejoignez les pêcheurs qui reçoivent les conseils, récits et vidéos de Jean-Baptiste.",
+  imageUrl    = '/images/bar-a-vue.jpg',
+  boutonTexte = "Je m'inscris",
+  ignorerTexte = 'Non merci',
+  formAction  = '/newsletter',
+} = Astro.props
+
+if (!actif) return
+---
+
+<div
+  class="nl-popup"
+  id="nl-popup"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Inscription newsletter"
+  data-delay={delai}
+  data-action={formAction}
+>
+  <div class="nl-popup__backdrop" id="nl-popup-backdrop"></div>
+
+  <div class="nl-popup__card">
+    <button class="nl-popup__close" id="nl-popup-close" aria-label="Fermer">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Image gauche -->
+    <div
+      class="nl-popup__image"
+      style={`background-image: url('${imageUrl}')`}
+      aria-hidden="true"
+    >
+      <div class="nl-popup__image-overlay"></div>
+      <p class="nl-popup__image-label">🪶 Guide mouche<br/>Bretagne-Sud</p>
+    </div>
+
+    <!-- Contenu droit -->
+    <div class="nl-popup__body">
+      <p class="nl-popup__eyebrow">📧 Newsletter</p>
+      <h2 class="nl-popup__titre">{titre}</h2>
+      <p class="nl-popup__texte">{texte}</p>
+
+      <form class="nl-popup__form" id="nl-popup-form">
+        <input
+          type="email"
+          name="email"
+          placeholder="votre@email.fr"
+          required
+          class="nl-popup__input"
+          aria-label="Votre adresse e-mail"
+        />
+        <button type="submit" class="nl-popup__btn">{boutonTexte}</button>
+        <div class="nl-popup__success" id="nl-popup-success" aria-live="polite">
+          ✅ Merci ! À très vite dans votre boîte mail.
+        </div>
+      </form>
+
+      <button class="nl-popup__ignorer" id="nl-popup-ignorer">{ignorerTexte}</button>
+      <p class="nl-popup__mention">Désinscription en 1 clic · Aucun spam</p>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ delai, formAction }}>
+  const STORAGE_KEY = 'nl_popup_closed'
+  const STORAGE_DELAY = 7 // jours avant de reafficher
+
+  function shouldShow() {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (!stored) return true
+    const ts = parseInt(stored, 10)
+    const diff = (Date.now() - ts) / (1000 * 60 * 60 * 24)
+    return diff > STORAGE_DELAY
+  }
+
+  function closePopup() {
+    const popup = document.getElementById('nl-popup')
+    if (!popup) return
+    popup.classList.remove('nl-popup--visible')
+    setTimeout(() => { popup.style.display = 'none' }, 350)
+    localStorage.setItem(STORAGE_KEY, String(Date.now()))
+  }
+
+  function openPopup() {
+    const popup = document.getElementById('nl-popup')
+    if (!popup) return
+    popup.style.display = 'flex'
+    requestAnimationFrame(() => popup.classList.add('nl-popup--visible'))
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!shouldShow()) return
+
+    setTimeout(openPopup, delai * 1000)
+
+    document.getElementById('nl-popup-close')?.addEventListener('click', closePopup)
+    document.getElementById('nl-popup-backdrop')?.addEventListener('click', closePopup)
+    document.getElementById('nl-popup-ignorer')?.addEventListener('click', closePopup)
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePopup()
+    })
+
+    const form = document.getElementById('nl-popup-form')
+    const success = document.getElementById('nl-popup-success')
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const email = form.querySelector('input[name="email"]')?.value
+
+      if (formAction && formAction.startsWith('http')) {
+        const fd = new FormData()
+        fd.append('email', email)
+        try {
+          await fetch(formAction, { method: 'POST', body: fd, mode: 'no-cors' })
+        } catch {}
+      }
+
+      if (success) {
+        form.querySelector('input')?.setAttribute('style', 'display:none')
+        form.querySelector('button[type="submit"]')?.setAttribute('style', 'display:none')
+        success.style.display = 'block'
+      }
+      localStorage.setItem(STORAGE_KEY, String(Date.now() + 30 * 24 * 60 * 60 * 1000))
+      setTimeout(closePopup, 2500)
+    })
+  })
+</script>
+
+<style>
+  .nl-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .nl-popup__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 24, 31, 0.75);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .nl-popup--visible .nl-popup__backdrop {
+    opacity: 1;
+  }
+
+  .nl-popup__card {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    width: 100%;
+    max-width: 680px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #0d1f2b;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    transform: translateY(20px) scale(0.97);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+  }
+
+  .nl-popup--visible .nl-popup__card {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  /* ── Close ── */
+  .nl-popup__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 10;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 50%;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .nl-popup__close:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  /* ── Image ── */
+  .nl-popup__image {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 320px;
+  }
+
+  .nl-popup__image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(7,24,31,0.7) 0%, rgba(7,24,31,0.1) 60%);
+  }
+
+  .nl-popup__image-label {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.6;
+    font-weight: 600;
+  }
+
+  /* ── Body ── */
+  .nl-popup__body {
+    padding: 2.25rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nl-popup__eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light, #7EC8E3);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .nl-popup__titre {
+    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+  }
+
+  .nl-popup__texte {
+    font-size: 0.87rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Form ── */
+  .nl-popup__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .nl-popup__input {
+    padding: 0.8rem 1rem;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 3px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: var(--font-sans, 'DM Sans', sans-serif);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .nl-popup__input::placeholder { color: rgba(255,255,255,0.3); }
+  .nl-popup__input:focus { border-color: var(--color-ocean-light, #7EC8E3); }
+
+  .nl-popup__btn {
+    padding: 0.85rem 1.25rem;
+    background: var(--color-ocean, #1B5E8A);
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: var(--font-sans, 'DM Sans', sans-serif);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+  }
+
+  .nl-popup__btn:hover { background: var(--color-ocean-mid, #5BA3C9); }
+
+  .nl-popup__success {
+    display: none;
+    color: var(--color-ocean-light, #7EC8E3);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+  }
+
+  .nl-popup__ignorer {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.78rem;
+    cursor: pointer;
+    text-decoration: underline;
+    align-self: flex-start;
+    padding: 0;
+    font-family: var(--font-sans, 'DM Sans', sans-serif);
+    transition: color 0.2s;
+  }
+
+  .nl-popup__ignorer:hover { color: rgba(255,255,255,0.6); }
+
+  .nl-popup__mention {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .nl-popup__card {
+      grid-template-columns: 1fr;
+    }
+    .nl-popup__image {
+      min-height: 180px;
+    }
+    .nl-popup__body {
+      padding: 1.5rem 1.25rem;
+    }
+  }
+</style>

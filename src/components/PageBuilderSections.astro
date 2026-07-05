@@ -676,7 +676,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
     <section class={`section pb-dates ${bg(s.fond)||'section--dark'}`}>
       <div class="container">
         {s.eyebrow && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
-        {s.titre   && <h2 class="pb-prog__h2" style="color:white">{s.titre}</h2>}
+        {s.titre   && <h2 class="pb-dates__h2">{s.titre}</h2>}
         {s.intro   && <p class="pb-dates__intro">{s.intro}</p>}
         <div class="pb-dates__grid">
           {s.sejours?.map((sej: any) => {
@@ -2737,20 +2737,42 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
 }
 
 /* ── DATES DES SÉJOURS ── */
+/* Titre de section — blanc sur fond sombre, ocean sur fond clair */
+.pb-dates__h2 {
+  font-family: var(--font-serif); font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 500; line-height: 1.2; color: white; margin-bottom: 0.5rem;
+}
+.section--white .pb-dates__h2,
+.section--sand  .pb-dates__h2,
+.section--mist  .pb-dates__h2 { color: var(--color-ocean); }
+
 .pb-dates__intro {
   color: rgba(255,255,255,0.7); font-size: 1rem; line-height: 1.7;
   max-width: 640px; margin-bottom: 2.5rem;
 }
+.section--white .pb-dates__intro,
+.section--sand  .pb-dates__intro,
+.section--mist  .pb-dates__intro { color: var(--color-text-muted); }
+
 .pb-dates__grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem; margin-bottom: 2.5rem;
 }
+
+/* Cartes — overlay discret sur fond sombre, carte ocean pleine sur fond clair */
 .pb-dates__card {
   background: rgba(255,255,255,0.07);
   border-radius: 8px; padding: 1.75rem;
   border-left: 3px solid var(--color-ocean-light);
   display: flex; flex-direction: column; gap: 0.6rem;
 }
+.section--white .pb-dates__card,
+.section--sand  .pb-dates__card,
+.section--mist  .pb-dates__card {
+  background: var(--color-ocean);
+  box-shadow: 0 4px 20px rgba(13,43,62,0.15);
+}
+
 .pb-dates__card-header {
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
 }
