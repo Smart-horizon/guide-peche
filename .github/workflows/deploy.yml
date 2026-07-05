@@ -10,6 +10,12 @@ on:
   # Permet de déclencher manuellement depuis l'onglet Actions de GitHub
   workflow_dispatch:
 
+# Un seul déploiement à la fois : un nouveau run annule le précédent encore
+# en cours, évitant qu'un ancien build n'écrase le plus récent (last-writer-wins).
+concurrency:
+  group: deploy-cloudflare
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Build & Deploy
