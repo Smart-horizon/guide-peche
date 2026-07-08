@@ -249,9 +249,10 @@ function isActive(href: string, prefix?: string) {
 
     <nav class="site-nav" id="site-nav">
       <ul>
+        {/* children?.length — un tableau vide venant de Sanity ne doit pas afficher de chevron */}
         {navLinks.map(({ label, href, children, activePrefix }) => (
-          <li class:list={[{ 'has-dropdown': children }]}>
-            {children ? (
+          <li class:list={[{ 'has-dropdown': children?.length }]}>
+            {children?.length ? (
               <>
                 <a href={navHref(href)} class:list={['nav-link', { active: isActive(href, activePrefix) }]}>
                   {label}
