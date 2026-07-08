@@ -65,3 +65,29 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: e1c99d02d3183b6fe3a4f517bb657e54
+
+  # ── Worker d'APERÇU (Sanity Presentation) — SSR + brouillons + overlays ──────
+  # Job séparé : un échec ici ne bloque PAS le déploiement du site public.
+  deploy-preview:
+    name: Build & Deploy — Aperçu Sanity
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build & Deploy worker d'aperçu
+        run: bash deploy-preview.sh
+        env:
+          SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: e1c99d02d3183b6fe3a4f517bb657e54

@@ -33,3 +33,6 @@ scraped/images/
 
 # fichiers temporaires de debug
 tmp_*.html
+
+# Cloudflare adapter — contient SANITY_TOKEN, ne jamais committer
+.dev.vars

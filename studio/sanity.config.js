@@ -318,8 +318,9 @@ export default defineConfig({
     presentationTool({
       name: 'preview',
       title: '👁️ Aperçu du site',
-      // /preview/* = route SSR qui affiche les BROUILLONS en temps réel
-      previewUrl: 'https://guide-peche.smart-horizon.workers.dev',
+      // Worker d'APERÇU dédié (deploy-preview.sh) : SSR + brouillons temps réel
+      // + overlays Visual Editing. Le site public (guide-peche) reste sans stega.
+      previewUrl: 'https://guide-peche-preview.smart-horizon.workers.dev',
       resolve: {
         locations: {
           // Témoignages → page publiée (pas de preview SSR pour cette page statique)

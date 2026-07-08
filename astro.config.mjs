@@ -4,9 +4,14 @@ import sanity from '@sanity/astro'
 import sitemap from '@astrojs/sitemap'
 import react from '@astrojs/react'
 
+// Mode aperçu (worker dédié) : SSR global pour servir les brouillons + overlays.
+// Build public : reste en "static" → comportement identique à aujourd'hui.
+const PREVIEW = process.env.PUBLIC_SANITY_PREVIEW === 'true'
+
 export default defineConfig({
   // Astro v6 : "static" supporte nativement les pages SSR (prerender = false)
   // L'adapter Cloudflare génère dist/_worker.js pour les routes dynamiques
+  output: PREVIEW ? 'server' : 'static',
   adapter: cloudflare({ imageService: 'passthrough' }),
   site: 'https://jeanbaptistevidalguidepeche.com',
   vite: {

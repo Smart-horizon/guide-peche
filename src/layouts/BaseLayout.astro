@@ -1,9 +1,10 @@
 ---
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
-import { client as stegaClient } from '../lib/sanity.js'
+import { client as stegaClient, visualEditingEnabled } from '../lib/sanity.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
+import { VisualEditing } from '@sanity/astro/visual-editing'
 
 const builder = imageUrlBuilder(stegaClient)
 const urlFor = (source: any) => { const b = builder.image(source); const hs = source?.hotspot; return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b }
@@ -97,6 +98,8 @@ const footerProps = {
       <slot />
     </main>
     <Footer {...footerProps} />
+    {/* Overlays Visual Editing — montés uniquement dans le worker d'aperçu */}
+    <VisualEditing enabled={visualEditingEnabled} />
   </body>
 </html>
 
