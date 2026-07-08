@@ -349,8 +349,22 @@ async function processArticle(filename) {
 
   const slug = filename.replace(/\.html$/, '')  // conserve l'ID BlogSpirit
 
-  const seoDescription = ($('meta[name="description"]').attr('content') || '').slice(0, 160)
-  const extrait        = ($('meta[name="description"]').attr('content') || '').slice(0, 300)
+  // Les meta descriptions BlogSpirit sont doublement encodées (&amp;nbsp; → &nbsp; littéral)
+  // → on décode les entités HTML restantes après l'extraction cheerio.
+  const NAMED_ENTITIES = { nbsp: ' ', amp: '&', quot: '"', apos: "'", lt: '<', gt: '>', eacute: 'é', egrave: 'è', ecirc: 'ê', euml: 'ë', agrave: 'à', acirc: 'â', ccedil: 'ç', icirc: 'î', iuml: 'ï', ocirc: 'ô', ouml: 'ö', ugrave: 'ù', ucirc: 'û', uuml: 'ü', hellip: '…', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“', laquo: '«', raquo: '»', euro: '€', deg: '°', ndash: '–', mdash: '—', oelig: 'œ' }
+  const decodeEntities = (s) => {
+    let out = s
+    for (let i = 0; i < 2; i++) {
+      out = out
+        .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+        .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+        .replace(/&([a-z]+);/gi, (m, name) => NAMED_ENTITIES[name.toLowerCase()] ?? m)
+    }
+    return out.replace(/ {2,}/g, ' ').trim()
+  }
+  const metaDesc       = decodeEntities($('meta[name="description"]').attr('content') || '')
+  const seoDescription = metaDesc.slice(0, 160)
+  const extrait        = metaDesc.slice(0, 300)
 
   const rawTags = $('span.box-article-tags a, span[itemprop="keywords"] a')
     .map((_, el) => $(el).text().trim()).get().filter(Boolean)
