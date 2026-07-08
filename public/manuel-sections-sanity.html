@@ -36,7 +36,7 @@ body{font-family:var(--sans);background:var(--beige);color:var(--text);line-heig
 /* Tabs */
 .tabs-wrap{background:var(--dark);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;border-bottom:2px solid rgba(255,255,255,.07)}
 .tabs-wrap::-webkit-scrollbar{display:none}
-.tabs{display:flex;max-width:1280px;margin:0 auto;padding:0 1.5rem;gap:1px}
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;max-width:1280px;margin:0 auto;padding:0 1.5rem;gap:1px}
 .tab{padding:.7rem .85rem .6rem;font-family:var(--sans);font-size:.68rem;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);white-space:nowrap;border-bottom:2.5px solid transparent;transition:all .13s;display:flex;flex-direction:column;align-items:center;gap:3px}
 .tab:hover{color:rgba(255,255,255,.75)}
 .tab.on{color:#7EC8E3;font-weight:500;border-bottom-color:var(--ocean)}
