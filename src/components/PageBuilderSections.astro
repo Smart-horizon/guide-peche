@@ -280,7 +280,11 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               {s.tarif  && <><p class="info-lbl">{lang === 'en' ? 'Rate'     : 'Tarif'}</p> <p class="info-val">{s.tarif}</p></>}
               {s.duree  && <><p class="info-lbl">{lang === 'en' ? 'Duration' : 'Durée'}</p> <p class="info-val">{s.duree}</p></>}
               {s.lignesSupp?.map((l: any) => l.label && (
-                <><p class="info-lbl">{l.label}</p><p class="info-val">{l.valeur}</p></>
+                <>
+                  <p class="info-lbl">{l.label}</p>
+                  <p class="info-val">{l.valeur}</p>
+                  {stegaClean(l.note) && <p class="info-note">{l.note}</p>}
+                </>
               ))}
               <p class="info-lbl">Contact</p>
               <p class="info-val">06 87 30 34 56<br/>enjoy.fishing@hotmail.fr</p>
@@ -1812,6 +1816,13 @@ span.ts-row__name { color: var(--color-text, #1a1a1f); }
   font-size: 0.92rem;
   color: var(--color-text);
   line-height: 1.55;
+}
+.info-note {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--color-text-muted, #6b7280);
+  line-height: 1.5;
+  margin-top: 0.15rem;
 }
 .info-card-btn {
   display: block;
