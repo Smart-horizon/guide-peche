@@ -627,4 +627,13 @@ function isActive(href: string, prefix?: string) {
     }
   }
 
+  /* ── Petits smartphones : libère de la place pour que le titre centré
+        "Guide de pêche à la mouche" tienne en entier (pas de troncature) ── */
+  @media (max-width: 460px) {
+    .header-inner { padding: 0 1rem; }
+    .logo-img { height: 54px; }
+    .header-title { padding: 0 0.25rem; }
+    .ht-tagline { letter-spacing: 0.02em; }
+  }
+
 </style>

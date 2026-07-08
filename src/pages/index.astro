@@ -831,6 +831,10 @@ const nlPopupImageUrl  = nl?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'
     color: white;
     aspect-ratio: 4/3;
     background: var(--color-ocean);
+    /* Empêche la carte (surtout --featured, grid-column 1/-1) de dépasser la
+       largeur de sa colonne de grille → évite le débordement horizontal mobile */
+    max-width: 100%;
+    min-width: 0;
   }
   .hp-mat-card--featured {
     grid-column: 1 / -1;
