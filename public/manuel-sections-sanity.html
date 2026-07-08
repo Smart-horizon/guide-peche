@@ -1344,16 +1344,57 @@ const EX={
   tarifs:       {p:'Tarifs',             u:'/tarifs'},
 }
 
+/* Sélecteur CSS de la section sur la vraie page (pour la faire défiler à l'écran).
+   null = pas de repère fiable → on montre le haut de la page. */
+const SEL={
+  hero:'.pb-hero', titre:'.pb-st', banniere:'.pb-banniere', bannierecard:'.bc-section',
+  cta:'.pb-cta', texte:'.pb-texte', texteimg:'.pb-ti', galerie:'.pb-galerie',
+  carrousel:'.pb-carr-outer', video:'.pb-video2', videos:'.pb-videos', lienblog:'.pb-blog-section',
+  cards:'.pb-cards', cards2:'.pb-cards2', cards3:'.wf3-section', grille:'.pb-hub',
+  equipement:'.pb-equip', intro:'.pb-intro', programme:'.pb-prog', progtexte:'.pb-prog-txt',
+  progcartes:'.pb-prog-cart', selection:'.pb-sel', stats:'.pb-bandeau', bilan:'.pb-bilan',
+  dates:'.pb-dates', choix:null, frise:'.frise-header', liste:null,
+  partenaires:'.pb-part-section', revuepresse:'.pb-press-section', temoignageshp:'.hp-temo',
+  prestationshp:null, guidehp:'.guide-section', boncadeauhp:'.hp-cadeau', materielhp:'.hp-materiel',
+  materielintro:'.pb-mat-intro', materielnav:'.pb-mat-nav', tarifs:'.pb-tarifs',
+}
+
+/* ── Charge la vraie page en iframe (même domaine) et la défile jusqu'à la section ── */
+function loadExample(url, sel){
+  const host=document.getElementById('ex-frame')
+  if(!host) return
+  const W=1180
+  const ifr=document.createElement('iframe')
+  ifr.setAttribute('scrolling','no'); ifr.setAttribute('tabindex','-1'); ifr.setAttribute('aria-hidden','true')
+  ifr.style.cssText='width:'+W+'px;height:900px;border:0;background:#fff;pointer-events:none;transform-origin:top left;transform:scale('+(host.clientWidth/W)+')'
+  ifr.src=SITE+url
+  ifr.onload=function(){
+    try{
+      const win=ifr.contentWindow, doc=win.document
+      const hdr=doc.getElementById('site-header'); if(hdr) hdr.style.display='none'
+      function go(){ let y=0; if(sel){ const el=doc.querySelector(sel); if(el) y=win.scrollY+el.getBoundingClientRect().top-14 } win.scrollTo(0,Math.max(0,y)) }
+      go(); setTimeout(go,500); setTimeout(go,1400)
+    }catch(e){}
+    const l=host.querySelector('.ex-load'); if(l) l.style.display='none'
+  }
+  host.appendChild(ifr)
+}
+
 /* ── showSec ─────────────────────────────────────────────── */
 function showSec(id){
   const s=SECS.find(x=>x.id===id)
   if(!s) return
   curId=id
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.id===id))
-  document.getElementById('preview').innerHTML=`<div style="overflow:hidden">${s.preview()}</div>`
-  const ex=EX[s.id]
-  const exHtml=ex?`<a href="${SITE}${ex.u}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-size:10.5px;color:#7EC8E3;text-decoration:none;background:rgba(126,200,227,.1);border:1px solid rgba(126,200,227,.28);padding:3px 10px;border-radius:20px;font-weight:500">🔗 Voir un exemple en ligne&nbsp;: ${ex.p} <span style="opacity:.7">↗</span></a>`:''
-  let html=`<div style="padding:7px 14px 8px;background:#161616;border-bottom:1px solid rgba(255,255,255,.08)"><div style="font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:2px">Nom dans Sanity Studio</div><div style="font-size:11.5px;color:#7EC8E3;font-weight:500">${s.sanityTitle||s.icon+' '+s.name}</div>${exHtml}</div>`+
+  const ex=EX[s.id], sel=SEL[s.id]
+  const capCss='font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:#7a8794;padding:9px 14px 6px;font-weight:700'
+  document.getElementById('preview').innerHTML=
+    (ex?`<div style="${capCss}">📷 La vraie section, en direct du site — page «&nbsp;${ex.p}&nbsp;»</div>`
+        +`<div id="ex-frame" style="position:relative;height:300px;overflow:hidden;background:#fff;border-bottom:3px solid #f0eff0"><div class="ex-load" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa">Chargement de la vraie section…</div></div>`:'')
+    +`<div style="${capCss}">✏️ Schéma annoté — les numéros renvoient aux champs Sanity ci-contre</div>`
+    +`<div style="overflow:hidden">${s.preview()}</div>`
+  if(ex) loadExample(ex.u, sel)
+  let html=`<div style="padding:7px 14px 8px;background:#161616;border-bottom:1px solid rgba(255,255,255,.08)"><div style="font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:2px">Nom dans Sanity Studio</div><div style="font-size:11.5px;color:#7EC8E3;font-weight:500">${s.sanityTitle||s.icon+' '+s.name}</div></div>`+
            (s.warn?`<div class="sf-warn">⚠️ ${s.warn}</div>`:'')+
            (s.tip?`<div class="sf-tip" style="margin:14px 14px 0">💡 ${s.tip}</div>`:'')+
            `<div class="sf-wrap">`
