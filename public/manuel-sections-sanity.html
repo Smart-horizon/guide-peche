@@ -1301,6 +1301,49 @@ const CATS=[
 
 let curCat='all', curId=null
 
+/* ── Exemples réels en ligne — chaque section → une vraie page du site ── */
+const SITE='https://guide-peche.smart-horizon.workers.dev'
+const EX={
+  hero:         {p:'Accueil',            u:'/'},
+  titre:        {p:'Cours de lancer',    u:'/cours-de-lancer-peche-a-la-mouche'},
+  banniere:     {p:'Bon cadeau',         u:'/bon-cadeau'},
+  bannierecard: {p:'Accueil',            u:'/'},
+  cta:          {p:'Bon cadeau',         u:'/bon-cadeau'},
+  texte:        {p:'Mes partenaires',    u:'/partenaires-jeanbaptistevidal'},
+  texteimg:     {p:'Le Guide',           u:'/jean-baptiste-vidal-moniteur-guide-de-peche'},
+  galerie:      {p:'Masterclass Nymphe', u:'/master-class-nymphe-au-fil'},
+  carrousel:    {p:'Le Guide',           u:'/jean-baptiste-vidal-moniteur-guide-de-peche'},
+  video:        {p:'Vidéos',             u:'/videos-jeanbaptiste-vidal-moniteur-guide-de-peche'},
+  videos:       {p:'Mes mouches',        u:'/mouches-de-peche-jeanbaptiste-vidal'},
+  lienblog:     {p:'Alose',              u:'/peche-de-l-alose-a-la-mouche'},
+  cards:        {p:'Pêche du bar',       u:'/peche-du-bar-a-la-mouche'},
+  cards2:       {p:'Initiation bar',     u:'/initiation-peche-du-bar-a-la-mouche'},
+  cards3:       {p:'Accueil',            u:'/'},
+  grille:       {p:'Mon matériel',       u:'/materiel-jeanbaptistevidal'},
+  equipement:   {p:'Matériel bar',       u:'/materiel-mouche-bar'},
+  intro:        {p:'Tarifs',             u:'/tarifs'},
+  programme:    {p:'Initiation',         u:'/initiation-peche-a-la-mouche'},
+  progtexte:    {p:'Le Guide',           u:'/jean-baptiste-vidal-moniteur-guide-de-peche'},
+  progcartes:   {p:'Bon cadeau',         u:'/bon-cadeau'},
+  selection:    {p:'Truite',             u:'/peche-de-la-truite-a-la-mouche-en-bretagne'},
+  stats:        {p:'Voyages',            u:'/voyages-peche-mouche'},
+  bilan:        {p:'Cuba — Cayo Cruz',   u:'/peche-mouche-cuba-cayo-cruz'},
+  dates:        {p:'Los Roques',         u:'/los-roques-venezuela'},
+  choix:        {p:'Argentine',          u:'/voyage-peche-argentine-rio-grande-truite-de-mer'},
+  frise:        {p:'Le Guide',           u:'/jean-baptiste-vidal-moniteur-guide-de-peche'},
+  liste:        {p:'Le Guide',           u:'/jean-baptiste-vidal-moniteur-guide-de-peche'},
+  partenaires:  {p:'Mes partenaires',    u:'/partenaires-jeanbaptistevidal'},
+  revuepresse:  {p:'Revue de presse',    u:'/revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche'},
+  temoignageshp:{p:'Accueil',            u:'/'},
+  prestationshp:{p:'Accueil',            u:'/'},
+  guidehp:      {p:'Accueil',            u:'/'},
+  boncadeauhp:  {p:'Accueil',            u:'/'},
+  materielhp:   {p:'Accueil',            u:'/'},
+  materielintro:{p:'Mon matériel',       u:'/materiel-jeanbaptistevidal'},
+  materielnav:  {p:'Matériel bar',       u:'/materiel-mouche-bar'},
+  tarifs:       {p:'Tarifs',             u:'/tarifs'},
+}
+
 /* ── showSec ─────────────────────────────────────────────── */
 function showSec(id){
   const s=SECS.find(x=>x.id===id)
@@ -1308,7 +1351,9 @@ function showSec(id){
   curId=id
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.id===id))
   document.getElementById('preview').innerHTML=`<div style="overflow:hidden">${s.preview()}</div>`
-  let html=`<div style="padding:7px 14px 6px;background:#161616;border-bottom:1px solid rgba(255,255,255,.08)"><div style="font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:2px">Nom dans Sanity Studio</div><div style="font-size:11.5px;color:#7EC8E3;font-weight:500">${s.sanityTitle||s.icon+' '+s.name}</div></div>`+
+  const ex=EX[s.id]
+  const exHtml=ex?`<a href="${SITE}${ex.u}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-size:10.5px;color:#7EC8E3;text-decoration:none;background:rgba(126,200,227,.1);border:1px solid rgba(126,200,227,.28);padding:3px 10px;border-radius:20px;font-weight:500">🔗 Voir un exemple en ligne&nbsp;: ${ex.p} <span style="opacity:.7">↗</span></a>`:''
+  let html=`<div style="padding:7px 14px 8px;background:#161616;border-bottom:1px solid rgba(255,255,255,.08)"><div style="font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:2px">Nom dans Sanity Studio</div><div style="font-size:11.5px;color:#7EC8E3;font-weight:500">${s.sanityTitle||s.icon+' '+s.name}</div>${exHtml}</div>`+
            (s.warn?`<div class="sf-warn">⚠️ ${s.warn}</div>`:'')+
            (s.tip?`<div class="sf-tip" style="margin:14px 14px 0">💡 ${s.tip}</div>`:'')+
            `<div class="sf-wrap">`
