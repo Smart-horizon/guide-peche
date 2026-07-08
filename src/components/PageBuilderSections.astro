@@ -355,8 +355,9 @@ const voyagesForGrid: any[] = hasVoyagesGrid
 
   {/* ════════════ GRILLE WILD FLY — style 3 ════════════ */}
   {s._type === 'sectionCards3' && (() => {
-    const eyebrow = stegaClean(s.eyebrow)
-    const titre   = stegaClean(s.titre)
+    // stegaClean = test de vide uniquement ; on rend l'original (overlays aperçu)
+    const eyebrow = stegaClean(s.eyebrow) ? s.eyebrow : ''
+    const titre   = stegaClean(s.titre)   ? s.titre   : ''
     const rawCartes: any[] = s.cartes ?? []
     // Carte isLarge en premier pour le positionnement CSS
     const li = rawCartes.findIndex((c: any) => c.isLarge)
@@ -382,8 +383,8 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                 {img && <div class="wf3-card__bg" style={`background-image:url(${img});background-position:${posWf3}`}></div>}
                 <div class="wf3-overlay"></div>
                 <div class="wf3-body">
-                  {c.sousTitre && <span class="wf3-sub">{stegaClean(c.sousTitre)}</span>}
-                  {c.label     && <strong class="wf3-label">{stegaClean(c.label)}</strong>}
+                  {c.sousTitre && <span class="wf3-sub">{c.sousTitre}</span>}
+                  {c.label     && <strong class="wf3-label">{c.label}</strong>}
                 </div>
               </a>
             )
@@ -749,9 +750,9 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         <div class="bc-overlay"></div>
         <div class="container bc-inner" data-card={showCard ? 'true' : 'false'}>
           <div class="bc-content">
-            {s.eyebrow && <p class="bc-eyebrow">{stegaClean(s.eyebrow)}</p>}
-            {s.titre   && <h2 class="bc-titre">{stegaClean(s.titre)}</h2>}
-            {s.texte   && <p class="bc-texte">{stegaClean(s.texte)}</p>}
+            {s.eyebrow && <p class="bc-eyebrow">{s.eyebrow}</p>}
+            {s.titre   && <h2 class="bc-titre">{s.titre}</h2>}
+            {s.texte   && <p class="bc-texte">{s.texte}</p>}
             {s.boutons?.length > 0 && (
               <div class="bc-actions">
                 {s.boutons.map((b: any) => (
@@ -770,8 +771,8 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               <div class="bc-card">
                 {s.infocard.lignes?.map((l: any) => (
                   <>
-                    {l.label  && <p class="bc-card__label">{stegaClean(l.label)}</p>}
-                    {l.valeur && <p class="bc-card__val">{stegaClean(l.valeur)}</p>}
+                    {l.label  && <p class="bc-card__label">{l.label}</p>}
+                    {l.valeur && <p class="bc-card__val">{l.valeur}</p>}
                   </>
                 ))}
                 {s.infocard.ctaTexte && (
@@ -1311,8 +1312,9 @@ const voyagesForGrid: any[] = hasVoyagesGrid
 
   {/* ════════════ VOYAGES GRID ════════════ */}
   {s._type === 'sectionVoyagesGrid' && (() => {
-    const eyebrow = stegaClean(s.eyebrow) || 'Destinations'
-    const titre   = stegaClean(s.titre) || 'Choisissez votre aventure'
+    // stegaClean = test de vide uniquement ; on rend l'original (overlays aperçu)
+    const eyebrow = stegaClean(s.eyebrow) ? s.eyebrow : 'Destinations'
+    const titre   = stegaClean(s.titre)   ? s.titre   : 'Choisissez votre aventure'
     const featuredSlug = stegaClean(s.voyageFeaturedSlug) || 'los-roques-venezuela'
 
     const featured = voyagesForGrid.find((v: any) => stegaClean(v.slug?.current) === featuredSlug)
@@ -1364,7 +1366,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                 {vRegion(featured) && <span class="vg-sub">{vRegion(featured)}</span>}
                 <strong class="vg-label">{vTitle(featured)}</strong>
                 {vTag(featured) && <span class="vg-tagline">{vTag(featured)}</span>}
-                {stegaClean(featured.periode) && <span class="vg-saison">{stegaClean(featured.periode)}</span>}
+                {stegaClean(featured.periode) && <span class="vg-saison">{featured.periode}</span>}
               </div>
             </a>
           )}
@@ -1378,7 +1380,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                   {vRegion(v) && <span class="vg-sub">{vRegion(v)}</span>}
                   <strong class="vg-label">{vTitle(v)}</strong>
                   {vTag(v) && <span class="vg-tagline">{vTag(v)}</span>}
-                  {stegaClean(v.periode) && <span class="vg-saison">{stegaClean(v.periode)}</span>}
+                  {stegaClean(v.periode) && <span class="vg-saison">{v.periode}</span>}
                 </div>
               </a>
             )

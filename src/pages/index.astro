@@ -54,11 +54,17 @@ const temoLabel    = temoCount > 0
   ? `${temoCount} témoignage${temoCount > 1 ? 's' : ''}`
   : '26 témoignages'
 
+// ── Helper : fallback sans perdre le stega ────────────────────────────────────
+// stegaClean() sert uniquement à tester si le champ est vide ; on rend la valeur
+// ORIGINALE (marqueurs stega préservés → overlays cliquables dans l'aperçu Sanity).
+// Les liens/URLs, eux, doivent rester nettoyés (stega dans un href = lien cassé).
+const pick = (v: any, fallback: string) => (stegaClean(v) ? v : fallback)
+
 // ── Témoignages section HP ────────────────────────────────────────────────────
 const temoHPSection = hp?.pagebuilder?.find((s: any) => s._type === 'sectionTemoignagesHP')
-const temoEyebrow = stegaClean(temoHPSection?.eyebrow) || "Ce qu'ils disent"
-const temoPitch   = stegaClean(temoHPSection?.pitch)   || 'Des pêcheurs de toute la France font confiance à Jean-Baptiste depuis 2004.'
-const temoCtaTxt  = stegaClean(temoHPSection?.ctaTexte) || 'Lire tous les témoignages'
+const temoEyebrow = pick(temoHPSection?.eyebrow, "Ce qu'ils disent")
+const temoPitch   = pick(temoHPSection?.pitch, 'Des pêcheurs de toute la France font confiance à Jean-Baptiste depuis 2004.')
+const temoCtaTxt  = pick(temoHPSection?.ctaTexte, 'Lire tous les témoignages')
 const temoCtaLien = stegaClean(temoHPSection?.ctaLien)  || '/temoignages'
 // ── Témoignages (avec fallback) ───────────────────────────────────────────────
 const sanityTemoignages = await stegaClient.fetch(`
@@ -76,11 +82,11 @@ const temoignages = sanityTemoignages.length > 0 ? sanityTemoignages : fallbackT
 
 // ── Bon cadeau HP ─────────────────────────────────────────────────────────────
 const bonCadeauHP = hp?.pagebuilder?.find((s: any) => s._type === 'sectionBonCadeauHP')
-const cadeauTitre  = stegaClean(bonCadeauHP?.titre)     || 'Offrez une expérience inoubliable'
-const cadeauTexte  = stegaClean(bonCadeauHP?.texte)     || "Offrez à un proche une journée de pêche à la mouche en Bretagne. Initiation, perfectionnement ou sortie guidée — le bon cadeau est valable sur toutes les prestations, eau douce ou bar en mer."
-const cadeauBtn1T  = stegaClean(bonCadeauHP?.btn1Texte) || 'Découvrir le bon cadeau'
+const cadeauTitre  = pick(bonCadeauHP?.titre, 'Offrez une expérience inoubliable')
+const cadeauTexte  = pick(bonCadeauHP?.texte, "Offrez à un proche une journée de pêche à la mouche en Bretagne. Initiation, perfectionnement ou sortie guidée — le bon cadeau est valable sur toutes les prestations, eau douce ou bar en mer.")
+const cadeauBtn1T  = pick(bonCadeauHP?.btn1Texte, 'Découvrir le bon cadeau')
 const cadeauBtn1L  = stegaClean(bonCadeauHP?.btn1Lien)  || '/bon-cadeau'
-const cadeauBtn2T  = stegaClean(bonCadeauHP?.btn2Texte) || 'Demander un renseignement'
+const cadeauBtn2T  = pick(bonCadeauHP?.btn2Texte, 'Demander un renseignement')
 const cadeauBtn2L  = stegaClean(bonCadeauHP?.btn2Lien)  || '/contact'
 
 // ── Guide HP ──────────────────────────────────────────────────────────────────
@@ -88,14 +94,14 @@ const guideHP    = hp?.pagebuilder?.find((s: any) => s._type === 'sectionGuideHP
 const guidePhotoUrl  = guideHP?.photo?.asset
   ? urlFor(guideHP.photo).width(600).height(800).fit('crop').crop('focalpoint').url()
   : null
-const guideEyebrow   = stegaClean(guideHP?.eyebrow)     || 'Votre guide'
-const guideNom       = stegaClean(guideHP?.nom)         || 'Jean-Baptiste Vidal'
-const guideAccroche  = stegaClean(guideHP?.accroche)    || "33 ans de pêche à la mouche et d'expérience à votre service, dont 21 années de guidage en France et à l'étranger."
-const guideBio       = stegaClean(guideHP?.bio)         || "Après des études dans l'environnement et 5 ans à la Fédération de Pêche du Finistère, Jean-Baptiste a guidé 6 saisons sur le Rio Grande (Argentine) pour Nervous Waters, puis en Irlande, Russie et Bolivie. Depuis 2014, il propose ses services de Moniteur-Guide en Bretagne-Sud, tout au long de l'année."
-const guideBtnTxt    = stegaClean(guideHP?.boutonTexte) || 'Votre guide'
+const guideEyebrow   = pick(guideHP?.eyebrow, 'Votre guide')
+const guideNom       = pick(guideHP?.nom, 'Jean-Baptiste Vidal')
+const guideAccroche  = pick(guideHP?.accroche, "33 ans de pêche à la mouche et d'expérience à votre service, dont 21 années de guidage en France et à l'étranger.")
+const guideBio       = pick(guideHP?.bio, "Après des études dans l'environnement et 5 ans à la Fédération de Pêche du Finistère, Jean-Baptiste a guidé 6 saisons sur le Rio Grande (Argentine) pour Nervous Waters, puis en Irlande, Russie et Bolivie. Depuis 2014, il propose ses services de Moniteur-Guide en Bretagne-Sud, tout au long de l'année.")
+const guideBtnTxt    = pick(guideHP?.boutonTexte, 'Votre guide')
 const guideBtnLien   = stegaClean(guideHP?.boutonLien)  || '/jean-baptiste-vidal-moniteur-guide-de-peche'
 const guideStats: { valeur: string; label: string }[] = (guideHP?.stats ?? []).length > 0
-  ? guideHP.stats.map((s: any) => ({ valeur: stegaClean(s.valeur) || '', label: stegaClean(s.label) || '' }))
+  ? guideHP.stats.map((s: any) => ({ valeur: pick(s.valeur, ''), label: pick(s.label, '') }))
   : [
       { valeur: '33 ans',   label: 'de pêche à la mouche' },
       { valeur: '21 ans',   label: 'de guidage' },
@@ -112,16 +118,16 @@ const MATERIEL_CARDS_FALLBACK = [
 ]
 
 const materielSection = {
-  eyebrow:         stegaClean(materielHP?.eyebrow)         || 'Équipement · Ressources',
-  titre:           stegaClean(materielHP?.titre)           || 'Matériel & univers',
-  featuredEyebrow: stegaClean(materielHP?.featuredEyebrow) || 'Cannes · Soies · Moulinets · Accessoires',
-  featuredTitre:   stegaClean(materielHP?.featuredTitre)   || 'Mon matériel',
+  eyebrow:         pick(materielHP?.eyebrow, 'Équipement · Ressources'),
+  titre:           pick(materielHP?.titre, 'Matériel & univers'),
+  featuredEyebrow: pick(materielHP?.featuredEyebrow, 'Cannes · Soies · Moulinets · Accessoires'),
+  featuredTitre:   pick(materielHP?.featuredTitre, 'Mon matériel'),
   featuredLien:    stegaClean(materielHP?.featuredLien)    || '/materiel-jeanbaptistevidal',
   featuredImage:   materielHP?.featuredImage?.asset
     ? urlFor(materielHP.featuredImage).width(900).height(700).fit('crop').crop('focalpoint').url()
     : '/images/materiel-hero.jpg',
   sousLiens: (materielHP?.sousLiens?.length > 0)
-    ? materielHP.sousLiens.map((l: any) => ({ label: stegaClean(l.label) || '', href: stegaClean(l.href) || '#' }))
+    ? materielHP.sousLiens.map((l: any) => ({ label: pick(l.label, ''), href: stegaClean(l.href) || '#' }))
     : [
         { label: 'Matériel migrateurs', href: '/materiel-mouche-migrateur' },
         { label: 'Matériel truite',     href: '/materiel-mouche-truite' },
@@ -132,8 +138,8 @@ const materielSection = {
       ],
   cardsSecondaires: (materielHP?.cardsSecondaires?.length > 0)
     ? materielHP.cardsSecondaires.map((c: any, i: number) => ({
-        eyebrow:  stegaClean(c.eyebrow) || MATERIEL_CARDS_FALLBACK[i]?.eyebrow || '',
-        titre:    stegaClean(c.titre)   || MATERIEL_CARDS_FALLBACK[i]?.titre   || '',
+        eyebrow:  pick(c.eyebrow, MATERIEL_CARDS_FALLBACK[i]?.eyebrow || ''),
+        titre:    pick(c.titre, MATERIEL_CARDS_FALLBACK[i]?.titre || ''),
         lien:     stegaClean(c.lien)    || MATERIEL_CARDS_FALLBACK[i]?.lien    || '#',
         imageUrl: c.image?.asset
           ? urlFor(c.image).width(600).height(500).fit('crop').crop('focalpoint').url()
@@ -152,24 +158,24 @@ const nl = await client.fetch(`*[_type == "newsletter"][0]{
   popupImage{ asset->{ _id, url } }
 }`)
 
-const nlSectionTitre   = stegaClean(nl?.sectionTitre)   || 'Les carnets du guide, dans votre boîte mail'
-const nlSectionSous    = stegaClean(nl?.sectionSousTitre) || "Conseils de pêche à la mouche, récits de sorties, annonces de stages et voyages. Pas de spam — seulement du contenu qui vaut le coup."
+const nlSectionTitre   = pick(nl?.sectionTitre, 'Les carnets du guide, dans votre boîte mail')
+const nlSectionSous    = pick(nl?.sectionSousTitre, "Conseils de pêche à la mouche, récits de sorties, annonces de stages et voyages. Pas de spam — seulement du contenu qui vaut le coup.")
 const nlAvantages      = nl?.sectionAvantages?.map((a: any) => ({
-  emoji: stegaClean(a.emoji) || '', label: stegaClean(a.label) || ''
+  emoji: pick(a.emoji, ''), label: pick(a.label, '')
 })) ?? [
   { emoji: '🎣', label: 'Conseils et techniques exclusifs' },
   { emoji: '🎬', label: 'Récits de sorties et vidéos' },
   { emoji: '🌍', label: 'Voyages et destinations pêche' },
 ]
-const nlBoutonTexte    = stegaClean(nl?.sectionBoutonTexte)  || "S'inscrire gratuitement"
+const nlBoutonTexte    = pick(nl?.sectionBoutonTexte, "S'inscrire gratuitement")
 const nlPlaceholder    = stegaClean(nl?.sectionPlaceholder)  || 'votre@email.fr'
 const nlFormAction     = stegaClean(nl?.formAction)          || '/newsletter'
 const nlPopupActif     = nl?.popupActif  ?? true
 const nlPopupDelai     = nl?.popupDelai  ?? 15
-const nlPopupTitre     = stegaClean(nl?.popupTitre)         || "Une lettre du bord de l'eau"
-const nlPopupTexte     = stegaClean(nl?.popupTexte)         || "Rejoignez les pêcheurs qui reçoivent les conseils, récits et vidéos de Jean-Baptiste."
-const nlPopupBtn       = stegaClean(nl?.popupBoutonTexte)   || "Je m'inscris"
-const nlPopupIgnorer   = stegaClean(nl?.popupIgnorerTexte)  || 'Non merci'
+const nlPopupTitre     = pick(nl?.popupTitre, "Une lettre du bord de l'eau")
+const nlPopupTexte     = pick(nl?.popupTexte, "Rejoignez les pêcheurs qui reçoivent les conseils, récits et vidéos de Jean-Baptiste.")
+const nlPopupBtn       = pick(nl?.popupBoutonTexte, "Je m'inscris")
+const nlPopupIgnorer   = pick(nl?.popupIgnorerTexte, 'Non merci')
 const nlPopupImageUrl  = nl?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'
 ---
 
