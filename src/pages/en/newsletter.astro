@@ -1,8 +1,8 @@
 ---
 export const prerender = true
 
-import BaseLayout from '../layouts/BaseLayout.astro'
-import { client } from '../lib/sanity.js'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { client } from '../../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
 
 const builder = imageUrlBuilder(client)
@@ -12,35 +12,27 @@ const urlFor = (source: any) => {
   return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b
 }
 
-const nl = await client.fetch(`*[_type == "newsletter"][0]`)
+// Même document Sanity que la page FR — image hero + URL du formulaire partagées.
+// Les textes sont en anglais (pas de champs EN dans le schéma newsletter).
+const nl = await client.fetch(`*[_type == "newsletter"][0]{ pageHeroImage{ asset->{ _id, url } }, formAction, popupDelai }`)
 
 const heroImageUrl = nl?.pageHeroImage?.asset
   ? urlFor(nl.pageHeroImage).width(1800).height(900).fit('crop').crop('focalpoint').url()
   : '/images/bar-bateau-hq-1.jpg'
 
-const titre       = nl?.pageTitre       || "L'école buissonnière de la mouche"
-const sousTitre   = nl?.pageSousTitre   || "La newsletter de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne. Une fois par mois, les secrets du terrain dans votre boîte mail."
-const socialProof = nl?.pageSocialProof || "Rejoignez des centaines de pêcheurs qui reçoivent déjà la lettre."
-const frequence   = nl?.pageFrequence   || "1 à 2 fois par mois · Zéro spam · Désabonnement en 1 clic"
-const formAction  = nl?.formAction      || ''
-const placeholder = nl?.sectionPlaceholder || 'votre@email.fr'
-const boutonTexte = nl?.sectionBoutonTexte || "S'inscrire gratuitement"
-const seoTitle    = nl?.seoTitle        || 'Newsletter — Conseils pêche mouche | Jean-Baptiste Vidal'
-const seoDesc     = nl?.seoDescription  || "Recevez les conseils, récits de sorties et annonces de stages de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne."
+const formAction = nl?.formAction || ''
 
-const benefices: { emoji: string; titre: string; description: string }[] = nl?.pageBenefices?.length
-  ? nl.pageBenefices
-  : [
-      { emoji: '🎣', titre: 'Techniques & conseils', description: "Les astuces que Jean-Baptiste donne à ses clients en guidage. Mouches, postes, conditions — du contenu pratique tiré du terrain." },
-      { emoji: '📖', titre: 'Récits de sorties', description: "Des histoires vraies, des rivières bretonnes aux flats de Los Roques. Les réussites, les galères, les rencontres avec des poissons extraordinaires." },
-      { emoji: '🗓️', titre: 'Stages & voyages en avant-première', description: "Les dates de stages et voyages annoncées aux abonnés avant toute publication. La priorité pour les places limitées." },
-    ]
+const benefices = [
+  { emoji: '🎣', titre: 'Techniques & tips', description: "The advice Jean-Baptiste gives his clients on guided trips. Flies, spots, conditions — practical content straight from the water." },
+  { emoji: '📖', titre: 'Fishing stories', description: "True stories, from Brittany's rivers to the flats of Los Roques. The successes, the struggles, the encounters with extraordinary fish." },
+  { emoji: '🗓️', titre: 'Courses & trips first', description: "Course dates and trip announcements sent to subscribers before anyone else. Priority access for limited places." },
+]
 ---
 
 <BaseLayout
-  title={seoTitle}
-  description={seoDesc}
-  lang="fr"
+  title="Newsletter — Fly Fishing Tips | Jean-Baptiste Vidal"
+  description="Get fly fishing tips, fishing stories and course announcements from Jean-Baptiste Vidal, fly fishing guide in Brittany."
+  lang="en"
   hreflangFr="/newsletter"
   hreflangEn="/en/newsletter"
 >
@@ -49,10 +41,10 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
   <section class="nl-hero" style={`background-image: url('${heroImageUrl}')`}>
     <div class="nl-hero__overlay"></div>
     <div class="container nl-hero__content">
-      <p class="nl-hero__eyebrow">📧 Newsletter gratuite</p>
-      <h1 class="nl-hero__titre">{titre}</h1>
-      <p class="nl-hero__sous">{sousTitre}</p>
-      <a href="#nl-page-form" class="nl-hero__cta">S'inscrire maintenant</a>
+      <p class="nl-hero__eyebrow">📧 Free newsletter</p>
+      <h1 class="nl-hero__titre">Letters from the water</h1>
+      <p class="nl-hero__sous">The newsletter of Jean-Baptiste Vidal, fly fishing guide in Brittany. Once a month, field secrets straight to your inbox.</p>
+      <a href="#nl-page-form" class="nl-hero__cta">Subscribe now</a>
     </div>
     <div class="nl-hero__wave" aria-hidden="true">
       <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
@@ -61,10 +53,10 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
     </div>
   </section>
 
-  <!-- ── BÉNÉFICES ── -->
+  <!-- ── BENEFITS ── -->
   <section class="nl-benefices">
     <div class="container">
-      <p class="nl-benefices__lead">Chaque lettre contient…</p>
+      <p class="nl-benefices__lead">Every letter includes…</p>
       <div class="nl-benefices__grid">
         {benefices.map(b => (
           <div class="nl-benefice-card">
@@ -77,7 +69,7 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
     </div>
   </section>
 
-  <!-- ── FORMULAIRE ── -->
+  <!-- ── FORM ── -->
   <section class="nl-page-form-section" id="nl-page-form">
     <div class="container nl-page-form-inner">
 
@@ -92,27 +84,27 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
           </svg>
         </div>
 
-        <p class="nl-page-form-box__social">{socialProof}</p>
+        <p class="nl-page-form-box__social">Join the anglers who already receive the letter.</p>
 
         <form class="nl-page-form" id="nl-page-form-el" data-action={formAction}>
-          <label for="nl-page-email" class="nl-page-form__label">Votre adresse e-mail</label>
+          <label for="nl-page-email" class="nl-page-form__label">Your e-mail address</label>
           <div class="nl-page-form__row">
             <input
               id="nl-page-email"
               type="email"
               name="email"
-              placeholder={placeholder}
+              placeholder="your@email.com"
               required
               class="nl-page-form__input"
             />
             <button type="submit" class="nl-page-form__btn">
-              {boutonTexte} →
+              Subscribe for free →
             </button>
           </div>
-          <p class="nl-page-form__mention">{frequence}</p>
+          <p class="nl-page-form__mention">1–2 e-mails per month · No spam · Unsubscribe in 1 click</p>
           <div class="nl-page-form__success" id="nl-page-success" aria-live="polite">
             <span class="nl-page-form__success-icon">✅</span>
-            <span>Inscription confirmée ! À très vite dans votre boîte mail.</span>
+            <span>Subscription confirmed! See you soon in your inbox.</span>
           </div>
         </form>
 
@@ -121,7 +113,7 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
       <!-- Aside -->
       <div class="nl-page-aside">
         <blockquote class="nl-page-aside__quote">
-          <p>« J'essaie de partager dans cette lettre ce que je dis à mes clients sur le terrain. Le genre de détails qui font vraiment la différence. »</p>
+          <p>“In this letter I try to share what I tell my clients on the water. The kind of details that really make the difference.”</p>
           <footer>— Jean-Baptiste Vidal</footer>
         </blockquote>
         <div class="nl-page-aside__signature" aria-hidden="true">
@@ -136,11 +128,11 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
     </div>
   </section>
 
-  <!-- ── CTA BAS ── -->
+  <!-- ── BOTTOM CTA ── -->
   <section class="nl-bottom-cta">
     <div class="container nl-bottom-cta__inner">
-      <p>Curieux de voir à quoi ça ressemble ?</p>
-      <a href="/blog/" class="nl-bottom-cta__link">Lire les derniers articles du blog →</a>
+      <p>Curious what it looks like?</p>
+      <a href="/en/blog/" class="nl-bottom-cta__link">Read the latest blog posts →</a>
     </div>
   </section>
 
@@ -246,7 +238,7 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
 
   .nl-hero__wave svg { width: 100%; height: 100%; }
 
-  /* ══════ BÉNÉFICES ══════ */
+  /* ══════ BENEFITS ══════ */
   .nl-benefices {
     background: var(--color-beige, #f8f7f4);
     padding: 5rem 0 4rem;
@@ -301,7 +293,7 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
     line-height: 1.65;
   }
 
-  /* ══════ FORMULAIRE ══════ */
+  /* ══════ FORM ══════ */
   .nl-page-form-section {
     background: var(--color-beige, #f8f7f4);
     padding: 2rem 0 5rem;
@@ -438,7 +430,7 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
     opacity: 0.7;
   }
 
-  /* ══════ CTA BAS ══════ */
+  /* ══════ BOTTOM CTA ══════ */
   .nl-bottom-cta {
     background: var(--color-beige-dark, #f0eff0);
     padding: 2.5rem 0;
