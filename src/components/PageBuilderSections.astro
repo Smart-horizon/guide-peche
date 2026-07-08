@@ -3089,12 +3089,9 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   display: flex;
   flex-direction: column;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: box-shadow 0.25s, transform 0.25s;
 }
-.pb-press-card2:hover {
-  box-shadow: 0 10px 36px rgba(27,94,138,0.13);
-  transform: translateY(-4px);
-}
+/* Pas d'effet de survol sur la carte : elle n'est pas cliquable —
+   seul le lien "Télécharger / Lire l'article" l'est. */
 
 /* ── Zone image / carrousel ── */
 .pb-press-card2__media {
@@ -3244,10 +3241,7 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   color: var(--color-text-muted);
   margin: 0;
   flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  /* Description complète — pas de troncature (demande JBV) */
 }
 .pb-press-card2__link {
   display: inline-flex;
