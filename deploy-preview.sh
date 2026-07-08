@@ -24,6 +24,7 @@ PRERENDER_PAGES=(
   "src/pages/en/contact.astro"
   "src/pages/en/index.astro"
   "src/pages/en/temoignages.astro"
+  "src/pages/en/newsletter.astro"
   "src/pages/newsletter.astro"
 )
 
