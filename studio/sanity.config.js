@@ -6,6 +6,7 @@ import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {presentationTool} from 'sanity/presentation'
 import {schemaTypes} from './schemaTypes'
 import {ManuelTool} from './plugins/ManuelTool'
+import {SyncEnSectionsAction} from './actions/syncEnSections'
 
 // ── Structure personnalisée du menu latéral ──
 const customStructure = (S, context) =>
@@ -377,6 +378,13 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
+  },
+
+  document: {
+    actions: (prev, context) =>
+      ['page', 'prestation', 'voyage'].includes(context.schemaType)
+        ? [SyncEnSectionsAction, ...prev]
+        : prev,
   },
 
   deployment: {

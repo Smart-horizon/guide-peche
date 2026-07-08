@@ -4,6 +4,7 @@ export const prerender = true
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import PageBuilderSections from '../../components/PageBuilderSections.astro'
 import { client } from '../../lib/sanity.js'
+import { mergeSectionsEn } from '../../lib/mergeEnSections.js'
 import imageUrlBuilder from '@sanity/image-url'
 
 const builder = imageUrlBuilder(client)
@@ -69,8 +70,9 @@ const doc = await client.fetch(`
 
 if (!doc) return Astro.redirect('/404')
 
-// ── Contenu : EN si disponible, fallback FR ───────────────────────────────────
-const sections = (doc.pagebuilderEn?.length ? doc.pagebuilderEn : doc.pagebuilder) ?? null
+// ── Contenu : structure/images/design FR + textes EN quand traduits ───────────
+// (une photo changée en FR s'applique immédiatement en EN, sans resynchronisation)
+const sections = mergeSectionsEn(doc.pagebuilder, doc.pagebuilderEn)
 
 // ── SEO EN — fallback sur valeurs FR ─────────────────────────────────────────
 const heroSection = sections?.find((s: any) => s._type === 'sectionHero')
