@@ -381,9 +381,11 @@ export default defineConfig({
   },
 
   document: {
+    // Miroir EN placé APRÈS les actions natives : "Publier" reste le bouton
+    // principal, le miroir est accessible via le menu ⋯
     actions: (prev, context) =>
       ['page', 'prestation', 'voyage'].includes(context.schemaType)
-        ? [SyncEnSectionsAction, ...prev]
+        ? [...prev, SyncEnSectionsAction]
         : prev,
   },
 
