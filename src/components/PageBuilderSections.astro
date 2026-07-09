@@ -1314,6 +1314,41 @@ const voyagesForGrid: any[] = hasVoyagesGrid
     </section>
   )}
 
+  {/* ════════════ FAQ (questions/réponses + JSON-LD FAQPage) ════════════ */}
+  {s._type === 'sectionFaq' && (() => {
+    const items = (s.questions ?? []).filter((q: any) => stegaClean(q.question) && stegaClean(q.reponse))
+    if (!items.length) return null
+    const faqJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: items.map((q: any) => ({
+        '@type': 'Question',
+        name: stegaClean(q.question),
+        acceptedAnswer: { '@type': 'Answer', text: stegaClean(q.reponse) },
+      })),
+    }
+    return (
+      <section class={`section pb-faq ${bg(s.fond) || 'section--white'}`}>
+        <div class="container pb-faq__inner">
+          {stegaClean(s.eyebrow) && <p class="pb-eyebrow">{s.eyebrow}</p>}
+          {stegaClean(s.titre) && <h2 class="pb-faq__titre">{s.titre}</h2>}
+          <div class="pb-faq__list">
+            {items.map((q: any) => (
+              <details class="pb-faq__item">
+                <summary class="pb-faq__q">
+                  {q.question}
+                  <span class="pb-faq__chevron" aria-hidden="true">+</span>
+                </summary>
+                <p class="pb-faq__a">{q.reponse}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+        <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+      </section>
+    )
+  })()}
+
   {/* ════════════ VOYAGES GRID ════════════ */}
   {s._type === 'sectionVoyagesGrid' && (() => {
     // stegaClean = test de vide uniquement ; on rend l'original (overlays aperçu)
@@ -3650,6 +3685,49 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
 /* ═══ AVANTAGES ════════════════════════════════════════════════════════════ */
 /* Fond géré par la classe section--* (choix "Couleur de fond" dans Sanity,
    défaut beige via section--sand dans le markup) — pas de fond codé en dur. */
+
+/* ── FAQ ── */
+.pb-faq__inner { max-width: 820px; }
+.pb-faq__titre {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  margin-bottom: 1.75rem;
+}
+.pb-faq__item {
+  border-bottom: 1px solid rgba(0,0,0,0.09);
+}
+.pb-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-text);
+  cursor: pointer;
+  list-style: none;
+  transition: color 0.15s;
+}
+.pb-faq__q::-webkit-details-marker { display: none; }
+.pb-faq__q:hover { color: var(--color-ocean-main); }
+.pb-faq__chevron {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid rgba(27,94,138,0.35);
+  border-radius: 50%;
+  color: var(--color-ocean-main);
+  font-size: 1rem;
+  transition: transform 0.2s, background 0.2s;
+}
+.pb-faq__item[open] .pb-faq__chevron { transform: rotate(45deg); background: rgba(27,94,138,0.08); }
+.pb-faq__a {
+  padding: 0 2.5rem 1.25rem 0;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  white-space: pre-line;
+}
 .pb-avantages__titre {
   font-family: var(--font-serif);
   font-size: clamp(1.5rem, 3vw, 2.1rem);

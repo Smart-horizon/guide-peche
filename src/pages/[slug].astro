@@ -60,6 +60,35 @@ const ogImg        = doc.ogImage
     ? urlFor(heroSection.image).width(1200).height(630).fit('crop').crop('focalpoint').url()
     : undefined
 
+// ── JSON-LD : fil d'Ariane + Service (prestations/voyages) ────────────────────
+const siteBase = Astro.site?.toString().replace(/\/$/, '') || ''
+const jsonLd: object[] = [{
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${siteBase}/` },
+    { '@type': 'ListItem', position: 2, name: doc.title, item: `${siteBase}/${slug}` },
+  ],
+}]
+
+if (doc._type === 'prestation' || doc._type === 'voyage') {
+  // Prix : uniquement si un montant chiffré existe (voyages)
+  const prixNum = typeof doc.prix === 'string' ? doc.prix.replace(/[^\d]/g, '') : null
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: doc.title,
+    serviceType: doc._type === 'voyage' ? 'Voyage de pêche à la mouche' : 'Guidage et stage de pêche à la mouche',
+    provider: { '@id': `${siteBase}/#business` },
+    areaServed: doc._type === 'voyage' && doc.pays ? doc.pays : 'Bretagne-Sud, France',
+    url: `${siteBase}/${slug}`,
+    ...(pageDesc ? { description: pageDesc } : {}),
+    ...(prixNum && prixNum.length >= 2 ? {
+      offers: { '@type': 'Offer', price: prixNum, priceCurrency: 'EUR' },
+    } : {}),
+  })
+}
+
 // ── Utilitaires pour le fallback (pages sans pagebuilder) ─────────────────────
 function spanHtml(b: any): string {
   return (b.children || []).map((span: any) => {
@@ -113,6 +142,7 @@ function blocks(content: any[]): string {
   lang="fr"
   hreflangFr={`/${slug}`}
   hreflangEn={`/en/${slug}`}
+  jsonLd={jsonLd}
 >
 
   {/* ── PAGE BUILDER ── */}

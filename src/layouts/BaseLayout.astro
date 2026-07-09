@@ -23,6 +23,7 @@ interface Props {
   lang?: 'fr' | 'en'
   hreflangFr?: string  // chemin relatif vers la version FR (ex: /stage-spey-cast)
   hreflangEn?: string  // chemin relatif vers la version EN (ex: /en/stage-spey-cast)
+  jsonLd?: object[]    // blocs JSON-LD additionnels fournis par la page (Service, Article, Breadcrumb…)
 }
 
 const {
@@ -34,6 +35,7 @@ const {
   lang        = 'fr',
   hreflangFr,
   hreflangEn,
+  jsonLd      = [],
 } = Astro.props
 
 const siteBase = Astro.site?.toString().replace(/\/$/, '') || ''
@@ -57,6 +59,41 @@ const footerProps = {
   vimeo:     stegaClean(params?.vimeo)     || null,
   lang,
 }
+
+// ── JSON-LD global : l'activité de guidage (toutes les pages) ─────────────
+// Données tirées de Sanity (téléphone, e-mail, réseaux) — invisibles pour les
+// visiteurs, lues par Google (pack local Maps, fiche entreprise).
+const businessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SportsActivityLocation',
+  '@id': `${siteBase}/#business`,
+  name: 'Jean-Baptiste Vidal — Guide de pêche à la mouche',
+  description: metaDesc,
+  url: siteBase || 'https://jeanbaptistevidalguidepeche.com',
+  telephone: footerProps.telephone,
+  email: footerProps.email,
+  image: image?.startsWith('http') ? image : `${siteBase}${image}`,
+  priceRange: '€€',
+  address: {
+    '@type': 'PostalAddress',
+    addressRegion: 'Bretagne',
+    addressCountry: 'FR',
+  },
+  areaServed: {
+    '@type': 'Place',
+    name: 'Bretagne-Sud, entre Quimper et Quimperlé, France',
+  },
+  founder: {
+    '@type': 'Person',
+    '@id': `${siteBase}/#jbv`,
+    name: 'Jean-Baptiste Vidal',
+    jobTitle: lang === 'en' ? 'Fly fishing guide and instructor' : 'Moniteur-Guide de pêche à la mouche',
+    url: `${siteBase}/jean-baptiste-vidal-moniteur-guide-de-peche`,
+  },
+  sameAs: [footerProps.instagram, footerProps.facebook, footerProps.youtube, footerProps.vimeo].filter(Boolean),
+}
+
+const allJsonLd = [businessJsonLd, ...jsonLd]
 ---
 
 <!doctype html>
@@ -90,6 +127,11 @@ const footerProps = {
     />
 
     <title>{metaTitle}</title>
+
+    {/* Données structurées — cartes d'identité lues par Google */}
+    {allJsonLd.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
   </head>
 
   <body>

@@ -2623,6 +2623,55 @@ export const sectionVoyagesGrid = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — FAQ (questions/réponses + données structurées Google)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionFaq = {
+  name: 'sectionFaq',
+  title: '❓ FAQ — Questions / Réponses',
+  type: 'object',
+  description: 'Questions fréquentes — affichées en accordéon et envoyées à Google (résultats enrichis)',
+  fields: [
+    { name: 'eyebrow', title: 'Texte au-dessus du titre', type: 'string' },
+    {
+      name: 'titre', title: 'Titre de section', type: 'string',
+      initialValue: 'Questions fréquentes',
+    },
+    {
+      name: 'questions',
+      title: 'Questions / Réponses',
+      type: 'array',
+      validation: Rule => Rule.min(1).error('Au moins une question'),
+      of: [{
+        type: 'object',
+        name: 'faqItem',
+        fields: [
+          { name: 'question', title: 'Question', type: 'string', validation: Rule => Rule.required() },
+          { name: 'reponse',  title: 'Réponse',  type: 'text', rows: 3, validation: Rule => Rule.required() },
+        ],
+        preview: {
+          select: { title: 'question' },
+          prepare: ({ title }) => ({ title: `❓ ${title || '(sans question)'}` }),
+        },
+      }],
+    },
+    {
+      name: 'fond', title: 'Couleur de fond', type: 'string',
+      options: { list: [
+        { title: '⬜ Blanc',         value: 'white' },
+        { title: '🟫 Beige (sable)', value: 'sand'  },
+      ], layout: 'radio' },
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', questions: 'questions' },
+    prepare: ({ titre, questions }) => ({
+      title: `❓ FAQ — ${titre || ''}`,
+      subtitle: `${questions?.length || 0} question(s)`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -2665,4 +2714,5 @@ export const allSectionTypes = [
   sectionTarifs,
   sectionAvantages,
   sectionVoyagesGrid,
+  sectionFaq,
 ]
