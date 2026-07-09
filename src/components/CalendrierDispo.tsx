@@ -5,11 +5,16 @@ import interactionPlugin from '@fullcalendar/interaction'
 import frLocale from '@fullcalendar/core/locales/fr'
 import { useState } from 'react'
 
-const STATUS_COLORS: Record<string, { bg: string; border: string; label: string }> = {
-  disponible:   { bg: '#22c55e', border: '#16a34a', label: 'Disponible' },
-  reserve:      { bg: '#ef4444', border: '#dc2626', label: 'Réservé' },
-  option:       { bg: '#f59e0b', border: '#d97706', label: 'Option' },
-  indisponible: { bg: '#6b7280', border: '#4b5563', label: 'Indisponible' },
+const LABELS: Record<'fr' | 'en', Record<string, string>> = {
+  fr: { disponible: 'Disponible', reserve: 'Réservé', option: 'Option', indisponible: 'Indisponible', favorable: 'Favorable bar' },
+  en: { disponible: 'Available', reserve: 'Booked', option: 'On hold', indisponible: 'Unavailable', favorable: 'Good sea bass window' },
+}
+
+const STATUS_COLORS: Record<string, { bg: string; border: string }> = {
+  disponible:   { bg: '#22c55e', border: '#16a34a' },
+  reserve:      { bg: '#ef4444', border: '#dc2626' },
+  option:       { bg: '#f59e0b', border: '#d97706' },
+  indisponible: { bg: '#6b7280', border: '#4b5563' },
 }
 
 interface Dispo {
@@ -24,6 +29,7 @@ interface Dispo {
 
 interface Props {
   disponibilites: Dispo[]
+  lang?: 'fr' | 'en'
 }
 
 interface Tooltip {
@@ -39,8 +45,9 @@ function addOneDay(dateStr: string): string {
   return d.toISOString().split('T')[0]
 }
 
-export default function CalendrierDispo({ disponibilites }: Props) {
+export default function CalendrierDispo({ disponibilites, lang = 'fr' }: Props) {
   const [tooltip, setTooltip] = useState<Tooltip | null>(null)
+  const labels = LABELS[lang]
 
   const events = disponibilites.flatMap((d) => {
     const fin = d.dateFin && d.dateFin !== d.dateDebut ? addOneDay(d.dateFin) : addOneDay(d.dateDebut)
@@ -71,7 +78,7 @@ export default function CalendrierDispo({ disponibilites }: Props) {
     const couleur = STATUS_COLORS[d.statut] || STATUS_COLORS.disponible
     return [{
       id: d._id,
-      title: d.confidentiel ? (STATUS_COLORS[d.statut]?.label || d.statut) : d.titre,
+      title: d.confidentiel ? (labels[d.statut] || d.statut) : d.titre,
       start: d.dateDebut,
       end: fin,
       backgroundColor: couleur.bg,
@@ -93,27 +100,30 @@ export default function CalendrierDispo({ disponibilites }: Props) {
         {Object.entries(STATUS_COLORS).map(([key, val]) => (
           <span key={key} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', fontFamily: 'DM Sans, sans-serif' }}>
             <span style={{ width: 12, height: 12, borderRadius: 3, background: val.bg, display: 'inline-block', flexShrink: 0 }} />
-            {val.label}
+            {labels[key]}
           </span>
         ))}
         <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', fontFamily: 'DM Sans, sans-serif' }}>
           <span style={{ width: 12, height: 12, borderRadius: 3, background: 'rgba(27,94,138,0.55)', border: '1.5px solid rgba(27,94,138,0.7)', display: 'inline-block', flexShrink: 0, position: 'relative', overflow: 'hidden' }}>
             <span style={{ position: 'absolute', top: 0, right: 0, width: 0, height: 0, borderStyle: 'solid', borderWidth: '0 5px 5px 0', borderColor: 'transparent rgba(27,94,138,0.9) transparent transparent' }} />
           </span>
-          Favorable bar
+          {labels.favorable}
         </span>
       </div>
 
       <FullCalendar
         plugins={[dayGridPlugin, listPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        locale={frLocale}
+        locale={lang === 'fr' ? frLocale : 'en'}
+        firstDay={1}
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
           right: 'dayGridMonth,listMonth',
         }}
-        buttonText={{ today: "Aujourd'hui", month: 'Mois', list: 'Liste' }}
+        buttonText={lang === 'fr'
+          ? { today: "Aujourd'hui", month: 'Mois', list: 'Liste' }
+          : { today: 'Today', month: 'Month', list: 'List' }}
         events={events}
         height="auto"
         eventMouseEnter={(info) => {

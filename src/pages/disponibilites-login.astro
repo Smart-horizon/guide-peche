@@ -4,12 +4,14 @@ export const prerender = false
 import { client } from '../lib/sanity.js'
 
 let erreur = ''
-let redirect = Astro.url.searchParams.get('r') || '/disponibilites-guidages'
+// Seuls les chemins internes sont acceptés (pas de redirection externe)
+const safePath = (p) => (p && p.startsWith('/') && !p.startsWith('//')) ? p : '/disponibilites-guidages'
+let redirect = safePath(Astro.url.searchParams.get('r'))
 
 if (Astro.request.method === 'POST') {
   const form = await Astro.request.formData()
   const saisi = form.get('password')?.toString().trim() || ''
-  redirect = form.get('redirect')?.toString() || redirect
+  redirect = safePath(form.get('redirect')?.toString() || redirect)
 
   const params = await client.fetch(`*[_id == "siteParametres"][0]{ motDePasseDispo }`)
   const mdp = params?.motDePasseDispo?.trim()
