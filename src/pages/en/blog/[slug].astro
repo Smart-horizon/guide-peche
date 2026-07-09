@@ -45,7 +45,10 @@ const especeLabel: Record<string, string> = {
   alose: 'Shad', brochet: 'Pike', exotique: 'Saltwater',
 }
 
-const heroImg = article.image ? urlFor(article.image).width(1400).height(600).fit('crop').crop('focalpoint').url() : null
+// Image par défaut si l'article n'a pas de photo — le hero n'est jamais vide
+const heroImg = article.image
+  ? urlFor(article.image).width(1400).height(600).fit('crop').crop('focalpoint').url()
+  : '/images/hero.jpg'
 const dateFormatee = article.date
   ? new Date(article.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
   : null

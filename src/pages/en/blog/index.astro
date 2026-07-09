@@ -68,9 +68,9 @@ const filtresPresents = FILTER_TAGS_ORDER.filter(tag => articles.some(a => (a.ta
             <a href={`/en/blog/${article.slug?.current}`} class="article-card"
                data-espece={article.espece || ''}
                data-tags={article.tags?.join(',') || ''}>
-              <div class="article-img" style={article.image
-                ? `background-image: url(${urlFor(article.image).width(600).height(380).fit('crop').crop('focalpoint').url()})`
-                : ''}>
+              <div class="article-img" style={`background-image: url(${article.image
+                ? urlFor(article.image).width(600).height(380).fit('crop').crop('focalpoint').url()
+                : '/images/hero.jpg'})`}>
                 {shortTags.length > 0 ? (
                   <div class="article-badges">
                     {shortTags.map(t => <span class="article-badge">{t}</span>)}
