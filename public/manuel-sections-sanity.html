@@ -807,6 +807,31 @@ tarifs(){return`
   </div>
 </div>`},
 
+faq(){return`
+<div style="background:#fff;padding:24px 22px;max-width:640px;margin:0 auto">
+  ${row(1,false,`<p style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:${OCEAN};margin:0">Avant votre sortie</p>`)}
+  ${row(2,false,`<h2 style="font-family:'Playfair Display',serif;font-size:18px;color:#1a1a1f;margin:0 0 14px">Questions fréquentes</h2>`)}
+  <div style="border-bottom:1px solid rgba(0,0,0,.09)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0">
+      ${row(3,false,`<strong style="font-size:12.5px;color:#1a1a1f">Faut-il savoir lancer pour une sortie bar&nbsp;?</strong>`)}
+      <span style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(27,94,138,.35);border-radius:50%;color:${OCEAN};font-size:13px;transform:rotate(45deg);background:rgba(27,94,138,.08);flex-shrink:0">+</span>
+    </div>
+    ${row(4,false,`<p style="font-size:11.5px;color:#5a6478;line-height:1.6;margin:0;padding:0 30px 12px 0">Non, aucun prérequis — j'adapte la journée à votre niveau, du premier lancer aux techniques de chasse visuelle. Le matériel est fourni si besoin.</p>`)}
+  </div>
+  <div style="border-bottom:1px solid rgba(0,0,0,.09)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0">
+      <strong style="font-size:12.5px;color:#1a1a1f">Quelle est la meilleure saison pour le bar&nbsp;?</strong>
+      <span style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(27,94,138,.35);border-radius:50%;color:${OCEAN};font-size:13px;flex-shrink:0">+</span>
+    </div>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0">
+      <strong style="font-size:12.5px;color:#1a1a1f">Que se passe-t-il en cas de mauvais temps&nbsp;?</strong>
+      <span style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(27,94,138,.35);border-radius:50%;color:${OCEAN};font-size:13px;flex-shrink:0">+</span>
+    </div>
+  </div>
+</div>`},
+
 }
 
 /* ── Studio field renderer ─────────────────────────────────── */
@@ -1284,11 +1309,22 @@ const SECS=[
   {n:8,lbl:'Prestations (lignes)',type:'arr',items:['Initiation bar → 1 journée → statut: normal → [320 € / 1 pers.] [225 € / 2 pers.]','Bar à vue en estuaire → 1 session → statut: accentué','Pêche du saumon → Fermée en 2026 → statut: fermé','Masterclass → Format sur mesure → statut: contact (bouton "Nous contacter")'],note:'Chaque ligne : Nom + URL opt. + Format + Statut (normal · accentué · fermé · contact) + Prix (1 pill = 1 tarif : valeur + libellé)'},
   {n:9,lbl:'Matrices de prix (tableaux croisés — optionnel)',type:'arr',items:['Grande alose — colonnes: Coup du soir · 1j. Aulne · 1j. Blavet — lignes: 1 pers. · 2 pers. · 3 pers.','Stage Père/enfant — colonnes: ½ journée · 1 journée — lignes: Père + 1 enfant · Père + 2 enfants'],note:'Matrice = titre + URL opt. + note + colonnes (formats) + lignes (nb personnes × valeurs)'},
 ]},
+/* ═══ FAQ ═══════════════════════════════════════════════════ */
+{id:'faq',cat:'t',icon:'❓',name:'FAQ',sanityTitle:'❓ FAQ — Questions / Réponses',preview:PV.faq,
+ tip:'Questions/réponses en accordéon (le visiteur clique pour ouvrir). Bonus SEO : les questions sont automatiquement envoyées à Google (résultats enrichis). Mettez de VRAIES questions de clients avec vos réponses — 3 à 5 questions en bas des pages clés (bar, tarifs, bon cadeau).',
+ fields:[
+  {n:1,lbl:'Texte au-dessus du titre',type:'text',ph:'Avant votre sortie'},
+  {n:2,lbl:'Titre de section',type:'text',ph:'Questions fréquentes'},
+  {n:3,lbl:'Questions / Réponses',type:'arr',items:['❓ Faut-il savoir lancer pour une sortie bar ?','❓ Quelle est la meilleure saison pour le bar ?','❓ Que se passe-t-il en cas de mauvais temps ?'],note:'Au moins 1 question — chaque élément : Question + Réponse'},
+  {n:4,lbl:'→ Question',type:'text',req:true,ph:'Faut-il savoir lancer pour une sortie bar ?'},
+  {n:null,lbl:'→ Réponse',type:'textarea',ph:'Non, aucun prérequis — j\'adapte la journée à votre niveau…'},
+  {n:null,lbl:'Couleur de fond',type:'sel',opts:'⬜ Blanc (défaut) · 🟫 Beige (sable)'},
+]},
 ]
 
 /* ── Categories ─────────────────────────────────────────────── */
 const CATS=[
-  {k:'all',lbl:'Toutes (38)'},
+  {k:'all',lbl:'Toutes (39)'},
   {k:'s',lbl:'📐 Structure'},
   {k:'t',lbl:'📝 Texte & Médias'},
   {k:'c',lbl:'🃏 Cartes'},
