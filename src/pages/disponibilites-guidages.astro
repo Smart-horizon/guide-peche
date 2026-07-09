@@ -76,6 +76,23 @@ const texteContactDispo = params?.texteContactDispo || ''
       margin: 0 auto;
       padding: 2rem 1.5rem 4rem;
     }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1B5E8A;
+      text-decoration: none;
+      padding: 0.45rem 0.9rem;
+      background: #fff;
+      border: 1.5px solid rgba(27,94,138,0.3);
+      border-radius: 6px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .back-btn:hover { background: #eef5fb; border-color: #1B5E8A; }
+
     .page-header { margin-bottom: 2rem; }
     .page-header h1 {
       font-family: 'Playfair Display', serif;
@@ -126,6 +143,7 @@ const texteContactDispo = params?.texteContactDispo || ''
   </header>
 
   <main class="container">
+    <a href="/" class="back-btn" id="back-btn">← Retour au site</a>
     <div class="page-header">
       <h1>📅 Calendrier des disponibilités</h1>
       <p>Retrouvez ici les disponibilités de Jean-Baptiste pour la saison en cours.</p>
@@ -141,6 +159,18 @@ const texteContactDispo = params?.texteContactDispo || ''
       </div>
     )}
   </main>
+
+  <script>
+    // Retour à la page précédente si on vient du site (mais jamais vers la
+    // page de connexion) ; sinon le lien mène à l'accueil.
+    const backBtn = document.getElementById('back-btn')
+    try {
+      const ref = document.referrer ? new URL(document.referrer) : null
+      if (ref && ref.origin === location.origin && !ref.pathname.includes('disponibilites-login')) {
+        backBtn?.addEventListener('click', (e) => { e.preventDefault(); history.back() })
+      }
+    } catch {}
+  </script>
 
 </body>
 </html>
