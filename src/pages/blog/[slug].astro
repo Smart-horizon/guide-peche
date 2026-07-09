@@ -44,10 +44,8 @@ const especeLabel = {
   alose: 'Alose', brochet: 'Brochet', exotique: 'Exotique',
 }
 
-// Image par défaut si l'article n'a pas de photo — le hero n'est jamais vide
-const heroImg = article.image
-  ? urlFor(article.image).width(1400).height(600).fit('crop').crop('focalpoint').url()
-  : '/images/hero.jpg'
+// Pas d'image par défaut : préférence JBV — un hero sobre plutôt qu'une photo inadaptée
+const heroImg = article.image ? urlFor(article.image).width(1400).height(600).fit('crop').crop('focalpoint').url() : null
 const dateFormatee = article.date
   ? new Date(article.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
   : null
