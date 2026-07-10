@@ -75,12 +75,15 @@ function mergedContent(fr: any[], en: any[]) {
 const content = mergedContent(article.contenu, article.contenuEn)
 
 // ── Maillage interne : page pilier + articles de la même espèce ───────────────
+// Fallback : articles sans espèce (contenus généraux) → les 3 derniers articles
 const pilier = article.espece ? PILIERS[article.espece] : null
-const articlesLies = article.espece ? await client.fetch(`
+const articlesLies = await client.fetch(article.espece ? `
   *[_type == "article" && espece == $espece && slug.current != $slug] | order(date desc) [0...3] {
     title, titleEn, "slug": slug.current, date, image
-  }
-`, { espece: article.espece, slug }) : []
+  }` : `
+  *[_type == "article" && slug.current != $slug] | order(date desc) [0...3] {
+    title, titleEn, "slug": slug.current, date, image
+  }`, { espece: article.espece ?? null, slug })
 const articlesLiesEn = articlesLies.map((a: any) => ({ ...a, title: a.titleEn || a.title }))
 
 // ── JSON-LD : article de blog + fil d'Ariane (EN) ─────────────────────────────
