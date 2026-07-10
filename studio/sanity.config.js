@@ -7,6 +7,7 @@ import {presentationTool} from 'sanity/presentation'
 import {schemaTypes} from './schemaTypes'
 import {ManuelTool} from './plugins/ManuelTool'
 import {SyncEnSectionsAction} from './actions/syncEnSections'
+import {createPublishWithEnSync} from './actions/publishWithEnSync'
 
 // ── Structure personnalisée du menu latéral ──
 const customStructure = (S, context) =>
@@ -383,9 +384,16 @@ export default defineConfig({
   document: {
     // Miroir EN placé APRÈS les actions natives : "Publier" reste le bouton
     // principal, le miroir est accessible via le menu ⋯
+    // "Publier" est enveloppé pour aligner l'ordre des sections EN sur le FR
+    // à chaque publication (ordre seul — textes EN préservés).
     actions: (prev, context) =>
       ['page', 'prestation', 'voyage'].includes(context.schemaType)
-        ? [...prev, SyncEnSectionsAction]
+        ? [
+            ...prev.map((action) =>
+              action.action === 'publish' ? createPublishWithEnSync(action) : action
+            ),
+            SyncEnSectionsAction,
+          ]
         : prev,
   },
 
