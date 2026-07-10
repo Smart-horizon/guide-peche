@@ -148,8 +148,12 @@ export default {
       title: 'Prestation liée (optionnel)',
       type: 'reference',
       group: 'classement',
-      to: [{ type: 'prestation' }, { type: 'voyage' }],
-      description: '🔗 La prestation vers laquelle cet article renvoie en bas de page. Laissez vide : le site choisit automatiquement la plus pertinente (mots-clés puis espèce). Remplissez uniquement pour corriger le choix automatique.',
+      to: [{ type: 'prestation' }, { type: 'voyage' }, { type: 'page' }],
+      options: {
+        // Uniquement des documents avec une URL (exclut la page d'accueil)
+        filter: 'defined(slug.current) && slug.current != "/"',
+      },
+      description: '🔗 La page vers laquelle cet article renvoie en bas de page (prestation, voyage ou page hub comme "Voyages de pêche à la mouche"). Laissez vide : le site choisit automatiquement la plus pertinente (mots-clés puis espèce). Remplissez uniquement pour corriger le choix automatique.',
     },
     {
       name: 'espece',
