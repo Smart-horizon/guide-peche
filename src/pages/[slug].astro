@@ -108,6 +108,10 @@ const relTitre = doc.categorie === 'bar' ? 'Derniers récits de pêche au bar'
   : doc._type === 'page' ? 'À lire sur le blog'
   : 'Derniers récits de pêche'
 
+// Si JBV a placé lui-même une section "📰 Blog" dans le Page Builder,
+// elle remplace la section automatique de bas de page.
+const pageHasBlogSection = doc.pagebuilder?.some((s: any) => s._type === 'sectionBlog') ?? false
+
 // ── Utilitaires pour le fallback (pages sans pagebuilder) ─────────────────────
 function spanHtml(b: any): string {
   return (b.children || []).map((span: any) => {
@@ -165,7 +169,7 @@ function blocks(content: any[]): string {
 >
 
   {/* ── PAGE BUILDER ── */}
-  <PageBuilderSections sections={doc.pagebuilder} pageTitle={pageTitle} />
+  <PageBuilderSections sections={doc.pagebuilder} pageTitle={pageTitle} articlesLies={articlesLies} />
 
   {/* ── Fallback pages génériques (type page / voyage sans pagebuilder) ── */}
   {!doc.pagebuilder && (
@@ -203,7 +207,8 @@ function blocks(content: any[]): string {
     </>
   )}
 
-  {/* ── Maillage interne : derniers récits du même thème ── */}
-  <RelatedArticles articles={articlesLies} titre={relTitre} lang="fr" />
+  {/* ── Maillage interne : derniers récits du même thème (masqué si une
+       section 📰 Blog est déjà placée dans le Page Builder) ── */}
+  {!pageHasBlogSection && <RelatedArticles articles={articlesLies} titre={relTitre} lang="fr" />}
 
 </BaseLayout>

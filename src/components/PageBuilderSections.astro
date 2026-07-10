@@ -93,9 +93,11 @@ interface Props {
   sections?: any[]
   pageTitle?: string
   lang?: 'fr' | 'en'
+  /** Articles du maillage intelligent — utilisés par sectionBlog en mode "liés à cette page" */
+  articlesLies?: any[]
 }
 
-const { sections, pageTitle = '', lang = 'fr' } = Astro.props
+const { sections, pageTitle = '', lang = 'fr', articlesLies = [] } = Astro.props
 
 // Prefix internal links with /en when rendering the EN version
 const pfx = (href: string | undefined): string | undefined =>
@@ -110,6 +112,16 @@ const partenaires: any[] = hasPartenaires
 const hasRevuePresse = (sections ?? []).some((s: any) => s._type === 'sectionRevuePresse')
 const revuePresse: any[] = hasRevuePresse
   ? await client.fetch(`*[_type == "revuePresse"] | order(orderRank asc) { _id, magazine, numero, date, annee, titre, description, type, cover { asset->{ url } }, photos[] { asset->{ url }, alt }, fichierPdf { asset->{ url, originalFilename } }, lien, labelLien }`)
+  : []
+
+const hasBlogSection = (sections ?? []).some((s: any) => s._type === 'sectionBlog')
+const blogArticles: any[] = hasBlogSection
+  ? await client.fetch(`
+    *[_type == "article"] | order(date desc) {
+      _id, title, titleEn, "slug": slug.current, date, espece,
+      image { _type, hotspot, crop, asset->{ _id, url } }
+    }
+  `)
   : []
 
 const hasVoyagesGrid = (sections ?? []).some((s: any) => s._type === 'sectionVoyagesGrid')
@@ -856,6 +868,65 @@ const voyagesForGrid: any[] = hasVoyagesGrid
       </div>
     </section>
   )}
+
+  {/* ════════════ BLOG — DERNIERS RÉCITS ════════════ */}
+  {s._type === 'sectionBlog' && (() => {
+    const mode = stegaClean(s.mode) || 'lies'
+    const n = parseInt(stegaClean(s.nombre) || '3', 10) || 3
+    let arts: any[] = []
+    if (mode === 'manuel') {
+      arts = (s.articlesChoisis ?? [])
+        .map((r: any) => blogArticles.find((a: any) => a._id === (r._ref || r._id)))
+        .filter(Boolean)
+    } else if (mode === 'espece' && stegaClean(s.espece)) {
+      arts = blogArticles.filter((a: any) => a.espece === stegaClean(s.espece))
+    } else if (mode === 'lies' && articlesLies?.length) {
+      arts = articlesLies
+    } else {
+      arts = blogArticles
+    }
+    arts = arts.slice(0, n)
+    if (!arts.length) return null
+    const base   = lang === 'en' ? '/en/blog' : '/blog'
+    const locale = lang === 'en' ? 'en-GB' : 'fr-FR'
+    const isDark = stegaClean(s.fond) === 'dark'
+    return (
+      <section class={`section pb-blogsec ${bg(s.fond)||'section--sand'}`}>
+        <div class="container">
+          <div class="pb-blogsec__head">
+            <div>
+              {stegaClean(s.eyebrow) && <p class={`pb-eyebrow-sm${isDark ? ' pb-blogsec__eyebrow--dark' : ''}`}>{s.eyebrow}</p>}
+              <h2 class="pb-blogsec__titre">{s.titre || (lang === 'en' ? 'Latest fishing stories' : 'Derniers récits de pêche')}</h2>
+            </div>
+            {s.afficherLienBlog !== false && (
+              <a href={base} class="pb-blogsec__all">{lang === 'en' ? 'All articles →' : 'Tous les articles →'}</a>
+            )}
+          </div>
+          <div class="pb-blogsec__grid">
+            {arts.map((a: any) => (
+              <a href={`${base}/${a.slug?.current || a.slug}`} class="pb-blogsec__card">
+                <div
+                  class="pb-blogsec__img"
+                  style={a.image
+                    ? `background-image:url(${urlFor(a.image).width(500).height(320).fit('crop').crop('focalpoint').url()})`
+                    : ''}
+                ></div>
+                <div class="pb-blogsec__body">
+                  {a.date && (
+                    <time class="pb-blogsec__date" datetime={a.date}>
+                      {new Date(a.date).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </time>
+                  )}
+                  <h3 class="pb-blogsec__h3">{lang === 'en' ? (a.titleEn || a.title) : a.title}</h3>
+                  <span class="pb-blogsec__lire">{lang === 'en' ? 'Read →' : 'Lire →'}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  })()}
 
   {/* ════════════ FRISE CHRONOLOGIQUE ════════════ */}
   {s._type === 'sectionFriseChronologique' && s.items?.length > 0 && (
@@ -3879,6 +3950,84 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   .vg-card:nth-child(4),
   .vg-card:nth-child(5) { grid-column: 1; grid-row: auto; }
   .vg-card--large .vg-label { font-size: 1.6rem; }
+}
+
+/* ── SECTION BLOG — DERNIERS RÉCITS ─────────────────────────────────────────── */
+.pb-blogsec__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+.pb-blogsec__titre {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+  color: var(--color-text);
+}
+.pb-blogsec__all {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-ocean-main);
+  white-space: nowrap;
+}
+.pb-blogsec__all:hover { text-decoration: underline; }
+.pb-blogsec__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.pb-blogsec__card {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s;
+}
+.pb-blogsec__card:hover { box-shadow: 0 8px 26px rgba(27,94,138,0.14); }
+.pb-blogsec__img {
+  aspect-ratio: 16/10;
+  background: var(--color-ocean) center / cover no-repeat;
+}
+.pb-blogsec__body {
+  padding: 1.1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+.pb-blogsec__date {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.pb-blogsec__h3 {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.35;
+  color: var(--color-text);
+  font-weight: 500;
+}
+.pb-blogsec__card:hover .pb-blogsec__h3 { color: var(--color-ocean-main); }
+.pb-blogsec__lire {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-ocean-main);
+}
+/* Variante fond bleu nuit */
+.pb-blogsec.section--dark .pb-blogsec__titre { color: #fff; }
+.pb-blogsec.section--dark .pb-blogsec__all   { color: var(--color-ocean-light); }
+.pb-blogsec__eyebrow--dark { color: var(--color-ocean-light); }
+@media (max-width: 800px) {
+  .pb-blogsec__grid { grid-template-columns: 1fr; }
 }
 </style>
 

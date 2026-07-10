@@ -2672,6 +2672,101 @@ export const sectionFaq = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — BLOG / DERNIERS RÉCITS (grille d'articles automatique)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionBlog = {
+  name: 'sectionBlog',
+  title: '📰 Blog — Derniers récits',
+  type: 'object',
+  description: 'Grille d\'articles du blog — remplace la section automatique en bas de page',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Texte au-dessus du titre (optionnel)',
+      type: 'string',
+      description: 'Ex : "Le blog" · "Récits de pêche"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section',
+      type: 'string',
+      initialValue: 'Derniers récits de pêche',
+      description: 'Ex : "Derniers récits de pêche au bar" · "À lire sur le blog"',
+    },
+    {
+      name: 'mode',
+      title: 'Quels articles afficher ?',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🔗 Articles liés à cette page (automatique — recommandé)', value: 'lies' },
+          { title: '🕐 Les plus récents du blog',                              value: 'recents' },
+          { title: '🐟 Une espèce précise',                                    value: 'espece' },
+          { title: '✋ Sélection manuelle',                                     value: 'manuel' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'lies',
+      description: '"Liés à cette page" reprend le maillage intelligent (articles qui parlent de cette prestation, puis même espèce)',
+    },
+    {
+      name: 'espece',
+      title: 'Espèce',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🌊 Bar',      value: 'bar' },
+          { title: '🏞️ Truite',   value: 'truite' },
+          { title: '🐟 Saumon',   value: 'saumon' },
+          { title: '🐟 Alose',    value: 'alose' },
+          { title: '🎣 Brochet',  value: 'brochet' },
+          { title: '✈️ Exotique', value: 'exotique' },
+        ],
+        layout: 'radio',
+      },
+      hidden: ({ parent }) => parent?.mode !== 'espece',
+    },
+    {
+      name: 'articlesChoisis',
+      title: 'Articles choisis',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'article' }] }],
+      description: 'Choisissez les articles à afficher, dans l\'ordre souhaité',
+      hidden: ({ parent }) => parent?.mode !== 'manuel',
+    },
+    {
+      name: 'nombre',
+      title: 'Nombre d\'articles affichés',
+      type: 'string',
+      options: {
+        list: [
+          { title: '3 articles (une ligne)',    value: '3' },
+          { title: '6 articles (deux lignes)',  value: '6' },
+          { title: '9 articles (trois lignes)', value: '9' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: '3',
+    },
+    {
+      name: 'afficherLienBlog',
+      title: 'Afficher le lien "Tous les articles →" ?',
+      type: 'boolean',
+      initialValue: true,
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { titre: 'titre', mode: 'mode', nombre: 'nombre' },
+    prepare: ({ titre, mode, nombre }) => {
+      const modes = { lies: '🔗 liés à la page', recents: '🕐 plus récents', espece: '🐟 par espèce', manuel: '✋ sélection manuelle' }
+      return {
+        title: `📰 Blog — ${titre || 'Derniers récits'}`,
+        subtitle: `${modes[mode] || '🔗 liés à la page'} · ${nombre || 3} article(s)`,
+      }
+    },
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -2715,4 +2810,5 @@ export const allSectionTypes = [
   sectionAvantages,
   sectionVoyagesGrid,
   sectionFaq,
+  sectionBlog,
 ]

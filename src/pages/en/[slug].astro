@@ -92,6 +92,10 @@ const relTitre = doc.categorie === 'bar' ? 'Latest sea bass fishing stories'
   : doc._type === 'page' ? 'From the blog'
   : 'Latest fishing stories'
 
+// Si une section "📰 Blog" est placée dans le Page Builder, elle remplace
+// la section automatique de bas de page.
+const pageHasBlogSection = sections?.some((s: any) => s._type === 'sectionBlog') ?? false
+
 // ── SEO EN — fallback sur valeurs FR ─────────────────────────────────────────
 const heroSection = sections?.find((s: any) => s._type === 'sectionHero')
 const pageTitle   = doc.seoTitleEn    || doc.seoTitle    || heroSection?.titre || doc.title
@@ -140,7 +144,7 @@ if (doc._type === 'prestation' || doc._type === 'voyage') {
   hreflangEn={`/en/${slug}`}
   jsonLd={jsonLd}
 >
-  <PageBuilderSections sections={sections} pageTitle={pageTitle} lang="en" />
+  <PageBuilderSections sections={sections} pageTitle={pageTitle} lang="en" articlesLies={articlesLiesEn} />
 
   {/* Fallback générique pour pages sans pagebuilder */}
   {!sections && (
@@ -169,6 +173,7 @@ if (doc._type === 'prestation' || doc._type === 'voyage') {
     </>
   )}
 
-  {/* ── Maillage interne : derniers récits du même thème ── */}
-  <RelatedArticles articles={articlesLiesEn} titre={relTitre} lang="en" />
+  {/* ── Maillage interne : derniers récits du même thème (masqué si une
+       section 📰 Blog est déjà placée dans le Page Builder) ── */}
+  {!pageHasBlogSection && <RelatedArticles articles={articlesLiesEn} titre={relTitre} lang="en" />}
 </BaseLayout>
