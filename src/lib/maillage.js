@@ -52,6 +52,12 @@ export const PILIERS = {
 // Ordre = priorité. `espece` (optionnel) restreint la règle à une espèce
 // pour éviter les faux positifs (ex : "bateau" dans un article truite).
 const CIBLES = [
+  // ── Contenus "média" : presse, montages de mouches, vidéos ────────────────
+  { rx: /revue de presse|dans (le |la )?p[êe]che mouche\b|magazine|parution|interview|podcast/i,
+    url: '/revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche', titre: 'la revue de presse', titreEn: 'the press review' },
+  { rx: /montage|fly.?tying|une semaine[\s\S]{0,12}une mouche|une mouche[\s\S]{0,12}une histoire/i,
+    url: '/mouches-de-peche-jeanbaptiste-vidal', titre: 'mes mouches de pêche', titreEn: 'my fishing flies' },
+  // ── Prestations précises ──────────────────────────────────────────────────
   { rx: /master.?class[\s\S]{0,40}r[ée]servoir|r[ée]servoir[\s\S]{0,40}master.?class/i,
     url: '/master-class-peche-en-reservoir', titre: 'la Masterclass pêche en réservoir', titreEn: 'the reservoir masterclass' },
   { rx: /nymphe au fil/i,
@@ -82,6 +88,27 @@ const CIBLES = [
     url: '/voyage-peche-argentine-rio-grande-truite-de-mer', titre: "le voyage Argentine — Rio Grande", titreEn: 'the Argentina trip — Rio Grande' },
   { rx: /mexi(que|co)/i,
     url: '/voyage-peche-mouche-mexique', titre: 'le voyage au Mexique', titreEn: 'the Mexico trip' },
+  // ── Matériel (par espèce, puis hub) ───────────────────────────────────────
+  { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i, espece: 'bar',
+    url: '/materiel-mouche-bar', titre: 'le matériel bar à la mouche', titreEn: 'sea bass fly fishing gear' },
+  { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i, espece: 'truite',
+    url: '/materiel-mouche-truite', titre: 'le matériel truite à la mouche', titreEn: 'trout fly fishing gear' },
+  { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i, espece: 'brochet',
+    url: '/materiel-mouche-brochet', titre: 'le matériel brochet à la mouche', titreEn: 'pike fly fishing gear' },
+  { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i, espece: 'saumon',
+    url: '/materiel-mouche-migrateur', titre: 'le matériel migrateurs', titreEn: 'migratory fish gear' },
+  { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i, espece: 'alose',
+    url: '/materiel-mouche-migrateur', titre: 'le matériel migrateurs', titreEn: 'migratory fish gear' },
+  { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i, espece: 'exotique',
+    url: '/materiel-mouche-peche-exotique', titre: 'le matériel pêche exotique', titreEn: 'saltwater fly fishing gear' },
+  { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i,
+    url: '/materiel-jeanbaptistevidal', titre: 'mon matériel de pêche à la mouche', titreEn: 'my fly fishing gear' },
+  // ── Bon cadeau ────────────────────────────────────────────────────────────
+  { rx: /bon cadeau|carte cadeau/i,
+    url: '/bon-cadeau', titre: 'le bon cadeau pêche à la mouche', titreEn: 'the gift voucher' },
+  // ── Vidéos (en dernier — les sujets précis ci-dessus gagnent) ─────────────
+  { rx: /\bvid[ée]os?\b/i,
+    url: '/videos-jeanbaptiste-vidal-moniteur-guide-de-peche', titre: 'mes vidéos de pêche', titreEn: 'my fishing videos' },
 ]
 
 /**

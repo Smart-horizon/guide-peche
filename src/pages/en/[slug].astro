@@ -4,7 +4,7 @@ export const prerender = true
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import PageBuilderSections from '../../components/PageBuilderSections.astro'
 import RelatedArticles from '../../components/RelatedArticles.astro'
-import { especesPourDoc, articlesPourPage } from '../../lib/maillage.js'
+import { articlesPourPage } from '../../lib/maillage.js'
 import { client } from '../../lib/sanity.js'
 import { mergeSectionsEn } from '../../lib/mergeEnSections.js'
 import imageUrlBuilder from '@sanity/image-url'
@@ -77,17 +77,18 @@ if (!doc) return Astro.redirect('/404')
 const sections = mergeSectionsEn(doc.pagebuilder, doc.pagebuilderEn)
 
 // ── Maillage interne : les récits qui CIBLENT cette page (puis même espèce) ───
-const especes = especesPourDoc(doc)
-const tousArticles = especes ? await client.fetch(`
+// Actif aussi sur les pages hub (matériel, mouches, vidéos, presse…)
+const tousArticles = await client.fetch(`
   *[_type == "article"] | order(date desc) {
     title, titleEn, "slug": slug.current, date, image, espece, tags,
     prestationLiee->{ title, "slug": slug.current }
   }
-`) : []
-const articlesLies = especes ? articlesPourPage(slug, doc, tousArticles) : []
+`)
+const articlesLies = articlesPourPage(slug, doc, tousArticles)
 const articlesLiesEn = articlesLies.map((a: any) => ({ ...a, title: a.titleEn || a.title }))
 const relTitre = doc.categorie === 'bar' ? 'Latest sea bass fishing stories'
   : doc._type === 'voyage' ? 'Latest trip reports'
+  : doc._type === 'page' ? 'From the blog'
   : 'Latest fishing stories'
 
 // ── SEO EN — fallback sur valeurs FR ─────────────────────────────────────────

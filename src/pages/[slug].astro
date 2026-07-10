@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import RelatedArticles from '../components/RelatedArticles.astro'
-import { especesPourDoc, articlesPourPage } from '../lib/maillage.js'
+import { articlesPourPage } from '../lib/maillage.js'
 import PageBuilderSections from '../components/PageBuilderSections.astro'
 import { client } from '../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
@@ -92,16 +92,19 @@ if (doc._type === 'prestation' || doc._type === 'voyage') {
 }
 
 // ── Maillage interne : les récits qui CIBLENT cette page (puis même espèce) ───
-const especes = especesPourDoc(doc)
-const tousArticles = especes ? await client.fetch(`
+// Actif sur TOUTES les pages : prestations/voyages (repli espèce) mais aussi
+// les pages hub (matériel, mouches, vidéos, presse…) dès qu'un article les
+// cible — automatiquement ou via le champ "Prestation liée" rempli par JBV.
+const tousArticles = await client.fetch(`
   *[_type == "article"] | order(date desc) {
     title, "slug": slug.current, date, image, espece, tags,
     prestationLiee->{ title, "slug": slug.current }
   }
-`) : []
-const articlesLies = especes ? articlesPourPage(slug, doc, tousArticles) : []
+`)
+const articlesLies = articlesPourPage(slug, doc, tousArticles)
 const relTitre = doc.categorie === 'bar' ? 'Derniers récits de pêche au bar'
   : doc._type === 'voyage' ? 'Derniers récits de voyage'
+  : doc._type === 'page' ? 'À lire sur le blog'
   : 'Derniers récits de pêche'
 
 // ── Utilitaires pour le fallback (pages sans pagebuilder) ─────────────────────
