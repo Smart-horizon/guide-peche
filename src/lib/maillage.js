@@ -121,6 +121,40 @@ export function especesPourDoc(doc) {
 }
 
 /**
+ * "À lire aussi" : les 3 articles les plus PROCHES thématiquement.
+ * Score : même prestation ciblée (+4) > même espèce (+2) > tags partagés
+ * (+1 par tag discriminant, plafonné à 3 — les tags génériques présents
+ * dans plus de 30 % des articles sont ignorés). Égalité → le plus récent.
+ */
+export function articlesSimilaires(article, allArticles) {
+  const monSlug = article?.slug?.current || article?.slug
+  const maCible = cibleArticle(article)?.url ?? null
+
+  // Fréquence des tags → ignorer les tags trop communs ("pêche à la mouche"…)
+  const freq = {}
+  for (const a of allArticles) for (const t of a.tags || []) {
+    const k = t.toLowerCase()
+    freq[k] = (freq[k] || 0) + 1
+  }
+  const seuil = allArticles.length * 0.3
+  const mesTags = new Set((article?.tags || []).map((t) => t.toLowerCase()).filter((t) => (freq[t] || 0) <= seuil))
+
+  return allArticles
+    .filter((a) => (a.slug?.current || a.slug) !== monSlug)
+    .map((a) => {
+      let score = 0
+      if (maCible && cibleArticle(a)?.url === maCible) score += 4
+      if (article?.espece && a.espece === article.espece) score += 2
+      const partages = (a.tags || []).filter((t) => mesTags.has(t.toLowerCase())).length
+      score += Math.min(partages, 3)
+      return { a, score }
+    })
+    .sort((x, y) => y.score - x.score || new Date(y.a.date || 0) - new Date(x.a.date || 0))
+    .slice(0, 3)
+    .map((x) => x.a)
+}
+
+/**
  * Sens inverse : les 3 articles à afficher sur une page prestation/voyage.
  * Priorité aux articles dont la CIBLE est cette page, complétés par les
  * articles de la même espèce (jamais de bloc à moitié vide).

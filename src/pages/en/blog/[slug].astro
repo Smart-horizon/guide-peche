@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import RelatedArticles from '../../../components/RelatedArticles.astro'
-import { PILIERS, cibleArticle } from '../../../lib/maillage.js'
+import { PILIERS, cibleArticle, articlesSimilaires } from '../../../lib/maillage.js'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -76,17 +76,18 @@ function mergedContent(fr: any[], en: any[]) {
 const content = mergedContent(article.contenu, article.contenuEn)
 
 // ── Maillage interne : cible précise (bouton) + hub de l'espèce (lien texte) ──
-// Fallback : articles sans espèce (contenus généraux) → les 3 derniers articles
 const cible  = cibleArticle(article)
 const hub    = article.espece ? PILIERS[article.espece] : null
 const pilier = hub ?? cible
-const articlesLies = await client.fetch(article.espece ? `
-  *[_type == "article" && espece == $espece && slug.current != $slug] | order(date desc) [0...3] {
-    title, titleEn, "slug": slug.current, date, image
-  }` : `
-  *[_type == "article" && slug.current != $slug] | order(date desc) [0...3] {
-    title, titleEn, "slug": slug.current, date, image
-  }`, { espece: article.espece ?? null, slug })
+
+// "À lire aussi" : les 3 articles les plus proches thématiquement
+const tousArticles = await client.fetch(`
+  *[_type == "article"] | order(date desc) {
+    title, titleEn, "slug": slug.current, date, image, espece, tags,
+    prestationLiee->{ title, "slug": slug.current }
+  }
+`)
+const articlesLies = articlesSimilaires(article, tousArticles)
 const articlesLiesEn = articlesLies.map((a: any) => ({ ...a, title: a.titleEn || a.title }))
 
 // ── JSON-LD : article de blog + fil d'Ariane (EN) ─────────────────────────────
