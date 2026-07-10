@@ -1,0 +1,136 @@
+---
+/**
+ * RelatedArticles — grille de 3 articles de blog liés (maillage interne SEO).
+ * Utilisé en bas des prestations ("Derniers récits") et des articles ("À lire aussi").
+ */
+import { client } from '../lib/sanity.js'
+import imageUrlBuilder from '@sanity/image-url'
+
+const builder = imageUrlBuilder(client)
+const urlFor = (source: any) => {
+  const b = builder.image(source)
+  const hs = source?.hotspot
+  return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b
+}
+
+interface Props {
+  articles: any[]
+  titre: string
+  lang?: 'fr' | 'en'
+}
+
+const { articles = [], titre, lang = 'fr' } = Astro.props
+const base     = lang === 'en' ? '/en/blog' : '/blog'
+const locale   = lang === 'en' ? 'en-GB' : 'fr-FR'
+const allLabel = lang === 'en' ? 'All articles →' : 'Tous les articles →'
+---
+
+{articles.length > 0 && (
+  <section class="rel-arts section">
+    <div class="container">
+      <div class="rel-arts__head">
+        <h2 class="rel-arts__titre">{titre}</h2>
+        <a href={base} class="rel-arts__all">{allLabel}</a>
+      </div>
+      <div class="rel-arts__grid">
+        {articles.map((a: any) => (
+          <a href={`${base}/${a.slug?.current || a.slug}`} class="rel-arts__card">
+            <div
+              class="rel-arts__img"
+              style={a.image
+                ? `background-image:url(${urlFor(a.image).width(500).height(320).fit('crop').crop('focalpoint').url()})`
+                : ''}
+            ></div>
+            <div class="rel-arts__body">
+              {a.date && (
+                <time class="rel-arts__date" datetime={a.date}>
+                  {new Date(a.date).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })}
+                </time>
+              )}
+              <h3 class="rel-arts__h3">{a.title}</h3>
+              <span class="rel-arts__lire">{lang === 'en' ? 'Read →' : 'Lire →'}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .rel-arts { background: var(--color-sand); }
+  .rel-arts__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+  }
+  .rel-arts__titre {
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+    color: var(--color-text);
+  }
+  .rel-arts__all {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-ocean-main);
+    white-space: nowrap;
+  }
+  .rel-arts__all:hover { text-decoration: underline; }
+
+  .rel-arts__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .rel-arts__card {
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s;
+  }
+  .rel-arts__card:hover { box-shadow: 0 8px 26px rgba(27,94,138,0.14); }
+  .rel-arts__img {
+    aspect-ratio: 16/10;
+    background: var(--color-ocean) center / cover no-repeat;
+  }
+  .rel-arts__body {
+    padding: 1.1rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+  .rel-arts__date {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .rel-arts__h3 {
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    line-height: 1.35;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+  .rel-arts__card:hover .rel-arts__h3 { color: var(--color-ocean-main); }
+  .rel-arts__lire {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-ocean-main);
+  }
+
+  @media (max-width: 800px) {
+    .rel-arts__grid { grid-template-columns: 1fr; }
+  }
+</style>

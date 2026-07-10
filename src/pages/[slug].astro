@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import RelatedArticles from '../components/RelatedArticles.astro'
+import { especesPourDoc } from '../lib/maillage.js'
 import PageBuilderSections from '../components/PageBuilderSections.astro'
 import { client } from '../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
@@ -88,6 +90,17 @@ if (doc._type === 'prestation' || doc._type === 'voyage') {
     } : {}),
   })
 }
+
+// ── Maillage interne : derniers articles du même thème ────────────────────────
+const especes = especesPourDoc(doc)
+const articlesLies = especes ? await client.fetch(`
+  *[_type == "article" && espece in $especes] | order(date desc) [0...3] {
+    title, "slug": slug.current, date, image, espece
+  }
+`, { especes }) : []
+const relTitre = doc.categorie === 'bar' ? 'Derniers récits de pêche au bar'
+  : doc._type === 'voyage' ? 'Derniers récits de voyage'
+  : 'Derniers récits de pêche'
 
 // ── Utilitaires pour le fallback (pages sans pagebuilder) ─────────────────────
 function spanHtml(b: any): string {
@@ -183,5 +196,8 @@ function blocks(content: any[]): string {
       </section>
     </>
   )}
+
+  {/* ── Maillage interne : derniers récits du même thème ── */}
+  <RelatedArticles articles={articlesLies} titre={relTitre} lang="fr" />
 
 </BaseLayout>

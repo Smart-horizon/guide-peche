@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import RelatedArticles from '../../components/RelatedArticles.astro'
+import { PILIERS } from '../../lib/maillage.js'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -49,6 +51,14 @@ const heroImg = article.image ? urlFor(article.image).width(1400).height(600).fi
 const dateFormatee = article.date
   ? new Date(article.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
   : null
+
+// ── Maillage interne : page pilier + articles de la même espèce ───────────────
+const pilier = article.espece ? PILIERS[article.espece] : null
+const articlesLies = article.espece ? await client.fetch(`
+  *[_type == "article" && espece == $espece && slug.current != $slug] | order(date desc) [0...3] {
+    title, "slug": slug.current, date, image
+  }
+`, { espece: article.espece, slug }) : []
 
 // ── JSON-LD : article de blog + fil d'Ariane ──────────────────────────────────
 const siteBase = Astro.site?.toString().replace(/\/$/, '') || ''
@@ -191,13 +201,21 @@ const jsonLd = [
     <a href="/blog" class="retour">← Retour au blog</a>
   </div>
 
-  <!-- CTA -->
-  <section class="section--sand article-cta">
+  <!-- Maillage interne : articles de la même espèce -->
+  <RelatedArticles articles={articlesLies} titre="À lire aussi" lang="fr" />
+
+  <!-- CTA contextuel : lien vers la page prestation pilier (maillage SEO) -->
+  <section class="section--sand article-cta" style={articlesLies.length ? 'background:#fff' : undefined}>
     <div class="container" style="text-align:center">
       <h2>Envie de vivre ça en vrai&nbsp;?</h2>
-      <p>Contactez Jean-Baptiste pour réserver une sortie sur ses rivières et côtes favorites.</p>
+      <p>
+        {pilier
+          ? <>Découvrez <a href={pilier.url} class="article-cta__pilier">{pilier.titre}</a> avec Jean-Baptiste, ou contactez-le pour réserver votre sortie.</>
+          : 'Contactez Jean-Baptiste pour réserver une sortie sur ses rivières et côtes favorites.'}
+      </p>
       <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
-        <a href="/contact" class="btn btn--ocean">Me contacter</a>
+        {pilier && <a href={pilier.url} class="btn btn--ocean">Découvrir la prestation</a>}
+        <a href="/contact" class={`btn ${pilier ? 'btn--outline' : 'btn--ocean'}`}>Me contacter</a>
         <a href="tel:+33687303456" class="btn btn--outline">06 87 30 34 56</a>
       </div>
     </div>
@@ -354,6 +372,12 @@ const jsonLd = [
   .article-cta { padding: 4rem 0; }
   .article-cta h2 { margin-bottom: 0.75rem; }
   .article-cta p { color: var(--color-text-muted); }
+  .article-cta__pilier {
+    color: var(--color-ocean-main);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+  .article-cta__pilier:hover { color: var(--color-ocean); }
 
   .btn {
     display: inline-block;
