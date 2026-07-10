@@ -1,13 +1,20 @@
 /**
  * maillage.js — Maillage interne SEO (cocon sémantique)
  *
- * Relie les 156 articles de blog (champ `espece`) aux pages prestations
- * "piliers" (champ `categorie`), dans les deux sens :
- *   · Blog → Prestation : CTA contextuel en bas d'article (transfert d'autorité)
- *   · Prestation → Blog : bloc "Derniers récits" (autorité thématique + conversion)
+ * Relie les 156 articles de blog aux pages business, dans les deux sens :
+ *   · Blog → Prestation : CTA hybride en bas d'article
+ *       - bouton  → la prestation la plus PRÉCISE (réservoir, spey, bar à vue…)
+ *       - lien texte → le hub de l'espèce (protège les URLs critiques)
+ *   · Prestation → Blog : bloc "Derniers récits" = articles qui CIBLENT la page
+ *       (repli sur l'espèce si moins de 3 articles précis)
+ *
+ * Résolution de la cible d'un article (ordre de priorité) :
+ *   1. Champ Sanity "Prestation liée" (choix manuel de JBV)
+ *   2. Détection par mots-clés dans les tags + titre
+ *   3. Page pilier de l'espèce
  */
 
-// Page pilier pour chaque espèce d'article
+// ── Pages piliers par espèce (hubs) ──────────────────────────────────────────
 export const PILIERS = {
   bar: {
     url: '/peche-du-bar-a-la-mouche',
@@ -41,7 +48,66 @@ export const PILIERS = {
   },
 }
 
-// Espèces d'articles pertinentes pour une prestation/un voyage
+// ── Détection mots-clés → prestation précise ─────────────────────────────────
+// Ordre = priorité. `espece` (optionnel) restreint la règle à une espèce
+// pour éviter les faux positifs (ex : "bateau" dans un article truite).
+const CIBLES = [
+  { rx: /master.?class[\s\S]{0,40}r[ée]servoir|r[ée]servoir[\s\S]{0,40}master.?class/i,
+    url: '/master-class-peche-en-reservoir', titre: 'la Masterclass pêche en réservoir', titreEn: 'the reservoir masterclass' },
+  { rx: /nymphe au fil/i,
+    url: '/master-class-nymphe-au-fil', titre: 'la Masterclass Nymphe au fil', titreEn: 'the Czech-nymphing masterclass' },
+  { rx: /r[ée]servoir/i,
+    url: '/peche-de-la-truite-en-reservoir', titre: 'la pêche de la truite en réservoir', titreEn: 'reservoir trout fishing' },
+  { rx: /spey/i,
+    url: '/stage-spey-cast', titre: 'le stage de Spey Cast', titreEn: 'the Spey cast course' },
+  { rx: /lancer/i,
+    url: '/cours-de-lancer-peche-a-la-mouche', titre: 'les cours de lancer', titreEn: 'casting lessons' },
+  { rx: /[àa] vue/i, espece: 'bar',
+    url: '/peche-du-bar-a-vue-a-la-mouche', titre: 'la pêche du bar à vue en estuaire', titreEn: 'sight fishing for sea bass' },
+  { rx: /bateau|skiff/i, espece: 'bar',
+    url: '/peche-mouche-bar-bateau-bretagne', titre: 'la pêche du bar en bateau', titreEn: 'sea bass fishing by boat' },
+  { rx: /coaching/i, espece: 'bar',
+    url: '/peche-du-bar-a-la-mouche-coaching', titre: 'le coaching bar à la mouche', titreEn: 'sea bass coaching' },
+  { rx: /initiation|d[ée]butant|d[ée]couverte de la p[êe]che/i, espece: 'bar',
+    url: '/initiation-peche-du-bar-a-la-mouche', titre: "l'initiation à la pêche du bar", titreEn: 'the sea bass beginners course' },
+  { rx: /initiation|d[ée]butant|d[ée]couverte de la p[êe]che/i,
+    url: '/initiation-peche-a-la-mouche', titre: "l'initiation à la pêche à la mouche", titreEn: 'the fly fishing beginners course' },
+  { rx: /los.?roques/i,
+    url: '/los-roques-venezuela', titre: 'le voyage Los Roques — Venezuela', titreEn: 'the Los Roques trip — Venezuela' },
+  { rx: /cayo.?cruz/i,
+    url: '/peche-mouche-cuba-cayo-cruz', titre: 'le voyage Cuba — Cayo Cruz', titreEn: 'the Cuba trip — Cayo Cruz' },
+  { rx: /santa.?maria/i,
+    url: '/peche-mouche-cuba-cayo-santa-maria', titre: 'le voyage Cuba — Cayo Santa Maria', titreEn: 'the Cuba trip — Cayo Santa Maria' },
+  { rx: /argentine|rio.?grande|terre de feu|kau.?tapen/i,
+    url: '/voyage-peche-argentine-rio-grande-truite-de-mer', titre: "le voyage Argentine — Rio Grande", titreEn: 'the Argentina trip — Rio Grande' },
+  { rx: /mexi(que|co)/i,
+    url: '/voyage-peche-mouche-mexique', titre: 'le voyage au Mexique', titreEn: 'the Mexico trip' },
+]
+
+/**
+ * Cible précise d'un article, par priorité :
+ * 1. prestationLiee (référence Sanity : { title, slug }) — choix manuel
+ * 2. mots-clés tags + titre
+ * 3. pilier de l'espèce
+ * Retourne { url, titre, titreEn } ou null.
+ */
+export function cibleArticle(article) {
+  // 1. Choix manuel dans Sanity
+  const ref = article?.prestationLiee
+  if (ref?.slug) {
+    return { url: `/${ref.slug}`, titre: ref.title || 'cette prestation', titreEn: ref.title || 'this experience' }
+  }
+  // 2. Mots-clés
+  const haystack = [article?.title || '', ...(article?.tags || [])].join(' · ')
+  for (const c of CIBLES) {
+    if (c.espece && article?.espece !== c.espece) continue
+    if (c.rx.test(haystack)) return { url: c.url, titre: c.titre, titreEn: c.titreEn }
+  }
+  // 3. Pilier de l'espèce
+  return article?.espece ? PILIERS[article.espece] ?? null : null
+}
+
+// ── Espèces pertinentes pour une prestation/un voyage (repli sens inverse) ──
 export function especesPourDoc(doc) {
   if (doc?._type === 'voyage') return ['exotique']
   if (doc?._type !== 'prestation') return null
@@ -52,4 +118,18 @@ export function especesPourDoc(doc) {
     case 'spey-cast':   return ['saumon', 'truite']
     default:            return null // bon-cadeau, etc.
   }
+}
+
+/**
+ * Sens inverse : les 3 articles à afficher sur une page prestation/voyage.
+ * Priorité aux articles dont la CIBLE est cette page, complétés par les
+ * articles de la même espèce (jamais de bloc à moitié vide).
+ * `allArticles` : liste légère { title, titleEn, slug, date, image, espece, tags, prestationLiee }.
+ */
+export function articlesPourPage(slug, doc, allArticles) {
+  const url = `/${slug}`
+  const precis = allArticles.filter((a) => cibleArticle(a)?.url === url)
+  const especes = especesPourDoc(doc) ?? []
+  const parEspece = allArticles.filter((a) => especes.includes(a.espece) && !precis.includes(a))
+  return [...precis, ...parEspece].slice(0, 3)
 }

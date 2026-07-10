@@ -144,6 +144,14 @@ export default {
     },
 
     {
+      name: 'prestationLiee',
+      title: 'Prestation liée (optionnel)',
+      type: 'reference',
+      group: 'classement',
+      to: [{ type: 'prestation' }, { type: 'voyage' }],
+      description: '🔗 La prestation vers laquelle cet article renvoie en bas de page. Laissez vide : le site choisit automatiquement la plus pertinente (mots-clés puis espèce). Remplissez uniquement pour corriger le choix automatique.',
+    },
+    {
       name: 'espece',
       title: 'Espèce',
       type: 'string',

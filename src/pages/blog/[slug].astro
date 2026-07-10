@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import RelatedArticles from '../../components/RelatedArticles.astro'
-import { PILIERS } from '../../lib/maillage.js'
+import { PILIERS, cibleArticle } from '../../lib/maillage.js'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -34,7 +34,8 @@ const urlFor = (source) => { const b = builder.image(source); const hs = source?
 
 const article = await client.fetch(
   `*[_type == "article" && slug.current == $slug][0]{
-    title, slug, date, image, extrait, contenu, tags, espece, seoTitle, seoDescription
+    title, slug, date, image, extrait, contenu, tags, espece, seoTitle, seoDescription,
+    prestationLiee->{ title, "slug": slug.current }
   }`,
   { slug }
 )
@@ -52,9 +53,11 @@ const dateFormatee = article.date
   ? new Date(article.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
   : null
 
-// ── Maillage interne : page pilier + articles de la même espèce ───────────────
+// ── Maillage interne : cible précise (bouton) + hub de l'espèce (lien texte) ──
 // Fallback : articles sans espèce (contenus généraux) → les 3 derniers articles
-const pilier = article.espece ? PILIERS[article.espece] : null
+const cible  = cibleArticle(article)                          // prestation précise
+const hub    = article.espece ? PILIERS[article.espece] : null // pilier espèce
+const pilier = hub ?? cible                                    // lien texte de la phrase
 const articlesLies = await client.fetch(article.espece ? `
   *[_type == "article" && espece == $espece && slug.current != $slug] | order(date desc) [0...3] {
     title, "slug": slug.current, date, image
@@ -217,8 +220,8 @@ const jsonLd = [
           : 'Contactez Jean-Baptiste pour réserver une sortie sur ses rivières et côtes favorites.'}
       </p>
       <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
-        {pilier && <a href={pilier.url} class="btn btn--ocean">Découvrir la prestation</a>}
-        <a href="/contact" class={`btn ${pilier ? 'btn--outline' : 'btn--ocean'}`}>Me contacter</a>
+        {cible && <a href={cible.url} class="btn btn--ocean">Découvrir : {cible.titre}</a>}
+        <a href="/contact" class={`btn ${cible ? 'btn--outline' : 'btn--ocean'}`}>Me contacter</a>
         <a href="tel:+33687303456" class="btn btn--outline">06 87 30 34 56</a>
       </div>
     </div>

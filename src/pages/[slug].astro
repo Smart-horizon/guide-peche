@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import RelatedArticles from '../components/RelatedArticles.astro'
-import { especesPourDoc } from '../lib/maillage.js'
+import { especesPourDoc, articlesPourPage } from '../lib/maillage.js'
 import PageBuilderSections from '../components/PageBuilderSections.astro'
 import { client } from '../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
@@ -91,13 +91,15 @@ if (doc._type === 'prestation' || doc._type === 'voyage') {
   })
 }
 
-// ── Maillage interne : derniers articles du même thème ────────────────────────
+// ── Maillage interne : les récits qui CIBLENT cette page (puis même espèce) ───
 const especes = especesPourDoc(doc)
-const articlesLies = especes ? await client.fetch(`
-  *[_type == "article" && espece in $especes] | order(date desc) [0...3] {
-    title, "slug": slug.current, date, image, espece
+const tousArticles = especes ? await client.fetch(`
+  *[_type == "article"] | order(date desc) {
+    title, "slug": slug.current, date, image, espece, tags,
+    prestationLiee->{ title, "slug": slug.current }
   }
-`, { especes }) : []
+`) : []
+const articlesLies = especes ? articlesPourPage(slug, doc, tousArticles) : []
 const relTitre = doc.categorie === 'bar' ? 'Derniers récits de pêche au bar'
   : doc._type === 'voyage' ? 'Derniers récits de voyage'
   : 'Derniers récits de pêche'
