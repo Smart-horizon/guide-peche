@@ -81,7 +81,8 @@ const sections = mergeSectionsEn(doc.pagebuilder, doc.pagebuilderEn)
 const tousArticles = await client.fetch(`
   *[_type == "article"] | order(date desc) {
     title, titleEn, "slug": slug.current, date, image, espece, tags,
-    prestationLiee->{ title, "slug": slug.current }
+    prestationLiee->{ title, "slug": slug.current },
+    pageLiee->{ title, "slug": slug.current }
   }
 `)
 const articlesLies = articlesPourPage(slug, doc, tousArticles)

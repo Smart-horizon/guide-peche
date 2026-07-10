@@ -153,7 +153,18 @@ export default {
         // Uniquement des documents avec une URL (exclut la page d'accueil)
         filter: 'defined(slug.current) && slug.current != "/"',
       },
-      description: '🔗 La page vers laquelle cet article renvoie en bas de page (prestation, voyage ou page hub comme "Voyages de pêche à la mouche"). Laissez vide : le site choisit automatiquement la plus pertinente (mots-clés puis espèce). Remplissez uniquement pour corriger le choix automatique.',
+      description: '🔗 La prestation/le voyage vers lequel cet article renvoie (bouton principal en bas d\'article). Laissez vide : le site choisit automatiquement (mots-clés puis espèce).',
+    },
+    {
+      name: 'pageLiee',
+      title: 'Page liée (optionnel)',
+      type: 'reference',
+      group: 'classement',
+      to: [{ type: 'page' }],
+      options: {
+        filter: 'defined(slug.current) && slug.current != "/"',
+      },
+      description: '🔗 Une page thématique du site en PLUS de la prestation : matériel, mes mouches, vidéos, revue de presse… Affichée en lien "Voir aussi" en bas d\'article, et l\'article apparaît dans le bloc "À lire sur le blog" de cette page. Laissez vide : détection automatique par mots-clés.',
     },
     {
       name: 'espece',

@@ -48,15 +48,10 @@ export const PILIERS = {
   },
 }
 
-// ── Détection mots-clés → prestation précise ─────────────────────────────────
+// ── Détection mots-clés → PRESTATION précise (cible principale, bouton) ──────
 // Ordre = priorité. `espece` (optionnel) restreint la règle à une espèce
 // pour éviter les faux positifs (ex : "bateau" dans un article truite).
 const CIBLES = [
-  // ── Contenus "média" : presse, montages de mouches, vidéos ────────────────
-  { rx: /revue de presse|dans (le |la )?p[êe]che mouche\b|magazine|parution|interview|podcast/i,
-    url: '/revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche', titre: 'la revue de presse', titreEn: 'the press review' },
-  { rx: /montage|fly.?tying|une semaine[\s\S]{0,12}une mouche|une mouche[\s\S]{0,12}une histoire/i,
-    url: '/mouches-de-peche-jeanbaptiste-vidal', titre: 'mes mouches de pêche', titreEn: 'my fishing flies' },
   // ── Prestations précises ──────────────────────────────────────────────────
   { rx: /master.?class[\s\S]{0,40}r[ée]servoir|r[ée]servoir[\s\S]{0,40}master.?class/i,
     url: '/master-class-peche-en-reservoir', titre: 'la Masterclass pêche en réservoir', titreEn: 'the reservoir masterclass' },
@@ -88,7 +83,21 @@ const CIBLES = [
     url: '/voyage-peche-argentine-rio-grande-truite-de-mer', titre: "le voyage Argentine — Rio Grande", titreEn: 'the Argentina trip — Rio Grande' },
   { rx: /mexi(que|co)/i,
     url: '/voyage-peche-mouche-mexique', titre: 'le voyage au Mexique', titreEn: 'the Mexico trip' },
-  // ── Matériel (par espèce, puis hub) ───────────────────────────────────────
+  // ── Bon cadeau ────────────────────────────────────────────────────────────
+  { rx: /bon cadeau|carte cadeau/i,
+    url: '/bon-cadeau', titre: 'le bon cadeau pêche à la mouche', titreEn: 'the gift voucher' },
+]
+
+// ── Détection mots-clés → PAGE thématique (cible secondaire, lien "Voir aussi")
+// Dissociée des prestations : un article peut pointer à la fois vers une
+// prestation (bouton principal) ET une page du site (matériel, mouches,
+// vidéos, revue de presse…).
+const CIBLES_PAGES = [
+  { rx: /revue de presse|dans (le |la )?p[êe]che mouche\b|magazine|parution|interview|podcast/i,
+    url: '/revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche', titre: 'la revue de presse', titreEn: 'the press review' },
+  { rx: /montage|fly.?tying|une semaine[\s\S]{0,12}une mouche|une mouche[\s\S]{0,12}une histoire/i,
+    url: '/mouches-de-peche-jeanbaptiste-vidal', titre: 'mes mouches de pêche', titreEn: 'my fishing flies' },
+  // Matériel — par espèce, puis hub
   { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i, espece: 'bar',
     url: '/materiel-mouche-bar', titre: 'le matériel bar à la mouche', titreEn: 'sea bass fly fishing gear' },
   { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i, espece: 'truite',
@@ -103,10 +112,7 @@ const CIBLES = [
     url: '/materiel-mouche-peche-exotique', titre: 'le matériel pêche exotique', titreEn: 'saltwater fly fishing gear' },
   { rx: /mat[ée]riel|lunettes polarisantes|waders|moulinets?\b|bas de ligne/i,
     url: '/materiel-jeanbaptistevidal', titre: 'mon matériel de pêche à la mouche', titreEn: 'my fly fishing gear' },
-  // ── Bon cadeau ────────────────────────────────────────────────────────────
-  { rx: /bon cadeau|carte cadeau/i,
-    url: '/bon-cadeau', titre: 'le bon cadeau pêche à la mouche', titreEn: 'the gift voucher' },
-  // ── Vidéos (en dernier — les sujets précis ci-dessus gagnent) ─────────────
+  // Vidéos — en dernier : les sujets plus précis gagnent
   { rx: /\bvid[ée]os?\b/i,
     url: '/videos-jeanbaptiste-vidal-moniteur-guide-de-peche', titre: 'mes vidéos de pêche', titreEn: 'my fishing videos' },
 ]
@@ -134,6 +140,35 @@ export function cibleArticle(article) {
   return article?.espece ? PILIERS[article.espece] ?? null : null
 }
 
+/**
+ * Cible SECONDAIRE d'un article — une page thématique du site (matériel,
+ * mouches, vidéos, revue de presse…), affichée en lien "Voir aussi" en plus
+ * de la prestation. Priorité :
+ * 1. pageLiee (référence Sanity : { title, slug }) — choix manuel
+ * 2. mots-clés tags + titre (CIBLES_PAGES)
+ * Jamais identique à la cible principale. Retourne { url, titre, titreEn } ou null.
+ */
+export function cibleSecondaire(article) {
+  const principale = cibleArticle(article)?.url ?? null
+  // 1. Choix manuel dans Sanity
+  const ref = article?.pageLiee
+  if (ref?.slug) {
+    const url = `/${ref.slug}`
+    if (url !== principale) {
+      return { url, titre: ref.title || 'cette page', titreEn: ref.title || 'this page' }
+    }
+  }
+  // 2. Mots-clés
+  const haystack = [article?.title || '', ...(article?.tags || [])].join(' · ')
+  for (const c of CIBLES_PAGES) {
+    if (c.espece && article?.espece !== c.espece) continue
+    if (c.rx.test(haystack) && c.url !== principale) {
+      return { url: c.url, titre: c.titre, titreEn: c.titreEn }
+    }
+  }
+  return null
+}
+
 // ── Espèces pertinentes pour une prestation/un voyage (repli sens inverse) ──
 export function especesPourDoc(doc) {
   if (doc?._type === 'voyage') return ['exotique']
@@ -156,6 +191,7 @@ export function especesPourDoc(doc) {
 export function articlesSimilaires(article, allArticles) {
   const monSlug = article?.slug?.current || article?.slug
   const maCible = cibleArticle(article)?.url ?? null
+  const maCibleSec = cibleSecondaire(article)?.url ?? null
 
   // Fréquence des tags → ignorer les tags trop communs ("pêche à la mouche"…)
   const freq = {}
@@ -171,6 +207,7 @@ export function articlesSimilaires(article, allArticles) {
     .map((a) => {
       let score = 0
       if (maCible && cibleArticle(a)?.url === maCible) score += 4
+      if (maCibleSec && cibleSecondaire(a)?.url === maCibleSec) score += 2
       if (article?.espece && a.espece === article.espece) score += 2
       const partages = (a.tags || []).filter((t) => mesTags.has(t.toLowerCase())).length
       score += Math.min(partages, 3)
@@ -189,7 +226,10 @@ export function articlesSimilaires(article, allArticles) {
  */
 export function articlesPourPage(slug, doc, allArticles) {
   const url = `/${slug}`
-  const precis = allArticles.filter((a) => cibleArticle(a)?.url === url)
+  // Un article compte s'il cible cette page en principal OU en secondaire
+  const precis = allArticles.filter(
+    (a) => cibleArticle(a)?.url === url || cibleSecondaire(a)?.url === url
+  )
   const especes = especesPourDoc(doc) ?? []
   const parEspece = allArticles.filter((a) => especes.includes(a.espece) && !precis.includes(a))
   return [...precis, ...parEspece].slice(0, 3)

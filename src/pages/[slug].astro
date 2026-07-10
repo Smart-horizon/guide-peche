@@ -98,7 +98,8 @@ if (doc._type === 'prestation' || doc._type === 'voyage') {
 const tousArticles = await client.fetch(`
   *[_type == "article"] | order(date desc) {
     title, "slug": slug.current, date, image, espece, tags,
-    prestationLiee->{ title, "slug": slug.current }
+    prestationLiee->{ title, "slug": slug.current },
+    pageLiee->{ title, "slug": slug.current }
   }
 `)
 const articlesLies = articlesPourPage(slug, doc, tousArticles)

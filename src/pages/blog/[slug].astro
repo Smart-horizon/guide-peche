@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import RelatedArticles from '../../components/RelatedArticles.astro'
-import { PILIERS, cibleArticle, articlesSimilaires } from '../../lib/maillage.js'
+import { PILIERS, cibleArticle, cibleSecondaire, articlesSimilaires } from '../../lib/maillage.js'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -35,7 +35,8 @@ const urlFor = (source) => { const b = builder.image(source); const hs = source?
 const article = await client.fetch(
   `*[_type == "article" && slug.current == $slug][0]{
     title, slug, date, image, extrait, contenu, tags, espece, seoTitle, seoDescription,
-    prestationLiee->{ title, "slug": slug.current }
+    prestationLiee->{ title, "slug": slug.current },
+    pageLiee->{ title, "slug": slug.current }
   }`,
   { slug }
 )
@@ -54,16 +55,18 @@ const dateFormatee = article.date
   : null
 
 // ── Maillage interne : cible précise (bouton) + hub de l'espèce (lien texte) ──
-const cible  = cibleArticle(article)                          // prestation précise
-const hub    = article.espece ? PILIERS[article.espece] : null // pilier espèce
-const pilier = hub ?? cible                                    // lien texte de la phrase
+const cible    = cibleArticle(article)                          // prestation précise (bouton)
+const cibleSec = cibleSecondaire(article)                       // page thématique ("Voir aussi")
+const hub      = article.espece ? PILIERS[article.espece] : null // pilier espèce
+const pilier   = hub ?? cible                                    // lien texte de la phrase
 
 // "À lire aussi" : les 3 articles les plus proches thématiquement
 // (même prestation ciblée > tags partagés > même espèce, puis fraîcheur)
 const tousArticles = await client.fetch(`
   *[_type == "article"] | order(date desc) {
     title, "slug": slug.current, date, image, espece, tags,
-    prestationLiee->{ title, "slug": slug.current }
+    prestationLiee->{ title, "slug": slug.current },
+    pageLiee->{ title, "slug": slug.current }
   }
 `)
 const articlesLies = articlesSimilaires(article, tousArticles)
@@ -223,6 +226,7 @@ const jsonLd = [
       </p>
       <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
         {cible && <a href={cible.url} class="btn btn--ocean">Découvrir : {cible.titre}</a>}
+        {cibleSec && <a href={cibleSec.url} class="btn btn--outline">Voir aussi : {cibleSec.titre}</a>}
         <a href="/contact" class={`btn ${cible ? 'btn--outline' : 'btn--ocean'}`}>Me contacter</a>
         <a href="tel:+33687303456" class="btn btn--outline">06 87 30 34 56</a>
       </div>

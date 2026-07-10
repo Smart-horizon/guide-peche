@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import RelatedArticles from '../../../components/RelatedArticles.astro'
-import { PILIERS, cibleArticle, articlesSimilaires } from '../../../lib/maillage.js'
+import { PILIERS, cibleArticle, cibleSecondaire, articlesSimilaires } from '../../../lib/maillage.js'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -36,7 +36,8 @@ const article = await client.fetch(
   `*[_type == "article" && slug.current == $slug][0]{
     title, titleEn, slug, date, image, extrait, extraitEn,
     contenu, contenuEn, tags, espece, seoTitle, seoTitleEn, seoDescription, seoDescriptionEn,
-    prestationLiee->{ title, "slug": slug.current }
+    prestationLiee->{ title, "slug": slug.current },
+    pageLiee->{ title, "slug": slug.current }
   }`,
   { slug }
 )
@@ -76,15 +77,17 @@ function mergedContent(fr: any[], en: any[]) {
 const content = mergedContent(article.contenu, article.contenuEn)
 
 // ── Maillage interne : cible précise (bouton) + hub de l'espèce (lien texte) ──
-const cible  = cibleArticle(article)
-const hub    = article.espece ? PILIERS[article.espece] : null
-const pilier = hub ?? cible
+const cible    = cibleArticle(article)
+const cibleSec = cibleSecondaire(article)
+const hub      = article.espece ? PILIERS[article.espece] : null
+const pilier   = hub ?? cible
 
 // "À lire aussi" : les 3 articles les plus proches thématiquement
 const tousArticles = await client.fetch(`
   *[_type == "article"] | order(date desc) {
     title, titleEn, "slug": slug.current, date, image, espece, tags,
-    prestationLiee->{ title, "slug": slug.current }
+    prestationLiee->{ title, "slug": slug.current },
+    pageLiee->{ title, "slug": slug.current }
   }
 `)
 const articlesLies = articlesSimilaires(article, tousArticles)
@@ -232,6 +235,7 @@ const jsonLd = [
       </p>
       <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
         {cible && <a href={`/en${cible.url}`} class="btn btn--ocean">Discover: {cible.titreEn}</a>}
+        {cibleSec && <a href={`/en${cibleSec.url}`} class="btn btn--outline">See also: {cibleSec.titreEn}</a>}
         <a href="/en/contact" class={`btn ${cible ? 'btn--outline' : 'btn--ocean'}`}>Contact Jean-Baptiste</a>
         <a href="tel:+33687303456" class="btn btn--outline">+33 6 87 30 34 56</a>
       </div>
