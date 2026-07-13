@@ -54,13 +54,15 @@ const ogImg       = heroSection?.image
   : undefined
 
 // ── Hero EN : always use FR sectionHero for visuals (video, image), override text in EN
+// Textes EN pris dans le hero de pagebuilderEn (éditable dans Sanity), fallback hardcodé
 const frHeroSection = hp?.pagebuilder?.find((s: any) => s._type === 'sectionHero')
+const enHeroSanity  = hp?.pagebuilderEn?.find((s: any) => s._type === 'sectionHero')
 const enHeroSection = frHeroSection ? {
   ...frHeroSection,
-  eyebrow: 'Licensed Guide · South Brittany',
-  titre: 'Fly Fishing in Brittany',
-  sousTitre: 'Guided fishing for sea bass, trout, shad and pike. Courses and coaching from beginner to masterclass level.',
-  btnReserverTexte: 'Book a session',
+  eyebrow: enHeroSanity?.eyebrow || 'Licensed Guide · South Brittany',
+  titre: enHeroSanity?.titre || 'Fly Fishing in Brittany',
+  sousTitre: enHeroSanity?.sousTitre || 'Guided fishing for sea bass, trout, shad and pike. Courses and coaching from beginner to masterclass level.',
+  btnReserverTexte: enHeroSanity?.btnReserverTexte || 'Book a session',
   btnReserverLien: '/contact',
   btnTelTexte: '06 87 30 34 56',
   // Badges EN depuis Sanity (badgesEn), sinon fallback hardcodé
