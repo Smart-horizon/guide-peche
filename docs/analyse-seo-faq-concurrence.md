@@ -7,6 +7,17 @@
 ### Le profil de Dolivet est GONFLÉ artificiellement
 brittanyflyfishing.com se positionne sur ~565 mots-clés, mais seulement **~33 % concernent la pêche** (187 kw "Fishing"). Près de 25 % relèvent du tourisme/hébergement/voyage (Swift Lodge B&B, Irlande, Islande : Travel & Tourism 108 kw, Attractions 58, Accommodations…) et une part est du bruit pur (Soccer, Pets By Breed, Bollywood…). **Son cœur guidage réel ≈ 190-220 mots-clés** — comparable au périmètre atteignable par JBV, et avec une intention d'achat souvent plus faible (un touriste qui cherche un B&B n'achète pas un guidage mouche).
 
+### Dolivet en chiffres (export mots-clés 13/07) — la menace était surestimée
+L'export mot-à-mot confirme et amplifie le constat :
+- **Son meilleur mot-clé : "peche au bar bretagne" #9 = 5 visites/mois.** JBV est #2 sur les mêmes requêtes avec 41+25+16+12 visites — **~15× plus de trafic bar que lui**
+- L'écrasante majorité de ses positions est **au-delà de la page 2** (20 à 88) : quasi aucune visibilité réelle
+- Sa page bar qui ranke est… **un article de blog de 2016-2017** ("saisons-2016-2017-guidage-peche-bar-mouche-bretagne") — sa page de vente ne ranke pas. Contenu daté partout (bilan 2017, coefficients 2016…)
+- Sur les mots-clés en dispute directe : "mouche alose" il est #79 (JBV #2), "le léguer pêche" #33 (JBV #5), "initiation pêche à la mouche" **#24** (JBV #3), "stage de pêche à la mouche" #25 (JBV #2)
+- Trafic organique estimé : **~40-60 visites/mois, soit 3 à 4× MOINS que JBV** (site seul, sans compter le blog)
+- Sa vraie force restante : le **domaine exact-match "brittanyflyfishing.com" sur les requêtes anglaises** ("fly fishing brittany") + quelques positions EN voyages (Islande #11)
+
+⚠️ Correctif vs l'analyse SERP du 13/07 : l'ordre des résultats de recherche web n'était pas un bon proxy des positions réelles — Haloscan fait foi. Dolivet n'est PAS #1 sur "initiation pêche à la mouche" (il est #24) : la bataille initiation est encore plus gagnable que prévu.
+
 ### La fusion enjoyfishing = l'arme décisive
 Le blog possède ~100 mots-clés dont des positions en or : **#1 sur "pêche du bar à la mouche"** (article matériel — la prestation JBV n'est que #6 dessus !), #2 "mouche crabe" (vol 110), #2 "truite géante" (vol 320), #3 "montage mouche à brochet", #3 "mouche mulet", #4 "streamer vairon", #1 "comment pêcher le bar à la mouche"… Site et blog se positionnent souvent sur les MÊMES requêtes (alose, brochet, bar) : la fusion dans /blog/ avec 301 **consolidera deux autorités en une** — c'est ce qui peut faire basculer les batailles serrées (initiation, bar, brochet).
 
@@ -155,7 +166,7 @@ Moniteur-guide, double zone **Irlande (Kerry) + Bretagne** (+ Normandie). Mouche
 
 | Mot-clé | État actuel | Verdict | Action pour passer devant |
 |---|---|---|---|
-| **initiation pêche à la mouche bretagne** | Dolivet **#1**, JBV #2-4 mais avec les MAUVAISES pages (stage, truite, hub — pas /initiation, qui n'est que #3 sur "initiation peche a la mouche") | 🎯 Bataille prioritaire | Renforcer /initiation-peche-a-la-mouche : title "Initiation pêche à la mouche en Bretagne", FAQ initiation, contenu enrichi, maillage interne avec ancre "initiation pêche à la mouche" vers cette page |
+| **initiation / apprendre la pêche à la mouche** | Haloscan : Dolivet #24-44 sur ces requêtes, JBV #3 sur "initiation peche a la mouche" mais la page /initiation ne capte presque rien (2 visites) — le potentiel est national ("initiation pêche" vol 110 : JBV #20) | 🎯 Bataille très gagnable | Renforcer /initiation-peche-a-la-mouche : title "Initiation pêche à la mouche en Bretagne", FAQ initiation, contenu enrichi, maillage interne avec ancre "initiation pêche à la mouche" vers cette page |
 | **fly fishing brittany / sea bass fly (EN)** | Dolivet **écrase tout** (4 résultats top 10 + son shop), Celtic présent, JBV quasi absent — MAIS ses 2 pages EN qui existent rankent déjà ("seabass fish" #4 = 8 visites/mois, "fly fishing boat" #2) | 🎯 Gros potentiel, ROI démontré | SEO EN complet (10 pages), héros EN soignés, 2-3 articles blog en anglais. JBV a l'international (12 pays, Rio Grande) : crédibilité réelle à faire valoir |
 | **pêche du bar à la mouche** (requête exacte) | L'article enjoyfishing est **#1**, la prestation JBV #6, Dolivet derrière | 🎯 Fusion = victoire | La fusion 301 du blog rapatrie le #1 sur le domaine principal ; maillage article → prestation déjà en place |
 | **brochet (famille ~800 vol cumulé)** | Positions 9-18 éparpillées entre site et blog, personne ne domine | ⚔️ Gisement n°2 | FAQ brochet + consolidation post-fusion → top 5 |
