@@ -145,6 +145,8 @@ Monitrice-guide depuis 2014, basée à **Kervignac (56) — la plus proche géog
 **Faiblesses** : tarifs absents, prestations peu détaillées, contenu statique, peu de photos.
 **Recouvrement avec JBV** : truite, réservoir, alose, initiation — mais pas le bar à la mouche ni les masterclass. Ses atouts différenciants : le montage (palmarès) et la cible famille/femmes.
 
+**Export Haloscan (13/07) — menace guidage quasi nulle.** Son profil SEO est celui d'une BOUTIQUE, pas d'un guide : son 1er mot-clé est "sauterelle marron" #6 (69 visites/mois)… porté par des gens qui se renseignent sur l'insecte ("sauterelle marron signification / dangereux / dans la maison") — zéro intention pêche. Ses mots-clés guidage sont invisibles : "guide de pêche bretagne" **#73**, "guide de peche mouche" #57, "initiation pêche au saumon" #77-83 (prestations saumon encore affichées alors que c'est interdit en Bretagne…). Sa seule position guidage correcte : "pêche mouche bretagne" #8 (JBV est #1-2). En revanche elle ranke sur les produits mouches (alose #14, saumon #40, bas de ligne…) — c'est le terrain de DuvalFly, pas celui de JBV.
+
 ### Celtic Fishing — celticfishing.com (Kilian Lebreton)
 
 Moniteur-guide, double zone **Irlande (Kerry) + Bretagne** (+ Normandie). Mouche ET leurre : bar, truite, brochet, saumon (en Irlande, où c'est légal). Version anglaise du site.
