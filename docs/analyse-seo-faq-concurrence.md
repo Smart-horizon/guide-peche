@@ -36,11 +36,14 @@ Volumes réels avec positions améliorables réparties site+blog : "mouche pour 
 "seabass fish" #4 = **8 visites/mois, 2e mot-clé du site en trafic** (page EN bar à vue) ; "fly fishing boat" #2 (page EN bateau). Les pages EN rankent déjà sans SEO dédié → compléter les meta EN a un ROI démontré par les données.
 
 ### ⚠️ JBV a AUSSI un site anglais séparé : enjoyfishingbrittany.com (découvert le 13/07)
-Site Wix dédié anglais de JBV (About, Saltwater/Freshwater fly fishing, Gallery, Testimonials, Contact — même téléphone). Le domaine contient "brittany", comme celui de Dolivet. Conséquences :
-- **Aujourd'hui, la présence EN de JBV est éclatée sur 2 domaines** (pages /en/ du site principal + ce site dédié) → l'autorité est diluée, et les deux peuvent se cannibaliser sur les mêmes requêtes
-- **Recommandation lancement** : fusionner enjoyfishingbrittany.com dans le /en/ du nouveau site via 301 page à page (comme enjoyfishing.fr → /blog/). Un seul domaine = toute l'autorité FR+EN+blog consolidée, hreflang propre entre les versions
-- **À faire** : export Haloscan de enjoyfishingbrittany.com pour connaître ses positions et construire son mapping 301 ; ajouter ce domaine à la liste des redirections du jour J
-- Alternative (non recommandée) : garder le site séparé — double maintenance, autorité divisée, contenu dupliqué avec le /en/
+Site Wix dédié anglais de JBV (About, Saltwater/Freshwater fly fishing, Gallery, Testimonials, Contact — même téléphone). Le domaine contient "brittany", comme celui de Dolivet.
+
+**Export Haloscan (13/07) : le site est SEO-mort.** 2 mots-clés seulement, tous deux sur la marque "enjoy fishing" (#8 et #14, ~2 visites/mois au total). Malgré son nom de domaine "brittany", il ne ranke sur AUCUNE requête métier anglaise. Le contraste est riche d'enseignement : les 2 pages /en/ du site PRINCIPAL rankent ("seabass fish" #4, "fly fishing boat" #2) parce qu'elles profitent de l'autorité du domaine principal, tandis que le site EN isolé, sans autorité, n'existe pas aux yeux de Google. **Preuve par les données que la stratégie /en/ sur le domaine principal est la bonne.**
+
+Conséquences :
+- **Fusion sans douleur** : rediriger enjoyfishingbrittany.com vers le /en/ du nouveau site ne fait rien perdre (aucune position métier à préserver) — un simple 301 domaine → /en/ suffit, avec 4-5 redirections page à page (rates → tarifs, saltwater → bar, etc.)
+- Le domaine reste utile : le conserver et le rediriger (trafic de marque + éviter qu'il retombe dans la nature)
+- Alternative écartée définitivement : maintenir le site séparé n'a produit aucun résultat SEO
 
 ## Rappel des positions actuelles (à protéger)
 
