@@ -5,6 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import PageBuilderSections from '../../components/PageBuilderSections.astro'
 import RelatedArticles from '../../components/RelatedArticles.astro'
 import { articlesPourPage } from '../../lib/maillage.js'
+import { fullTitle } from '../../lib/seo.js'
 import { client } from '../../lib/sanity.js'
 import { mergeSectionsEn } from '../../lib/mergeEnSections.js'
 import imageUrlBuilder from '@sanity/image-url'
@@ -136,7 +137,7 @@ if (doc._type === 'prestation' || doc._type === 'voyage') {
 ---
 
 <BaseLayout
-  title={`${pageTitle} — Jean-Baptiste Vidal`}
+  title={fullTitle(pageTitle)}
   description={pageDesc}
   image={ogImg}
   lang="en"

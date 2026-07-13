@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import RelatedArticles from '../components/RelatedArticles.astro'
 import { articlesPourPage } from '../lib/maillage.js'
+import { fullTitle } from '../lib/seo.js'
 import PageBuilderSections from '../components/PageBuilderSections.astro'
 import { client } from '../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
@@ -159,7 +160,7 @@ function blocks(content: any[]): string {
 ---
 
 <BaseLayout
-  title={`${pageTitle} — Jean-Baptiste Vidal`}
+  title={fullTitle(pageTitle)}
   description={pageDesc}
   image={ogImg}
   lang="fr"

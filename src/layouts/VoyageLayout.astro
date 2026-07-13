@@ -7,6 +7,7 @@
  */
 import BaseLayout from './BaseLayout.astro'
 import { stegaClient } from '../lib/sanity.js'
+import { fullTitle } from '../lib/seo.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -64,7 +65,7 @@ function cartesVariant(s: any): 'photo-gauche' | 'photo-haut' | 'texte-cartes' |
 let carouselCount = 0
 ---
 
-<BaseLayout title={`${pageTitle} — Jean-Baptiste Vidal`} description={pageDesc}>
+<BaseLayout title={fullTitle(pageTitle)} description={pageDesc}>
 
 {pb.map((s: any) => (
 <>

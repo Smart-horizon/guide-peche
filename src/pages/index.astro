@@ -4,6 +4,7 @@ import PageBuilderSections from '../components/PageBuilderSections.astro'
 import NewsletterSection from '../components/NewsletterSection.astro'
 import NewsletterPopup from '../components/NewsletterPopup.astro'
 import { client, stegaClient } from '../lib/sanity.js'
+import { fullTitle } from '../lib/seo.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -180,7 +181,7 @@ const nlPopupImageUrl  = nl?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'
 ---
 
 <BaseLayout
-  title={`${pageTitle} — Jean-Baptiste Vidal`}
+  title={fullTitle(pageTitle)}
   description={pageDesc}
   image={ogImg}
   lang="fr"
