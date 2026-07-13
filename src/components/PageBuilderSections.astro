@@ -114,6 +114,14 @@ const revuePresse: any[] = hasRevuePresse
   ? await client.fetch(`*[_type == "revuePresse"] | order(orderRank asc) { _id, magazine, numero, date, annee, titre, description, type, cover { asset->{ url } }, photos[] { asset->{ url }, alt }, fichierPdf { asset->{ url, originalFilename } }, lien, labelLien }`)
   : []
 
+// Coordonnées du bloc Contact des encarts d'infos (⚙️ Paramètres, éditable par JBV)
+const hasIntroCard = (sections ?? []).some((s: any) => s._type === 'sectionIntro')
+const contactParams = hasIntroCard
+  ? await client.fetch(`*[_type == "parametres"][0]{ telephone, email }`)
+  : null
+const contactTel   = contactParams?.telephone || '06 87 30 34 56'
+const contactEmail = contactParams?.email     || 'enjoy.fishing@hotmail.fr'
+
 const hasBlogSection = (sections ?? []).some((s: any) => s._type === 'sectionBlog')
 const blogArticles: any[] = hasBlogSection
   ? await client.fetch(`
@@ -298,8 +306,12 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                   {stegaClean(l.note) && <p class="info-note">{l.note}</p>}
                 </>
               ))}
-              <p class="info-lbl">Contact</p>
-              <p class="info-val">06 87 30 34 56<br/>enjoy.fishing@hotmail.fr</p>
+              {s.afficherContact !== false && (
+                <>
+                  <p class="info-lbl">Contact</p>
+                  <p class="info-val">{contactTel}<br/>{contactEmail}</p>
+                </>
+              )}
               {s.boutons?.map((btn: any) => (
                 <a href={pfx(btn.lien)} class="info-card-btn">{btn.texte}</a>
               ))}

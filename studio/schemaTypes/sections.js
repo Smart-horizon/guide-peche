@@ -295,6 +295,11 @@ export const sectionIntro = {
       type: 'boolean', initialValue: true,
     },
     {
+      name: 'afficherContact', title: 'Afficher le bloc Contact automatique ?',
+      type: 'boolean', initialValue: true,
+      description: 'Téléphone + e-mail (tirés de ⚙️ Paramètres) affichés en bas de l\'encart. Décochez si vous ajoutez votre propre ligne Contact.',
+    },
+    {
       name: 'niveau', title: 'Niveau requis',
       type: 'string', description: 'Ex : Tous niveaux — Débutant à expert',
     },
