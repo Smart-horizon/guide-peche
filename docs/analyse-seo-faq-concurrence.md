@@ -35,6 +35,13 @@ Volumes réels avec positions améliorables réparties site+blog : "mouche pour 
 ### L'anglais rapporte DÉJÀ
 "seabass fish" #4 = **8 visites/mois, 2e mot-clé du site en trafic** (page EN bar à vue) ; "fly fishing boat" #2 (page EN bateau). Les pages EN rankent déjà sans SEO dédié → compléter les meta EN a un ROI démontré par les données.
 
+### ⚠️ JBV a AUSSI un site anglais séparé : enjoyfishingbrittany.com (découvert le 13/07)
+Site Wix dédié anglais de JBV (About, Saltwater/Freshwater fly fishing, Gallery, Testimonials, Contact — même téléphone). Le domaine contient "brittany", comme celui de Dolivet. Conséquences :
+- **Aujourd'hui, la présence EN de JBV est éclatée sur 2 domaines** (pages /en/ du site principal + ce site dédié) → l'autorité est diluée, et les deux peuvent se cannibaliser sur les mêmes requêtes
+- **Recommandation lancement** : fusionner enjoyfishingbrittany.com dans le /en/ du nouveau site via 301 page à page (comme enjoyfishing.fr → /blog/). Un seul domaine = toute l'autorité FR+EN+blog consolidée, hreflang propre entre les versions
+- **À faire** : export Haloscan de enjoyfishingbrittany.com pour connaître ses positions et construire son mapping 301 ; ajouter ce domaine à la liste des redirections du jour J
+- Alternative (non recommandée) : garder le site séparé — double maintenance, autorité divisée, contenu dupliqué avec le /en/
+
 ## Rappel des positions actuelles (à protéger)
 
 | Mot-clé | Position | Trafic/mois | Page cible |
