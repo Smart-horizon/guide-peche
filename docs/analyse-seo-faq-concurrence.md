@@ -122,6 +122,18 @@ Conséquences :
 3. **Quelles imitations pour le bar à vue ?** → crabe, crevette
 4. **Sur quel bateau pêche-t-on ?** → Carolina Skiff, seul bateau dédié mouche en Bretagne
 
+### Pages voyages (ajout 13/07 — 12 questions)
+
+Justification : positions existantes à consolider ("pêche à Cuba" #3-5, "voyage de pêche à Cuba" #6, "voyage pêche exotique" #11, "Rio Grande Argentine" #12), quasi zéro concurrence FR sur ces requêtes, et fort enjeu de conversion (achat 3-6 k€ = beaucoup d'objections à lever sur la page).
+
+- **Hub /voyages-peche-mouche (6)** : déroulement d'un voyage accompagné · niveau requis · ce que comprend le prix · accompagnant non-pêcheur · délai de réservation · matériel
+- **Argentine (2)** : meilleure période truite de mer Rio Grande · niveau requis (lien stages Spey Cast = vente croisée)
+- **Cuba (2)** : espèces (grand chelem) · meilleure saison
+- **Los Roques (1)** : pourquoi destination mythique bonefish
+- **Mexique (1)** : espèces du Quintana Roo
+
+Toutes intégrées au fichier Excel de validation JBV (48 questions FR+EN au total).
+
 ---
 
 ## 2. Mots-clés sous-exploités — plan d'action
