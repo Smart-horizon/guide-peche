@@ -60,8 +60,8 @@
 
 ### /peche-a-la-mouche-en-bretagne (hub — porte "pêche saumon bretagne" #3)
 
-1. **Peut-on pêcher le saumon à la mouche en Bretagne ?** ⭐ opportunité : Ellé, Elorn, Aulne, Léguer = meilleur potentiel saumon de France
-2. **Quelles espèces pêcher à la mouche en Bretagne ?** → truite, saumon, alose, brochet, bar
+1. **Peut-on encore pêcher le saumon en Bretagne ?** ⚠️ la pêche du saumon est INTERDITE en Bretagne — JBV ne peut plus vendre de prestation saumon. La question capte quand même la requête #3 : réponse honnête (moratoire) + rediriger vers l'alose (sensations migrateur comparables), la truite, et les voyages (truite de mer d'Argentine, saumon à l'étranger)
+2. **Quelles espèces pêcher à la mouche en Bretagne ?** → truite, alose, brochet, bar
 3. **Faut-il un permis pour pêcher en Bretagne ? Lequel ?**
 4. **Quelle est la meilleure saison pour chaque espèce ?**
 
@@ -85,7 +85,7 @@
 
 | Opportunité | Constat | Action | Priorité |
 |---|---|---|---|
-| **pêche saumon bretagne** (#3) | Aucune page dédiée — le hub capte par accident | FAQ saumon sur le hub + article blog "Pêcher le saumon à la mouche en Bretagne : rivières et saisons" (maillage vers hub) ; envisager une page prestation dédiée | 🔴 Haute |
+| **pêche saumon bretagne** (#3) | ⚠️ Pêche du saumon INTERDITE en Bretagne — pas de prestation vendable | Contenu informatif : FAQ "Peut-on encore pêcher le saumon en Bretagne ?" + article blog sur le moratoire → rediriger le trafic vers alose, truite et voyages (truite de mer Argentine) | 🔴 Haute |
 | **peche aux bars en bretagne** (#5) | Variante mal couverte | FAQ bar (saisons, marées, spots) enrichit le champ sémantique → remonter vers #2-3 | 🔴 Haute |
 | **guide de pêche bretagne** (générique) | Capté par bjpeche, pesketa, guides "leurre" | Renforcer "moniteur-guide de pêche Bretagne" sur accueil + page Le Guide (title, H1, FAQ bio) | 🟠 Moyenne |
 | **réservoir mouche bretagne / étang neuf** | Marché neuf, quasi zéro concurrence locale ; peche.com a couvert la masterclass | FAQ réservoir + 1-2 articles récap masterclass → position de référent régional | 🟠 Moyenne |
@@ -106,26 +106,52 @@ Même métier, même région (Nord-Finistère : Morlaix, Rade de Brest), même p
 
 **Différenciation JBV à markteler dans le contenu** : tarifs transparents · 26 avis 5★ visibles · blog vivant (156 articles) · bar À VUE (niche rare) · Carolina Skiff dédié mouche · masterclass avec champion du monde · Bretagne-Sud (zone géo complémentaire — peu de chevauchement rivières).
 
+### So Mouche — somouche.fr (Solène Le Bourhis-Beyer)
+
+Monitrice-guide depuis 2014, basée à **Kervignac (56) — la plus proche géographiquement de JBV** (Bretagne-Sud). Championne de France de montage 2015. Prestations : truite rivière/réservoir, alose, initiation, montage de mouches, float tube, voyages Laponie. Boutique en ligne (mouches, cartes cadeaux). Site multilingue (EN/DE/ES).
+**Faiblesses** : tarifs absents, prestations peu détaillées, contenu statique, peu de photos.
+**Recouvrement avec JBV** : truite, réservoir, alose, initiation — mais pas le bar à la mouche ni les masterclass. Ses atouts différenciants : le montage (palmarès) et la cible famille/femmes.
+
+### Celtic Fishing — celticfishing.com (Kilian Lebreton)
+
+Moniteur-guide, double zone **Irlande (Kerry) + Bretagne** (+ Normandie). Mouche ET leurre : bar, truite, brochet, saumon (en Irlande, où c'est légal). Version anglaise du site.
+**Faiblesses** : pas de tarifs, pas de calendrier, peu de contenu stages.
+**Recouvrement** : bar Bretagne + clientèle anglophone. Son atout : l'Irlande (destination saumon légale).
+
 ### Autres concurrents
 
 | Concurrent | Zone / spécialité | Menace | Note |
 |---|---|---|---|
 | Pesketa (pesketa.com) | Finistère, multi-techniques dont initiation mouche | Moyenne | Moins spécialisé mouche |
 | BJ Pêche (bjpeche.com) | Bretagne, stages + bons cadeaux | Moyenne | Concurrent sur "stage pêche" générique |
-| Celtic Fishing | Bar Bretagne, site EN | Moyenne (EN) | Cible la clientèle anglophone — argument pour compléter le SEO EN |
+| Nageoires et Cie (T. Le Sceller) | Bretagne, stage mouche | Faible | Présent sur "initiation mouche bretagne" |
 | Mickaël Rio, Bar'ouf, Belle-Île | Bar Morbihan (leurre surtout) | Faible en mouche | Partagent la SERP "pêche bar bretagne" |
 | Bourgogne Pêche, T. Millot, Jurapêche, B. Beusse… | Stages mouche nationaux | Moyenne | Concurrents sur "stage pêche à la mouche" (JBV #1 à défendre) |
 | Médias : peche.com, blog Ardent Pêche | Contenu SEO massif | — | Alliés de fait : parutions + backlinks (continuer la revue de presse) |
+
+### ⚔️ Champs de bataille vs Dolivet — où JBV peut passer devant (SERP vérifiées 13/07/2026)
+
+| Mot-clé | État actuel | Verdict | Action pour passer devant |
+|---|---|---|---|
+| **initiation pêche à la mouche bretagne** | Dolivet **#1**, JBV #2-4 mais avec les MAUVAISES pages (stage, truite, hub — pas /initiation) | 🎯 Bataille prioritaire | Renforcer /initiation-peche-a-la-mouche : title "Initiation pêche à la mouche en Bretagne", FAQ initiation, contenu enrichi, maillage interne avec ancre "initiation pêche à la mouche" vers cette page |
+| **fly fishing brittany / sea bass fly (EN)** | Dolivet **écrase tout** (4 résultats top 10 + son shop), Celtic présent, **JBV absent** | 🎯 Gros potentiel | SEO EN complet (10 pages), héros EN soignés, 2-3 articles blog en anglais. JBV a l'international (12 pays, Rio Grande) : crédibilité réelle à faire valoir |
+| pêche à la mouche bretagne | JBV 3 résultats top 10, Dolivet 1 | ✅ JBV devant — consolider | FAQ hub + fraîcheur de contenu |
+| bar à la mouche (national) | Médias devant, JBV 1er guide (~#6), Dolivet hors top 10 | ✅ JBV devant | Articles blog mouches/technique bar (les médias prennent les places : longue traîne) |
+| pêche de l'alose à la mouche | JBV #3 + son article peche.com #4 + enjoyfishing #5 → 3 positions ! Dolivet invisible | ✅ JBV domine | Défendre : FAQ alose + fusion enjoyfishing (les redirections 301 consolideront tout) |
+| réservoir mouche bretagne | Dolivet a le lac du Drennec ; JBV a l'Étang Neuf + masterclass champion du monde | ⚔️ Bataille naissante | 1-2 articles récap masterclass + FAQ réservoir → prendre la tête sur un marché neuf |
+| guide de pêche bretagne | Ni l'un ni l'autre ne domine (guides leurre, annuaires) | ⚔️ Ouvert | "Moniteur-guide de pêche Bretagne" dans title/H1 accueil + page Le Guide |
+| stage pêche à la mouche (national) | JBV **#1**, Dolivet absent | ✅ JBV domine | Défendre avec FAQ + avis clients |
 
 ---
 
 ## 4. Plan d'action priorisé
 
 1. **FAQ sur les 6 pages prioritaires** (bar, stage, initiation, truite, alose, hub Bretagne) — questions ci-dessus, réponses à rédiger par JBV → message à lui transmettre
-2. **Quick win saumon** : FAQ hub + article blog dédié (position #3 sans effort → #1-2 atteignable)
-3. **SEO EN** : 10 pages hub + titres EN des 15-20 meilleurs articles (contrer Celtic Fishing/Dolivet sur l'anglais)
-4. **Articles spots** (Golfe du Morbihan, Ria d'Etel, estuaires 29) avec maillage vers prestations
-5. **Backlinks** : annuaires guides (Génération Pêche, FFPML), partenaires matériel, presse spécialisée
+2. **Bataille "initiation mouche bretagne"** : renforcer la page initiation (Dolivet #1, JBV juste derrière avec les mauvaises pages — la plus gagnable)
+3. **SEO EN** : 10 pages hub + titres EN des meilleurs articles — le seul terrain où Dolivet écrase JBV (4 résultats top 10 vs 0)
+4. **Saumon → contenu informatif** : FAQ + article sur l'interdiction, rediriger le trafic #3 vers alose/truite/voyages
+5. **Articles spots & réservoir** (Golfe du Morbihan, Ria d'Etel, récaps masterclass) avec maillage vers prestations
+6. **Backlinks** : annuaires guides (Génération Pêche, FFPML), partenaires matériel, presse spécialisée
 
 ## Sources concurrence
 
