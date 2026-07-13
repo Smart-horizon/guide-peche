@@ -2,6 +2,9 @@
 interface Props {
   actif?: boolean
   delai?: number
+  scrollPct?: number
+  cooldown1?: number
+  cooldown2?: number
   titre?: string
   texte?: string
   imageUrl?: string
@@ -13,6 +16,9 @@ interface Props {
 const {
   actif       = true,
   delai       = 15,
+  scrollPct   = 35,
+  cooldown1   = 30,
+  cooldown2   = 180,
   titre       = "Une lettre du bord de l'eau",
   texte       = "Rejoignez les pêcheurs qui reçoivent les conseils, récits et vidéos de Jean-Baptiste.",
   imageUrl    = '/images/bar-a-vue.jpg',
@@ -79,27 +85,59 @@ if (!actif) return
   </div>
 </div>
 
-<script define:vars={{ delai, formAction }}>
-  const STORAGE_KEY = 'nl_popup_closed'
-  const STORAGE_DELAY = 7 // jours avant de reafficher
+<script define:vars={{ delai, scrollPct, cooldown1, cooldown2, formAction }}>
+  // ── Mémorisation ────────────────────────────────────────────────────────────
+  // nl_subscribed = '1'  → inscrit (popup, section, page newsletter, ou arrivée
+  //                        depuis un lien Mailchimp) : ne JAMAIS réafficher.
+  // nl_popup_dismissed   → JSON { n: nb de refus, ts: date du dernier refus } :
+  //                        silence cooldown1 jours après le 1er refus,
+  //                        cooldown2 jours à partir du 2e.
+  const KEY_SUB = 'nl_subscribed'
+  const KEY_DIS = 'nl_popup_dismissed'
+  const KEY_OLD = 'nl_popup_closed' // ancien format — migré comme 1 refus
 
-  function shouldShow() {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (!stored) return true
-    const ts = parseInt(stored, 10)
-    const diff = (Date.now() - ts) / (1000 * 60 * 60 * 24)
-    return diff > STORAGE_DELAY
+  function getDismiss() {
+    try {
+      const d = JSON.parse(localStorage.getItem(KEY_DIS))
+      if (d && typeof d.n === 'number' && typeof d.ts === 'number') return d
+    } catch {}
+    const old = parseInt(localStorage.getItem(KEY_OLD) || '', 10)
+    return old ? { n: 1, ts: Math.min(old, Date.now()) } : null
   }
 
-  function closePopup() {
+  function shouldShow() {
+    if (localStorage.getItem(KEY_SUB) === '1') return false
+    const d = getDismiss()
+    if (!d) return true
+    const jours = (Date.now() - d.ts) / (1000 * 60 * 60 * 24)
+    return jours > (d.n >= 2 ? cooldown2 : cooldown1)
+  }
+
+  function markDismissed() {
+    const d = getDismiss()
+    localStorage.setItem(KEY_DIS, JSON.stringify({ n: (d?.n || 0) + 1, ts: Date.now() }))
+    localStorage.removeItem(KEY_OLD)
+  }
+
+  function markSubscribed() {
+    localStorage.setItem(KEY_SUB, '1')
+    localStorage.removeItem(KEY_DIS)
+    localStorage.removeItem(KEY_OLD)
+  }
+
+  let opened = false
+
+  function closePopup(dismiss = true) {
     const popup = document.getElementById('nl-popup')
     if (!popup) return
     popup.classList.remove('nl-popup--visible')
     setTimeout(() => { popup.style.display = 'none' }, 350)
-    localStorage.setItem(STORAGE_KEY, String(Date.now()))
+    if (dismiss) markDismissed()
   }
 
   function openPopup() {
+    if (opened) return
+    opened = true
     const popup = document.getElementById('nl-popup')
     if (!popup) return
     popup.style.display = 'flex'
@@ -109,14 +147,36 @@ if (!actif) return
   document.addEventListener('DOMContentLoaded', () => {
     if (!shouldShow()) return
 
-    setTimeout(openPopup, delai * 1000)
+    // ── Déclenchement : délai écoulé ET scroll suffisant (si scrollPct > 0) ──
+    let delaiOk  = false
+    let scrollOk = scrollPct <= 0
 
-    document.getElementById('nl-popup-close')?.addEventListener('click', closePopup)
-    document.getElementById('nl-popup-backdrop')?.addEventListener('click', closePopup)
-    document.getElementById('nl-popup-ignorer')?.addEventListener('click', closePopup)
+    function scrolled() {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      return total <= 0 ? 100 : (window.scrollY / total) * 100
+    }
+    function maybeOpen() {
+      if (delaiOk && scrollOk) openPopup()
+    }
+    setTimeout(() => { delaiOk = true; maybeOpen() }, delai * 1000)
+    if (!scrollOk) {
+      const onScroll = () => {
+        if (scrolled() >= scrollPct) {
+          scrollOk = true
+          window.removeEventListener('scroll', onScroll)
+          maybeOpen()
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true })
+      onScroll() // pages courtes : condition déjà remplie
+    }
+
+    document.getElementById('nl-popup-close')?.addEventListener('click', () => closePopup())
+    document.getElementById('nl-popup-backdrop')?.addEventListener('click', () => closePopup())
+    document.getElementById('nl-popup-ignorer')?.addEventListener('click', () => closePopup())
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closePopup()
+      if (e.key === 'Escape' && opened) closePopup()
     })
 
     const form = document.getElementById('nl-popup-form')
@@ -139,8 +199,8 @@ if (!actif) return
         form.querySelector('button[type="submit"]')?.setAttribute('style', 'display:none')
         success.style.display = 'block'
       }
-      localStorage.setItem(STORAGE_KEY, String(Date.now() + 30 * 24 * 60 * 60 * 1000))
-      setTimeout(closePopup, 2500)
+      markSubscribed()
+      setTimeout(() => closePopup(false), 2500)
     })
   })
 </script>

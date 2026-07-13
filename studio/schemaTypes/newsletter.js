@@ -120,6 +120,41 @@ export default {
       group: 'popup',
       initialValue: 'Non merci',
     },
+    {
+      name: 'popupScroll',
+      title: 'Scroll minimum avant apparition (%)',
+      type: 'number',
+      group: 'popup',
+      initialValue: 35,
+      description: 'Le popup attend que le visiteur ait parcouru ce pourcentage de la page (en plus du délai). 0 = délai seul. Recommandé : 35 — évite de couper la lecture et protège des pénalités Google mobile.',
+      validation: Rule => Rule.min(0).max(100),
+    },
+    {
+      name: 'popupCooldown1',
+      title: 'Silence après le 1er « Non merci » (jours)',
+      type: 'number',
+      group: 'popup',
+      initialValue: 30,
+      description: 'Nombre de jours sans popup après un premier refus.',
+      validation: Rule => Rule.min(1).max(365),
+    },
+    {
+      name: 'popupCooldown2',
+      title: 'Silence après le 2e « Non merci » (jours)',
+      type: 'number',
+      group: 'popup',
+      initialValue: 180,
+      description: 'Après deux refus, on n\'insiste (presque) plus. ℹ️ Un visiteur qui s\'inscrit (popup, section ou page newsletter) ou qui arrive depuis un lien de la newsletter ne revoit JAMAIS le popup.',
+      validation: Rule => Rule.min(1).max(730),
+    },
+    {
+      name: 'popupSurBlog',
+      title: 'Afficher aussi sur le blog ?',
+      type: 'boolean',
+      group: 'popup',
+      initialValue: false,
+      description: 'Les lecteurs du blog sont la meilleure cible newsletter. Mêmes règles de fréquence que sur l\'accueil.',
+    },
 
     // ── Page dédiée ───────────────────────────────────────────────────────────
     {

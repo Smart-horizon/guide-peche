@@ -168,6 +168,13 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
       form.querySelector('.nl-page-form__row')?.setAttribute('style', 'display:none')
       form.querySelector('.nl-page-form__label')?.setAttribute('style', 'display:none')
     }
+
+    // Abonné : le popup newsletter ne sera plus jamais proposé
+    try {
+      localStorage.setItem('nl_subscribed', '1')
+      localStorage.removeItem('nl_popup_dismissed')
+      localStorage.removeItem('nl_popup_closed')
+    } catch {}
   })
 </script>
 

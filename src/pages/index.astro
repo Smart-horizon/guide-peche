@@ -155,7 +155,8 @@ const allSections = hp?.pagebuilder ?? []
 // ── Newsletter ────────────────────────────────────────────────────────────────
 const nl = await client.fetch(`*[_type == "newsletter"][0]{
   sectionTitre, sectionSousTitre, sectionAvantages, sectionBoutonTexte, sectionPlaceholder,
-  popupActif, popupDelai, popupTitre, popupTexte, popupBoutonTexte, popupIgnorerTexte, formAction,
+  popupActif, popupDelai, popupScroll, popupCooldown1, popupCooldown2,
+  popupTitre, popupTexte, popupBoutonTexte, popupIgnorerTexte, formAction,
   popupImage{ asset->{ _id, url } }
 }`)
 
@@ -173,6 +174,9 @@ const nlPlaceholder    = stegaClean(nl?.sectionPlaceholder)  || 'votre@email.fr'
 const nlFormAction     = stegaClean(nl?.formAction)          || '/newsletter'
 const nlPopupActif     = nl?.popupActif  ?? true
 const nlPopupDelai     = nl?.popupDelai  ?? 15
+const nlPopupScroll    = nl?.popupScroll ?? 35
+const nlPopupCd1       = nl?.popupCooldown1 ?? 30
+const nlPopupCd2       = nl?.popupCooldown2 ?? 180
 const nlPopupTitre     = pick(nl?.popupTitre, "Une lettre du bord de l'eau")
 const nlPopupTexte     = pick(nl?.popupTexte, "Rejoignez les pêcheurs qui reçoivent les conseils, récits et vidéos de Jean-Baptiste.")
 const nlPopupBtn       = pick(nl?.popupBoutonTexte, "Je m'inscris")
@@ -366,6 +370,9 @@ const nlPopupImageUrl  = nl?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'
   <NewsletterPopup
     actif={nlPopupActif}
     delai={nlPopupDelai}
+    scrollPct={nlPopupScroll}
+    cooldown1={nlPopupCd1}
+    cooldown2={nlPopupCd2}
     titre={nlPopupTitre}
     texte={nlPopupTexte}
     imageUrl={nlPopupImageUrl}

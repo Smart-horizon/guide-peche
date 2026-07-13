@@ -1,5 +1,6 @@
----
+﻿---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import NewsletterPopup from '../../components/NewsletterPopup.astro'
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -12,6 +13,14 @@ const client = createClient({
 
 const builder = imageUrlBuilder(client)
 const urlFor = (source) => builder.image(source)
+
+// Popup newsletter sur le blog (activable dans Sanity — mêmes règles que l'accueil)
+const nlPopup = await client.fetch(`*[_type == "newsletter"][0]{
+  popupActif, popupSurBlog, popupDelai, popupScroll, popupCooldown1, popupCooldown2,
+  popupTitre, popupTexte, popupBoutonTexte, popupIgnorerTexte, formAction,
+  popupImage{ asset->{ url } }
+}`)
+const popupBlogActif = (nlPopup?.popupActif ?? true) && (nlPopup?.popupSurBlog ?? false)
 
 const articles = await client.fetch(`
   *[_type == "article"] | order(date desc) {
@@ -100,6 +109,21 @@ const filtresPresents = FILTER_TAGS_ORDER.filter(tag => articles.some(a => (a.ta
     </div>
   </section>
 
+  {popupBlogActif && (
+    <NewsletterPopup
+      actif={true}
+      delai={nlPopup?.popupDelai ?? 15}
+      scrollPct={nlPopup?.popupScroll ?? 35}
+      cooldown1={nlPopup?.popupCooldown1 ?? 30}
+      cooldown2={nlPopup?.popupCooldown2 ?? 180}
+      titre={nlPopup?.popupTitre || undefined}
+      texte={nlPopup?.popupTexte || undefined}
+      imageUrl={nlPopup?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'}
+      boutonTexte={nlPopup?.popupBoutonTexte || undefined}
+      ignorerTexte={nlPopup?.popupIgnorerTexte || undefined}
+      formAction={nlPopup?.formAction || '/newsletter'}
+    />
+  )}
 </BaseLayout>
 
 <style>

@@ -1,5 +1,6 @@
----
+﻿---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import NewsletterPopup from '../../components/NewsletterPopup.astro'
 import RelatedArticles from '../../components/RelatedArticles.astro'
 import { PILIERS, cibleArticle, cibleSecondaire, articlesSimilaires } from '../../lib/maillage.js'
 import { fullTitle } from '../../lib/seo.js'
@@ -32,6 +33,14 @@ const client = createClient({
 
 const builder = imageUrlBuilder(client)
 const urlFor = (source) => { const b = builder.image(source); const hs = source?.hotspot; return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b }
+
+// Popup newsletter sur le blog (activable dans Sanity — mêmes règles que l'accueil)
+const nlPopup = await client.fetch(`*[_type == "newsletter"][0]{
+  popupActif, popupSurBlog, popupDelai, popupScroll, popupCooldown1, popupCooldown2,
+  popupTitre, popupTexte, popupBoutonTexte, popupIgnorerTexte, formAction,
+  popupImage{ asset->{ url } }
+}`)
+const popupBlogActif = (nlPopup?.popupActif ?? true) && (nlPopup?.popupSurBlog ?? false)
 
 const article = await client.fetch(
   `*[_type == "article" && slug.current == $slug][0]{
@@ -234,6 +243,21 @@ const jsonLd = [
     </div>
   </section>
 
+  {popupBlogActif && (
+    <NewsletterPopup
+      actif={true}
+      delai={nlPopup?.popupDelai ?? 15}
+      scrollPct={nlPopup?.popupScroll ?? 35}
+      cooldown1={nlPopup?.popupCooldown1 ?? 30}
+      cooldown2={nlPopup?.popupCooldown2 ?? 180}
+      titre={nlPopup?.popupTitre || undefined}
+      texte={nlPopup?.popupTexte || undefined}
+      imageUrl={nlPopup?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'}
+      boutonTexte={nlPopup?.popupBoutonTexte || undefined}
+      ignorerTexte={nlPopup?.popupIgnorerTexte || undefined}
+      formAction={nlPopup?.formAction || '/newsletter'}
+    />
+  )}
 </BaseLayout>
 
 <style>

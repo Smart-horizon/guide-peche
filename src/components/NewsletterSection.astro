@@ -98,6 +98,13 @@ const {
       form.querySelector('.nl-form__row')?.setAttribute('style', 'display:none')
       form.querySelector('.nl-form__mention')?.setAttribute('style', 'display:none')
     }
+
+    // Abonné : le popup newsletter ne sera plus jamais proposé
+    try {
+      localStorage.setItem('nl_subscribed', '1')
+      localStorage.removeItem('nl_popup_dismissed')
+      localStorage.removeItem('nl_popup_closed')
+    } catch {}
   })
 </script>
 

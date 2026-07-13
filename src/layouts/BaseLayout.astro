@@ -128,6 +128,19 @@ const allJsonLd = [businessJsonLd, ...jsonLd]
 
     <title>{metaTitle}</title>
 
+    {/* Visiteur arrivant depuis un lien de la newsletter Mailchimp (?mc_cid / ?mc_eid)
+        → déjà abonné : le popup newsletter ne lui sera plus jamais proposé. */}
+    <script is:inline>
+      try {
+        var p = new URLSearchParams(location.search)
+        if (p.has('mc_cid') || p.has('mc_eid')) {
+          localStorage.setItem('nl_subscribed', '1')
+          localStorage.removeItem('nl_popup_dismissed')
+          localStorage.removeItem('nl_popup_closed')
+        }
+      } catch (e) {}
+    </script>
+
     {/* Données structurées — cartes d'identité lues par Google */}
     {allJsonLd.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />
