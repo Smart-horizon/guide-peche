@@ -1,6 +1,28 @@
 # Analyse SEO — FAQ × mots-clés, opportunités & concurrence
 
-*Établie le 13/07/2026 — base : positions Google connues (étude initiale) + recherche web concurrentielle.*
+*Établie le 13/07/2026 — base : exports Haloscan (mai 2026 : ~100 mots-clés site JBV + ~100 mots-clés enjoyfishing.fr + profil catégories Dolivet) + SERP vérifiées le 13/07/2026.*
+
+## Enseignements Haloscan (ajout 13/07)
+
+### Le profil de Dolivet est GONFLÉ artificiellement
+brittanyflyfishing.com se positionne sur ~565 mots-clés, mais seulement **~33 % concernent la pêche** (187 kw "Fishing"). Près de 25 % relèvent du tourisme/hébergement/voyage (Swift Lodge B&B, Irlande, Islande : Travel & Tourism 108 kw, Attractions 58, Accommodations…) et une part est du bruit pur (Soccer, Pets By Breed, Bollywood…). **Son cœur guidage réel ≈ 190-220 mots-clés** — comparable au périmètre atteignable par JBV, et avec une intention d'achat souvent plus faible (un touriste qui cherche un B&B n'achète pas un guidage mouche).
+
+### La fusion enjoyfishing = l'arme décisive
+Le blog possède ~100 mots-clés dont des positions en or : **#1 sur "pêche du bar à la mouche"** (article matériel — la prestation JBV n'est que #6 dessus !), #2 "mouche crabe" (vol 110), #2 "truite géante" (vol 320), #3 "montage mouche à brochet", #3 "mouche mulet", #4 "streamer vairon", #1 "comment pêcher le bar à la mouche"… Site et blog se positionnent souvent sur les MÊMES requêtes (alose, brochet, bar) : la fusion dans /blog/ avec 301 **consolidera deux autorités en une** — c'est ce qui peut faire basculer les batailles serrées (initiation, bar, brochet).
+
+### ⚠️ Pages Wix à positions SANS équivalent dans le nouveau site (danger 301)
+L'export révèle des URLs Wix positionnées qui n'existent pas dans la nouvelle arborescence — à intégrer ABSOLUMENT au mapping 301 :
+- `/peche-du-saumon-a-la-mouche-bretagne` — porte ~6 mots-clés saumon (#3 "pêche saumon bretagne"…) → 301 vers le futur contenu info saumon ou le hub
+- `/riviere-leguer-guidage-mouche-saumon` — "le léguer pêche" #5
+- `/peche-mouche-saumon-elle-guidage` — "elle pêche" #6
+- `/voyage-peche-mouche-mer-exotique` — "voyage pêche exotique" #11
+- `/bateau-special-mouche-carnassier` (+ version /en/) — "fly fishing boat" #2
+
+### Le brochet, gisement n°2 après le bar
+Volumes réels avec positions améliorables réparties site+blog : "mouche pour le brochet" vol 260 (#15 site / #10 blog), "mouche brochet" vol 140 (#18/#10), "montage brochet" vol 320 (#29 blog), "brochet à la mouche" vol 70 (#10/#14)… → FAQ brochet + consolidation post-fusion = top 5 atteignable sur une famille à ~800 vol cumulé.
+
+### L'anglais rapporte DÉJÀ
+"seabass fish" #4 = **8 visites/mois, 2e mot-clé du site en trafic** (page EN bar à vue) ; "fly fishing boat" #2 (page EN bateau). Les pages EN rankent déjà sans SEO dédié → compléter les meta EN a un ROI démontré par les données.
 
 ## Rappel des positions actuelles (à protéger)
 
@@ -133,8 +155,10 @@ Moniteur-guide, double zone **Irlande (Kerry) + Bretagne** (+ Normandie). Mouche
 
 | Mot-clé | État actuel | Verdict | Action pour passer devant |
 |---|---|---|---|
-| **initiation pêche à la mouche bretagne** | Dolivet **#1**, JBV #2-4 mais avec les MAUVAISES pages (stage, truite, hub — pas /initiation) | 🎯 Bataille prioritaire | Renforcer /initiation-peche-a-la-mouche : title "Initiation pêche à la mouche en Bretagne", FAQ initiation, contenu enrichi, maillage interne avec ancre "initiation pêche à la mouche" vers cette page |
-| **fly fishing brittany / sea bass fly (EN)** | Dolivet **écrase tout** (4 résultats top 10 + son shop), Celtic présent, **JBV absent** | 🎯 Gros potentiel | SEO EN complet (10 pages), héros EN soignés, 2-3 articles blog en anglais. JBV a l'international (12 pays, Rio Grande) : crédibilité réelle à faire valoir |
+| **initiation pêche à la mouche bretagne** | Dolivet **#1**, JBV #2-4 mais avec les MAUVAISES pages (stage, truite, hub — pas /initiation, qui n'est que #3 sur "initiation peche a la mouche") | 🎯 Bataille prioritaire | Renforcer /initiation-peche-a-la-mouche : title "Initiation pêche à la mouche en Bretagne", FAQ initiation, contenu enrichi, maillage interne avec ancre "initiation pêche à la mouche" vers cette page |
+| **fly fishing brittany / sea bass fly (EN)** | Dolivet **écrase tout** (4 résultats top 10 + son shop), Celtic présent, JBV quasi absent — MAIS ses 2 pages EN qui existent rankent déjà ("seabass fish" #4 = 8 visites/mois, "fly fishing boat" #2) | 🎯 Gros potentiel, ROI démontré | SEO EN complet (10 pages), héros EN soignés, 2-3 articles blog en anglais. JBV a l'international (12 pays, Rio Grande) : crédibilité réelle à faire valoir |
+| **pêche du bar à la mouche** (requête exacte) | L'article enjoyfishing est **#1**, la prestation JBV #6, Dolivet derrière | 🎯 Fusion = victoire | La fusion 301 du blog rapatrie le #1 sur le domaine principal ; maillage article → prestation déjà en place |
+| **brochet (famille ~800 vol cumulé)** | Positions 9-18 éparpillées entre site et blog, personne ne domine | ⚔️ Gisement n°2 | FAQ brochet + consolidation post-fusion → top 5 |
 | pêche à la mouche bretagne | JBV 3 résultats top 10, Dolivet 1 | ✅ JBV devant — consolider | FAQ hub + fraîcheur de contenu |
 | bar à la mouche (national) | Médias devant, JBV 1er guide (~#6), Dolivet hors top 10 | ✅ JBV devant | Articles blog mouches/technique bar (les médias prennent les places : longue traîne) |
 | pêche de l'alose à la mouche | JBV #3 + son article peche.com #4 + enjoyfishing #5 → 3 positions ! Dolivet invisible | ✅ JBV domine | Défendre : FAQ alose + fusion enjoyfishing (les redirections 301 consolideront tout) |
