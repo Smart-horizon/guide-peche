@@ -14,14 +14,17 @@ const sanity = createClient({
   useCdn: false,
 })
 
-// Frais de port PROVISOIRES (mode test) — à remplacer par les tarifs postaux
-// réels validés avec JBV avant le passage en production.
-const PORT = {
-  leger: { label: 'Lettre suivie (tarif provisoire)', montant: 400, maxGrammes: 100 },
-  colis: { label: 'Colissimo (tarif provisoire)',     montant: 800 },
+// Repli si le document "parametresBoutique" n'existe pas encore dans Sanity.
+// La vraie configuration (pays, tarifs, poids max, franco) est éditée par JBV
+// dans le Studio : Boutique → 🚚 Livraison.
+const LIVRAISON_DEFAUT = {
+  paysLivraison: ['FR'],
+  francoSeuil: null,
+  modes: [
+    { nom: 'Lettre suivie', delai: '2-3 jours ouvrés', prix: 4.99, poidsMax: 250, actif: true },
+    { nom: 'Colissimo domicile', delai: '2-3 jours ouvrés', prix: 7.5, actif: true },
+  ],
 }
-
-const PAYS_LIVRAISON = ['FR', 'BE', 'LU', 'CH', 'DE', 'NL', 'IT', 'ES', 'GB', 'IE']
 
 export async function POST({ request }) {
   const erreur = (statut, message) =>
@@ -43,12 +46,18 @@ export async function POST({ request }) {
   const demandes = Array.isArray(corps?.items) ? corps.items.slice(0, 50) : []
   if (!demandes.length) return erreur(400, 'Panier vide')
 
-  // ── Relit les produits demandés dans Sanity ───────────────────────────────
+  // ── Relit les produits demandés + la config livraison dans Sanity ────────
   const ids = [...new Set(demandes.map((d) => String(d.produitId)))]
-  const produits = await sanity.fetch(
-    `*[_type == "produit" && _id in $ids && disponible == true]{
-      _id, title, prix, stock, poids,
-      "variantes": variantes[]{ nom, prix, stock, poids }
+  const { produits, livraison } = await sanity.fetch(
+    `{
+      "produits": *[_type == "produit" && _id in $ids && disponible == true]{
+        _id, title, prix, stock, poids,
+        "variantes": variantes[]{ nom, prix, stock, poids }
+      },
+      "livraison": *[_id == "parametresBoutique"][0]{
+        paysLivraison, francoSeuil,
+        "modes": modes[actif != false]{ nom, delai, prix, poidsMax }
+      }
     }`,
     { ids }
   )
@@ -88,9 +97,26 @@ export async function POST({ request }) {
     recap.push([produit._id, variante ? variante.nom : null, qty])
   }
 
+  // ── Options d'expédition depuis la config Sanity ──────────────────────────
+  const config = livraison?.modes?.length ? livraison : LIVRAISON_DEFAUT
+  const pays = config.paysLivraison?.length ? config.paysLivraison : ['FR']
+  const sousTotal = lignes.reduce((s, l) => s + (l.centimes * l.qty) / 100, 0)
+  const francoAtteint = config.francoSeuil != null && sousTotal >= config.francoSeuil
+
+  // Modes compatibles avec le poids du panier (vide = tous poids)
+  let modes = config.modes.filter(
+    (m) => m.prix != null && (m.poidsMax == null || poidsTotal <= m.poidsMax)
+  )
+  if (!modes.length) modes = config.modes.filter((m) => m.poidsMax == null)
+  if (!modes.length) modes = [LIVRAISON_DEFAUT.modes[1]]
+  // Livraison offerte : le mode le moins cher passe à 0 €
+  if (francoAtteint) {
+    const moinsCher = modes.reduce((a, b) => (a.prix <= b.prix ? a : b))
+    modes = [{ ...moinsCher, nom: `${moinsCher.nom} — offerte`, prix: 0 }]
+  }
+
   // ── Construit la requête Stripe (API REST, encodage formulaire) ──────────
   const origine = new URL(request.url).origin
-  const port = poidsTotal <= PORT.leger.maxGrammes ? PORT.leger : PORT.colis
 
   const p = new URLSearchParams()
   p.set('mode', 'payment')
@@ -103,13 +129,16 @@ export async function POST({ request }) {
     p.set(`line_items[${i}][price_data][unit_amount]`, String(l.centimes))
     p.set(`line_items[${i}][price_data][product_data][name]`, l.nom)
   })
-  PAYS_LIVRAISON.forEach((pays, i) =>
-    p.set(`shipping_address_collection[allowed_countries][${i}]`, pays)
+  pays.forEach((code, i) =>
+    p.set(`shipping_address_collection[allowed_countries][${i}]`, code)
   )
-  p.set('shipping_options[0][shipping_rate_data][type]', 'fixed_amount')
-  p.set('shipping_options[0][shipping_rate_data][display_name]', port.label)
-  p.set('shipping_options[0][shipping_rate_data][fixed_amount][amount]', String(port.montant))
-  p.set('shipping_options[0][shipping_rate_data][fixed_amount][currency]', 'eur')
+  modes.slice(0, 5).forEach((m, i) => {
+    const libelle = m.delai ? `${m.nom} (${m.delai})` : m.nom
+    p.set(`shipping_options[${i}][shipping_rate_data][type]`, 'fixed_amount')
+    p.set(`shipping_options[${i}][shipping_rate_data][display_name]`, libelle.slice(0, 100))
+    p.set(`shipping_options[${i}][shipping_rate_data][fixed_amount][amount]`, String(Math.round(m.prix * 100)))
+    p.set(`shipping_options[${i}][shipping_rate_data][fixed_amount][currency]`, 'eur')
+  })
   p.set('phone_number_collection[enabled]', 'true')
   // Récapitulatif du panier pour le webhook (commande Sanity + stock).
   // Limite Stripe : 500 caractères par clé → découpage en panier0, panier1…

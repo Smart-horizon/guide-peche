@@ -330,6 +330,16 @@ const customStructure = (S, context) =>
                 .title('📋 Tous les produits')
                 .child(S.documentList().title('Tous les produits').filter('_type == "produit"')),
               S.divider(),
+              // 🚚 Livraison — pays, tarifs, modes d'expédition (singleton)
+              S.listItem()
+                .title('🚚 Livraison')
+                .child(
+                  S.document()
+                    .schemaType('parametresBoutique')
+                    .documentId('parametresBoutique')
+                    .title('Livraison — pays et tarifs')
+                ),
+              S.divider(),
               // 📬 Commandes — créées automatiquement par les paiements Stripe
               S.listItem()
                 .title('📬 Commandes')

@@ -11,6 +11,7 @@ import article from './article'
 import parametres from './parametres'
 import produit from './produit'
 import commande from './commande'
+import parametresBoutique from './parametresBoutique'
 import accueil from './accueil'
 import sectionAccueil from './sectionAccueil'
 import pageTemoignages from './pageTemoignages'
@@ -42,6 +43,7 @@ export const schemaTypes = [
   prestation,
   produit,
   commande,
+  parametresBoutique,
   voyage,
   temoignage,
   article,
