@@ -305,6 +305,28 @@ const customStructure = (S, context) =>
                 .child(S.documentList().title('Tous les articles').filter('_type == "article"')),
             ])
         ),
+
+      S.divider(),
+
+      // 🛒 Boutique
+      S.listItem()
+        .title('🛒 Boutique')
+        .child(
+          S.list()
+            .title('Boutique')
+            .items([
+              S.listItem()
+                .title('🪰 Mouches')
+                .child(S.documentList().title('Mouches').filter('_type == "produit" && categorie == "mouche"')),
+              S.listItem()
+                .title('🧢 Casquettes & goodies')
+                .child(S.documentList().title('Casquettes & goodies').filter('_type == "produit" && categorie == "goodies"')),
+              S.divider(),
+              S.listItem()
+                .title('📋 Tous les produits')
+                .child(S.documentList().title('Tous les produits').filter('_type == "produit"')),
+            ])
+        ),
     ])
 
 export default defineConfig({

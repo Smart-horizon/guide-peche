@@ -9,6 +9,7 @@ import voyage from './voyage'
 import temoignage from './temoignage'
 import article from './article'
 import parametres from './parametres'
+import produit from './produit'
 import accueil from './accueil'
 import sectionAccueil from './sectionAccueil'
 import pageTemoignages from './pageTemoignages'
@@ -38,6 +39,7 @@ export const schemaTypes = [
   pageTemoignages,
   parametres,
   prestation,
+  produit,
   voyage,
   temoignage,
   article,
