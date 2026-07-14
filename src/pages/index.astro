@@ -152,6 +152,10 @@ const materielSection = {
 // ── Toutes les sections dans l'ordre Sanity ───────────────────────────────────
 const allSections = hp?.pagebuilder ?? []
 
+// ── Coordonnées (⚙️ Paramètres) pour le hero de secours ──────────────────────
+const paramsContact = await client.fetch(`*[_id == "siteParametres"][0]{ telephone }`)
+const fallbackTel = paramsContact?.telephone || '06 87 30 34 56'
+
 // ── Newsletter ────────────────────────────────────────────────────────────────
 const nl = await client.fetch(`*[_type == "newsletter"][0]{
   sectionTitre, sectionSousTitre, sectionAvantages, sectionBoutonTexte, sectionPlaceholder,
@@ -208,7 +212,7 @@ const nlPopupImageUrl  = nl?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'
         <p class="hp-hero-fallback__sub">Guidage bar, truite, alose et brochet. Stages toutes techniques, de l'initiation à la masterclass.</p>
         <div class="hp-hero-fallback__cta">
           <a href="/contact" class="btn-prim">Réserver une sortie</a>
-          <a href="tel:0687303456" class="btn-ghost-hero">06 87 30 34 56</a>
+          <a href={`tel:${fallbackTel.replace(/\s/g, '')}`} class="btn-ghost-hero">{fallbackTel}</a>
         </div>
       </div>
     </section>

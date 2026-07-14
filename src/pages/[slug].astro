@@ -113,6 +113,10 @@ const relTitre = doc.categorie === 'bar' ? 'Derniers récits de pêche au bar'
 // elle remplace la section automatique de bas de page.
 const pageHasBlogSection = doc.pagebuilder?.some((s: any) => s._type === 'sectionBlog') ?? false
 
+// Coordonnées (⚙️ Paramètres) pour le CTA du layout de secours
+const paramsContact = await client.fetch(`*[_id == "siteParametres"][0]{ telephone }`)
+const fallbackTel = paramsContact?.telephone || '06 87 30 34 56'
+
 // ── Utilitaires pour le fallback (pages sans pagebuilder) ─────────────────────
 function spanHtml(b: any): string {
   return (b.children || []).map((span: any) => {
@@ -201,7 +205,7 @@ function blocks(content: any[]): string {
           </div>
           <div class="pb-cta__btns">
             <a href="/contact"        class="btn-prim">Me contacter</a>
-            <a href="tel:0687303456"  class="btn-ghost-light">06 87 30 34 56</a>
+            <a href={`tel:${fallbackTel.replace(/\s/g, '')}`} class="btn-ghost-light">{fallbackTel}</a>
           </div>
         </div>
       </section>

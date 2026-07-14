@@ -34,6 +34,10 @@ const client = createClient({
 const builder = imageUrlBuilder(client)
 const urlFor = (source) => { const b = builder.image(source); const hs = source?.hotspot; return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b }
 
+// Coordonnées (⚙️ Paramètres) pour le CTA de fin d'article
+const paramsContact = await client.fetch(`*[_id == "siteParametres"][0]{ telephone }`)
+const contactTel = paramsContact?.telephone || '06 87 30 34 56'
+
 // Popup newsletter sur le blog (activable dans Sanity — mêmes règles que l'accueil)
 const nlPopup = await client.fetch(`*[_type == "newsletter"][0]{
   popupActif, popupSurBlog, popupDelai, popupScroll, popupCooldown1, popupCooldown2,
@@ -238,7 +242,7 @@ const jsonLd = [
         {cible && <a href={cible.url} class="btn btn--ocean">Découvrir : {cible.titre}</a>}
         {cibleSec && <a href={cibleSec.url} class="btn btn--outline">Voir aussi : {cibleSec.titre}</a>}
         <a href="/contact" class={`btn ${cible ? 'btn--outline' : 'btn--ocean'}`}>Me contacter</a>
-        <a href="tel:+33687303456" class="btn btn--outline">06 87 30 34 56</a>
+        <a href={`tel:${contactTel.replace(/\s/g, '')}`} class="btn btn--outline">{contactTel}</a>
       </div>
     </div>
   </section>

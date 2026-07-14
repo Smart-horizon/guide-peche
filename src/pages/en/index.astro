@@ -64,7 +64,7 @@ const enHeroSection = frHeroSection ? {
   sousTitre: enHeroSanity?.sousTitre || 'Guided fishing for sea bass, trout, shad and pike. Courses and coaching from beginner to masterclass level.',
   btnReserverTexte: enHeroSanity?.btnReserverTexte || 'Book a session',
   btnReserverLien: '/contact',
-  btnTelTexte: '06 87 30 34 56',
+  btnTelTexte: enHeroSanity?.btnTelTexte || frHeroSection.btnTelTexte || '06 87 30 34 56',
   // Badges EN depuis Sanity (badgesEn), sinon fallback hardcodé
   badges: frHeroSection.badgesEn?.length
     ? frHeroSection.badgesEn

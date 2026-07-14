@@ -114,13 +114,18 @@ const revuePresse: any[] = hasRevuePresse
   ? await client.fetch(`*[_type == "revuePresse"] | order(orderRank asc) { _id, magazine, numero, date, annee, titre, description, type, cover { asset->{ url } }, photos[] { asset->{ url }, alt }, fichierPdf { asset->{ url, originalFilename } }, lien, labelLien }`)
   : []
 
-// Coordonnées du bloc Contact des encarts d'infos (⚙️ Paramètres, éditable par JBV)
-const hasIntroCard = (sections ?? []).some((s: any) => s._type === 'sectionIntro')
-const contactParams = hasIntroCard
+// Coordonnées (⚙️ Paramètres, éditable par JBV) — encarts d'infos et CTA
+const hasContactUse = (sections ?? []).some((s: any) => s._type === 'sectionIntro' || s._type === 'sectionCta')
+const contactParams = hasContactUse
   ? await client.fetch(`*[_type == "parametres"][0]{ telephone, email }`)
   : null
 const contactTel   = contactParams?.telephone || '06 87 30 34 56'
 const contactEmail = contactParams?.email     || 'enjoy.fishing@hotmail.fr'
+
+// FAQ : si plusieurs sections FAQ sur une même page, un SEUL bloc JSON-LD
+// FAQPage est émis (sur la première), regroupant toutes les questions.
+const faqSectionsAll = (sections ?? []).filter((s: any) => s._type === 'sectionFaq')
+const firstFaqKey = faqSectionsAll[0]?._key
 
 const hasBlogSection = (sections ?? []).some((s: any) => s._type === 'sectionBlog')
 const blogArticles: any[] = hasBlogSection
@@ -749,7 +754,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
         </div>
         <div class="pb-cta__btns">
           <a href={pfx(s.btn1Lien)||pfx('/contact')} class="btn-prim">{s.btn1Texte||'Me contacter'}</a>
-          {s.btn2Texte && <a href={pfx(s.btn2Lien)||'tel:0687303456'} class="btn-ghost-light">{s.btn2Texte}</a>}
+          {s.btn2Texte && <a href={pfx(s.btn2Lien) || `tel:${contactTel.replace(/\s/g, '')}`} class="btn-ghost-light">{s.btn2Texte}</a>}
         </div>
       </div>
     </section>
@@ -1401,10 +1406,16 @@ const voyagesForGrid: any[] = hasVoyagesGrid
   {s._type === 'sectionFaq' && (() => {
     const items = (s.questions ?? []).filter((q: any) => stegaClean(q.question) && stegaClean(q.reponse))
     if (!items.length) return null
+    // JSON-LD émis une seule fois par page (guidelines Google : un seul FAQPage),
+    // en agrégeant les questions de TOUTES les sections FAQ de la page
+    const emitJsonLd = s._key === firstFaqKey
+    const allItems = faqSectionsAll
+      .flatMap((f: any) => f.questions ?? [])
+      .filter((q: any) => stegaClean(q.question) && stegaClean(q.reponse))
     const faqJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: items.map((q: any) => ({
+      mainEntity: allItems.map((q: any) => ({
         '@type': 'Question',
         name: stegaClean(q.question),
         acceptedAnswer: { '@type': 'Answer', text: stegaClean(q.reponse) },
@@ -1427,7 +1438,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             ))}
           </div>
         </div>
-        <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+        {emitJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
       </section>
     )
   })()}
