@@ -165,18 +165,20 @@
   }
 
   /* Voile + tiroir */
+  /* Au-dessus du header du site (z-index 100), sinon la bande du header
+     transparent intercepte les clics sur la croix */
   .panier-voile {
     position: fixed;
     inset: 0;
     background: rgba(7,24,31,0.55);
-    z-index: 95;
+    z-index: 210;
   }
   .panier-tiroir {
     position: fixed;
     top: 0; right: 0; bottom: 0;
     width: min(420px, 100vw);
     background: white;
-    z-index: 96;
+    z-index: 220;
     display: flex;
     flex-direction: column;
     box-shadow: -8px 0 32px rgba(0,0,0,0.25);
