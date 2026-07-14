@@ -4,6 +4,7 @@ export const prerender = false
 // Le navigateur n'envoie QUE des identifiants et quantités : les prix, noms
 // et poids sont relus depuis Sanity côté serveur (jamais confiance au client).
 
+import { env } from 'cloudflare:workers'
 import { createClient } from '@sanity/client'
 
 const sanity = createClient({
@@ -22,15 +23,14 @@ const PORT = {
 
 const PAYS_LIVRAISON = ['FR', 'BE', 'LU', 'CH', 'DE', 'NL', 'IT', 'ES', 'GB', 'IE']
 
-export async function POST({ request, locals }) {
+export async function POST({ request }) {
   const erreur = (statut, message) =>
     new Response(JSON.stringify({ erreur: message }), {
       status: statut,
       headers: { 'Content-Type': 'application/json' },
     })
 
-  const cleStripe =
-    locals?.runtime?.env?.STRIPE_SECRET_KEY || import.meta.env.STRIPE_SECRET_KEY
+  const cleStripe = env?.STRIPE_SECRET_KEY || import.meta.env.STRIPE_SECRET_KEY
   if (!cleStripe) return erreur(500, 'Paiement non configuré')
 
   let corps
