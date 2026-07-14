@@ -157,6 +157,22 @@ export default {
       description: 'Matériaux, conseils d\'utilisation, conditions de pêche idéales…',
     },
 
+    {
+      name: 'videoYoutube',
+      title: 'Vidéo YouTube (optionnel)',
+      type: 'url',
+      group: 'infos',
+      description: 'Ex : vidéo de montage de la mouche. Collez l\'adresse complète de la vidéo — elle sera intégrée sur la fiche produit.',
+    },
+    {
+      name: 'articleLie',
+      title: 'Article de blog lié (optionnel)',
+      type: 'reference',
+      to: [{ type: 'article' }],
+      group: 'infos',
+      description: 'Un article qui parle de ce produit — un lien "En savoir plus" apparaîtra sur la fiche',
+    },
+
     // ── Version anglaise ─────────────────────────────────────────────────────
     {
       name: 'titleEn',
