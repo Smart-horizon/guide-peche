@@ -135,12 +135,10 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
             📖 <a href={`/blog/${produit.article.slug.current}`}>En savoir plus : {produit.article.title}</a>
           </p>
         )}
-      </div>
-    </div>
 
-    <!-- Description -->
-    {produit.description?.length > 0 && (
-      <div class="description">
+        <!-- Description — sous les boutons, à droite de la photo -->
+        {produit.description?.length > 0 && (
+          <div class="description">
         {(() => {
           // Regroupe les blocs consécutifs en liste à puces dans un même <ul>
           const rendus = []
@@ -164,9 +162,11 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
             if (r.type === 'blockquote') return <blockquote>{r.texte}</blockquote>
             return <p>{r.texte}</p>
           })
-        })()}
+            })()}
+          </div>
+        )}
       </div>
-    )}
+    </div>
 
     <!-- Vidéo -->
     {videoId && (
@@ -451,14 +451,16 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
     text-underline-offset: 3px;
   }
 
-  /* Description */
+  /* Description — dans la colonne infos, sous les boutons */
   .description {
-    max-width: 760px;
-    margin-bottom: 3rem;
+    margin-top: 2rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid #e4e6ea;
   }
   .description p {
     margin-bottom: 1.1rem;
     color: var(--color-text);
+    font-size: 0.95rem;
   }
   .description h2, .description h3 {
     margin: 1.75rem 0 0.9rem;
