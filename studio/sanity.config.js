@@ -6,6 +6,7 @@ import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {presentationTool} from 'sanity/presentation'
 import {schemaTypes} from './schemaTypes'
 import {ManuelTool} from './plugins/ManuelTool'
+import {StockTool} from './plugins/StockTool'
 import {SyncEnSectionsAction} from './actions/syncEnSections'
 import {createPublishWithEnSync} from './actions/publishWithEnSync'
 
@@ -185,6 +186,9 @@ const customStructure = (S, context) =>
               S.listItem()
                 .title('🎁 Bon cadeau')
                 .child(S.document().schemaType('page').documentId('page-bon-cadeau').title('Bon cadeau')),
+              S.listItem()
+                .title('📜 Conditions générales de vente')
+                .child(S.document().schemaType('page').documentId('page-conditions-generales-de-ventes').title('CGV')),
 
               S.divider(),
 
@@ -396,6 +400,11 @@ export default defineConfig({
       name: 'manuel',
       title: '📖 Manuel',
       component: ManuelTool,
+    },
+    {
+      name: 'stocks',
+      title: '📦 Stocks',
+      component: StockTool,
     },
   ],
 
