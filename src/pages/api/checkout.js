@@ -55,6 +55,7 @@ export async function POST({ request }) {
   const parId = Object.fromEntries(produits.map((p) => [p._id, p]))
 
   const lignes = []
+  const recap = [] // [produitId, variante|null, qty] — relu par le webhook
   let poidsTotal = 0
 
   for (const d of demandes) {
@@ -84,6 +85,7 @@ export async function POST({ request }) {
       centimes: Math.round(prix * 100),
       qty,
     })
+    recap.push([produit._id, variante ? variante.nom : null, qty])
   }
 
   // ── Construit la requête Stripe (API REST, encodage formulaire) ──────────
@@ -109,8 +111,12 @@ export async function POST({ request }) {
   p.set('shipping_options[0][shipping_rate_data][fixed_amount][amount]', String(port.montant))
   p.set('shipping_options[0][shipping_rate_data][fixed_amount][currency]', 'eur')
   p.set('phone_number_collection[enabled]', 'true')
-  // Récapitulatif du panier pour le futur webhook (email + stock)
-  p.set('metadata[panier]', JSON.stringify(demandes).slice(0, 480))
+  // Récapitulatif du panier pour le webhook (commande Sanity + stock).
+  // Limite Stripe : 500 caractères par clé → découpage en panier0, panier1…
+  const json = JSON.stringify(recap)
+  for (let i = 0; i * 450 < json.length; i++) {
+    p.set(`metadata[panier${i}]`, json.slice(i * 450, (i + 1) * 450))
+  }
 
   const reponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
     method: 'POST',

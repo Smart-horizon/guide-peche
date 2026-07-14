@@ -329,6 +329,29 @@ const customStructure = (S, context) =>
               S.listItem()
                 .title('📋 Tous les produits')
                 .child(S.documentList().title('Tous les produits').filter('_type == "produit"')),
+              S.divider(),
+              // 📬 Commandes — créées automatiquement par les paiements Stripe
+              S.listItem()
+                .title('📬 Commandes')
+                .child(
+                  S.list()
+                    .title('Commandes')
+                    .items([
+                      S.listItem()
+                        .title('🆕 À préparer')
+                        .child(S.documentList().title('À préparer').filter('_type == "commande" && statut == "commandee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
+                      S.listItem()
+                        .title('📦 Préparées')
+                        .child(S.documentList().title('Préparées').filter('_type == "commande" && statut == "preparee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
+                      S.listItem()
+                        .title('🚚 Expédiées')
+                        .child(S.documentList().title('Expédiées').filter('_type == "commande" && statut == "expediee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
+                      S.divider(),
+                      S.listItem()
+                        .title('📋 Toutes les commandes')
+                        .child(S.documentList().title('Toutes les commandes').filter('_type == "commande"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
+                    ])
+                ),
             ])
         ),
     ])
