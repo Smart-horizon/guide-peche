@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+// Page de retour après un paiement Stripe réussi.
+// Vide le panier localStorage côté client.
+---
+
+<BaseLayout
+  title="Merci pour votre commande — Jean-Baptiste Vidal"
+  description="Votre commande est confirmée."
+  lang="fr"
+>
+
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="container page-hero-content">
+      <p class="eyebrow">Boutique</p>
+      <h1>Merci pour votre commande&nbsp;!</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container merci-page">
+      <p class="merci-texte">
+        Votre paiement a bien été reçu. Vous allez recevoir un e-mail de confirmation
+        avec le récapitulatif de votre commande.
+      </p>
+      <p class="merci-texte">
+        Jean-Baptiste prépare votre colis avec soin — comme ses mouches, à la main&nbsp;🎣
+      </p>
+      <div class="merci-actions">
+        <a href="/boutique" class="btn-retour">← Retour à la boutique</a>
+        <a href="/blog" class="btn-blog">Lire le blog en attendant</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Paiement confirmé → on vide le panier et on prévient le header
+  localStorage.removeItem('boutique_panier_v1')
+  window.dispatchEvent(new CustomEvent('panier:maj', { detail: { nb: 0 } }))
+</script>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 32vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2.5rem;
+    color: white;
+  }
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(7,24,31,0.85) 0%, rgba(13,43,62,0.55) 100%),
+      url('/images/hero.jpg') center / cover no-repeat;
+    background-color: var(--color-ocean);
+  }
+  .page-hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: var(--header-height);
+  }
+  .page-hero h1 { color: white; margin: 0.4rem 0 0; }
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    font-weight: 500;
+  }
+
+  .merci-page { max-width: 640px; }
+  .merci-texte {
+    margin-bottom: 1rem;
+    font-size: 1.02rem;
+  }
+  .merci-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+  .btn-retour {
+    padding: 0.85rem 1.75rem;
+    background: var(--color-ocean-main);
+    color: white;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  .btn-retour:hover { background: var(--color-ocean); }
+  .btn-blog {
+    padding: 0.85rem 1.75rem;
+    border: 1.5px solid var(--color-ocean-main);
+    color: var(--color-ocean-main);
+    border-radius: 3px;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .btn-blog:hover { background: var(--color-ocean-main); color: white; }
+</style>

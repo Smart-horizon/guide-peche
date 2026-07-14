@@ -25,9 +25,8 @@
   <div class="panier-pied">
     <p class="panier-total">Total <strong id="panier-total">0,00 €</strong></p>
     <p class="panier-note">Frais de port calculés au moment du paiement.</p>
-    <button class="btn-payer" disabled title="Le paiement en ligne arrive bientôt">
-      Paiement en ligne — bientôt disponible
-    </button>
+    <button class="btn-payer" id="panier-payer">Payer par carte</button>
+    <p class="panier-erreur" id="panier-erreur" hidden></p>
     <a href="/contact" class="btn-message">Commander par message</a>
     <a href="/panier" class="lien-panier-complet">Voir le panier complet</a>
   </div>
@@ -101,6 +100,35 @@
   bouton.addEventListener('click', ouvrir)
   voile.addEventListener('click', fermer)
   document.getElementById('panier-fermer')!.addEventListener('click', fermer)
+
+  // ── Paiement : crée la session Stripe côté serveur puis redirige ──────────
+  const btnPayer  = document.getElementById('panier-payer') as HTMLButtonElement
+  const erreurEl  = document.getElementById('panier-erreur')!
+
+  btnPayer.addEventListener('click', async () => {
+    const items = lire()
+    if (!items.length) return
+    btnPayer.disabled = true
+    btnPayer.textContent = 'Redirection…'
+    erreurEl.hidden = true
+    try {
+      const r = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map(it => ({ produitId: it.produitId, variante: it.variante, qty: it.qty })),
+        }),
+      })
+      const data = await r.json()
+      if (!r.ok || !data.url) throw new Error(data.erreur || 'Paiement indisponible')
+      window.location.href = data.url
+    } catch (e: any) {
+      erreurEl.textContent = e.message || 'Une erreur est survenue — réessayez.'
+      erreurEl.hidden = false
+      btnPayer.disabled = false
+      btnPayer.textContent = 'Payer par carte'
+    }
+  })
 
   // API globale pour la fiche produit
   ;(window as any).panierAjouter = (item: any) => {
@@ -309,9 +337,18 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: 500;
-    cursor: not-allowed;
-    opacity: 0.55;
+    cursor: pointer;
+    transition: background 0.2s;
     margin-bottom: 0.6rem;
+  }
+  .btn-payer:hover:not(:disabled) { background: var(--color-ocean); }
+  .btn-payer:disabled { cursor: wait; opacity: 0.7; }
+  .panier-erreur[hidden] { display: none !important; }
+  .panier-erreur {
+    font-size: 0.8rem;
+    color: #b4552d;
+    margin: -0.2rem 0 0.6rem;
+    text-align: center;
   }
   .btn-message {
     display: block;
