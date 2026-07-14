@@ -65,7 +65,7 @@ export default {
       title: 'Prix (€ TTC)',
       type: 'number',
       group: 'infos',
-      description: 'Prix de vente en euros, ex : 3.50',
+      description: 'Prix de vente en euros, ex : 3.50 — c\'est aussi le prix par défaut des variantes qui n\'en précisent pas',
       validation: Rule => Rule.required().positive(),
     },
     {
@@ -99,14 +99,28 @@ export default {
             name: 'nom',
             title: 'Nom de la variante',
             type: 'string',
-            description: 'Ex : "Hameçon n°2", "Bleu marine"',
+            description: 'Ex : "Hameçon n°2", "Bleu marine", "10 cm – Blanc/olive"',
             validation: Rule => Rule.required(),
+          },
+          {
+            name: 'prix',
+            title: 'Prix (€ TTC) — optionnel',
+            type: 'number',
+            description: 'Laissez vide pour utiliser le prix du produit. Ex : la grande taille un peu plus chère.',
+            validation: Rule => Rule.positive(),
           },
           {
             name: 'stock',
             title: 'Stock',
             type: 'number',
             description: 'Laissez vide = illimité · 0 = épuisé',
+            validation: Rule => Rule.min(0),
+          },
+          {
+            name: 'poids',
+            title: 'Poids (grammes) — optionnel',
+            type: 'number',
+            description: 'Laissez vide pour utiliser le poids du produit. Sert au calcul des frais de port.',
             validation: Rule => Rule.min(0),
           },
           {
@@ -118,13 +132,11 @@ export default {
           },
         ],
         preview: {
-          select: { title: 'nom', stock: 'stock', media: 'photos.0' },
-          prepare({ title, stock, media }) {
-            return {
-              title,
-              subtitle: stock === 0 ? '❌ Épuisé' : stock != null ? `${stock} en stock` : 'Stock illimité',
-              media,
-            }
+          select: { title: 'nom', prix: 'prix', stock: 'stock', media: 'photos.0' },
+          prepare({ title, prix, stock, media }) {
+            const p = prix != null ? `${prix.toFixed(2).replace('.', ',')} € · ` : ''
+            const s = stock === 0 ? '❌ Épuisé' : stock != null ? `${stock} en stock` : 'Stock illimité'
+            return { title, subtitle: `${p}${s}`, media }
           },
         },
       }],
