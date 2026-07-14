@@ -1,0 +1,469 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { client } from '../../lib/sanity.js'
+import imageUrlBuilder from '@sanity/image-url'
+
+export async function getStaticPaths() {
+  const produits = await client.fetch(`
+    *[_type == "produit" && disponible == true]{
+      title, slug, categorie, espece, prix, stock, poids,
+      images, description, videoYoutube, seoTitle, seoDescription, ogImage,
+      "variantes": variantes[]{ nom, prix, stock, photos },
+      "article": articleLie->{ title, slug }
+    }
+  `)
+  return produits
+    .filter(p => p.slug?.current)
+    .map(p => ({ params: { slug: p.slug.current }, props: { produit: p } }))
+}
+
+const { produit } = Astro.props
+
+const builder = imageUrlBuilder(client)
+const urlFor = (source) => builder.image(source)
+
+const categorieLabel = { mouche: 'Mouche', goodies: 'Goodies' }
+const fmtPrix = (n) => n != null ? `${n.toFixed(2).replace('.', ',')} €` : ''
+
+// ── Galerie : URLs des photos principales + par variante ──────────────────
+const photosDefaut = (produit.images || [])
+  .filter(img => img?.asset)
+  .map(img => ({
+    grande: urlFor(img).width(900).height(900).fit('crop').crop('focalpoint').url(),
+    mini:   urlFor(img).width(160).height(160).fit('crop').crop('focalpoint').url(),
+  }))
+
+const variantes = (produit.variantes || []).map(v => ({
+  nom:   v.nom,
+  prix:  v.prix ?? produit.prix,
+  stock: v.stock ?? null,
+  photos: (v.photos || [])
+    .filter(img => img?.asset)
+    .map(img => ({
+      grande: urlFor(img).width(900).height(900).fit('crop').crop('focalpoint').url(),
+      mini:   urlFor(img).width(160).height(160).fit('crop').crop('focalpoint').url(),
+    })),
+}))
+
+const epuiseGlobal = variantes.length
+  ? variantes.every(v => v.stock === 0)
+  : produit.stock === 0
+
+// ── Vidéo YouTube : extraction de l'identifiant ───────────────────────────
+function youtubeId(url) {
+  if (!url) return null
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/)
+  return m ? m[1] : null
+}
+const videoId = youtubeId(produit.videoYoutube)
+
+const metaTitle = produit.seoTitle || `${produit.title} — Boutique Jean-Baptiste Vidal`
+const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goodies de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne.`
+---
+
+<BaseLayout title={metaTitle} description={metaDesc} lang="fr">
+
+  <div class="produit-page container">
+
+    <nav class="fil-ariane">
+      <a href="/boutique">← Retour à la boutique</a>
+    </nav>
+
+    <div class="produit-haut">
+
+      <!-- Galerie -->
+      <div class="galerie">
+        <div class="galerie-grande" id="galerie-grande">
+          {photosDefaut.length > 0 ? (
+            <img src={photosDefaut[0].grande} alt={produit.title} id="galerie-img" />
+          ) : (
+            <div class="galerie-placeholder" id="galerie-placeholder">
+              <img src="/images/logo.svg" alt="" />
+              <span>Photo à venir</span>
+            </div>
+          )}
+        </div>
+        <div class="galerie-minis" id="galerie-minis">
+          {photosDefaut.map((ph, i) => (
+            <button class:list={['galerie-mini', { 'galerie-mini--active': i === 0 }]} data-grande={ph.grande}>
+              <img src={ph.mini} alt="" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Infos -->
+      <div class="infos">
+        {produit.categorie && <p class="eyebrow">{categorieLabel[produit.categorie] ?? produit.categorie}</p>}
+        <h1>{produit.title}</h1>
+        <p class="prix" id="prix">{fmtPrix(variantes.length ? variantes[0].prix : produit.prix)}</p>
+
+        {variantes.length > 0 && (
+          <div class="champ-variante">
+            <label for="select-variante">Choisissez une option</label>
+            <select id="select-variante">
+              {variantes.map((v, i) => (
+                <option value={i} disabled={v.stock === 0}>
+                  {v.nom}{v.stock === 0 ? ' — épuisé' : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <p class="stock-note" id="stock-note"></p>
+
+        <div class="achat">
+          {epuiseGlobal ? (
+            <button class="btn-achat" disabled>Épuisé</button>
+          ) : (
+            <button class="btn-achat" disabled title="Le paiement en ligne arrive bientôt">
+              Paiement en ligne — bientôt disponible
+            </button>
+          )}
+          <a href="/contact" class="btn-contact">Commander par message</a>
+        </div>
+
+        {produit.article?.slug?.current && (
+          <p class="article-lie">
+            📖 <a href={`/blog/${produit.article.slug.current}`}>En savoir plus : {produit.article.title}</a>
+          </p>
+        )}
+      </div>
+    </div>
+
+    <!-- Description -->
+    {produit.description?.length > 0 && (
+      <div class="description">
+        {(() => {
+          // Regroupe les blocs consécutifs en liste à puces dans un même <ul>
+          const rendus = []
+          let puces = []
+          const videListe = () => {
+            if (puces.length) { rendus.push({ type: 'ul', items: puces }); puces = [] }
+          }
+          for (const block of produit.description) {
+            if (block._type !== 'block') continue
+            const texte = (block.children || []).map(c => c.text || '').join('')
+            if (!texte.trim()) continue
+            if (block.listItem === 'bullet') { puces.push(texte); continue }
+            videListe()
+            rendus.push({ type: block.style || 'normal', texte })
+          }
+          videListe()
+          return rendus.map(r => {
+            if (r.type === 'ul') return <ul>{r.items.map(item => <li>{item}</li>)}</ul>
+            if (r.type === 'h2') return <h2>{r.texte}</h2>
+            if (r.type === 'h3') return <h3>{r.texte}</h3>
+            if (r.type === 'blockquote') return <blockquote>{r.texte}</blockquote>
+            return <p>{r.texte}</p>
+          })
+        })()}
+      </div>
+    )}
+
+    <!-- Vidéo -->
+    {videoId && (
+      <div class="produit-video">
+        <h2>La vidéo de montage</h2>
+        <div class="video-cadre">
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}`}
+            title={`Vidéo — ${produit.title}`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          />
+        </div>
+      </div>
+    )}
+
+  </div>
+</BaseLayout>
+
+<script is:inline define:vars={{ variantes, photosDefaut }}>
+  const selectEl   = document.getElementById('select-variante')
+  const prixEl     = document.getElementById('prix')
+  const stockEl    = document.getElementById('stock-note')
+  const minisEl    = document.getElementById('galerie-minis')
+  const grandeEl   = document.getElementById('galerie-grande')
+
+  const fmt = (n) => n != null ? n.toFixed(2).replace('.', ',') + ' €' : ''
+
+  function majGalerie(photos) {
+    const liste = photos.length ? photos : photosDefaut
+    if (!liste.length) return
+    grandeEl.innerHTML = '<img src="' + liste[0].grande + '" alt="" id="galerie-img" />'
+    minisEl.innerHTML = liste.map((ph, i) =>
+      '<button class="galerie-mini' + (i === 0 ? ' galerie-mini--active' : '') + '" data-grande="' + ph.grande + '">' +
+      '<img src="' + ph.mini + '" alt="" loading="lazy" /></button>'
+    ).join('')
+    brancherMinis()
+  }
+
+  function brancherMinis() {
+    document.querySelectorAll('.galerie-mini').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const img = document.getElementById('galerie-img')
+        if (img) img.src = btn.dataset.grande
+        document.querySelectorAll('.galerie-mini').forEach(b => b.classList.toggle('galerie-mini--active', b === btn))
+      })
+    })
+  }
+  brancherMinis()
+
+  function majVariante() {
+    if (!selectEl) return
+    const v = variantes[Number(selectEl.value)]
+    if (!v) return
+    if (prixEl) prixEl.textContent = fmt(v.prix)
+    if (stockEl) {
+      stockEl.textContent =
+        v.stock === 0 ? 'Épuisé dans cette option' :
+        v.stock != null && v.stock <= 5 ? 'Plus que ' + v.stock + ' en stock' : ''
+    }
+    majGalerie(v.photos || [])
+  }
+
+  if (selectEl) {
+    // Présélectionne la première option disponible
+    const dispo = variantes.findIndex(v => v.stock !== 0)
+    if (dispo > 0) selectEl.value = String(dispo)
+    selectEl.addEventListener('change', majVariante)
+    majVariante()
+  }
+</script>
+
+<style>
+  .produit-page {
+    padding-top: calc(var(--header-height) + 4rem);
+    padding-bottom: 4rem;
+  }
+
+  .fil-ariane {
+    margin-bottom: 2rem;
+  }
+  .fil-ariane a {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 500;
+  }
+
+  .produit-haut {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+    align-items: start;
+    margin-bottom: 3.5rem;
+  }
+
+  /* Galerie */
+  .galerie-grande {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    overflow: hidden;
+    background: linear-gradient(160deg, var(--color-ocean) 0%, var(--color-ocean-main) 100%);
+  }
+  .galerie-grande img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .galerie-placeholder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .galerie-placeholder img {
+    width: 50%;
+    height: auto;
+    opacity: 0.85;
+  }
+  .galerie-placeholder span {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+  .galerie-minis {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+  :global(.galerie-mini) {
+    width: 68px;
+    height: 68px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    background: none;
+    opacity: 0.75;
+    transition: opacity 0.15s, border-color 0.15s;
+  }
+  :global(.galerie-mini img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  :global(.galerie-mini--active), :global(.galerie-mini:hover) {
+    opacity: 1;
+    border-color: var(--color-ocean-main);
+  }
+
+  /* Infos */
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  .infos h1 {
+    font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+    margin-bottom: 0.75rem;
+  }
+  .prix {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--color-ocean-main);
+    margin-bottom: 1.5rem;
+  }
+
+  .champ-variante {
+    margin-bottom: 1rem;
+  }
+  .champ-variante label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .champ-variante select {
+    width: 100%;
+    max-width: 340px;
+    padding: 0.65rem 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    border: 1.5px solid #d5d9e0;
+    border-radius: 3px;
+    background: white;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+  .champ-variante select:focus {
+    outline: none;
+    border-color: var(--color-ocean-main);
+  }
+
+  .stock-note {
+    min-height: 1.3rem;
+    font-size: 0.8rem;
+    color: #b4552d;
+    margin-bottom: 1rem;
+  }
+
+  .achat {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .btn-achat {
+    padding: 0.85rem 1.75rem;
+    background: var(--color-ocean-main);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .btn-contact {
+    padding: 0.85rem 1.75rem;
+    border: 1.5px solid var(--color-ocean-main);
+    color: var(--color-ocean-main);
+    border-radius: 3px;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .btn-contact:hover {
+    background: var(--color-ocean-main);
+    color: white;
+  }
+
+  .article-lie {
+    font-size: 0.9rem;
+  }
+  .article-lie a {
+    color: var(--color-ocean-main);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Description */
+  .description {
+    max-width: 760px;
+    margin-bottom: 3rem;
+  }
+  .description p {
+    margin-bottom: 1.1rem;
+    color: var(--color-text);
+  }
+  .description h2, .description h3 {
+    margin: 1.75rem 0 0.9rem;
+  }
+  .description ul {
+    margin: 0 0 1.1rem 1.25rem;
+  }
+  .description li {
+    margin-bottom: 0.35rem;
+  }
+
+  /* Vidéo */
+  .produit-video {
+    max-width: 760px;
+  }
+  .produit-video h2 {
+    margin-bottom: 1rem;
+  }
+  .video-cadre {
+    position: relative;
+    aspect-ratio: 16/9;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--color-ocean);
+  }
+  .video-cadre iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  @media (max-width: 860px) {
+    .produit-haut {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>
