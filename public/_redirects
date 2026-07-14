@@ -35,8 +35,12 @@
 /peche-mouche-saumon-elle-guidage         /peche-de-la-truite-a-la-mouche-en-bretagne              301
 /sejours-de-peche-a-la-mouche-en-bretagne /stage-peche-mouche                                      301
 
-# ── Blog enjoyfishing.fr (ceinture + bretelles : la règle principale est dans
-#    le middleware par domaine ; celle-ci couvre les chemins /archive arrivant
-#    sur le domaine principal) ────────────────────────────────────────────────
-/archive/:annee/:mois/:jour/:slug.html    /blog/:slug                                              301
-/tag/*                                    /blog                                                    301
+# ── Chemins du blog enjoyfishing.fr arrivant sur le domaine principal ────────
+# (filet de sécurité — la règle précise article par article est une Redirect
+# Rule Cloudflare sur le domaine enjoyfishing.fr, cf. docs/mapping-301.md)
+/archive/*                            /blog                                                        301
+/tag/*                                /blog                                                        301
+
+# ⚠️ MAINTENANCE : toute nouvelle source ajoutée ici doit AUSSI être ajoutée
+# aux exclusions run_worker_first dans deploy.sh et .github/workflows/deploy.yml
+# (sinon le worker avale le 301 et sert un 200).
