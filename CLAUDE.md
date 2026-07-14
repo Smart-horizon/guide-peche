@@ -257,6 +257,14 @@ Champs : title, slug, date, image, extrait, contenu (blocks), tags, espece (bar/
 - [ ] Désactiver le noindex avant mise en ligne
 - [ ] Soumettre le sitemap dans Google Search Console
 
+### Boutique (au passage en production)
+- [ ] Activer le compte Stripe "Jean-Baptiste Vidal — Enjoy Fishing" (SIREN + IBAN de JBV) et passer les clés en live (worker + webhook à redéclarer en live)
+- [ ] JBV : déclarer l'achat-revente en activité secondaire au guichet unique INPI (avant les premières ventes)
+- [ ] Activer les reçus Stripe (Réglages → E-mails → "Paiements réussis") pour l'e-mail de confirmation client
+- [ ] Après transfert du domaine : configurer SPF/DKIM et brancher des e-mails personnalisés aux couleurs du site via Resend (confirmation de commande + notification "commande expédiée"). D'ici là : notifications Stripe pour JBV + suivi dans Sanity → Commandes
+- [ ] Remplacer les frais de port provisoires par les vrais tarifs (Colissimo / lettre suivie / Mondial Relay ? — à décider avec JBV)
+- [ ] Raccorder la page CGV à la boutique (lien au checkout) et vérifier les mentions vente à distance / rétractation
+
 ---
 
 ## 🚀 PROCHAINES ÉTAPES IMMÉDIATES
