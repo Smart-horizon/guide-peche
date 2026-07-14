@@ -45,10 +45,10 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
     return ctx.redirect(`${MAIN}${cible}`, 301)
   }
 
-  // apex → www (canonique) une fois le domaine principal transféré
-  if (hostname === 'jeanbaptistevidalguidepeche.com') {
-    return ctx.redirect(`${MAIN}${pathname}${ctx.url.search}`, 301)
-  }
+  // NB : PAS de règle apex → www ici — Astro prérend les pages avec le host du
+  // `site` (l'apex), une telle règle transformerait tout le build en pages de
+  // redirection. L'apex → www se fera par une Redirect Rule Cloudflare au
+  // lancement (cf. docs/mapping-301.md).
 
   // ── Protection de la page disponibilités ────────────────────────────────────
   if (PROTECTED.some(p => pathname === p || pathname.startsWith(p + '/'))) {
