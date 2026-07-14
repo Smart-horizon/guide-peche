@@ -20,9 +20,6 @@
 # ── Pages Wix sans équivalent → page la plus proche ──────────────────────────
 /book-online                          /contact                                                     301
 /brochure-jeanbaptiste-vidal          /tarifs                                                      301
-# ⚠️ CGV : rediriger vers /contact TEMPORAIREMENT — créer une vraie page CGV
-# avant le lancement (obligation légale, d'autant plus avec la boutique)
-/conditions-generales-de-ventes       /contact                                                     301
 /medias-jeanbaptistevidal             /revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche  301
 /voyage-peche-mouche-mer-exotique     /voyages-peche-mouche                                        301
 /voyage-peche-mouche-migrateurs       /voyages-peche-mouche                                        301

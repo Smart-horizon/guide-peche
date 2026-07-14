@@ -17,7 +17,6 @@ cfg.assets.run_worker_first = [
   '!/en/temoignages-avis-jeanbaptiste-vidal',
   '!/book-online',
   '!/brochure-jeanbaptiste-vidal',
-  '!/conditions-generales-de-ventes',
   '!/medias-jeanbaptistevidal',
   '!/voyage-peche-mouche-mer-exotique',
   '!/voyage-peche-mouche-migrateurs',

@@ -42,7 +42,6 @@ partenaires, vidéos, bio…). Les URLs `/en/...` suivent le même schéma.
 | /temoignages-avis-jeanbaptiste-vidal (+ /en/) | /temoignages | page statique canonique |
 | /book-online | /contact | module réservation Wix abandonné |
 | /brochure-jeanbaptiste-vidal | /tarifs | |
-| /conditions-generales-de-ventes | /contact ⚠️ | **temporaire — créer une vraie page CGV avant lancement (obligation légale, boutique !)** |
 | /medias-jeanbaptistevidal | /revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche | |
 | /voyage-peche-mouche-mer-exotique | /voyages-peche-mouche | "voyage pêche exotique" #11 |
 | /voyage-peche-mouche-migrateurs | /voyages-peche-mouche | |
@@ -95,7 +94,7 @@ Zone `jeanbaptistevidalguidepeche.com` : hostname `jeanbaptistevidalguidepeche.c
 
 ## ✅ Checklist du jour J (transfert)
 
-1. [ ] Créer la page CGV et remplacer sa redirection temporaire dans `_redirects`
+1. [x] ~~Créer la page CGV~~ — fait le 14/07/2026 : `/conditions-generales-de-ventes` migrée de Wix (même URL, page Sanity éditable). ⚠️ À compléter avec un volet « vente de produits » (rétractation 14 j, livraison) avant l'ouverture de la boutique.
 2. [ ] Ajouter `www.jeanbaptistevidalguidepeche.com` comme Custom Domain du worker guide-peche
 3. [ ] Pointer les DNS des 3 domaines vers Cloudflare (zones actives)
 4. [ ] Créer les Redirect Rules des sections 3, 4 et 5
