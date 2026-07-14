@@ -1,21 +1,14 @@
 #!/bin/bash
-# Script deploy sécurisé — masque src/pages/old/ avant le build, le restaure après.
+# Script de deploy du site public (worker guide-peche).
+# Obligatoire (ne pas utiliser `npm run deploy` directement) car il :
+#   1. nettoie le cache Vite SSR
+#   2. patche wrangler.json (run_worker_first, requis pour les pages SSR)
+#   3. force le re-upload des HTML (invalidation du cache Wrangler)
+# NB : les anciennes pages hardcodées vivent dans archive/pages-old-hardcodees
+# (hors de src/) — plus aucun masquage nécessaire depuis le 14/07/2026.
 
 set -e
 
-OLD_DIR="src/pages/old"
-BACKUP_DIR=".pages-old-backup"
-
-# ── Masque les pages hardcodées ───────────────────────────────────────────────
-if [ -d "$OLD_DIR" ]; then
-  echo "📦 Masquage de $OLD_DIR..."
-  mv "$OLD_DIR" "$BACKUP_DIR"
-  echo "  ✓ $OLD_DIR temporairement retiré"
-else
-  echo "  (aucun dossier $OLD_DIR à masquer)"
-fi
-
-echo ""
 echo "🧹 Nettoyage du cache Vite (SSR)..."
 rm -rf node_modules/.vite/deps_ssr node_modules/.vite/deps_astro
 echo "  ✓ Cache Vite vidé"
@@ -57,11 +50,4 @@ node -e "
 npx wrangler deploy --config dist/server/wrangler.json 2>/dev/null | grep -E "Found [0-9]|Uploaded [0-9]|Deployed" || true
 
 echo ""
-echo "🔁 Restauration de $OLD_DIR..."
-if [ -d "$BACKUP_DIR" ]; then
-  mv "$BACKUP_DIR" "$OLD_DIR"
-  echo "  ✓ $OLD_DIR restauré"
-fi
-
-echo ""
-echo "✅ Deploy terminé — workers.dev = Sanity, localhost /old/* = pages de référence"
+echo "✅ Deploy terminé — https://guide-peche.smart-horizon.workers.dev"

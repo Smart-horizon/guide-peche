@@ -11,8 +11,6 @@
 # ─────────────────────────────────────────────────────────────────────────────
 set -e
 
-OLD_DIR="src/pages/old"
-BACKUP_DIR=".pages-old-backup"
 PRERENDER_BACKUP=".prerender-backup"
 
 # Pages passées en SSR pour l'aperçu (brouillons temps réel).
@@ -37,8 +35,6 @@ restore() {
     done
     rm -rf "$PRERENDER_BACKUP"
   fi
-  # Restaure old/
-  [ -d "$BACKUP_DIR" ] && mv "$BACKUP_DIR" "$OLD_DIR"
 }
 trap restore EXIT
 
@@ -49,12 +45,6 @@ fi
 if [ -z "$SANITY_TOKEN" ]; then
   echo "❌ SANITY_TOKEN manquant (.env). Requis pour lire les brouillons."
   exit 1
-fi
-
-# ── Masque les pages hardcodées de référence ─────────────────────────────────
-if [ -d "$OLD_DIR" ]; then
-  echo "📦 Masquage de $OLD_DIR..."
-  mv "$OLD_DIR" "$BACKUP_DIR"
 fi
 
 # ── Bascule prerender = true → false (SSR temps réel) ─────────────────────────

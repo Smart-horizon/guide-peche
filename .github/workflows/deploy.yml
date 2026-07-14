@@ -35,14 +35,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Masquer les pages hardcodées de référence (identique à deploy.sh)
-        run: |
-          # Aligné sur deploy.sh : on masque UNIQUEMENT le dossier de référence
-          # src/pages/old/. Toutes les autres pages (EN, newsletter, etc.) sont
-          # de vraies pages qui DOIVENT être déployées.
-          rm -rf src/pages/old
-          echo "  src/pages/old retiré (pages de référence hardcodées)"
-
       - name: Build Astro
         run: npm run build
         env:

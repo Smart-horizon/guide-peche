@@ -306,9 +306,9 @@ SANITY_DATASET=production
 
 ### /jean-baptiste-vidal-moniteur-guide-de-peche (Le Guide)
 - **Frise chronologique** : reste à configurer — envisager une démo à montrer à JBV pour valider le concept avant de remplir le contenu définitif
-- Comparaison ancien hardcodé / nouveau Sanity : disponible via `git restore src/pages/jean-baptiste-vidal-moniteur-guide-de-peche.astro` (local) vs workers.dev (Sanity)
+- Anciennes pages hardcodées de référence : archivées dans `archive/pages-old-hardcodees/` (hors de src/, plus compilées) depuis le 14/07/2026
 - ⚠️ **PROCÉDURE DEPLOY OBLIGATOIRE** — toujours utiliser `bash deploy.sh` et JAMAIS `npm run deploy` directement.
-  Le script détecte automatiquement tous les fichiers hardcodés trackés dans git (hors whitelist), les supprime avant le deploy, puis les restaure. Résultat : **workers.dev = Sanity, localhost = anciens fichiers hardcodés**.
+  Le script nettoie le cache Vite SSR, patche wrangler.json (`run_worker_first`, requis pour les pages SSR) et force le re-upload des HTML (invalidation du cache Wrangler).
   ```
   bash deploy.sh
   ```
