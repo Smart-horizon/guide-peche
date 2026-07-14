@@ -9,6 +9,7 @@ interface Props {
   facebook?:  string | null
   youtube?:   string | null
   vimeo?:     string | null
+  navItems?:  any[] | null   // items du document navigation Sanity (menu principal)
   lang?:      'fr' | 'en'
 }
 
@@ -21,6 +22,7 @@ const {
   facebook  = null,
   youtube   = null,
   vimeo     = null,
+  navItems  = null,
   lang      = 'fr',
 } = Astro.props
 
@@ -35,21 +37,8 @@ const phone     = telephone
 const phoneHref = 'tel:+33' + phone.replace(/\s/g, '').replace(/^0/, '')
 const hasSocial = instagram || facebook || youtube || vimeo
 
-const navLinks = isEn ? [
-  { label: 'Home',                href: '/en/' },
-  { label: 'Services',            href: '/en/stage-peche-mouche' },
-  { label: 'Sea bass fly fishing', href: '/en/peche-du-bar-a-la-mouche' },
-  { label: 'Freshwater rivers',   href: '/en/peche-a-la-mouche-en-bretagne' },
-  { label: 'Masterclass',         href: '/en/masterclass' },
-  { label: 'Spey Cast & casting', href: '/en/stage-spey-cast-et-cours-de-lancer' },
-  { label: 'Fishing trips',       href: '/en/voyages-peche-mouche' },
-  { label: 'Gear',                href: '/en/materiel-jeanbaptistevidal' },
-  { label: 'My flies',            href: '/en/mouches-de-peche-jeanbaptiste-vidal' },
-  { label: 'Testimonials',        href: '/en/temoignages' },
-  { label: 'Blog',                href: '/en/blog' },
-  { label: 'About',               href: '/en/jean-baptiste-vidal-moniteur-guide-de-peche' },
-  { label: 'Contact',             href: '/en/contact' },
-] : [
+// ── Liste FR de secours (si le document navigation Sanity est vide) ──────────
+const NAV_FALLBACK_FR = [
   { label: 'Accueil',             href: '/' },
   { label: 'Prestations',         href: '/stage-peche-mouche' },
   { label: 'Bar à la mouche',     href: '/peche-du-bar-a-la-mouche' },
@@ -64,6 +53,45 @@ const navLinks = isEn ? [
   { label: 'À propos',            href: '/jean-baptiste-vidal-moniteur-guide-de-peche' },
   { label: 'Contact',             href: '/contact' },
 ]
+
+// ── FR : le footer reflète automatiquement le menu de navigation Sanity ──────
+// (entrées principales + sous-menus, aplatis et dédupliqués par URL).
+// Une page ajoutée au menu par JBV apparaît donc ici sans toucher au code.
+function flattenNav(items: any[]): { label: string; href: string }[] {
+  const out: { label: string; href: string }[] = []
+  const vus = new Set<string>()
+  for (const item of items || []) {
+    for (const lien of [item, ...(item.children || [])]) {
+      if (!lien?.label || !lien?.href) continue
+      const href = lien.href.trim()
+      if (vus.has(href)) continue
+      vus.add(href)
+      out.push({ label: lien.label, href })
+    }
+  }
+  return out
+}
+
+// EN : le menu Sanity n'a pas de libellés anglais → liste dédiée (comme le header)
+const navLinks = isEn ? [
+  { label: 'Home',                href: '/en/' },
+  { label: 'Services',            href: '/en/stage-peche-mouche' },
+  { label: 'Sea bass fly fishing', href: '/en/peche-du-bar-a-la-mouche' },
+  { label: 'Freshwater rivers',   href: '/en/peche-a-la-mouche-en-bretagne' },
+  { label: 'Masterclass',         href: '/en/masterclass' },
+  { label: 'Spey Cast & casting', href: '/en/stage-spey-cast-et-cours-de-lancer' },
+  { label: 'Fishing trips',       href: '/en/voyages-peche-mouche' },
+  { label: 'Gear',                href: '/en/materiel-jeanbaptistevidal' },
+  { label: 'My flies',            href: '/en/mouches-de-peche-jeanbaptiste-vidal' },
+  { label: 'Testimonials',        href: '/en/temoignages' },
+  { label: 'Blog',                href: '/en/blog' },
+  { label: 'About',               href: '/en/jean-baptiste-vidal-moniteur-guide-de-peche' },
+  { label: 'Contact',             href: '/en/contact' },
+] : (navItems?.length ? flattenNav(navItems) : NAV_FALLBACK_FR)
+
+// Lien CGV (barre du bas)
+const cgvHref  = isEn ? '/en/conditions-generales-de-ventes' : '/conditions-generales-de-ventes'
+const cgvLabel = isEn ? 'Terms of sale' : 'CGV'
 ---
 
 <footer class="site-footer">
@@ -125,7 +153,11 @@ const navLinks = isEn ? [
 
   <div class="footer-bottom">
     <p>© {year} Jean-Baptiste Vidal · ENJOY FISHING · Siret 789636313</p>
-    <p>{isEn ? 'All rights reserved' : 'Tous droits réservés'}</p>
+    <p>
+      <a href={cgvHref} class="footer-legal-link">{cgvLabel}</a>
+      <span class="footer-legal-sep">·</span>
+      {isEn ? 'All rights reserved' : 'Tous droits réservés'}
+    </p>
   </div>
 </footer>
 
@@ -222,7 +254,6 @@ const navLinks = isEn ? [
     font-weight: 600;
   }
 
-  .footer-nav ul,
   .footer-certif ul {
     list-style: none;
     padding: 0;
@@ -230,6 +261,19 @@ const navLinks = isEn ? [
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+  }
+
+  /* Nav : 2 colonnes dès que la liste s'allonge (menu Sanity dynamique) */
+  .footer-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    columns: 2;
+    column-gap: 1.5rem;
+  }
+  .footer-nav li {
+    break-inside: avoid;
+    padding-bottom: 0.6rem;
   }
 
   .footer-nav a {
@@ -260,6 +304,14 @@ const navLinks = isEn ? [
     font-size: 0.75rem;
     opacity: 0.5;
   }
+
+  .footer-legal-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .footer-legal-link:hover { color: white; }
+  .footer-legal-sep { margin: 0 0.35rem; }
 
   @media (max-width: 768px) {
     .footer-inner {

@@ -16,6 +16,10 @@ const params = await stegaClient.fetch(`*[_id == "siteParametres"][0]{
   facebook, instagram, youtube, vimeo
 }`)
 
+// Menu de navigation Sanity — le footer FR reflète automatiquement le menu
+// (entrées + sous-menus aplatis) : une page ajoutée au menu apparaît au footer.
+const navDoc = await stegaClient.fetch(`*[_type == "navigation" && _id == "navigation"][0]{ items }`)
+
 interface Props {
   title?: string
   description?: string
@@ -57,6 +61,7 @@ const footerProps = {
   facebook:  stegaClean(params?.facebook)  || null,
   youtube:   stegaClean(params?.youtube)   || null,
   vimeo:     stegaClean(params?.vimeo)     || null,
+  navItems:  navDoc?.items || null,
   lang,
 }
 
