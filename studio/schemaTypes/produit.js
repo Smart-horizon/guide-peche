@@ -109,13 +109,21 @@ export default {
             description: 'Laissez vide = illimité · 0 = épuisé',
             validation: Rule => Rule.min(0),
           },
+          {
+            name: 'photos',
+            title: 'Photos de la variante (optionnel)',
+            type: 'array',
+            of: [{ type: 'image', options: { hotspot: true } }],
+            description: 'Ex : la casquette dans cette couleur. Si vide, ce sont les photos principales du produit qui s\'affichent.',
+          },
         ],
         preview: {
-          select: { title: 'nom', stock: 'stock' },
-          prepare({ title, stock }) {
+          select: { title: 'nom', stock: 'stock', media: 'photos.0' },
+          prepare({ title, stock, media }) {
             return {
               title,
               subtitle: stock === 0 ? '❌ Épuisé' : stock != null ? `${stock} en stock` : 'Stock illimité',
+              media,
             }
           },
         },
