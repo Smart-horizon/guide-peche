@@ -1,0 +1,42 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Redirections 301 — anciennes URLs Wix → nouvelles URLs
+# Inertes tant que le domaine jeanbaptistevidalguidepeche.com pointe vers Wix ;
+# actives dès le transfert du domaine vers ce worker (et testables sur
+# workers.dev dès maintenant).
+# Source : sitemap Wix du 14/07/2026 + export Haloscan (pages orphelines
+# encore positionnées). Détail : docs/mapping-301.md
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Pages renommées ───────────────────────────────────────────────────────────
+/bon-cadeau-peche-mouche              /bon-cadeau                                                  301
+/en/bon-cadeau-peche-mouche           /en/bon-cadeau                                               301
+/bateau-special-mouche-carnassier     /bateau-bar-a-la-mouche                                      301
+/en/bateau-special-mouche-carnassier  /en/bateau-bar-a-la-mouche                                   301
+/contact-jeanbaptiste-vidal-guide-de-peche      /contact                                           301
+/en/contact-jeanbaptiste-vidal-guide-de-peche   /en/contact                                        301
+/temoignages-avis-jeanbaptiste-vidal            /temoignages                                       301
+/en/temoignages-avis-jeanbaptiste-vidal         /en/temoignages                                    301
+
+# ── Pages Wix sans équivalent → page la plus proche ──────────────────────────
+/book-online                          /contact                                                     301
+/brochure-jeanbaptiste-vidal          /tarifs                                                      301
+# ⚠️ CGV : rediriger vers /contact TEMPORAIREMENT — créer une vraie page CGV
+# avant le lancement (obligation légale, d'autant plus avec la boutique)
+/conditions-generales-de-ventes       /contact                                                     301
+/medias-jeanbaptistevidal             /revue-de-presse-jeanbaptiste-vidal-moniteur-guide-de-peche  301
+/voyage-peche-mouche-mer-exotique     /voyages-peche-mouche                                        301
+/voyage-peche-mouche-migrateurs       /voyages-peche-mouche                                        301
+/service-page/*                       /stage-peche-jeanbaptiste-vidal                              301
+
+# ── Pages orphelines (retirées de Wix mais encore positionnées sur Google) ────
+/peche-du-saumon-a-la-mouche-bretagne     /peche-a-la-mouche-en-bretagne                           301
+/en/peche-du-saumon-a-la-mouche-bretagne  /en/peche-a-la-mouche-en-bretagne                        301
+/riviere-leguer-guidage-mouche-saumon     /peche-a-la-mouche-en-bretagne                           301
+/peche-mouche-saumon-elle-guidage         /peche-de-la-truite-a-la-mouche-en-bretagne              301
+/sejours-de-peche-a-la-mouche-en-bretagne /stage-peche-mouche                                      301
+
+# ── Blog enjoyfishing.fr (ceinture + bretelles : la règle principale est dans
+#    le middleware par domaine ; celle-ci couvre les chemins /archive arrivant
+#    sur le domaine principal) ────────────────────────────────────────────────
+/archive/:annee/:mois/:jour/:slug.html    /blog/:slug                                              301
+/tag/*                                    /blog                                                    301
