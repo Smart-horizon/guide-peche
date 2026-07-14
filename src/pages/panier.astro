@@ -1,0 +1,294 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+// Page panier — contenu rendu côté client depuis le localStorage
+// (clé boutique_panier_v1, partagée avec le tiroir des pages boutique).
+---
+
+<BaseLayout
+  title="Votre panier — Boutique Jean-Baptiste Vidal"
+  description="Votre panier de mouches et goodies Enjoy Fishing."
+  lang="fr"
+>
+
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="container page-hero-content">
+      <p class="eyebrow">Boutique</p>
+      <h1>Votre panier</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container panier-page">
+
+      <div id="pp-contenu"></div>
+
+      <div class="pp-pied" id="pp-pied" hidden>
+        <div class="pp-total-bloc">
+          <p class="pp-total">Total <strong id="pp-total">0,00 €</strong></p>
+          <p class="pp-note">Frais de port calculés au moment du paiement.</p>
+        </div>
+        <div class="pp-actions">
+          <button class="btn-payer" disabled title="Le paiement en ligne arrive bientôt">
+            Paiement en ligne — bientôt disponible
+          </button>
+          <a href="/contact" class="btn-message">Commander par message</a>
+        </div>
+      </div>
+
+      <p class="pp-continuer">
+        <a href="/boutique">← Continuer mes achats</a>
+      </p>
+
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const CLE = 'boutique_panier_v1'
+  const lire = (): any[] => {
+    try { return JSON.parse(localStorage.getItem(CLE) || '[]') } catch { return [] }
+  }
+  const sauver = (items: any[]) => {
+    localStorage.setItem(CLE, JSON.stringify(items))
+    window.dispatchEvent(new CustomEvent('panier:maj', { detail: {} }))
+  }
+  const fmt = (n: number) => n.toFixed(2).replace('.', ',') + ' €'
+
+  const contenu = document.getElementById('pp-contenu')!
+  const pied    = document.getElementById('pp-pied')!
+  const totalEl = document.getElementById('pp-total')!
+
+  function majUI() {
+    const items = lire()
+
+    if (items.length === 0) {
+      contenu.innerHTML = '<p class="pp-vide">Votre panier est vide.</p>'
+      pied.hidden = true
+      return
+    }
+    pied.hidden = false
+    totalEl.textContent = fmt(items.reduce((s, it) => s + it.prix * it.qty, 0))
+
+    contenu.innerHTML = items.map((it, i) => `
+      <div class="pp-ligne">
+        <a href="/boutique/${it.slug}" class="pp-img" style="${it.image ? `background-image:url(${it.image})` : ''}"></a>
+        <div class="pp-infos">
+          <a href="/boutique/${it.slug}" class="pp-titre">${it.titre}</a>
+          ${it.variante ? `<p class="pp-variante">${it.variante}</p>` : ''}
+          <p class="pp-prix-unitaire">${fmt(it.prix)} l'unité</p>
+        </div>
+        <div class="pp-qte">
+          <button data-moins="${i}" aria-label="Réduire la quantité">−</button>
+          <span>${it.qty}</span>
+          <button data-plus="${i}" aria-label="Augmenter la quantité">+</button>
+        </div>
+        <p class="pp-sous-total">${fmt(it.prix * it.qty)}</p>
+        <button data-retirer="${i}" class="pp-retirer" aria-label="Retirer du panier">×</button>
+      </div>`).join('')
+
+    contenu.querySelectorAll<HTMLElement>('[data-moins]').forEach(b => b.addEventListener('click', () => {
+      const items = lire(); const i = Number(b.dataset.moins)
+      items[i].qty -= 1
+      if (items[i].qty <= 0) items.splice(i, 1)
+      sauver(items); majUI()
+    }))
+    contenu.querySelectorAll<HTMLElement>('[data-plus]').forEach(b => b.addEventListener('click', () => {
+      const items = lire(); const i = Number(b.dataset.plus)
+      const max = items[i].stockMax
+      if (max == null || items[i].qty < max) items[i].qty += 1
+      sauver(items); majUI()
+    }))
+    contenu.querySelectorAll<HTMLElement>('[data-retirer]').forEach(b => b.addEventListener('click', () => {
+      const items = lire(); items.splice(Number(b.dataset.retirer), 1)
+      sauver(items); majUI()
+    }))
+  }
+
+  majUI()
+</script>
+
+<style>
+  /* Bandeau — même recette que les autres pages */
+  .page-hero {
+    position: relative;
+    min-height: 28vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2.5rem;
+    color: white;
+  }
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(7,24,31,0.85) 0%, rgba(13,43,62,0.55) 100%),
+      url('/images/hero.jpg') center / cover no-repeat;
+    background-color: var(--color-ocean);
+  }
+  .page-hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: var(--header-height);
+  }
+  .page-hero h1 { color: white; margin: 0.4rem 0 0; }
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    font-weight: 500;
+  }
+
+  .panier-page { max-width: 860px; }
+
+  :global(.pp-vide) {
+    text-align: center;
+    padding: 4rem 0 2rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-style: italic;
+  }
+
+  :global(.pp-ligne) {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid #eef0f3;
+  }
+  :global(.pp-img) {
+    flex-shrink: 0;
+    width: 84px;
+    height: 84px;
+    border-radius: 3px;
+    background: linear-gradient(160deg, var(--color-ocean) 0%, var(--color-ocean-main) 100%) center / cover no-repeat;
+  }
+  :global(.pp-infos) { flex: 1; min-width: 0; }
+  :global(.pp-titre) {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--color-text);
+    display: block;
+    line-height: 1.3;
+  }
+  :global(.pp-variante) {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.15rem;
+  }
+  :global(.pp-prix-unitaire) {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.15rem;
+  }
+  :global(.pp-qte) {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-shrink: 0;
+  }
+  :global(.pp-qte button) {
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid #d5d9e0;
+    border-radius: 3px;
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--color-text);
+    transition: border-color 0.15s;
+  }
+  :global(.pp-qte button:hover) { border-color: var(--color-ocean-main); }
+  :global(.pp-qte span) { min-width: 1.5rem; text-align: center; font-size: 0.95rem; }
+  :global(.pp-sous-total) {
+    width: 90px;
+    text-align: right;
+    font-weight: 500;
+    color: var(--color-ocean-main);
+    flex-shrink: 0;
+  }
+  :global(.pp-retirer) {
+    border: none;
+    background: none;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 0.25rem 0.4rem;
+    flex-shrink: 0;
+  }
+  :global(.pp-retirer:hover) { color: #b4552d; }
+
+  .pp-pied {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding-top: 1.75rem;
+  }
+  .pp-pied[hidden] { display: none !important; }
+  .pp-total {
+    font-size: 1.15rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+  }
+  .pp-total strong { color: var(--color-ocean-main); }
+  .pp-note {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+  }
+  .pp-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    min-width: min(320px, 100%);
+  }
+  .btn-payer {
+    padding: 0.85rem;
+    background: var(--color-ocean-main);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .btn-message {
+    padding: 0.8rem;
+    text-align: center;
+    border: 1.5px solid var(--color-ocean-main);
+    color: var(--color-ocean-main);
+    border-radius: 3px;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .btn-message:hover { background: var(--color-ocean-main); color: white; }
+
+  .pp-continuer { margin-top: 2rem; }
+  .pp-continuer a {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 500;
+  }
+
+  @media (max-width: 640px) {
+    :global(.pp-ligne) { flex-wrap: wrap; gap: 0.75rem 1rem; }
+    :global(.pp-infos) { flex-basis: calc(100% - 100px); }
+    :global(.pp-sous-total) { width: auto; margin-left: auto; }
+  }
+</style>

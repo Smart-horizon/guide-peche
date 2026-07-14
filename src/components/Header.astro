@@ -278,6 +278,14 @@ function isActive(href: string, prefix?: string) {
       </ul>
     </nav>
 
+    <a href="/panier" class="header-panier" id="header-panier" aria-label="Panier" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="20" height="20" aria-hidden="true">
+        <circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/>
+        <path d="M3 4h2l2.6 11.2a1.5 1.5 0 0 0 1.47 1.16h7.9a1.5 1.5 0 0 0 1.46-1.13L20.5 8H6.1"/>
+      </svg>
+      <span class="header-panier-compte" id="header-panier-compte">0</span>
+    </a>
+
     {hasLangSwitch && (
       <div class="lang-switch" role="navigation" aria-label="Language">
         <a href={frPath} class:list={['lang-btn', !isEn && 'lang-btn--active']} aria-label="Version française" hreflang="fr">FR</a>
@@ -311,6 +319,20 @@ function isActive(href: string, prefix?: string) {
       }
     })
   })
+
+  // ── Icône panier — visible dès qu'il y a des articles (localStorage boutique) ──
+  function majHeaderPanier() {
+    try {
+      const items = JSON.parse(localStorage.getItem('boutique_panier_v1') || '[]')
+      const nb = items.reduce((s: number, it: any) => s + (it.qty || 0), 0)
+      const lien = document.getElementById('header-panier')
+      const compte = document.getElementById('header-panier-compte')
+      if (lien) lien.hidden = nb === 0
+      if (compte) compte.textContent = String(nb)
+    } catch {}
+  }
+  majHeaderPanier()
+  window.addEventListener('panier:maj', majHeaderPanier)
 </script>
 
 <style>
@@ -451,6 +473,39 @@ function isActive(href: string, prefix?: string) {
   .dropdown-link:hover, .dropdown-link.active {
     background: rgba(255,255,255,0.07);
     color: white;
+  }
+
+  /* ── Icône panier ── */
+  .header-panier[hidden] { display: none !important; }
+  .header-panier {
+    position: relative;
+    display: flex;
+    align-items: center;
+    color: rgba(255,255,255,0.85);
+    margin-left: 0.75rem;
+    padding: 0.4rem;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .header-panier:hover { color: white; }
+  .header-panier-compte {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: #b4552d;
+    color: white;
+    font-size: 0.62rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (max-width: 1024px) {
+    .header-panier { order: 2; margin-left: 0; }
   }
 
   /* ── Language switch ── */

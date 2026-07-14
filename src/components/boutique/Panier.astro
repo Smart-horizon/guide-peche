@@ -4,7 +4,7 @@
 // indicatifs : le futur endpoint /api/checkout relira les prix depuis Sanity.
 ---
 
-<button class="panier-bouton" id="panier-bouton" aria-label="Voir le panier" hidden>
+<button class="panier-bouton" id="panier-bouton" aria-label="Voir le panier">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22" aria-hidden="true">
     <circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/>
     <path d="M3 4h2l2.6 11.2a1.5 1.5 0 0 0 1.47 1.16h7.9a1.5 1.5 0 0 0 1.46-1.13L20.5 8H6.1"/>
@@ -29,6 +29,7 @@
       Paiement en ligne — bientôt disponible
     </button>
     <a href="/contact" class="btn-message">Commander par message</a>
+    <a href="/panier" class="lien-panier-complet">Voir le panier complet</a>
   </div>
 </aside>
 
@@ -52,8 +53,9 @@
     const items = lire()
     const nb = items.reduce((s, it) => s + it.qty, 0)
     compte.textContent = String(nb)
-    bouton.hidden = nb === 0
-    if (nb === 0) fermer()
+    compte.hidden = nb === 0
+    // Prévient le header (icône panier) et d'éventuelles autres vues
+    window.dispatchEvent(new CustomEvent('panier:maj', { detail: { nb } }))
 
     totalEl.textContent = fmt(items.reduce((s, it) => s + it.prix * it.qty, 0))
 
@@ -119,6 +121,12 @@
 </script>
 
 <style>
+  /* L'attribut hidden doit gagner sur les display CSS ci-dessous */
+  .panier-bouton[hidden],
+  .panier-voile[hidden],
+  .panier-tiroir[hidden],
+  .panier-compte[hidden] { display: none !important; }
+
   /* Bouton flottant */
   .panier-bouton {
     position: fixed;
@@ -318,4 +326,15 @@
     transition: all 0.2s;
   }
   .btn-message:hover { background: var(--color-ocean-main); color: white; }
+  .lien-panier-complet {
+    display: block;
+    text-align: center;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .lien-panier-complet:hover { color: var(--color-ocean-main); }
 </style>
