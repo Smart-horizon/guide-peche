@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import Panier from '../../components/boutique/Panier.astro'
 import { client } from '../../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -101,6 +102,8 @@ const hasGoodies = produits.some(p => p.categorie === 'goodies')
 
     </div>
   </section>
+
+  <Panier />
 </BaseLayout>
 
 <style>

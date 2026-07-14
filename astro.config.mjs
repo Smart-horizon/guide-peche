@@ -12,6 +12,8 @@ export default defineConfig({
   // Astro v6 : "static" supporte nativement les pages SSR (prerender = false)
   // L'adapter Cloudflare génère dist/_worker.js pour les routes dynamiques
   output: PREVIEW ? 'server' : 'static',
+  // Respecte le port assigné par le lanceur de preview (PORT) — sinon 4321
+  server: { port: process.env.PORT ? Number(process.env.PORT) : 4321 },
   adapter: cloudflare({ imageService: 'passthrough' }),
   site: 'https://jeanbaptistevidalguidepeche.com',
   vite: {

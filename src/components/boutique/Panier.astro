@@ -1,0 +1,321 @@
+---
+// Panier boutique — bouton flottant + tiroir coulissant.
+// Stockage localStorage (clé boutique_panier_v1). Les prix affichés sont
+// indicatifs : le futur endpoint /api/checkout relira les prix depuis Sanity.
+---
+
+<button class="panier-bouton" id="panier-bouton" aria-label="Voir le panier" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22" aria-hidden="true">
+    <circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/>
+    <path d="M3 4h2l2.6 11.2a1.5 1.5 0 0 0 1.47 1.16h7.9a1.5 1.5 0 0 0 1.46-1.13L20.5 8H6.1"/>
+  </svg>
+  <span class="panier-compte" id="panier-compte">0</span>
+</button>
+
+<div class="panier-voile" id="panier-voile" hidden></div>
+
+<aside class="panier-tiroir" id="panier-tiroir" aria-label="Panier" hidden>
+  <div class="panier-tete">
+    <h2>Votre panier</h2>
+    <button class="panier-fermer" id="panier-fermer" aria-label="Fermer le panier">×</button>
+  </div>
+
+  <div class="panier-lignes" id="panier-lignes"></div>
+
+  <div class="panier-pied">
+    <p class="panier-total">Total <strong id="panier-total">0,00 €</strong></p>
+    <p class="panier-note">Frais de port calculés au moment du paiement.</p>
+    <button class="btn-payer" disabled title="Le paiement en ligne arrive bientôt">
+      Paiement en ligne — bientôt disponible
+    </button>
+    <a href="/contact" class="btn-message">Commander par message</a>
+  </div>
+</aside>
+
+<script>
+  const CLE = 'boutique_panier_v1'
+
+  const lire = (): any[] => {
+    try { return JSON.parse(localStorage.getItem(CLE) || '[]') } catch { return [] }
+  }
+  const sauver = (items: any[]) => localStorage.setItem(CLE, JSON.stringify(items))
+  const fmt = (n: number) => n.toFixed(2).replace('.', ',') + ' €'
+
+  const bouton  = document.getElementById('panier-bouton')!
+  const compte  = document.getElementById('panier-compte')!
+  const voile   = document.getElementById('panier-voile')!
+  const tiroir  = document.getElementById('panier-tiroir')!
+  const lignes  = document.getElementById('panier-lignes')!
+  const totalEl = document.getElementById('panier-total')!
+
+  function majUI() {
+    const items = lire()
+    const nb = items.reduce((s, it) => s + it.qty, 0)
+    compte.textContent = String(nb)
+    bouton.hidden = nb === 0
+    if (nb === 0) fermer()
+
+    totalEl.textContent = fmt(items.reduce((s, it) => s + it.prix * it.qty, 0))
+
+    lignes.innerHTML = items.length === 0
+      ? '<p class="panier-vide">Votre panier est vide.</p>'
+      : items.map((it, i) => `
+        <div class="panier-ligne">
+          <a href="/boutique/${it.slug}" class="panier-img" style="${it.image ? `background-image:url(${it.image})` : ''}"></a>
+          <div class="panier-infos">
+            <a href="/boutique/${it.slug}" class="panier-titre">${it.titre}</a>
+            ${it.variante ? `<p class="panier-variante">${it.variante}</p>` : ''}
+            <p class="panier-prix">${fmt(it.prix)}</p>
+            <div class="panier-qte">
+              <button data-moins="${i}" aria-label="Réduire la quantité">−</button>
+              <span>${it.qty}</span>
+              <button data-plus="${i}" aria-label="Augmenter la quantité">+</button>
+              <button data-retirer="${i}" class="panier-retirer" aria-label="Retirer du panier">Retirer</button>
+            </div>
+          </div>
+        </div>`).join('')
+
+    lignes.querySelectorAll<HTMLElement>('[data-moins]').forEach(b => b.addEventListener('click', () => {
+      const items = lire(); const i = Number(b.dataset.moins)
+      items[i].qty -= 1
+      if (items[i].qty <= 0) items.splice(i, 1)
+      sauver(items); majUI()
+    }))
+    lignes.querySelectorAll<HTMLElement>('[data-plus]').forEach(b => b.addEventListener('click', () => {
+      const items = lire(); const i = Number(b.dataset.plus)
+      const max = items[i].stockMax
+      if (max == null || items[i].qty < max) items[i].qty += 1
+      sauver(items); majUI()
+    }))
+    lignes.querySelectorAll<HTMLElement>('[data-retirer]').forEach(b => b.addEventListener('click', () => {
+      const items = lire(); items.splice(Number(b.dataset.retirer), 1)
+      sauver(items); majUI()
+    }))
+  }
+
+  function ouvrir() { tiroir.hidden = false; voile.hidden = false; document.body.style.overflow = 'hidden' }
+  function fermer() { tiroir.hidden = true;  voile.hidden = true;  document.body.style.overflow = '' }
+
+  bouton.addEventListener('click', ouvrir)
+  voile.addEventListener('click', fermer)
+  document.getElementById('panier-fermer')!.addEventListener('click', fermer)
+
+  // API globale pour la fiche produit
+  ;(window as any).panierAjouter = (item: any) => {
+    const items = lire()
+    const idx = items.findIndex(it => it.produitId === item.produitId && it.variante === item.variante)
+    if (idx >= 0) {
+      const max = items[idx].stockMax
+      items[idx].qty = max == null ? items[idx].qty + item.qty : Math.min(items[idx].qty + item.qty, max)
+    } else {
+      items.push(item)
+    }
+    sauver(items)
+    majUI()
+    ouvrir()
+  }
+
+  majUI()
+</script>
+
+<style>
+  /* Bouton flottant */
+  .panier-bouton {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 90;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-ocean-main);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .panier-bouton:hover { transform: scale(1.06); background: var(--color-ocean); }
+  .panier-compte {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    border-radius: 11px;
+    background: #b4552d;
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Voile + tiroir */
+  .panier-voile {
+    position: fixed;
+    inset: 0;
+    background: rgba(7,24,31,0.55);
+    z-index: 95;
+  }
+  .panier-tiroir {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: min(420px, 100vw);
+    background: white;
+    z-index: 96;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -8px 0 32px rgba(0,0,0,0.25);
+  }
+
+  .panier-tete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e4e6ea;
+  }
+  .panier-tete h2 { font-size: 1.3rem; }
+  .panier-fermer {
+    border: none;
+    background: none;
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 0.25rem 0.5rem;
+  }
+  .panier-fermer:hover { color: var(--color-text); }
+
+  .panier-lignes {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+  }
+  :global(.panier-vide) {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--color-text-muted);
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+  :global(.panier-ligne) {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eef0f3;
+  }
+  :global(.panier-img) {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: 3px;
+    background: linear-gradient(160deg, var(--color-ocean) 0%, var(--color-ocean-main) 100%) center / cover no-repeat;
+  }
+  :global(.panier-infos) { flex: 1; min-width: 0; }
+  :global(.panier-titre) {
+    font-family: var(--font-serif);
+    font-size: 0.98rem;
+    color: var(--color-text);
+    display: block;
+    line-height: 1.3;
+  }
+  :global(.panier-variante) {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin-top: 0.15rem;
+  }
+  :global(.panier-prix) {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--color-ocean-main);
+    margin-top: 0.2rem;
+  }
+  :global(.panier-qte) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  :global(.panier-qte button) {
+    width: 26px;
+    height: 26px;
+    border: 1.5px solid #d5d9e0;
+    border-radius: 3px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1;
+    color: var(--color-text);
+    transition: border-color 0.15s;
+  }
+  :global(.panier-qte button:hover) { border-color: var(--color-ocean-main); }
+  :global(.panier-qte span) { min-width: 1.4rem; text-align: center; font-size: 0.9rem; }
+  :global(.panier-retirer) {
+    width: auto !important;
+    height: auto !important;
+    border: none !important;
+    background: none !important;
+    font-size: 0.72rem !important;
+    color: var(--color-text-muted) !important;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    margin-left: auto;
+  }
+  :global(.panier-retirer:hover) { color: #b4552d !important; }
+
+  .panier-pied {
+    padding: 1.25rem 1.5rem 1.5rem;
+    border-top: 1px solid #e4e6ea;
+  }
+  .panier-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.05rem;
+    margin-bottom: 0.35rem;
+  }
+  .panier-total strong { color: var(--color-ocean-main); }
+  .panier-note {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+  }
+  .btn-payer {
+    display: block;
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--color-ocean-main);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: not-allowed;
+    opacity: 0.55;
+    margin-bottom: 0.6rem;
+  }
+  .btn-message {
+    display: block;
+    width: 100%;
+    padding: 0.8rem;
+    text-align: center;
+    border: 1.5px solid var(--color-ocean-main);
+    color: var(--color-ocean-main);
+    border-radius: 3px;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .btn-message:hover { background: var(--color-ocean-main); color: white; }
+</style>

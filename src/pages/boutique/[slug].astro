@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import Panier from '../../components/boutique/Panier.astro'
 import { client } from '../../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
 
 export async function getStaticPaths() {
   const produits = await client.fetch(`
     *[_type == "produit" && disponible == true]{
-      title, slug, categorie, espece, prix, stock, poids,
+      _id, title, slug, categorie, espece, prix, stock, poids,
       images, description, videoYoutube, seoTitle, seoDescription, ogImage,
       "variantes": variantes[]{ nom, prix, stock, photos },
       "article": articleLie->{ title, slug }
@@ -56,6 +57,17 @@ function youtubeId(url) {
   return m ? m[1] : null
 }
 const videoId = youtubeId(produit.videoYoutube)
+
+// ── Données produit passées au script panier ──────────────────────────────
+const produitMeta = {
+  id:        produit._id,
+  slug:      produit.slug.current,
+  titre:     produit.title,
+  prix:      produit.prix,
+  stock:     produit.stock ?? null,
+  poids:     produit.poids ?? null,
+  imageMini: photosDefaut[0]?.mini || null,
+}
 
 const metaTitle = produit.seoTitle || `${produit.title} — Boutique Jean-Baptiste Vidal`
 const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goodies de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne.`
@@ -123,9 +135,14 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
           {epuiseGlobal ? (
             <button class="btn-achat" disabled>Épuisé</button>
           ) : (
-            <button class="btn-achat" disabled title="Le paiement en ligne arrive bientôt">
-              Paiement en ligne — bientôt disponible
-            </button>
+            <>
+              <div class="qte">
+                <button type="button" id="qte-moins" aria-label="Réduire la quantité">−</button>
+                <span id="qte-valeur">1</span>
+                <button type="button" id="qte-plus" aria-label="Augmenter la quantité">+</button>
+              </div>
+              <button class="btn-achat" id="btn-ajouter">Ajouter au panier</button>
+            </>
           )}
           <a href="/contact" class="btn-contact">Commander par message</a>
         </div>
@@ -185,9 +202,11 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
     )}
 
   </div>
+
+  <Panier />
 </BaseLayout>
 
-<script is:inline define:vars={{ variantes, photosDefaut }}>
+<script is:inline define:vars={{ variantes, photosDefaut, produitMeta }}>
   const selectEl   = document.getElementById('select-variante')
   const prixEl     = document.getElementById('prix')
   const stockEl    = document.getElementById('stock-note')
@@ -238,6 +257,56 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
     selectEl.addEventListener('change', majVariante)
     majVariante()
   }
+
+  // ── Quantité + ajout au panier ────────────────────────────────────────────
+  const btnAjouter = document.getElementById('btn-ajouter')
+  const qteValeur  = document.getElementById('qte-valeur')
+  let qte = 1
+
+  function varianteCourante() {
+    if (!selectEl) return null
+    return variantes[Number(selectEl.value)] || null
+  }
+  function stockMax() {
+    const v = varianteCourante()
+    const s = v ? v.stock : produitMeta.stock
+    return s == null ? 99 : s
+  }
+  function majQte(delta) {
+    qte = Math.min(Math.max(1, qte + delta), Math.max(1, stockMax()))
+    if (qteValeur) qteValeur.textContent = String(qte)
+  }
+
+  document.getElementById('qte-moins')?.addEventListener('click', () => majQte(-1))
+  document.getElementById('qte-plus')?.addEventListener('click', () => majQte(1))
+  selectEl?.addEventListener('change', () => { qte = 1; majQte(0); majBtnAjouter() })
+
+  function majBtnAjouter() {
+    if (!btnAjouter) return
+    const v = varianteCourante()
+    const epuise = (v ? v.stock : produitMeta.stock) === 0
+    btnAjouter.disabled = epuise
+    btnAjouter.textContent = epuise ? 'Épuisé' : 'Ajouter au panier'
+  }
+  majBtnAjouter()
+
+  btnAjouter?.addEventListener('click', () => {
+    const v = varianteCourante()
+    if ((v ? v.stock : produitMeta.stock) === 0) return
+    window.panierAjouter({
+      produitId: produitMeta.id,
+      slug:      produitMeta.slug,
+      titre:     produitMeta.titre,
+      variante:  v ? v.nom : null,
+      prix:      v ? v.prix : produitMeta.prix,
+      poids:     produitMeta.poids,
+      image:     (v && v.photos && v.photos[0] && v.photos[0].mini) || produitMeta.imageMini,
+      stockMax:  (v ? v.stock : produitMeta.stock) ?? null,
+      qty:       qte,
+    })
+    qte = 1
+    majQte(0)
+  })
 </script>
 
 <style>
@@ -410,7 +479,31 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
+    align-items: stretch;
     margin-bottom: 1.5rem;
+  }
+  .qte {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    border: 1.5px solid #d5d9e0;
+    border-radius: 3px;
+    padding: 0 0.5rem;
+  }
+  .qte button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--color-text);
+    padding: 0.4rem 0.35rem;
+  }
+  .qte button:hover { color: var(--color-ocean-main); }
+  .qte span {
+    min-width: 1.5rem;
+    text-align: center;
+    font-size: 0.95rem;
   }
   .btn-achat {
     padding: 0.85rem 1.75rem;
@@ -423,6 +516,11 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
     letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-achat:hover:not(:disabled) { background: var(--color-ocean); }
+  .btn-achat:disabled {
     cursor: not-allowed;
     opacity: 0.55;
   }
