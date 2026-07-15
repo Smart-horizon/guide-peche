@@ -35,6 +35,17 @@ export const stegaClient = client
 // Indique aux composants (BaseLayout) s'il faut monter l'overlay Visual Editing.
 export const visualEditingEnabled = PREVIEW
 
+// Projection GROQ de la fiche produit — partagée entre le build statique
+// (getStaticPaths, scope isolé : seuls les imports y sont visibles) et le
+// fallback SSR du worker d'aperçu.
+export const PRODUIT_PROJECTION = `{
+  _id, title, slug, categorie, espece, prix, stock, poids,
+  images, description, videoYoutube, seoTitle, seoDescription, ogImage,
+  "variantes": variantes[]{ nom, prix, stock, photos },
+  "prestations": prestationsAssociees[]->{ title, "slug": slug.current },
+  "articles": articlesAssocies[]->{ title, "slug": slug.current }
+}`
+
 // Client preview (SSR) — conservé pour compatibilité éventuelle.
 export const previewClient = createClient({
   projectId:   PROJECT_ID,

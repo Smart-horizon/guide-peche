@@ -1,20 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Panier from '../../components/boutique/Panier.astro'
-import { client } from '../../lib/sanity.js'
+import { client, PRODUIT_PROJECTION } from '../../lib/sanity.js'
 import imageUrlBuilder from '@sanity/image-url'
 
-// Projection partagée build statique (site public) / SSR (worker d'aperçu Sanity)
-const PROJECTION = `{
-  _id, title, slug, categorie, espece, prix, stock, poids,
-  images, description, videoYoutube, seoTitle, seoDescription, ogImage,
-  "variantes": variantes[]{ nom, prix, stock, photos },
-  "prestations": prestationsAssociees[]->{ title, "slug": slug.current },
-  "articles": articlesAssocies[]->{ title, "slug": slug.current }
-}`
-
 export async function getStaticPaths() {
-  const produits = await client.fetch(`*[_type == "produit" && disponible == true]${PROJECTION}`)
+  const produits = await client.fetch(`*[_type == "produit" && disponible == true]${PRODUIT_PROJECTION}`)
   return produits
     .filter(p => p.slug?.current)
     .map(p => ({ params: { slug: p.slug.current }, props: { produit: p } }))
@@ -26,7 +17,7 @@ export async function getStaticPaths() {
 let { produit } = Astro.props
 if (!produit) {
   produit = await client.fetch(
-    `*[_type == "produit" && slug.current == $slug][0]${PROJECTION}`,
+    `*[_type == "produit" && slug.current == $slug][0]${PRODUIT_PROJECTION}`,
     { slug: Astro.params.slug }
   )
   if (!produit) return Astro.redirect('/boutique')
