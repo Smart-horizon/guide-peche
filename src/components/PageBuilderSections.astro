@@ -980,7 +980,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
     if (!prods.length) return null
     const isDark = stegaClean(s.fond) === 'dark'
     const fmtPrix = (v: number) => v.toFixed(2).replace('.', ',') + ' €'
-    const BADGES: Record<string, string> = lang === 'en'
+    const BADGES = lang === 'en'
       ? { nouveaute: 'New', vente: 'Bestseller', 'coup-coeur': 'Favourite' }
       : { nouveaute: 'Nouveauté', vente: 'Meilleure vente', 'coup-coeur': 'Coup de cœur' }
     return (
