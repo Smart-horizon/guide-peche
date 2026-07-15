@@ -397,6 +397,18 @@ export default defineConfig({
           parametres: () => ({
             locations: [{ title: "Page d'accueil", href: '/' }],
           }),
+          // Produits boutique → fiche produit (brouillons visibles en SSR)
+          produit: (doc) => ({
+            locations: doc?.slug?.current
+              ? [
+                  { title: doc.title || 'Produit', href: `/boutique/${doc.slug.current}` },
+                  { title: 'La boutique', href: '/boutique' },
+                ]
+              : [{ title: 'La boutique', href: '/boutique' }],
+          }),
+          parametresBoutique: () => ({
+            locations: [{ title: 'La boutique', href: '/boutique' }],
+          }),
           // Prestations → page live (Visual Editing overlays actifs)
           prestation: (doc) => ({
             locations: doc?.slug?.current
