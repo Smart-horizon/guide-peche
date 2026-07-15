@@ -329,8 +329,14 @@ const customStructure = (S, context) =>
                 .title('🪰 Mouches')
                 .child(S.documentList().title('Mouches').filter('_type == "produit" && categorie == "mouche"')),
               S.listItem()
+                .title('🎁 Coffrets de mouches')
+                .child(S.documentList().title('Coffrets').filter('_type == "produit" && categorie == "coffret"')),
+              S.listItem()
                 .title('🧢 Casquettes & goodies')
                 .child(S.documentList().title('Casquettes & goodies').filter('_type == "produit" && categorie == "goodies"')),
+              S.listItem()
+                .title('🎣 Matériel')
+                .child(S.documentList().title('Matériel').filter('_type == "produit" && categorie == "materiel"')),
               S.divider(),
               S.listItem()
                 .title('📋 Tous les produits')

@@ -42,8 +42,15 @@ const articlesAssocies    = (produit.articles || []).filter(a => a?.slug)
 const builder = imageUrlBuilder(client)
 const urlFor = (source) => builder.image(source)
 
-const categorieLabel = { mouche: 'Mouche', goodies: 'Goodies' }
+const categorieLabel = {
+  mouche: 'Mouche', coffret: 'Coffret de mouches', goodies: 'Goodies',
+  materiel: 'Matériel', autre: 'Boutique',
+}
+const badgeLabel = { nouveaute: 'Nouveauté', vente: 'Meilleure vente', 'coup-coeur': 'Coup de cœur' }
 const fmtPrix = (n) => n != null ? `${n.toFixed(2).replace('.', ',')} €` : ''
+
+// Quantité minimum de commande (ex : mouches vendues par 3)
+const quantiteMin = Math.max(1, Math.floor(produit.quantiteMin ?? 1))
 
 // ── Galerie : URLs des photos principales + par variante ──────────────────
 const photosDefaut = (produit.images || [])
@@ -79,13 +86,14 @@ const videoId = youtubeId(produit.videoYoutube)
 
 // ── Données produit passées au script panier ──────────────────────────────
 const produitMeta = {
-  id:        produit._id,
-  slug:      produit.slug.current,
-  titre:     produit.title,
-  prix:      produit.prix,
-  stock:     produit.stock ?? null,
-  poids:     produit.poids ?? null,
-  imageMini: photosDefaut[0]?.mini || null,
+  id:          produit._id,
+  slug:        produit.slug.current,
+  titre:       produit.title,
+  prix:        produit.prix,
+  stock:       produit.stock ?? null,
+  poids:       produit.poids ?? null,
+  quantiteMin,
+  imageMini:   photosDefaut[0]?.mini || null,
 }
 
 const metaTitle = produit.seoTitle || `${produit.title} — Boutique Jean-Baptiste Vidal`
@@ -101,7 +109,10 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
       <nav class="fil-ariane">
         <a href="/boutique">← Retour à la boutique</a>
       </nav>
-      <p class="eyebrow">{categorieLabel[produit.categorie] ?? 'Boutique'}</p>
+      <p class="eyebrow">
+        {categorieLabel[produit.categorie] ?? 'Boutique'}
+        {(produit.badges ?? []).map(b => badgeLabel[b] && <span class="hero-badge">{badgeLabel[b]}</span>)}
+      </p>
       <h1>{produit.title}</h1>
     </div>
   </section>
@@ -148,6 +159,10 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
           </div>
         )}
 
+        {quantiteMin > 1 && (
+          <p class="qte-min-note">Vendu par {quantiteMin} minimum</p>
+        )}
+
         <p class="stock-note" id="stock-note"></p>
 
         <div class="achat">
@@ -157,7 +172,7 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
             <>
               <div class="qte">
                 <button type="button" id="qte-moins" aria-label="Réduire la quantité">−</button>
-                <span id="qte-valeur">1</span>
+                <span id="qte-valeur">{quantiteMin}</span>
                 <button type="button" id="qte-plus" aria-label="Augmenter la quantité">+</button>
               </div>
               <button class="btn-achat" id="btn-ajouter">Ajouter au panier</button>
@@ -295,7 +310,8 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
   // ── Quantité + ajout au panier ────────────────────────────────────────────
   const btnAjouter = document.getElementById('btn-ajouter')
   const qteValeur  = document.getElementById('qte-valeur')
-  let qte = 1
+  const qteMin     = produitMeta.quantiteMin || 1
+  let qte = qteMin
 
   function varianteCourante() {
     if (!selectEl) return null
@@ -307,13 +323,14 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
     return s == null ? 99 : s
   }
   function majQte(delta) {
-    qte = Math.min(Math.max(1, qte + delta), Math.max(1, stockMax()))
+    // Le pas suit la quantité minimum : par 3 si vendu par 3
+    qte = Math.min(Math.max(qteMin, qte + delta * qteMin), Math.max(qteMin, stockMax()))
     if (qteValeur) qteValeur.textContent = String(qte)
   }
 
   document.getElementById('qte-moins')?.addEventListener('click', () => majQte(-1))
   document.getElementById('qte-plus')?.addEventListener('click', () => majQte(1))
-  selectEl?.addEventListener('change', () => { qte = 1; majQte(0); majBtnAjouter() })
+  selectEl?.addEventListener('change', () => { qte = qteMin; majQte(0); majBtnAjouter() })
 
   function majBtnAjouter() {
     if (!btnAjouter) return
@@ -336,9 +353,10 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
       poids:     produitMeta.poids,
       image:     (v && v.photos && v.photos[0] && v.photos[0].mini) || produitMeta.imageMini,
       stockMax:  (v ? v.stock : produitMeta.stock) ?? null,
+      qtyMin:    qteMin,
       qty:       qte,
     })
-    qte = 1
+    qte = qteMin
     majQte(0)
   })
 </script>
@@ -502,11 +520,27 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
     border-color: var(--color-ocean-main);
   }
 
+  .qte-min-note {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
   .stock-note {
     min-height: 1.3rem;
     font-size: 0.8rem;
     color: #b4552d;
     margin-bottom: 1rem;
+  }
+  .hero-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.15rem 0.5rem;
+    background: rgba(126,200,227,0.18);
+    border: 1px solid var(--color-ocean-light);
+    border-radius: 2px;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--color-ocean-light);
   }
 
   .achat {

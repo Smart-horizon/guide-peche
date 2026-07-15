@@ -98,16 +98,19 @@ const heroStyle = heroImg
         <button data-retirer="${i}" class="pp-retirer" aria-label="Retirer du panier">×</button>
       </div>`).join('')
 
+    // Le pas suit la quantité minimum du produit (ex : mouches vendues par 3)
     contenu.querySelectorAll<HTMLElement>('[data-moins]').forEach(b => b.addEventListener('click', () => {
       const items = lire(); const i = Number(b.dataset.moins)
-      items[i].qty -= 1
-      if (items[i].qty <= 0) items.splice(i, 1)
+      const min = items[i].qtyMin || 1
+      items[i].qty -= min
+      if (items[i].qty < min) items.splice(i, 1) // sous le minimum → on retire l'article
       sauver(items); majUI()
     }))
     contenu.querySelectorAll<HTMLElement>('[data-plus]').forEach(b => b.addEventListener('click', () => {
       const items = lire(); const i = Number(b.dataset.plus)
       const max = items[i].stockMax
-      if (max == null || items[i].qty < max) items[i].qty += 1
+      const pas = items[i].qtyMin || 1
+      if (max == null || items[i].qty + pas <= max) items[i].qty += pas
       sauver(items); majUI()
     }))
     contenu.querySelectorAll<HTMLElement>('[data-retirer]').forEach(b => b.addEventListener('click', () => {

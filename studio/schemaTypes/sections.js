@@ -2779,7 +2779,7 @@ export const sectionProduits = {
   name: 'sectionProduits',
   title: '🛒 Produits — mise en avant boutique',
   type: 'object',
-  description: 'Met en avant des produits de la boutique (ex : les mouches à bar sur la page bar)',
+  description: 'Affiche des produits de la boutique (sélection, nouveautés, meilleures ventes, par type ou par espèce)',
   fields: [
     {
       name: 'eyebrow', title: 'Texte au-dessus du titre (optionnel)',
@@ -2793,20 +2793,155 @@ export const sectionProduits = {
       description: 'Ex : "Les mouches de cette pêche" · "Équipez-vous"',
     },
     {
+      name: 'mode',
+      title: 'Quels produits afficher ?',
+      type: 'string',
+      options: {
+        list: [
+          { title: '✋ Sélection manuelle',                     value: 'manuel'    },
+          { title: '🔥 Meilleures ventes',                      value: 'vente'     },
+          { title: '✨ Nouveautés',                             value: 'nouveaute' },
+          { title: '❤️ Coups de cœur',                          value: 'coup-coeur'},
+          { title: '🪰 Un type de produit (mouches, coffrets…)', value: 'categorie' },
+          { title: '🐟 Une espèce précise',                     value: 'espece'    },
+          { title: '🛒 Toute la boutique (les plus récents)',   value: 'tous'      },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'manuel',
+      description: '« Meilleures ventes », « Nouveautés » et « Coups de cœur » reprennent les mises en avant cochées sur les fiches produit',
+    },
+    {
       name: 'produits',
       title: 'Produits à afficher',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'produit' }] }],
-      validation: Rule => Rule.required().min(1).max(8),
-      description: 'Choisissez 1 à 8 produits — glissez-déposez pour changer l\'ordre',
+      validation: Rule => Rule.custom((produits, ctx) =>
+        ctx.parent?.mode !== 'manuel' || (produits?.length > 0)
+          ? true
+          : 'Choisissez au moins un produit'
+      ).max(12),
+      description: 'Glissez-déposez pour changer l\'ordre',
+      hidden: ({ parent }) => parent?.mode && parent.mode !== 'manuel',
+    },
+    {
+      name: 'categorie',
+      title: 'Type de produit',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🪰 Mouches',              value: 'mouche'   },
+          { title: '🎁 Coffrets de mouches',  value: 'coffret'  },
+          { title: '🧢 Casquettes & goodies', value: 'goodies'  },
+          { title: '🎣 Matériel',             value: 'materiel' },
+          { title: '📦 Autre',                value: 'autre'    },
+        ],
+        layout: 'radio',
+      },
+      hidden: ({ parent }) => parent?.mode !== 'categorie',
+    },
+    {
+      name: 'espece',
+      title: 'Espèce',
+      type: 'string',
+      options: {
+        list: [
+          { title: '🌊 Bar',      value: 'bar'      },
+          { title: '🏞️ Truite',   value: 'truite'   },
+          { title: '🐟 Alose',    value: 'alose'    },
+          { title: '🎣 Brochet',  value: 'brochet'  },
+          { title: '✈️ Exotique', value: 'exotique' },
+        ],
+        layout: 'radio',
+      },
+      hidden: ({ parent }) => parent?.mode !== 'espece',
+    },
+    {
+      name: 'nombre',
+      title: 'Nombre de produits affichés',
+      type: 'number',
+      initialValue: 4,
+      description: 'Uniquement pour les modes automatiques (4 recommandé — une belle ligne)',
+      validation: Rule => Rule.min(1).max(12),
+      hidden: ({ parent }) => !parent?.mode || parent.mode === 'manuel',
+    },
+    {
+      name: 'afficherLienBoutique',
+      title: 'Afficher le lien « Toute la boutique → »',
+      type: 'boolean',
+      initialValue: true,
     },
     fondField('sand'),
   ],
   preview: {
-    select: { titre: 'titre', produits: 'produits' },
-    prepare: ({ titre, produits }) => ({
-      title: `🛒 Produits — ${titre || ''}`,
-      subtitle: `${produits?.length || 0} produit(s) mis en avant`,
+    select: { titre: 'titre', produits: 'produits', mode: 'mode', categorie: 'categorie', espece: 'espece', nombre: 'nombre' },
+    prepare: ({ titre, produits, mode, categorie, espece, nombre }) => {
+      const libelles = {
+        manuel:       `${produits?.length || 0} produit(s) choisi(s)`,
+        vente:        `🔥 ${nombre || 4} meilleures ventes`,
+        nouveaute:    `✨ ${nombre || 4} nouveautés`,
+        'coup-coeur': `❤️ ${nombre || 4} coups de cœur`,
+        categorie:    `🪰 ${nombre || 4} × ${categorie || 'type non choisi'}`,
+        espece:       `🐟 ${nombre || 4} × ${espece || 'espèce non choisie'}`,
+        tous:         `🛒 ${nombre || 4} produits récents`,
+      }
+      return {
+        title: `🛒 Produits — ${titre || ''}`,
+        subtitle: libelles[mode] ?? libelles.manuel,
+      }
+    },
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — APPEL VERS LA BOUTIQUE (bannière pleine largeur, photo de fond)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionBoutiqueCta = {
+  name: 'sectionBoutiqueCta',
+  title: '🛍️ Boutique — bannière d\'appel',
+  type: 'object',
+  description: 'Grande bannière qui invite à visiter la boutique (idéale sur la page d\'accueil)',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Texte au-dessus du titre',
+      type: 'string',
+      initialValue: 'La boutique',
+    },
+    {
+      name: 'titre', title: 'Titre',
+      type: 'string',
+      initialValue: 'Mes mouches, montées à la main',
+      validation: Rule => Rule.required(),
+    },
+    {
+      name: 'texte', title: 'Texte',
+      type: 'text', rows: 3,
+      initialValue: 'Les modèles que j\'utilise au quotidien sur les côtes et rivières bretonnes, montés un par un dans mon atelier.',
+    },
+    {
+      name: 'image', title: 'Photo de fond',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Format paysage — min. 1600 px de large. Si vide : fond bleu océan.',
+    },
+    {
+      name: 'boutonTexte', title: 'Bouton — texte',
+      type: 'string',
+      initialValue: 'Découvrir la boutique',
+    },
+    {
+      name: 'boutonLien', title: 'Bouton — lien',
+      type: 'string',
+      initialValue: '/boutique',
+      description: 'Ex : /boutique — ou une fiche produit précise',
+    },
+  ],
+  preview: {
+    select: { titre: 'titre', eyebrow: 'eyebrow', media: 'image' },
+    prepare: ({ titre, eyebrow, media }) => ({
+      title: `🛍️ Bannière boutique — ${titre || ''}`,
+      subtitle: eyebrow || '',
+      media,
     }),
   },
 }
@@ -2856,4 +2991,5 @@ export const allSectionTypes = [
   sectionFaq,
   sectionBlog,
   sectionProduits,
+  sectionBoutiqueCta,
 ]

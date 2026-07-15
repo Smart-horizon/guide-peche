@@ -114,7 +114,7 @@ export function StockTool() {
           <div key={p._id} style={styles.carte}>
             <div style={styles.enTete}>
               <span style={styles.nomProduit}>
-                {p.categorie === 'mouche' ? '🪰' : '🧢'} {p.title}
+                {{ mouche: '🪰', coffret: '🎁', goodies: '🧢', materiel: '🎣', autre: '📦' }[p.categorie] ?? '📦'} {p.title}
               </span>
               {p.disponible === false && <span style={styles.badge}>masqué de la boutique</span>}
               {(p.variantes?.length ?? 0) > 0 && <span style={styles.badge}>{p.variantes.length} variantes</span>}

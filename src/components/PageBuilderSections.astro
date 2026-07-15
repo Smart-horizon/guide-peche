@@ -131,8 +131,9 @@ const firstFaqKey = faqSectionsAll[0]?._key
 const hasProduitsSection = (sections ?? []).some((s: any) => s._type === 'sectionProduits')
 const produitsBoutique: any[] = hasProduitsSection
   ? await client.fetch(`
-    *[_type == "produit" && disponible == true]{
-      _id, title, titleEn, "slug": slug.current, prix, categorie,
+    *[_type == "produit" && disponible == true] | order(coalesce(dateAjout, _createdAt) desc) {
+      _id, title, titleEn, "slug": slug.current, prix, categorie, espece, badges, stock,
+      "dateAjout": coalesce(dateAjout, _createdAt),
       "image": images[0]{ _type, hotspot, crop, asset->{ _id, url } },
       "variantes": variantes[]{ prix, stock }
     }
@@ -959,12 +960,29 @@ const voyagesForGrid: any[] = hasVoyagesGrid
 
   {/* ════════════ PRODUITS — MISE EN AVANT BOUTIQUE ════════════ */}
   {s._type === 'sectionProduits' && (() => {
-    const prods = (s.produits ?? [])
-      .map((r: any) => produitsBoutique.find((p: any) => p._id === (r._ref || r._id)))
-      .filter(Boolean)
+    const mode = stegaClean(s.mode) || 'manuel'
+    const n = parseInt(stegaClean(s.nombre) || '4', 10) || 4
+    let prods: any[] = []
+    if (mode === 'manuel') {
+      prods = (s.produits ?? [])
+        .map((r: any) => produitsBoutique.find((p: any) => p._id === (r._ref || r._id)))
+        .filter(Boolean)
+    } else if (mode === 'categorie') {
+      prods = produitsBoutique.filter((p: any) => p.categorie === stegaClean(s.categorie)).slice(0, n)
+    } else if (mode === 'espece') {
+      prods = produitsBoutique.filter((p: any) => p.espece === stegaClean(s.espece)).slice(0, n)
+    } else if (mode === 'tous') {
+      prods = produitsBoutique.slice(0, n)
+    } else {
+      // vente · nouveaute · coup-coeur → pastilles cochées sur la fiche produit
+      prods = produitsBoutique.filter((p: any) => (p.badges ?? []).includes(mode)).slice(0, n)
+    }
     if (!prods.length) return null
     const isDark = stegaClean(s.fond) === 'dark'
-    const fmtPrix = (n: number) => n.toFixed(2).replace('.', ',') + ' €'
+    const fmtPrix = (v: number) => v.toFixed(2).replace('.', ',') + ' €'
+    const BADGES: Record<string, string> = lang === 'en'
+      ? { nouveaute: 'New', vente: 'Bestseller', 'coup-coeur': 'Favourite' }
+      : { nouveaute: 'Nouveauté', vente: 'Meilleure vente', 'coup-coeur': 'Coup de cœur' }
     return (
       <section class={`section pb-prodsec ${bg(s.fond)||'section--sand'}`}>
         <div class="container">
@@ -973,13 +991,19 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               {stegaClean(s.eyebrow) && <p class={`pb-eyebrow-sm${isDark ? ' pb-prodsec__eyebrow--dark' : ''}`}>{s.eyebrow}</p>}
               <h2 class="pb-prodsec__titre">{s.titre || (lang === 'en' ? 'From the shop' : 'Dans la boutique')}</h2>
             </div>
-            <a href="/boutique" class="pb-prodsec__all">{lang === 'en' ? 'Visit the shop →' : 'Toute la boutique →'}</a>
+            {s.afficherLienBoutique !== false && (
+              <a href={pfx('/boutique')} class="pb-prodsec__all">{lang === 'en' ? 'Visit the shop →' : 'Toute la boutique →'}</a>
+            )}
           </div>
           <div class="pb-prodsec__grid">
             {prods.map((p: any) => {
               const prixVar = (p.variantes ?? []).map((v: any) => v.prix).filter((x: any) => x != null)
               const prixMin = prixVar.length ? Math.min(...prixVar, ...(p.variantes.length > prixVar.length ? [p.prix] : [])) : p.prix
               const aPartir = prixVar.length > 0 && new Set([...prixVar, p.prix]).size > 1
+              const epuise = (p.variantes ?? []).length
+                ? p.variantes.every((v: any) => v.stock === 0)
+                : p.stock === 0
+              const badge = (p.badges ?? [])[0]
               return (
                 <a href={`/boutique/${p.slug}`} class="pb-prodsec__card">
                   <div
@@ -987,7 +1011,10 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                     style={p.image?.asset
                       ? `background-image:url(${urlFor(p.image).width(500).height(500).fit('crop').crop('focalpoint').url()})`
                       : ''}
-                  ></div>
+                  >
+                    {badge && BADGES[badge] && <span class="pb-prodsec__badge">{BADGES[badge]}</span>}
+                    {epuise && <span class="pb-prodsec__epuise">{lang === 'en' ? 'Sold out' : 'Épuisé'}</span>}
+                  </div>
                   <div class="pb-prodsec__body">
                     <h3 class="pb-prodsec__h3">{lang === 'en' ? (p.titleEn || p.title) : p.title}</h3>
                     <p class="pb-prodsec__prix">
@@ -1004,6 +1031,20 @@ const voyagesForGrid: any[] = hasVoyagesGrid
       </section>
     )
   })()}
+
+  {/* ════════════ BOUTIQUE — BANNIÈRE D'APPEL ════════════ */}
+  {s._type === 'sectionBoutiqueCta' && (
+    <section class="pb-shopcta" style={heroBg(s.image)}>
+      <div class="container pb-shopcta__inner">
+        {stegaClean(s.eyebrow) && <p class="pb-shopcta__eyebrow">{s.eyebrow}</p>}
+        <h2 class="pb-shopcta__titre">{s.titre}</h2>
+        {stegaClean(s.texte) && <p class="pb-shopcta__texte">{s.texte}</p>}
+        <a href={pfx(stegaClean(s.boutonLien)) || pfx('/boutique')} class="pb-shopcta__btn">
+          {s.boutonTexte || (lang === 'en' ? 'Visit the shop' : 'Découvrir la boutique')}
+        </a>
+      </div>
+    </section>
+  )}
 
   {/* ════════════ FRISE CHRONOLOGIQUE ════════════ */}
   {s._type === 'sectionFriseChronologique' && s.items?.length > 0 && (
@@ -4154,8 +4195,34 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   transform: translateY(-3px);
 }
 .pb-prodsec__img {
+  position: relative;
   aspect-ratio: 1;
   background: linear-gradient(160deg, var(--color-ocean) 0%, var(--color-ocean-main) 100%) center / cover no-repeat;
+}
+.pb-prodsec__badge {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.7rem;
+  background: var(--color-ocean-main);
+  color: #fff;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 0.22rem 0.55rem;
+  border-radius: 2px;
+}
+.pb-prodsec__epuise {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  background: rgba(26,26,31,0.85);
+  color: #fff;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.55rem;
+  border-radius: 2px;
 }
 .pb-prodsec__body {
   padding: 1rem 1.15rem 1.15rem;
@@ -4199,6 +4266,62 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
 }
 @media (max-width: 560px) {
   .pb-prodsec__grid { grid-template-columns: 1fr; }
+}
+
+/* ── SECTION BOUTIQUE — BANNIÈRE D'APPEL ────────────────────────────────────── */
+.pb-shopcta {
+  position: relative;
+  min-height: 46vh;
+  display: flex;
+  align-items: center;
+  padding: 4.5rem 0;
+  color: #fff;
+  background: var(--color-ocean);
+}
+.pb-shopcta__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+.pb-shopcta__eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ocean-light);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.pb-shopcta__titre {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: #fff;
+  margin-bottom: 0.9rem;
+}
+.pb-shopcta__texte {
+  color: rgba(255,255,255,0.82);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1.75rem;
+}
+.pb-shopcta__btn {
+  display: inline-block;
+  padding: 0.9rem 2.2rem;
+  background: var(--color-ocean-main);
+  color: #fff;
+  border-radius: 3px;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+}
+.pb-shopcta__btn:hover {
+  background: #fff;
+  color: var(--color-ocean);
+  transform: translateY(-2px);
+}
+@media (max-width: 640px) {
+  .pb-shopcta { min-height: 40vh; padding: 3.5rem 0; }
 }
 </style>
 

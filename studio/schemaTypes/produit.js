@@ -34,11 +34,15 @@ export default {
       group: 'infos',
       options: {
         list: [
-          { title: '🪰 Mouche',              value: 'mouche'  },
-          { title: '🧢 Casquette & goodies', value: 'goodies' },
+          { title: '🪰 Mouche',               value: 'mouche'   },
+          { title: '🎁 Coffret de mouches',   value: 'coffret'  },
+          { title: '🧢 Casquette & goodies',  value: 'goodies'  },
+          { title: '🎣 Matériel',             value: 'materiel' },
+          { title: '📦 Autre',                value: 'autre'    },
         ],
         layout: 'radio',
       },
+      description: 'Sert à filtrer la boutique et à alimenter les sections « Produits » des pages',
       validation: Rule => Rule.required(),
     },
     {
@@ -55,8 +59,32 @@ export default {
           { title: '✈️ Exotique', value: 'exotique' },
         ],
       },
-      description: 'Pour les mouches uniquement — permet de filtrer la boutique et de lier les pages prestations',
-      hidden: ({ document }) => document?.categorie !== 'mouche',
+      description: 'Pour les mouches, coffrets et matériel — permet de filtrer la boutique et d\'alimenter les sections « Produits » par espèce',
+      hidden: ({ document }) => !['mouche', 'coffret', 'materiel'].includes(document?.categorie),
+    },
+    {
+      name: 'badges',
+      title: 'Mises en avant',
+      type: 'array',
+      group: 'infos',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: '✨ Nouveauté',       value: 'nouveaute' },
+          { title: '🔥 Meilleure vente', value: 'vente'     },
+          { title: '❤️ Coup de cœur',    value: 'coup-coeur'},
+        ],
+      },
+      description: 'Affiché en pastille sur le produit. Sert aussi aux sections « Produits » des pages (ex : afficher les meilleures ventes).',
+    },
+    {
+      name: 'dateAjout',
+      title: 'Date d\'ajout à la boutique',
+      type: 'datetime',
+      group: 'infos',
+      options: { dateFormat: 'DD/MM/YYYY' },
+      initialValue: () => new Date().toISOString(),
+      description: 'Utilisée pour classer les nouveautés — laissez la date du jour',
     },
 
     // ── Prix & disponibilité ─────────────────────────────────────────────────
@@ -75,6 +103,15 @@ export default {
       group: 'infos',
       initialValue: true,
       description: 'Décochez pour retirer le produit de la boutique sans le supprimer',
+    },
+    {
+      name: 'quantiteMin',
+      title: 'Quantité minimum par commande',
+      type: 'number',
+      group: 'infos',
+      initialValue: 1,
+      description: 'Ex : 3 pour vendre les mouches par 3 minimum. Laissez 1 si le produit se vend à l\'unité.',
+      validation: Rule => Rule.min(1).integer(),
     },
     {
       name: 'stock',
@@ -247,7 +284,7 @@ export default {
       media:      'images.0',
     },
     prepare({ title, categorie, prix, disponible, stock, media }) {
-      const cat = categorie === 'mouche' ? '🪰' : '🧢'
+      const cat = { mouche: '🪰', coffret: '🎁', goodies: '🧢', materiel: '🎣', autre: '📦' }[categorie] ?? '📦'
       const etat = disponible === false ? ' · 🚫 masqué' : stock === 0 ? ' · ❌ épuisé' : ''
       return {
         title,

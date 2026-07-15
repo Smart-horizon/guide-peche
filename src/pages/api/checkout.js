@@ -54,7 +54,7 @@ export async function POST({ request }) {
   const { produits, livraison } = await sanity.fetch(
     `{
       "produits": *[_type == "produit" && _id in $ids && disponible == true]{
-        _id, title, prix, stock, poids,
+        _id, title, prix, stock, poids, quantiteMin,
         "variantes": variantes[]{ nom, prix, stock, poids }
       },
       "livraison": *[_id == "parametresBoutique"][0]{
@@ -75,6 +75,11 @@ export async function POST({ request }) {
     if (!produit) return erreur(400, 'Produit introuvable ou indisponible')
 
     const qty = Math.min(Math.max(1, Math.floor(Number(d.qty) || 1)), 50)
+
+    // Quantité minimum de commande (ex : mouches vendues par 3)
+    const qtyMin = Math.max(1, Math.floor(produit.quantiteMin ?? 1))
+    if (qty < qtyMin)
+      return erreur(400, `${produit.title} se commande par ${qtyMin} minimum`)
 
     let variante = null
     if (d.variante != null) {

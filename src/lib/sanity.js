@@ -39,7 +39,7 @@ export const visualEditingEnabled = PREVIEW
 // (getStaticPaths, scope isolé : seuls les imports y sont visibles) et le
 // fallback SSR du worker d'aperçu.
 export const PRODUIT_PROJECTION = `{
-  _id, title, slug, categorie, espece, prix, stock, poids,
+  _id, title, slug, categorie, espece, prix, stock, poids, quantiteMin, badges,
   images, description, videoYoutube, seoTitle, seoDescription, ogImage,
   "variantes": variantes[]{ nom, prix, stock, photos },
   "prestations": prestationsAssociees[]->{ title, "slug": slug.current },

@@ -19,13 +19,23 @@ const heroStyle = heroImg
 
 const produits = await client.fetch(`
   *[_type == "produit" && disponible == true] | order(categorie asc, title asc) {
-    title, slug, categorie, espece, prix, stock,
+    title, slug, categorie, espece, prix, stock, badges, quantiteMin,
     "image": images[0],
     "variantes": variantes[]{ nom, prix, stock }
   }
 `)
 
-const categorieLabel = { mouche: 'Mouche', goodies: 'Goodies' }
+// Ordre et libellés des catégories — les filtres n'affichent que celles utilisées
+const CATEGORIES = [
+  { value: 'mouche',   label: 'Mouches',   singulier: 'Mouche' },
+  { value: 'coffret',  label: 'Coffrets',  singulier: 'Coffret' },
+  { value: 'goodies',  label: 'Goodies',   singulier: 'Goodies' },
+  { value: 'materiel', label: 'Matériel',  singulier: 'Matériel' },
+  { value: 'autre',    label: 'Autres',    singulier: 'Boutique' },
+]
+const categorieLabel = Object.fromEntries(CATEGORIES.map(c => [c.value, c.singulier]))
+const badgeLabel = { nouveaute: 'Nouveauté', vente: 'Meilleure vente', 'coup-coeur': 'Coup de cœur' }
+const filtres = CATEGORIES.filter(c => produits.some(p => p.categorie === c.value))
 
 // Prix affiché : le plus bas entre produit et variantes → "À partir de" si écarts
 function prixInfo(p) {
@@ -44,8 +54,6 @@ function estEpuise(p) {
 
 const fmtPrix = (n) => n != null ? `${n.toFixed(2).replace('.', ',')} €` : ''
 
-const hasMouches = produits.some(p => p.categorie === 'mouche')
-const hasGoodies = produits.some(p => p.categorie === 'goodies')
 ---
 
 <BaseLayout
@@ -66,11 +74,12 @@ const hasGoodies = produits.some(p => p.categorie === 'goodies')
   <section class="section boutique-section">
     <div class="container">
 
-      {(hasMouches && hasGoodies) && (
+      {filtres.length > 1 && (
         <nav class="filtres">
           <button class="filtre filtre--actif" data-cat="">Tous</button>
-          <button class="filtre" data-cat="mouche">Mouches</button>
-          <button class="filtre" data-cat="goodies">Goodies</button>
+          {filtres.map(c => (
+            <button class="filtre" data-cat={c.value}>{c.label}</button>
+          ))}
         </nav>
       )}
 
@@ -90,13 +99,16 @@ const hasGoodies = produits.some(p => p.categorie === 'goodies')
                       <span>Photo à venir</span>
                     </div>
                   )}
-                  {p.categorie && <span class="produit-badge">{categorieLabel[p.categorie] ?? p.categorie}</span>}
+                  {(p.badges ?? [])[0]
+                    ? <span class="produit-badge produit-badge--promo">{badgeLabel[p.badges[0]] ?? categorieLabel[p.categorie]}</span>
+                    : p.categorie && <span class="produit-badge">{categorieLabel[p.categorie] ?? p.categorie}</span>}
                   {epuise && <span class="produit-epuise">Épuisé</span>}
                 </div>
                 <div class="produit-body">
                   <h2 class="produit-title">{p.title}</h2>
                   <p class="produit-prix">
                     {aPartirDe && <span class="a-partir">À partir de </span>}{fmtPrix(prix)}
+                    {p.quantiteMin > 1 && <span class="par-lot"> · par {p.quantiteMin}</span>}
                   </p>
                   <span class="produit-voir">Voir le produit →</span>
                 </div>
@@ -269,6 +281,14 @@ const hasGoodies = produits.some(p => p.categorie === 'goodies')
     font-size: 0.75rem;
     font-weight: 400;
     color: var(--color-text-muted);
+  }
+  .par-lot {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+  .produit-badge--promo {
+    background: #b4552d;
   }
   .produit-voir {
     font-size: 0.72rem;
