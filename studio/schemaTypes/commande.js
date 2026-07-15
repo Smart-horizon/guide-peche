@@ -56,6 +56,14 @@ export default {
       readOnly: true,
     },
     {
+      name: 'pointRelais',
+      title: 'Point relais choisi (Mondial Relay)',
+      type: 'text',
+      rows: 3,
+      readOnly: true,
+      description: 'Rempli uniquement pour les livraisons en point relais — c\'est là qu\'il faut expédier le colis',
+    },
+    {
       name: 'lignes',
       title: 'Articles commandés',
       type: 'array',

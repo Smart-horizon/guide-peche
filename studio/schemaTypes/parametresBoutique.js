@@ -32,8 +32,14 @@ export default {
       name: 'francoSeuil',
       title: 'Livraison offerte à partir de (€)',
       type: 'number',
-      description: 'Laissez vide pour ne jamais offrir la livraison. Ex : 60 → port gratuit dès 60 € d\'articles.',
+      description: 'Laissez vide pour ne jamais offrir la livraison. Ex : 60 → port gratuit dès 60 € d\'articles (tous modes).',
       validation: Rule => Rule.positive(),
+    },
+    {
+      name: 'mondialRelayEnseigne',
+      title: 'Code enseigne Mondial Relay',
+      type: 'string',
+      description: '⚠️ Fourni par le contrat Mondial Relay. "BDTEST13" = code de démonstration (points relais réels, mais aucune étiquette possible). À remplacer par le vrai code au lancement.',
     },
     {
       name: 'modes',
@@ -49,8 +55,22 @@ export default {
             name: 'nom',
             title: 'Nom affiché au client',
             type: 'string',
-            description: 'Ex : "Lettre suivie", "Colissimo domicile"',
+            description: 'Ex : "Lettre suivie", "Colissimo domicile", "Mondial Relay"',
             validation: Rule => Rule.required(),
+          },
+          {
+            name: 'type',
+            title: 'Type de livraison',
+            type: 'string',
+            options: {
+              list: [
+                { title: '🏠 À domicile',                    value: 'domicile' },
+                { title: '📍 Point relais (Mondial Relay)',  value: 'relais'   },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'domicile',
+            description: 'Point relais : le client choisit son point Mondial Relay sur la carte avant de payer',
           },
           {
             name: 'delai',

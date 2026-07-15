@@ -128,6 +128,7 @@ export async function POST({ request }) {
       telephone: session.customer_details?.phone ?? null,
     },
     adresseLivraison: adresseTexte,
+    pointRelais: session.metadata?.pointRelais || undefined,
     lignes,
     totalArticles: session.amount_subtotal != null ? session.amount_subtotal / 100 : null,
     fraisPort:     session.shipping_cost?.amount_total != null ? session.shipping_cost.amount_total / 100 : null,

@@ -1,0 +1,405 @@
+---
+export const prerender = false
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { client } from '../lib/sanity.js'
+
+// Page de commande — SSR pour lire la config livraison à jour à chaque visite.
+// Étape 1 : récap panier + choix du mode de livraison (+ point relais Mondial
+// Relay le cas échéant). Étape 2 : paiement Stripe embarqué sur la page.
+
+const livraison = await client.fetch(`*[_id == "parametresBoutique"][0]{
+  francoSeuil, mondialRelayEnseigne,
+  "modes": modes[actif != false]{ _key, nom, delai, prix, poidsMax, type }
+}`)
+
+const modes = livraison?.modes?.length
+  ? livraison.modes
+  : [
+      { _key: 'defaut-lettre', nom: 'Lettre suivie', delai: '2-3 jours ouvrés', prix: 4.99, poidsMax: 250, type: 'domicile' },
+      { _key: 'defaut-colissimo', nom: 'Colissimo domicile', delai: '2-3 jours ouvrés', prix: 7.5, type: 'domicile' },
+    ]
+const francoSeuil = livraison?.francoSeuil ?? null
+const enseigneMR = livraison?.mondialRelayEnseigne || null
+
+// Clé publiable Stripe (publique par nature — TEST, à basculer en pk_live au lancement)
+const STRIPE_PK = 'pk_test_51Tt4ycD7T2UfmymNmdzTSIQRuQLNoDThpKoKRZO0dFwASQ1t9mg67x8klchpzxFn3s5vmKl9FmxrotBbGsMnCsuI00sL2L3M0x'
+
+const fmtPrix = (n) => n.toFixed(2).replace('.', ',') + ' €'
+---
+
+<BaseLayout
+  title="Finaliser ma commande — Boutique Jean-Baptiste Vidal"
+  description="Choisissez votre mode de livraison et payez en ligne en toute sécurité."
+  lang="fr"
+>
+
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="container page-hero-content">
+      <p class="eyebrow">Boutique</p>
+      <h1>Finaliser ma commande</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container commander-page">
+
+      <!-- Panier vide -->
+      <div id="etape-vide" hidden>
+        <p class="vide-texte">Votre panier est vide.</p>
+        <p><a href="/boutique" class="btn-retour">← Retour à la boutique</a></p>
+      </div>
+
+      <!-- Étape 1 : récap + livraison -->
+      <div id="etape-livraison" hidden>
+
+        <h2 class="titre-bloc">Votre panier</h2>
+        <div id="recap"></div>
+        <p class="recap-total">Sous-total <strong id="recap-total"></strong></p>
+
+        <h2 class="titre-bloc">Livraison</h2>
+        {francoSeuil != null && (
+          <p class="franco-note" id="franco-note" data-seuil={francoSeuil}>
+            🎁 Livraison offerte à partir de {fmtPrix(francoSeuil)} d'articles
+          </p>
+        )}
+        <div class="modes" id="modes">
+          {modes.map((m) => (
+            <label class="mode" data-key={m._key} data-prix={m.prix} data-poids-max={m.poidsMax ?? ''} data-type={m.type ?? 'domicile'}>
+              <input type="radio" name="mode" value={m._key} />
+              <span class="mode-infos">
+                <span class="mode-nom">{m.type === 'relais' ? '📍 ' : ''}{m.nom}</span>
+                {m.delai && <span class="mode-delai">{m.delai}</span>}
+              </span>
+              <span class="mode-prix" data-prix-affiche>{fmtPrix(m.prix)}</span>
+            </label>
+          ))}
+        </div>
+
+        <!-- Widget Mondial Relay (chargé à la demande) -->
+        <div id="mr-bloc" hidden>
+          <p class="mr-titre">Choisissez votre point relais</p>
+          <div id="Zone_Widget"></div>
+          <input type="hidden" id="Retour_Widget" />
+          <p class="mr-choisi" id="mr-choisi" hidden></p>
+        </div>
+
+        <p class="erreur" id="erreur" hidden></p>
+        <button class="btn-payer" id="btn-payer" disabled>Passer au paiement</button>
+      </div>
+
+      <!-- Étape 2 : paiement embarqué -->
+      <div id="etape-paiement" hidden>
+        <p class="retour-livraison"><a href="/commander">← Modifier ma livraison</a></p>
+        <div id="zone-paiement"></div>
+      </div>
+
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ enseigneMR, francoSeuil, STRIPE_PK }}>
+  const CLE = 'boutique_panier_v1'
+  const lire = () => { try { return JSON.parse(localStorage.getItem(CLE) || '[]') } catch { return [] } }
+  const fmt = (n) => n.toFixed(2).replace('.', ',') + ' €'
+
+  const items = lire()
+  const etapeVide      = document.getElementById('etape-vide')
+  const etapeLivraison = document.getElementById('etape-livraison')
+  const etapePaiement  = document.getElementById('etape-paiement')
+  const btnPayer  = document.getElementById('btn-payer')
+  const erreurEl  = document.getElementById('erreur')
+  const mrBloc    = document.getElementById('mr-bloc')
+  const mrChoisi  = document.getElementById('mr-choisi')
+
+  if (!items.length) {
+    etapeVide.hidden = false
+  } else {
+    etapeLivraison.hidden = false
+  }
+
+  // ── Récapitulatif ──────────────────────────────────────────────────────────
+  const sousTotal = items.reduce((s, it) => s + it.prix * it.qty, 0)
+  const poidsTotal = items.reduce((s, it) => s + (it.poids ?? 50) * it.qty, 0)
+  document.getElementById('recap').innerHTML = items.map((it) => `
+    <div class="recap-ligne">
+      <span class="recap-img" style="${it.image ? `background-image:url(${it.image})` : ''}"></span>
+      <span class="recap-nom">${it.qty} × ${it.titre}${it.variante ? ` — ${it.variante}` : ''}</span>
+      <span class="recap-prix">${fmt(it.prix * it.qty)}</span>
+    </div>`).join('')
+  document.getElementById('recap-total').textContent = fmt(sousTotal)
+
+  const francoAtteint = francoSeuil != null && sousTotal >= francoSeuil
+
+  // ── Modes : filtre par poids, affichage franco ────────────────────────────
+  let pointRelais = null
+  document.querySelectorAll('.mode').forEach((mode) => {
+    const poidsMax = mode.dataset.poidsMax === '' ? null : Number(mode.dataset.poidsMax)
+    if (poidsMax != null && poidsTotal > poidsMax) { mode.remove(); return }
+    if (mode.dataset.type === 'relais' && !enseigneMR) { mode.remove(); return }
+    if (francoAtteint) mode.querySelector('[data-prix-affiche]').textContent = 'Offerte'
+  })
+
+  document.getElementById('modes').addEventListener('change', (e) => {
+    const mode = e.target.closest('.mode')
+    document.querySelectorAll('.mode').forEach((m) => m.classList.toggle('mode--choisi', m === mode))
+    const estRelais = mode.dataset.type === 'relais'
+    mrBloc.hidden = !estRelais
+    if (estRelais) { chargerWidgetMR(); pointRelais = null; mrChoisi.hidden = true }
+    majBoutonPayer()
+  })
+
+  function majBoutonPayer() {
+    const choisi = document.querySelector('input[name="mode"]:checked')
+    const estRelais = choisi?.closest('.mode')?.dataset.type === 'relais'
+    btnPayer.disabled = !choisi || (estRelais && !pointRelais)
+  }
+
+  // ── Widget Mondial Relay (jQuery + Leaflet chargés à la demande) ──────────
+  let mrCharge = false
+  function script(src) {
+    return new Promise((ok, ko) => {
+      const s = document.createElement('script')
+      s.src = src; s.onload = ok; s.onerror = ko
+      document.head.appendChild(s)
+    })
+  }
+  async function chargerWidgetMR() {
+    if (mrCharge) return
+    mrCharge = true
+    const css = document.createElement('link')
+    css.rel = 'stylesheet'
+    css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
+    document.head.appendChild(css)
+    try {
+      await script('https://unpkg.com/jquery@3.7.1/dist/jquery.min.js')
+      await script('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js')
+      await script('https://widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js')
+      window.jQuery('#Zone_Widget').MR_ParcelShopPicker({
+        Target: '#Retour_Widget',
+        Brand: enseigneMR,
+        Country: 'FR',
+        NbResults: '7',
+        Responsive: true,
+        ShowResultsOnMap: true,
+        OnParcelShopSelected: (d) => {
+          pointRelais = { id: d.ID, nom: d.Nom, adresse: d.Adresse1, cp: d.CP, ville: d.Ville }
+          mrChoisi.textContent = `✓ ${d.Nom} — ${d.Adresse1}, ${d.CP} ${d.Ville}`
+          mrChoisi.hidden = false
+          majBoutonPayer()
+        },
+      })
+    } catch (e) {
+      mrCharge = false
+      erreurEl.textContent = 'Impossible de charger la carte des points relais — réessayez.'
+      erreurEl.hidden = false
+    }
+  }
+
+  // ── Paiement : session embarquée puis montage Stripe ──────────────────────
+  btnPayer.addEventListener('click', async () => {
+    const choisi = document.querySelector('input[name="mode"]:checked')
+    if (!choisi) return
+    btnPayer.disabled = true
+    btnPayer.textContent = 'Chargement du paiement…'
+    erreurEl.hidden = true
+    try {
+      await script('https://js.stripe.com/v3/')
+      const r = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map((it) => ({ produitId: it.produitId, variante: it.variante, qty: it.qty })),
+          modeKey: choisi.value,
+          pointRelais,
+        }),
+      })
+      const data = await r.json()
+      if (!r.ok || !data.clientSecret) throw new Error(data.erreur || 'Paiement indisponible')
+
+      etapeLivraison.hidden = true
+      etapePaiement.hidden = false
+      const stripe = window.Stripe(STRIPE_PK)
+      const checkout = await stripe.initEmbeddedCheckout({ clientSecret: data.clientSecret })
+      checkout.mount('#zone-paiement')
+    } catch (e) {
+      erreurEl.textContent = e.message || 'Une erreur est survenue — réessayez.'
+      erreurEl.hidden = false
+      btnPayer.disabled = false
+      btnPayer.textContent = 'Passer au paiement'
+    }
+  })
+</script>
+
+<style>
+  .page-hero {
+    position: relative;
+    min-height: 28vh;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2.5rem;
+    color: white;
+  }
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(7,24,31,0.85) 0%, rgba(13,43,62,0.55) 100%),
+      url('/images/hero.jpg') center / cover no-repeat;
+    background-color: var(--color-ocean);
+  }
+  .page-hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: var(--header-height);
+  }
+  .page-hero h1 { color: white; margin: 0.4rem 0 0; }
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ocean-light);
+    font-weight: 500;
+  }
+
+  .commander-page { max-width: 720px; }
+
+  .titre-bloc {
+    font-size: 1.25rem;
+    margin: 2rem 0 1rem;
+  }
+  .titre-bloc:first-child { margin-top: 0; }
+
+  .vide-texte {
+    text-align: center;
+    padding: 3rem 0 1.5rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-style: italic;
+  }
+  .btn-retour {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 500;
+  }
+
+  /* Récap */
+  :global(.recap-ligne) {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #eef0f3;
+  }
+  :global(.recap-img) {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 3px;
+    background: linear-gradient(160deg, var(--color-ocean) 0%, var(--color-ocean-main) 100%) center / cover no-repeat;
+  }
+  :global(.recap-nom) { flex: 1; font-size: 0.9rem; }
+  :global(.recap-prix) { font-weight: 500; color: var(--color-ocean-main); }
+  .recap-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    font-size: 1rem;
+  }
+  .recap-total strong { color: var(--color-ocean-main); }
+
+  /* Modes */
+  .franco-note {
+    font-size: 0.85rem;
+    color: #1e7d4f;
+    margin-bottom: 0.75rem;
+  }
+  .modes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .mode {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid #d5d9e0;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .mode:hover { border-color: var(--color-ocean-mid); }
+  .mode--choisi {
+    border-color: var(--color-ocean-main);
+    background: #f4f9fc;
+  }
+  .mode input { accent-color: var(--color-ocean-main); }
+  .mode-infos { flex: 1; display: flex; flex-direction: column; }
+  .mode-nom { font-size: 0.92rem; font-weight: 500; }
+  .mode-delai { font-size: 0.78rem; color: var(--color-text-muted); }
+  .mode-prix { font-weight: 500; color: var(--color-ocean-main); }
+
+  /* Mondial Relay */
+  #mr-bloc { margin-top: 1.25rem; }
+  #mr-bloc[hidden] { display: none !important; }
+  .mr-titre {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 0.6rem;
+  }
+  #Zone_Widget { min-height: 60px; }
+  .mr-choisi {
+    margin-top: 0.6rem;
+    font-size: 0.88rem;
+    color: #1e7d4f;
+    font-weight: 500;
+  }
+  .mr-choisi[hidden] { display: none !important; }
+
+  .erreur {
+    font-size: 0.85rem;
+    color: #b4552d;
+    margin-top: 1rem;
+  }
+  .erreur[hidden] { display: none !important; }
+
+  .btn-payer {
+    display: block;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.95rem;
+    background: var(--color-ocean-main);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-payer:hover:not(:disabled) { background: var(--color-ocean); }
+  .btn-payer:disabled { cursor: not-allowed; opacity: 0.5; }
+
+  .retour-livraison { margin-bottom: 1.25rem; }
+  .retour-livraison a {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+    font-weight: 500;
+  }
+  #zone-paiement { min-height: 480px; }
+
+  [hidden] { display: none !important; }
+</style>

@@ -106,33 +106,9 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
   majUI()
 
-  // ── Paiement : session Stripe créée côté serveur puis redirection ─────────
-  const btnPayer = document.getElementById('pp-payer') as HTMLButtonElement
-  const erreurEl = document.getElementById('pp-erreur')!
-
-  btnPayer.addEventListener('click', async () => {
-    const items = lire()
-    if (!items.length) return
-    btnPayer.disabled = true
-    btnPayer.textContent = 'Redirection…'
-    erreurEl.hidden = true
-    try {
-      const r = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: items.map(it => ({ produitId: it.produitId, variante: it.variante, qty: it.qty })),
-        }),
-      })
-      const data = await r.json()
-      if (!r.ok || !data.url) throw new Error(data.erreur || 'Paiement indisponible')
-      window.location.href = data.url
-    } catch (e: any) {
-      erreurEl.textContent = e.message || 'Une erreur est survenue — réessayez.'
-      erreurEl.hidden = false
-      btnPayer.disabled = false
-      btnPayer.textContent = 'Payer par carte'
-    }
+  // ── Paiement : direction /commander (choix livraison + paiement embarqué) ──
+  document.getElementById('pp-payer')!.addEventListener('click', () => {
+    if (lire().length) window.location.href = '/commander'
   })
 </script>
 
