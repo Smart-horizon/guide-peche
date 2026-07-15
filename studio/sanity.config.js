@@ -382,8 +382,10 @@ const commandesStructure = (S) =>
 
 // ⚠️ Studio multi-workspace : Sanity exige que tous les basePath aient le MÊME
 // nombre de segments. Le workspace principal ne peut donc pas rester à la
-// racine '/' — il vit sur '/site', les commandes sur '/commandes'. La racine
-// affiche un sélecteur entre les deux.
+// racine '/' — il vit sur '/site', les commandes sur '/commandes'.
+// NB : ces basePath ne servent qu'en dev local (sanity dev). Le Studio déployé
+// route par NOM de workspace (.../default/… et .../commandes/…) et redirige sa
+// racine vers le premier workspace — le marque-page de JBV reste valable.
 export default defineConfig([{
   name: 'default',
   title: 'Jean-Baptiste Vidal — Guide Pêche',

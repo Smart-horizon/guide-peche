@@ -54,7 +54,8 @@ Sanity Studio  →  Astro  →  Cloudflare Pages
 **Pourquoi** : `production` est en lecture publique — n'importe qui peut interroger son endpoint GROQ sans authentification. Y laisser les commandes exposerait les données personnelles des clients (obligation RGPD). Elles sont donc isolées dans un dataset privé.
 
 **Ce que ça implique** :
-- Le Studio a **deux workspaces** (`studio/sanity.config.js` exporte un tableau) : le site à la racine `/`, les commandes sur `/commandes`. JBV bascule via le sélecteur en haut du Studio.
+- Le Studio a **deux workspaces** (`studio/sanity.config.js` exporte un tableau). JBV bascule de l'un à l'autre via le sélecteur en haut à gauche. Son marque-page `jbvidal.sanity.studio` reste valable : la racine redirige vers le workspace du site.
+- ⚠️ Sanity impose que tous les `basePath` aient le **même nombre de segments** : le workspace principal ne peut donc pas rester sur `/` (d'où `/site` + `/commandes`). `sanity build` ne détecte PAS cette erreur — elle n'apparaît qu'au chargement du Studio. Toujours vérifier avec `sanity dev` après avoir touché aux workspaces.
 - Le type `commande` n'est **pas** dans `schemaTypes` (il est dans `commandeTypes`) — ne pas l'y remettre.
 - `src/pages/api/stripe-webhook.js` utilise **deux clients** : `sanityCmd` écrit la commande dans `commandes`, `sanity` lit/patche les stocks dans `production`.
 - Le StockTool et les produits restent dans `production` — le suivi des stocks n'est pas concerné.
