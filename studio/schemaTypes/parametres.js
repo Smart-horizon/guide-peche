@@ -84,6 +84,25 @@ export default {
       rows: 5,
       group: 'footer',
     },
+    {
+      name: 'certifications',
+      title: 'Certifications (footer + page contact)',
+      type: 'array',
+      of: [{ type: 'string' }],
+      group: 'footer',
+      initialValue: [
+        'BP JEPS « Pêche de Loisir » (2005)',
+        'UCC « Pêche de loisir en milieu maritime »',
+        'Carte pro n° 02913ED0228',
+      ],
+    },
+    {
+      name: 'siret',
+      title: 'SIRET (footer + page contact)',
+      type: 'string',
+      group: 'footer',
+      initialValue: '789 636 313',
+    },
     // ── Accès protégés ──
     {
       name: 'motDePasseDispo',

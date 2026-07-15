@@ -13,7 +13,7 @@ const urlFor = (source: any) => { const b = builder.image(source); const hs = so
 const params = await stegaClient.fetch(`*[_id == "siteParametres"][0]{
   siteTitle, siteDescription, ogImage,
   telephone, email, adresse, footerTexte, mentionsLegales,
-  facebook, instagram, youtube, vimeo
+  facebook, instagram, youtube, vimeo, certifications, siret
 }`)
 
 // Menu de navigation Sanity — le footer FR reflète automatiquement le menu
@@ -62,6 +62,8 @@ const footerProps = {
   youtube:   stegaClean(params?.youtube)   || null,
   vimeo:     stegaClean(params?.vimeo)     || null,
   navItems:  navDoc?.items || null,
+  certifications: params?.certifications || null,
+  siret: stegaClean(params?.siret) || null,
   lang,
 }
 

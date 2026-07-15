@@ -189,6 +189,12 @@ const customStructure = (S, context) =>
               S.listItem()
                 .title('📜 Conditions générales de vente')
                 .child(S.document().schemaType('page').documentId('page-conditions-generales-de-ventes').title('CGV')),
+              S.listItem()
+                .title('✉️ Contact (textes)')
+                .child(S.document().schemaType('pageContact').documentId('pageContact').title('Page Contact — textes')),
+              S.listItem()
+                .title('📰 Blog (textes)')
+                .child(S.document().schemaType('pageBlog').documentId('pageBlog').title('Page Blog — textes')),
 
               S.divider(),
 

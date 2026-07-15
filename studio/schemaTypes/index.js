@@ -15,6 +15,8 @@ import parametresBoutique from './parametresBoutique'
 import accueil from './accueil'
 import sectionAccueil from './sectionAccueil'
 import pageTemoignages from './pageTemoignages'
+import pageContact from './pageContact'
+import pageBlog from './pageBlog'
 import {
   sectionHero, sectionIntro, sectionTitre, sectionCards, sectionTexte,
   sectionTexteImage, sectionGalerie, sectionVideo, sectionStats,
@@ -40,6 +42,8 @@ export const schemaTypes = [
   revuePresse,
   sectionAccueil,
   pageTemoignages,
+  pageContact,
+  pageBlog,
   parametres,
   prestation,
   produit,

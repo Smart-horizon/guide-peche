@@ -10,6 +10,8 @@ interface Props {
   youtube?:   string | null
   vimeo?:     string | null
   navItems?:  any[] | null   // items du document navigation Sanity (menu principal)
+  certifications?: string[] | null
+  siret?:     string | null
   lang?:      'fr' | 'en'
 }
 
@@ -23,8 +25,17 @@ const {
   youtube   = null,
   vimeo     = null,
   navItems  = null,
+  certifications: _certifs = null,
+  siret: _siret = null,
   lang      = 'fr',
 } = Astro.props
+
+const certifs = _certifs?.length ? _certifs : [
+  'BP JEPS « Pêche de Loisir » (2005)',
+  'UCC « Pêche de loisir en milieu maritime »',
+  'Carte pro n° 02913ED0228',
+]
+const siret = _siret || '789 636 313'
 
 const isEn = lang === 'en'
 
@@ -143,16 +154,14 @@ const cgvLabel = isEn ? 'Terms of sale' : 'CGV'
     <div class="footer-certif">
       <h3>Certifications</h3>
       <ul>
-        <li>BP JEPS « Pêche de Loisir » (2005)</li>
-        <li>UCC « Pêche de loisir en milieu maritime »</li>
-        <li>Carte pro n° 02913ED0228</li>
+        {certifs.map((c) => <li>{c}</li>)}
       </ul>
     </div>
 
   </div>
 
   <div class="footer-bottom">
-    <p>© {year} Jean-Baptiste Vidal · ENJOY FISHING · Siret 789636313</p>
+    <p>© {year} Jean-Baptiste Vidal · ENJOY FISHING · Siret {siret.replace(/\s/g, '')}</p>
     <p>
       <a href={cgvHref} class="footer-legal-link">{cgvLabel}</a>
       <span class="footer-legal-sep">·</span>

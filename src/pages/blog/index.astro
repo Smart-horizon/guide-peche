@@ -14,6 +14,13 @@ const client = createClient({
 const builder = imageUrlBuilder(client)
 const urlFor = (source) => builder.image(source)
 
+// ── Textes éditables de la page (singleton pageBlog) ─────────────────────────
+const pb = await client.fetch(`*[_id == "pageBlog"][0]`) ?? {}
+const heroEyebrow   = pb.heroEyebrow   || 'Enjoy Fishing'
+const heroTitre     = pb.heroTitre     || 'Le blog'
+const heroSousTitre = pb.heroSousTitre || 'Récits, techniques et carnets de pêche à la mouche.'
+const videTexte     = pb.videTexte     || 'Les articles arrivent bientôt.'
+
 // Popup newsletter sur le blog (activable dans Sanity — mêmes règles que l'accueil)
 const nlPopup = await client.fetch(`*[_type == "newsletter"][0]{
   popupActif, popupSurBlog, popupDelai, popupScroll, popupCooldown1, popupCooldown2,
@@ -39,8 +46,8 @@ const filtresPresents = FILTER_TAGS_ORDER.filter(tag => articles.some(a => (a.ta
 ---
 
 <BaseLayout
-  title="Blog pêche à la mouche — Jean-Baptiste Vidal"
-  description="Articles et récits de pêche à la mouche par Jean-Baptiste Vidal : bar, truite, alose, saumon et pêche exotique."
+  title={pb.seoTitle || 'Blog pêche à la mouche — Jean-Baptiste Vidal'}
+  description={pb.seoDescription || 'Articles et récits de pêche à la mouche par Jean-Baptiste Vidal : bar, truite, alose, saumon et pêche exotique.'}
   lang="fr"
   hreflangFr="/blog"
   hreflangEn="/en/blog"
@@ -49,9 +56,9 @@ const filtresPresents = FILTER_TAGS_ORDER.filter(tag => articles.some(a => (a.ta
   <section class="page-hero">
     <div class="page-hero-bg"></div>
     <div class="container page-hero-content">
-      <p class="eyebrow">Enjoy Fishing</p>
-      <h1>Le blog</h1>
-      <p class="hero-sub">Récits, techniques et carnets de pêche à la mouche.</p>
+      <p class="eyebrow">{heroEyebrow}</p>
+      <h1>{heroTitre}</h1>
+      <p class="hero-sub">{heroSousTitre}</p>
     </div>
   </section>
 
@@ -102,7 +109,7 @@ const filtresPresents = FILTER_TAGS_ORDER.filter(tag => articles.some(a => (a.ta
         </div>
       ) : (
         <div class="blog-vide">
-          <p>Les articles arrivent bientôt.</p>
+          <p>{videTexte}</p>
         </div>
       )}
 

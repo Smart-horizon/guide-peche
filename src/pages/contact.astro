@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import { client } from '../lib/sanity.js'
 
 const params = await client.fetch(
-  `*[_id == "siteParametres"][0]{ formspreeId, email, telephone, adresse }`
+  `*[_id == "siteParametres"][0]{ formspreeId, email, telephone, adresse, certifications, siret }`
 )
 
 const formspreeId   = params?.formspreeId  || null
@@ -13,11 +13,36 @@ const formAction    = formspreeId
 const contactEmail  = params?.email    || 'enjoy.fishing@hotmail.fr'
 const contactPhone  = params?.telephone || '06 87 30 34 56'
 const contactAdresse = params?.adresse || 'Bretagne-Sud, entre Quimper et Quimperlé'
+const certifications: string[] = params?.certifications?.length ? params.certifications : [
+  'BP JEPS « Pêche de Loisir » (2005)',
+  'UCC « Pêche de loisir en milieu maritime »',
+  'Carte pro n° 02913ED0228',
+]
+const siret = params?.siret || '789 636 313'
+
+// ── Textes éditables de la page (singleton pageContact) ──────────────────────
+const pc = await client.fetch(`*[_id == "pageContact"][0]`) ?? {}
+const heroEyebrow   = pc.heroEyebrow   || 'Enjoy Fishing'
+const heroTitre     = pc.heroTitre     || 'Contact'
+const heroSousTitre = pc.heroSousTitre || 'Moniteur - Guide de pêche à la mouche'
+const formIntro     = pc.formIntro     || "Que ce soit pour une demande de renseignements ou bien pour réserver une prestation, formulez votre demande ici. Je vous répondrai dans les plus brefs délais."
+const boutonEnvoyer = pc.boutonEnvoyer || 'Envoyer ma demande'
+const succesMsg     = pc.succesMsg     || 'Vos informations ont bien été envoyées !'
+const erreurMsg     = pc.erreurMsg     || 'Une erreur est survenue. Merci de réessayer ou de nous contacter par téléphone.'
+const carteSousTitre = pc.carteSousTitre || "Moniteur-Guide diplômé d'État\nPêche à la mouche en Bretagne-Sud"
+const delaiTitre    = pc.delaiTitre    || 'Délai de réponse'
+const delaiTexte    = pc.delaiTexte    || 'Je réponds généralement sous 24 à 48 heures en semaine.'
+const sujets: { groupe: string; options: string[] }[] = pc.sujets?.length ? pc.sujets : [
+  { groupe: '— Eau douce', options: ["Stage d'initiation à la mouche", 'Pêche de la truite', 'Pêche du brochet', "Pêche de l'alose"] },
+  { groupe: '— Bar (mer)', options: ['Initiation bar à la mouche', 'Perfectionnement bar', 'Bar à vue en estuaire', 'Bar en bateau', 'Coaching bar'] },
+  { groupe: '— Voyages', options: ['Voyage Argentine — Rio Grande', 'Voyage Cuba — Cayo Cruz', 'Voyage Cuba — Santa Maria', 'Voyage Venezuela — Los Roques', 'Voyage Mexique'] },
+  { groupe: '— Autres', options: ['Bon cadeau', 'Renseignements généraux'] },
+]
 ---
 
 <BaseLayout
-  title="Contact — Jean-Baptiste Vidal, Guide de pêche à la mouche en Bretagne"
-  description="Contacter Jean-Baptiste Vidal Moniteur-Guide de pêche à la mouche en Bretagne pour organiser votre stage."
+  title={pc.seoTitle || 'Contact — Jean-Baptiste Vidal, Guide de pêche à la mouche en Bretagne'}
+  description={pc.seoDescription || 'Contacter Jean-Baptiste Vidal Moniteur-Guide de pêche à la mouche en Bretagne pour organiser votre stage.'}
   lang="fr"
   hreflangFr="/contact"
   hreflangEn="/en/contact"
@@ -26,9 +51,9 @@ const contactAdresse = params?.adresse || 'Bretagne-Sud, entre Quimper et Quimpe
   <section class="page-hero">
     <div class="page-hero-bg"></div>
     <div class="container page-hero-content">
-      <p class="eyebrow">Enjoy Fishing</p>
-      <h1>Contact</h1>
-      <p class="hero-sub">Moniteur - Guide de pêche à la mouche</p>
+      <p class="eyebrow">{heroEyebrow}</p>
+      <h1>{heroTitre}</h1>
+      <p class="hero-sub">{heroSousTitre}</p>
     </div>
   </section>
 
@@ -37,10 +62,7 @@ const contactAdresse = params?.adresse || 'Bretagne-Sud, entre Quimper et Quimpe
 
       <!-- Formulaire -->
       <div class="contact-form-wrap">
-        <p class="form-intro">
-          Que ce soit pour une demande de renseignements ou bien pour réserver une prestation, formulez votre demande ici.
-          Je vous répondrai dans les plus brefs délais.
-        </p>
+        <p class="form-intro">{formIntro}</p>
 
         {formAction ? (
         <form
@@ -70,30 +92,11 @@ const contactAdresse = params?.adresse || 'Bretagne-Sud, entre Quimper et Quimpe
             <label for="sujet">Sujet *</label>
             <select id="sujet" name="sujet" required>
               <option value="" disabled selected>Choisissez une prestation</option>
-              <optgroup label="— Eau douce">
-                <option value="Stage d'initiation à la mouche">Stage d'initiation à la mouche</option>
-                <option value="Pêche de la truite">Pêche de la truite</option>
-                <option value="Pêche du brochet">Pêche du brochet</option>
-                <option value="Pêche de l'alose">Pêche de l'alose</option>
-              </optgroup>
-              <optgroup label="— Bar (mer)">
-                <option value="Initiation bar à la mouche">Initiation bar à la mouche</option>
-                <option value="Perfectionnement bar">Perfectionnement bar</option>
-                <option value="Bar à vue en estuaire">Bar à vue en estuaire</option>
-                <option value="Bar en bateau">Bar en bateau</option>
-                <option value="Coaching bar">Coaching bar</option>
-              </optgroup>
-              <optgroup label="— Voyages">
-                <option value="Voyage Argentine — Rio Grande">Argentine — Rio Grande</option>
-                <option value="Voyage Cuba — Cayo Cruz">Cuba — Cayo Cruz</option>
-                <option value="Voyage Cuba — Santa Maria">Cuba — Santa Maria</option>
-                <option value="Voyage Venezuela — Los Roques">Venezuela — Los Roques</option>
-                <option value="Voyage Mexique">Mexique</option>
-              </optgroup>
-              <optgroup label="— Autres">
-                <option value="Bon cadeau">Bon cadeau</option>
-                <option value="Renseignements généraux">Renseignements généraux</option>
-              </optgroup>
+              {sujets.map((g) => (
+                <optgroup label={g.groupe}>
+                  {(g.options || []).map((o) => <option value={o}>{o}</option>)}
+                </optgroup>
+              ))}
             </select>
           </div>
 
@@ -102,14 +105,10 @@ const contactAdresse = params?.adresse || 'Bretagne-Sud, entre Quimper et Quimpe
             <textarea id="message" name="message" required rows="6" placeholder="Décrivez votre demande, vos dates souhaitées, votre niveau..."></textarea>
           </div>
 
-          <button type="submit" class="btn btn--ocean">Envoyer ma demande</button>
+          <button type="submit" class="btn btn--ocean">{boutonEnvoyer}</button>
 
-          <p id="form-success" class="form-success" aria-live="polite" hidden>
-            Vos informations ont bien été envoyées !
-          </p>
-          <p id="form-error" class="form-error" aria-live="polite" hidden>
-            Une erreur est survenue. Merci de réessayer ou de nous contacter par téléphone.
-          </p>
+          <p id="form-success" class="form-success" aria-live="polite" hidden>{succesMsg}</p>
+          <p id="form-error" class="form-error" aria-live="polite" hidden>{erreurMsg}</p>
         </form>
         ) : (
         <div class="form-fallback">
@@ -131,7 +130,7 @@ const contactAdresse = params?.adresse || 'Bretagne-Sud, entre Quimper et Quimpe
       <aside class="contact-info">
         <div class="info-card">
           <h2>Jean-Baptiste Vidal</h2>
-          <p class="info-subtitle">Moniteur-Guide diplômé d'État<br />Pêche à la mouche en Bretagne-Sud</p>
+          <p class="info-subtitle" set:html={carteSousTitre.replace(/\n/g, '<br />')} />
 
           <ul class="info-list">
             <li>
@@ -149,17 +148,15 @@ const contactAdresse = params?.adresse || 'Bretagne-Sud, entre Quimper et Quimpe
           </ul>
 
           <div class="info-delai">
-            <strong>Délai de réponse</strong>
-            <p>Je réponds généralement sous 24 à 48 heures en semaine.</p>
+            <strong>{delaiTitre}</strong>
+            <p>{delaiTexte}</p>
           </div>
 
           <div class="info-certif">
             <strong>Certifications</strong>
             <ul>
-              <li>BP JEPS « Pêche de Loisir » (2005)</li>
-              <li>UCC « Pêche de loisir en milieu maritime »</li>
-              <li>Carte pro n° 02913ED0228</li>
-              <li>SIRET 789 636 313</li>
+              {certifications.map((c) => <li>{c}</li>)}
+              <li>SIRET {siret}</li>
             </ul>
           </div>
         </div>
