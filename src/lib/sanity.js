@@ -3,7 +3,10 @@ import { createClient } from '@sanity/client'
 const PROJECT_ID = 'uievv97s'
 const DATASET    = 'production'
 const API_VER    = '2024-01-01'
-const STUDIO_URL = 'https://jbvidal.sanity.studio'
+// Inclut le basePath du workspace : depuis que les commandes ont leur propre
+// workspace (dataset privé), le Studio est multi-workspace et le site vit sous
+// /site. Sans ce segment, les overlays d'aperçu renvoient vers le sélecteur.
+const STUDIO_URL = 'https://jbvidal.sanity.studio/site'
 
 // ── Mode aperçu ────────────────────────────────────────────────────────────
 // Activé UNIQUEMENT dans le build du worker d'aperçu (deploy-preview.sh pose

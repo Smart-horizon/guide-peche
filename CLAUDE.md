@@ -36,12 +36,31 @@ Sanity Studio  →  Astro  →  Cloudflare Pages
 ```
 
 - **Project ID Sanity** : uievv97s
-- **Dataset** : production
+- **Datasets** : `production` (public) + `commandes` (privé) — voir ci-dessous
 - **Organisation Sanity** : Smart-horizon
+- **Plan Sanity** : Growth (2 datasets inclus — les 2 sont utilisés)
 - **GitHub repo** : https://github.com/Smart-horizon/guide-peche
 - **Site live** : https://guide-peche.smart-horizon.workers.dev
 - **Node.js** : v24.16.0
 - **npm** : 11.13.0
+
+### 🔒 Deux datasets — à ne pas confondre
+
+| Dataset | Visibilité | Contenu | Qui y accède |
+|---|---|---|---|
+| `production` | **public** en lecture | Tout le contenu éditorial : pages, prestations, voyages, articles, **produits + stocks**, paramètres | Le site (build + workers), sans token |
+| `commandes` | **privé** | Uniquement les documents `commande` (nom, e-mail, téléphone, adresse des clients) | Le webhook Stripe (SANITY_TOKEN) + les membres du projet via le Studio |
+
+**Pourquoi** : `production` est en lecture publique — n'importe qui peut interroger son endpoint GROQ sans authentification. Y laisser les commandes exposerait les données personnelles des clients (obligation RGPD). Elles sont donc isolées dans un dataset privé.
+
+**Ce que ça implique** :
+- Le Studio a **deux workspaces** (`studio/sanity.config.js` exporte un tableau) : le site à la racine `/`, les commandes sur `/commandes`. JBV bascule via le sélecteur en haut du Studio.
+- Le type `commande` n'est **pas** dans `schemaTypes` (il est dans `commandeTypes`) — ne pas l'y remettre.
+- `src/pages/api/stripe-webhook.js` utilise **deux clients** : `sanityCmd` écrit la commande dans `commandes`, `sanity` lit/patche les stocks dans `production`.
+- Le StockTool et les produits restent dans `production` — le suivi des stocks n'est pas concerné.
+- ⚠️ Jamais de `reference` entre une commande et un produit : les références Sanity ne traversent pas les datasets. Les lignes de commande recopient titre/prix en dur, c'est voulu.
+- Un dataset privé renvoie `200` + liste vide (pas un `401`) aux requêtes non authentifiées.
+- ⚠️ Rendre un dataset privé ne protège **pas** les assets (images) : `cdn.sanity.io` reste accessible par URL.
 
 ---
 
@@ -264,6 +283,8 @@ Champs : title, slug, date, image, extrait, contenu (blocks), tags, espece (bar/
 - [ ] Après transfert du domaine : configurer SPF/DKIM et brancher des e-mails personnalisés aux couleurs du site via Resend (confirmation de commande + notification "commande expédiée"). D'ici là : notifications Stripe pour JBV + suivi dans Sanity → Commandes
 - [ ] Remplacer les frais de port provisoires par les vrais tarifs (Colissimo / lettre suivie / Mondial Relay ? — à décider avec JBV)
 - [ ] Raccorder la page CGV à la boutique (lien au checkout) et vérifier les mentions vente à distance / rétractation
+- [ ] Définir une durée de conservation des commandes (RGPD) : purge ou anonymisation des données clients après X mois — Stripe garde de son côté une copie des mêmes données
+- [x] ✅ RGPD — données clients isolées : les commandes vivent dans le dataset **privé** `commandes`, pas dans `production` (public en lecture). Voir la section Datasets ci-dessous.
 
 ---
 

@@ -52,17 +52,16 @@ export async function POST({ request }) {
   const session = evenement.data.object
   if (session.payment_status !== 'paid') return new Response('Non payé', { status: 200 })
 
-  const sanity = createClient({
-    projectId: 'uievv97s',
-    dataset: 'production',
-    apiVersion: '2024-01-01',
-    token: tokenSanity,
-    useCdn: false,
-  })
+  // Deux datasets, deux clients (même token, de portée projet) :
+  //  · production → catalogue produits + stocks (dataset PUBLIC en lecture)
+  //  · commandes  → données personnelles des clients (dataset PRIVÉ, RGPD)
+  const options = { projectId: 'uievv97s', apiVersion: '2024-01-01', token: tokenSanity, useCdn: false }
+  const sanity   = createClient({ ...options, dataset: 'production' })
+  const sanityCmd = createClient({ ...options, dataset: 'commandes' })
 
   // ── Idempotence : commande déjà enregistrée pour cette session ? ──────────
   const idCommande = `commande-${session.id.replace(/[^a-zA-Z0-9_-]/g, '')}`
-  const existante = await sanity.fetch(`*[_id == $id][0]{_id}`, { id: idCommande })
+  const existante = await sanityCmd.fetch(`*[_id == $id][0]{_id}`, { id: idCommande })
   if (existante) return new Response('Déjà traité', { status: 200 })
 
   // ── Panier : réassemble metadata.panier0 + panier1 + … ───────────────────
@@ -115,8 +114,8 @@ export async function POST({ request }) {
   const dateCommande = new Date((session.created ?? evenement.created) * 1000)
   const numero = `CMD-${dateCommande.toISOString().slice(0, 10).replace(/-/g, '')}-${session.id.slice(-6).toUpperCase()}`
 
-  // ── 1. Création de la commande ────────────────────────────────────────────
-  await sanity.createIfNotExists({
+  // ── 1. Création de la commande (dataset privé) ────────────────────────────
+  await sanityCmd.createIfNotExists({
     _id: idCommande,
     _type: 'commande',
     numero,

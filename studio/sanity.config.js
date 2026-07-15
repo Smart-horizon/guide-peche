@@ -4,7 +4,7 @@ import {visionTool} from '@sanity/vision'
 import {frFRLocale} from '@sanity/locale-fr-fr'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {presentationTool} from 'sanity/presentation'
-import {schemaTypes} from './schemaTypes'
+import {schemaTypes, commandeTypes} from './schemaTypes'
 import {ManuelTool} from './plugins/ManuelTool'
 import {StockTool} from './plugins/StockTool'
 import {SyncEnSectionsAction} from './actions/syncEnSections'
@@ -351,36 +351,43 @@ const customStructure = (S, context) =>
                     .documentId('parametresBoutique')
                     .title('Réglages boutique — bandeau & livraison')
                 ),
-              S.divider(),
-              // 📬 Commandes — créées automatiquement par les paiements Stripe
-              S.listItem()
-                .title('📬 Commandes')
-                .child(
-                  S.list()
-                    .title('Commandes')
-                    .items([
-                      S.listItem()
-                        .title('🆕 À préparer')
-                        .child(S.documentList().title('À préparer').filter('_type == "commande" && statut == "commandee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
-                      S.listItem()
-                        .title('📦 Préparées')
-                        .child(S.documentList().title('Préparées').filter('_type == "commande" && statut == "preparee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
-                      S.listItem()
-                        .title('🚚 Expédiées')
-                        .child(S.documentList().title('Expédiées').filter('_type == "commande" && statut == "expediee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
-                      S.divider(),
-                      S.listItem()
-                        .title('📋 Toutes les commandes')
-                        .child(S.documentList().title('Toutes les commandes').filter('_type == "commande"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
-                    ])
-                ),
+              // 📬 Les commandes ne sont PAS ici : elles vivent dans le workspace
+              // "commandes" (dataset privé), car elles contiennent les données
+              // personnelles des clients. Voir commandesStructure ci-dessous.
             ])
         ),
     ])
 
-export default defineConfig({
+// ── Structure du workspace "commandes" (dataset privé) ──
+// Suivi de préparation : les commandes sont créées automatiquement par le
+// webhook Stripe, JBV ne fait qu'y changer le statut.
+const commandesStructure = (S) =>
+  S.list()
+    .title('Commandes')
+    .items([
+      S.listItem()
+        .title('🆕 À préparer')
+        .child(S.documentList().title('À préparer').filter('_type == "commande" && statut == "commandee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
+      S.listItem()
+        .title('📦 Préparées')
+        .child(S.documentList().title('Préparées').filter('_type == "commande" && statut == "preparee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
+      S.listItem()
+        .title('🚚 Expédiées')
+        .child(S.documentList().title('Expédiées').filter('_type == "commande" && statut == "expediee"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
+      S.divider(),
+      S.listItem()
+        .title('📋 Toutes les commandes')
+        .child(S.documentList().title('Toutes les commandes').filter('_type == "commande"').defaultOrdering([{ field: 'date', direction: 'desc' }])),
+    ])
+
+// ⚠️ Studio multi-workspace : Sanity exige que tous les basePath aient le MÊME
+// nombre de segments. Le workspace principal ne peut donc pas rester à la
+// racine '/' — il vit sur '/site', les commandes sur '/commandes'. La racine
+// affiche un sélecteur entre les deux.
+export default defineConfig([{
   name: 'default',
   title: 'Jean-Baptiste Vidal — Guide Pêche',
+  basePath: '/site',
 
   projectId: 'uievv97s',
   dataset: 'production',
@@ -484,9 +491,29 @@ export default defineConfig({
           ]
         : prev,
   },
+  // NB : deployment.appId n'est pas ici mais dans sanity.cli.js, seul endroit
+  // que la CLI lit réellement (il faisait doublon et était ignoré).
+},
 
-  deployment: {
-    appId: 'obu7zdkgranctpllogehvpfu',
-    autoUpdates: true,
+// ── Workspace 📬 Commandes — dataset PRIVÉ ──
+// Les commandes portent les données personnelles des clients (nom, e-mail,
+// téléphone, adresse). Le dataset production étant en lecture publique, elles
+// sont isolées ici : lecture réservée aux membres authentifiés du projet et au
+// webhook Stripe (SANITY_TOKEN). Le site public n'y accède jamais.
+{
+  name: 'commandes',
+  title: '📬 Commandes',
+  basePath: '/commandes',
+
+  projectId: 'uievv97s',
+  dataset: 'commandes',
+
+  plugins: [
+    frFRLocale(),
+    structureTool({ structure: commandesStructure }),
+  ],
+
+  schema: {
+    types: commandeTypes,
   },
-})
+}])

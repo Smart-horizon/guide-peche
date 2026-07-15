@@ -32,6 +32,9 @@ import {
   sectionProduits, sectionBoutiqueCta,
 } from './sections.js'
 
+// Le type "commande" est volontairement absent de schemaTypes : il vit dans le
+// workspace "commandes" (dataset privé), jamais dans production, qui est en
+// lecture publique. Voir commandeTypes plus bas et sanity.config.js.
 export const schemaTypes = [
   // Documents
   newsletter,
@@ -47,7 +50,6 @@ export const schemaTypes = [
   parametres,
   prestation,
   produit,
-  commande,
   parametresBoutique,
   voyage,
   temoignage,
@@ -99,3 +101,7 @@ export const schemaTypes = [
   sectionProduits,
   sectionBoutiqueCta,
 ]
+
+// Schéma du workspace "commandes" (dataset privé). Le type ligneCommande est
+// défini en ligne dans commande.js : rien d'autre à enregistrer ici.
+export const commandeTypes = [commande]
