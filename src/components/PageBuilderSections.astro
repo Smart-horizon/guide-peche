@@ -129,7 +129,7 @@ const firstFaqKey = faqSectionsAll[0]?._key
 
 // Produits boutique — utilisés par sectionProduits (mise en avant)
 const hasProduitsSection = (sections ?? []).some((s: any) => s._type === 'sectionProduits')
-const produitsBoutique: any[] = hasProduitsSection
+const produitsBruts: any[] = hasProduitsSection
   ? await client.fetch(`
     *[_type == "produit" && disponible == true] | order(coalesce(dateAjout, _createdAt) desc) {
       _id, title, titleEn, "slug": slug.current, prix, categorie, espece, badges, stock,
@@ -139,6 +139,16 @@ const produitsBoutique: any[] = hasProduitsSection
     }
   `)
   : []
+// En mode aperçu, stega encode des caractères invisibles dans les chaînes :
+// on nettoie celles qui servent à filtrer/router (les titres restent encodés
+// pour garder les overlays cliquables dans Sanity).
+const produitsBoutique: any[] = produitsBruts.map((p: any) => ({
+  ...p,
+  slug:      stegaClean(p.slug),
+  categorie: stegaClean(p.categorie),
+  espece:    stegaClean(p.espece),
+  badges:    (p.badges ?? []).map((b: any) => stegaClean(b)),
+}))
 
 const hasBlogSection = (sections ?? []).some((s: any) => s._type === 'sectionBlog')
 const blogArticles: any[] = hasBlogSection

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Panier from '../../components/boutique/Panier.astro'
 import { client, PRODUIT_PROJECTION } from '../../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
 export async function getStaticPaths() {
@@ -49,6 +50,11 @@ const categorieLabel = {
 const badgeLabel = { nouveaute: 'Nouveauté', vente: 'Meilleure vente', 'coup-coeur': 'Coup de cœur' }
 const fmtPrix = (n) => n != null ? `${n.toFixed(2).replace('.', ',')} €` : ''
 
+// Mode aperçu : stega encode les chaînes → on nettoie celles qui pilotent
+// l'affichage (le titre reste encodé pour les overlays Sanity).
+const categorie = stegaClean(produit.categorie)
+const badges    = (produit.badges ?? []).map(b => stegaClean(b))
+
 // Quantité minimum de commande (ex : mouches vendues par 3)
 const quantiteMin = Math.max(1, Math.floor(produit.quantiteMin ?? 1))
 
@@ -61,7 +67,8 @@ const photosDefaut = (produit.images || [])
   }))
 
 const variantes = (produit.variantes || []).map(v => ({
-  nom:   v.nom,
+  // nom nettoyé : il sert de clé (panier, checkout) et transite en JSON
+  nom:   stegaClean(v.nom),
   prix:  v.prix ?? produit.prix,
   stock: v.stock ?? null,
   photos: (v.photos || [])
@@ -110,8 +117,8 @@ const metaDesc  = produit.seoDescription || `${produit.title} — mouches et goo
         <a href="/boutique">← Retour à la boutique</a>
       </nav>
       <p class="eyebrow">
-        {categorieLabel[produit.categorie] ?? 'Boutique'}
-        {(produit.badges ?? []).map(b => badgeLabel[b] && <span class="hero-badge">{badgeLabel[b]}</span>)}
+        {categorieLabel[categorie] ?? 'Boutique'}
+        {badges.map(b => badgeLabel[b] && <span class="hero-badge">{badgeLabel[b]}</span>)}
       </p>
       <h1>{produit.title}</h1>
     </div>

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Panier from '../../components/boutique/Panier.astro'
 import { client } from '../../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
 const builder = imageUrlBuilder(client)
@@ -17,13 +18,21 @@ const heroStyle = heroImg
   ? `background-image: linear-gradient(to top, rgba(7,24,31,0.85) 0%, rgba(13,43,62,0.55) 100%), url(${urlFor(heroImg).width(1600).auto('format').url()}); background-size: cover; background-position: ${heroPos}; background-repeat: no-repeat;`
   : ''
 
-const produits = await client.fetch(`
+const produitsBruts = await client.fetch(`
   *[_type == "produit" && disponible == true] | order(categorie asc, title asc) {
     title, slug, categorie, espece, prix, stock, badges, quantiteMin,
     "image": images[0],
     "variantes": variantes[]{ nom, prix, stock }
   }
 `)
+// Mode aperçu : stega encode les chaînes → on nettoie celles qui servent
+// à filtrer (les titres restent encodés pour les overlays Sanity).
+const produits = produitsBruts.map(p => ({
+  ...p,
+  categorie: stegaClean(p.categorie),
+  espece:    stegaClean(p.espece),
+  badges:    (p.badges ?? []).map(b => stegaClean(b)),
+}))
 
 // Ordre et libellés des catégories — les filtres n'affichent que celles utilisées
 const CATEGORIES = [
