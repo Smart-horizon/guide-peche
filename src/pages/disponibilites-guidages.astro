@@ -12,9 +12,13 @@ const disponibilites = await client.fetch(`
 `)
 
 // Paramètres du site pour le header/footer minimal
-const params = await client.fetch(`*[_id == "siteParametres"][0]{ telephone, texteContactDispo }`)
+const params = await client.fetch(`*[_id == "siteParametres"][0]{
+  telephone, texteContactDispo, dispoTitre, dispoIntro, footerTexte
+}`)
 const telephone = params?.telephone || ''
 const texteContactDispo = params?.texteContactDispo || ''
+const dispoTitre = params?.dispoTitre || '📅 Calendrier des disponibilités'
+const dispoIntro = params?.dispoIntro || 'Retrouvez ici les disponibilités de Jean-Baptiste pour la saison en cours.'
 ---
 
 <!DOCTYPE html>
@@ -145,8 +149,8 @@ const texteContactDispo = params?.texteContactDispo || ''
   <main class="container">
     <a href="/" class="back-btn" id="back-btn">← Retour au site</a>
     <div class="page-header">
-      <h1>📅 Calendrier des disponibilités</h1>
-      <p>Retrouvez ici les disponibilités de Jean-Baptiste pour la saison en cours.</p>
+      <h1>{dispoTitre}</h1>
+      <p>{dispoIntro}</p>
     </div>
 
     <div class="cal-card">

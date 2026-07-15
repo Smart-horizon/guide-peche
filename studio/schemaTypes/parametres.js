@@ -119,6 +119,42 @@ export default {
       group: 'acces',
       description: 'Texte affiché sous le calendrier des disponibilités. Ex : "Pour réserver ou poser une option, contactez Jean-Baptiste au 06 87 30 34 56." Laissez vide pour masquer ce message.',
     },
+    {
+      name: 'dispoTitre',
+      title: 'Calendrier — Titre de la page',
+      type: 'string',
+      group: 'acces',
+      initialValue: '📅 Calendrier des disponibilités',
+    },
+    {
+      name: 'dispoIntro',
+      title: 'Calendrier — Texte d\'introduction',
+      type: 'string',
+      group: 'acces',
+      initialValue: 'Retrouvez ici les disponibilités de Jean-Baptiste pour la saison en cours.',
+    },
+    {
+      name: 'loginTitre',
+      title: 'Accès protégé — Titre de la page de connexion',
+      type: 'string',
+      group: 'acces',
+      initialValue: 'Calendrier des disponibilités',
+    },
+    {
+      name: 'loginTexte',
+      title: 'Accès protégé — Texte de la page de connexion',
+      type: 'text',
+      rows: 2,
+      group: 'acces',
+      initialValue: "Accès réservé aux clients — merci d'entrer le mot de passe communiqué par Jean-Baptiste.",
+    },
+    {
+      name: 'loginBouton',
+      title: 'Accès protégé — Texte du bouton',
+      type: 'string',
+      group: 'acces',
+      initialValue: 'Accéder au calendrier',
+    },
     // ── SEO global ──
     {
       name: 'siteTitle',

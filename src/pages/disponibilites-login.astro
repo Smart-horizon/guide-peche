@@ -29,6 +29,12 @@ if (Astro.request.method === 'POST') {
 
   erreur = 'Mot de passe incorrect.'
 }
+
+// Textes éditables (⚙️ Paramètres → Accès protégés)
+const textes = await client.fetch(`*[_id == "siteParametres"][0]{ loginTitre, loginTexte, loginBouton }`)
+const loginTitre  = textes?.loginTitre  || 'Calendrier des disponibilités'
+const loginTexte  = textes?.loginTexte  || "Accès réservé aux clients — merci d'entrer le mot de passe communiqué par Jean-Baptiste."
+const loginBouton = textes?.loginBouton || 'Accéder au calendrier'
 ---
 
 <!DOCTYPE html>
@@ -118,8 +124,8 @@ if (Astro.request.method === 'POST') {
 <body>
   <div class="card">
     <div class="icon">📅</div>
-    <h1>Calendrier des disponibilités</h1>
-    <p class="subtitle">Accès réservé aux clients — merci d'entrer le mot de passe communiqué par Jean-Baptiste.</p>
+    <h1>{loginTitre}</h1>
+    <p class="subtitle">{loginTexte}</p>
 
     {erreur && <div class="erreur">{erreur}</div>}
 
@@ -129,7 +135,7 @@ if (Astro.request.method === 'POST') {
         <label for="password">Mot de passe</label>
         <input type="password" id="password" name="password" autocomplete="current-password" autofocus required />
       </div>
-      <button type="submit">Accéder au calendrier</button>
+      <button type="submit">{loginBouton}</button>
     </form>
 
     <p class="retour"><a href="/">← Retour au site</a></p>
