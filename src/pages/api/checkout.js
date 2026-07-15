@@ -131,7 +131,7 @@ export async function POST({ request }) {
 
   const p = new URLSearchParams()
   p.set('mode', 'payment')
-  p.set('ui_mode', 'embedded')
+  p.set('ui_mode', 'embedded_page')
   p.set('locale', 'fr')
   p.set('return_url', `${origine}/merci?session_id={CHECKOUT_SESSION_ID}`)
   lignes.forEach((l, i) => {
