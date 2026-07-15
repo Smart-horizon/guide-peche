@@ -1,11 +1,32 @@
 export default {
   name: 'parametresBoutique',
-  title: 'Boutique — Livraison',
+  title: 'Boutique — Réglages (bandeau & livraison)',
   type: 'document',
   icon: () => '🚚',
   // Singleton créé automatiquement — pas de création manuelle
   __experimental_actions: ['update', 'publish'],
   fields: [
+    // ── Bandeau des pages boutique ───────────────────────────────────────────
+    {
+      name: 'heroImage',
+      title: 'Photo du bandeau (toutes les pages boutique)',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Affichée en haut de la boutique, des fiches produit, du panier et de la page de commande. Si vide : photo générale du site.',
+    },
+    {
+      name: 'heroTitre',
+      title: 'Titre de la page boutique',
+      type: 'string',
+      initialValue: 'La boutique',
+    },
+    {
+      name: 'heroSousTitre',
+      title: 'Sous-titre de la page boutique',
+      type: 'string',
+      initialValue: 'Mouches montées à la main par Jean-Baptiste, et goodies Enjoy Fishing.',
+    },
+    // ── Livraison ────────────────────────────────────────────────────────────
     {
       name: 'paysLivraison',
       title: 'Pays de livraison autorisés',
@@ -114,6 +135,6 @@ export default {
     },
   ],
   preview: {
-    prepare: () => ({ title: '🚚 Livraison — pays, tarifs et modes d\'expédition' }),
+    prepare: () => ({ title: '⚙️ Réglages boutique — bandeau, pays, tarifs, expédition' }),
   },
 }

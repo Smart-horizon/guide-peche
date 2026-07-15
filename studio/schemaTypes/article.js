@@ -167,6 +167,14 @@ export default {
       description: '🔗 Une page thématique du site en PLUS de la prestation : matériel, mes mouches, vidéos, revue de presse… Affichée en lien "Voir aussi" en bas d\'article, et l\'article apparaît dans le bloc "À lire sur le blog" de cette page. Laissez vide : détection automatique par mots-clés.',
     },
     {
+      name: 'produitsAssocies',
+      title: 'Produits de la boutique associés (optionnel)',
+      type: 'array',
+      group: 'classement',
+      of: [{ type: 'reference', to: [{ type: 'produit' }] }],
+      description: '🛒 Ex : la mouche dont parle l\'article — affichés en cartes "Dans la boutique" en bas d\'article',
+    },
+    {
       name: 'espece',
       title: 'Espèce',
       type: 'string',

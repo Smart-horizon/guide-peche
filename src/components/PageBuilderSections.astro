@@ -127,6 +127,18 @@ const contactEmail = contactParams?.email     || 'enjoy.fishing@hotmail.fr'
 const faqSectionsAll = (sections ?? []).filter((s: any) => s._type === 'sectionFaq')
 const firstFaqKey = faqSectionsAll[0]?._key
 
+// Produits boutique — utilisés par sectionProduits (mise en avant)
+const hasProduitsSection = (sections ?? []).some((s: any) => s._type === 'sectionProduits')
+const produitsBoutique: any[] = hasProduitsSection
+  ? await client.fetch(`
+    *[_type == "produit" && disponible == true]{
+      _id, title, titleEn, "slug": slug.current, prix, categorie,
+      "image": images[0]{ _type, hotspot, crop, asset->{ _id, url } },
+      "variantes": variantes[]{ prix, stock }
+    }
+  `)
+  : []
+
 const hasBlogSection = (sections ?? []).some((s: any) => s._type === 'sectionBlog')
 const blogArticles: any[] = hasBlogSection
   ? await client.fetch(`
@@ -939,6 +951,54 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                 </div>
               </a>
             ))}
+          </div>
+        </div>
+      </section>
+    )
+  })()}
+
+  {/* ════════════ PRODUITS — MISE EN AVANT BOUTIQUE ════════════ */}
+  {s._type === 'sectionProduits' && (() => {
+    const prods = (s.produits ?? [])
+      .map((r: any) => produitsBoutique.find((p: any) => p._id === (r._ref || r._id)))
+      .filter(Boolean)
+    if (!prods.length) return null
+    const isDark = stegaClean(s.fond) === 'dark'
+    const fmtPrix = (n: number) => n.toFixed(2).replace('.', ',') + ' €'
+    return (
+      <section class={`section pb-prodsec ${bg(s.fond)||'section--sand'}`}>
+        <div class="container">
+          <div class="pb-prodsec__head">
+            <div>
+              {stegaClean(s.eyebrow) && <p class={`pb-eyebrow-sm${isDark ? ' pb-prodsec__eyebrow--dark' : ''}`}>{s.eyebrow}</p>}
+              <h2 class="pb-prodsec__titre">{s.titre || (lang === 'en' ? 'From the shop' : 'Dans la boutique')}</h2>
+            </div>
+            <a href="/boutique" class="pb-prodsec__all">{lang === 'en' ? 'Visit the shop →' : 'Toute la boutique →'}</a>
+          </div>
+          <div class="pb-prodsec__grid">
+            {prods.map((p: any) => {
+              const prixVar = (p.variantes ?? []).map((v: any) => v.prix).filter((x: any) => x != null)
+              const prixMin = prixVar.length ? Math.min(...prixVar, ...(p.variantes.length > prixVar.length ? [p.prix] : [])) : p.prix
+              const aPartir = prixVar.length > 0 && new Set([...prixVar, p.prix]).size > 1
+              return (
+                <a href={`/boutique/${p.slug}`} class="pb-prodsec__card">
+                  <div
+                    class="pb-prodsec__img"
+                    style={p.image?.asset
+                      ? `background-image:url(${urlFor(p.image).width(500).height(500).fit('crop').crop('focalpoint').url()})`
+                      : ''}
+                  ></div>
+                  <div class="pb-prodsec__body">
+                    <h3 class="pb-prodsec__h3">{lang === 'en' ? (p.titleEn || p.title) : p.title}</h3>
+                    <p class="pb-prodsec__prix">
+                      {aPartir && <span class="pb-prodsec__apartir">{lang === 'en' ? 'From ' : 'À partir de '}</span>}
+                      {prixMin != null && fmtPrix(prixMin)}
+                    </p>
+                    <span class="pb-prodsec__voir">{lang === 'en' ? 'View →' : 'Voir le produit →'}</span>
+                  </div>
+                </a>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -4051,6 +4111,94 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
 .pb-blogsec__eyebrow--dark { color: var(--color-ocean-light); }
 @media (max-width: 800px) {
   .pb-blogsec__grid { grid-template-columns: 1fr; }
+}
+
+/* ── SECTION PRODUITS — MISE EN AVANT BOUTIQUE ──────────────────────────────── */
+.pb-prodsec__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+.pb-prodsec__titre {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+  color: var(--color-text);
+}
+.pb-prodsec__all {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-ocean-main);
+  white-space: nowrap;
+}
+.pb-prodsec__all:hover { text-decoration: underline; }
+.pb-prodsec__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.pb-prodsec__card {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.pb-prodsec__card:hover {
+  box-shadow: 0 8px 26px rgba(27,94,138,0.14);
+  transform: translateY(-3px);
+}
+.pb-prodsec__img {
+  aspect-ratio: 1;
+  background: linear-gradient(160deg, var(--color-ocean) 0%, var(--color-ocean-main) 100%) center / cover no-repeat;
+}
+.pb-prodsec__body {
+  padding: 1rem 1.15rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+}
+.pb-prodsec__h3 {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--color-text);
+  font-weight: 500;
+}
+.pb-prodsec__card:hover .pb-prodsec__h3 { color: var(--color-ocean-main); }
+.pb-prodsec__prix {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--color-ocean-main);
+}
+.pb-prodsec__apartir {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+.pb-prodsec__voir {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ocean-main);
+}
+.pb-prodsec.section--dark .pb-prodsec__titre { color: #fff; }
+.pb-prodsec.section--dark .pb-prodsec__all   { color: var(--color-ocean-light); }
+.pb-prodsec__eyebrow--dark { color: var(--color-ocean-light); }
+@media (max-width: 1000px) {
+  .pb-prodsec__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .pb-prodsec__grid { grid-template-columns: 1fr; }
 }
 </style>
 

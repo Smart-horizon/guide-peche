@@ -9,9 +9,19 @@ import { client } from '../lib/sanity.js'
 // Relay le cas échéant). Étape 2 : paiement Stripe embarqué sur la page.
 
 const livraison = await client.fetch(`*[_id == "parametresBoutique"][0]{
-  francoSeuil, mondialRelayEnseigne,
+  francoSeuil, mondialRelayEnseigne, heroImage,
   "modes": modes[actif != false]{ _key, nom, delai, prix, poidsMax, type }
 }`)
+
+// Bandeau : photo configurable par JBV (Studio → Boutique → ⚙️ Réglages)
+import imageUrlBuilder from '@sanity/image-url'
+const heroImg = livraison?.heroImage?.asset ? livraison.heroImage : null
+const heroPos = heroImg?.hotspot
+  ? `${Math.round(heroImg.hotspot.x * 100)}% ${Math.round(heroImg.hotspot.y * 100)}%`
+  : 'center'
+const heroStyle = heroImg
+  ? `background-image: linear-gradient(to top, rgba(7,24,31,0.85) 0%, rgba(13,43,62,0.55) 100%), url(${imageUrlBuilder(client).image(heroImg).width(1600).auto('format').url()}); background-size: cover; background-position: ${heroPos}; background-repeat: no-repeat;`
+  : ''
 
 const modes = livraison?.modes?.length
   ? livraison.modes
@@ -35,7 +45,7 @@ const fmtPrix = (n) => n.toFixed(2).replace('.', ',') + ' €'
 >
 
   <section class="page-hero">
-    <div class="page-hero-bg"></div>
+    <div class="page-hero-bg" style={heroStyle}></div>
     <div class="container page-hero-content">
       <p class="eyebrow">Boutique</p>
       <h1>Finaliser ma commande</h1>

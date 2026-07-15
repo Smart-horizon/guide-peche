@@ -2772,6 +2772,45 @@ export const sectionBlog = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — PRODUITS DE LA BOUTIQUE (maillage prestations/pages → boutique)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionProduits = {
+  name: 'sectionProduits',
+  title: '🛒 Produits — mise en avant boutique',
+  type: 'object',
+  description: 'Met en avant des produits de la boutique (ex : les mouches à bar sur la page bar)',
+  fields: [
+    {
+      name: 'eyebrow', title: 'Texte au-dessus du titre (optionnel)',
+      type: 'string',
+      description: 'Ex : "La boutique" · "Montées à la main"',
+    },
+    {
+      name: 'titre', title: 'Titre de la section',
+      type: 'string',
+      initialValue: 'Dans la boutique',
+      description: 'Ex : "Les mouches de cette pêche" · "Équipez-vous"',
+    },
+    {
+      name: 'produits',
+      title: 'Produits à afficher',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'produit' }] }],
+      validation: Rule => Rule.required().min(1).max(8),
+      description: 'Choisissez 1 à 8 produits — glissez-déposez pour changer l\'ordre',
+    },
+    fondField('sand'),
+  ],
+  preview: {
+    select: { titre: 'titre', produits: 'produits' },
+    prepare: ({ titre, produits }) => ({
+      title: `🛒 Produits — ${titre || ''}`,
+      subtitle: `${produits?.length || 0} produit(s) mis en avant`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -2816,4 +2855,5 @@ export const allSectionTypes = [
   sectionVoyagesGrid,
   sectionFaq,
   sectionBlog,
+  sectionProduits,
 ]

@@ -177,12 +177,20 @@ export default {
       description: 'Ex : vidéo de montage de la mouche. Collez l\'adresse complète de la vidéo — elle sera intégrée sur la fiche produit.',
     },
     {
-      name: 'articleLie',
-      title: 'Article de blog lié (optionnel)',
-      type: 'reference',
-      to: [{ type: 'article' }],
+      name: 'prestationsAssociees',
+      title: 'Prestations associées (optionnel)',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'prestation' }] }],
       group: 'infos',
-      description: 'Un article qui parle de ce produit — un lien "En savoir plus" apparaîtra sur la fiche',
+      description: 'Ex : pour une mouche à bar, les sorties bar — un encart "Pêchez-la avec Jean-Baptiste" apparaîtra sur la fiche',
+    },
+    {
+      name: 'articlesAssocies',
+      title: 'Articles de blog associés (optionnel)',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'article' }] }],
+      group: 'infos',
+      description: 'Des articles qui parlent de ce produit ou de cette pêche — liens "À lire sur le blog" sur la fiche',
     },
 
     // ── Version anglaise ─────────────────────────────────────────────────────

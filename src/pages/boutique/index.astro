@@ -7,6 +7,16 @@ import imageUrlBuilder from '@sanity/image-url'
 const builder = imageUrlBuilder(client)
 const urlFor = (source) => builder.image(source)
 
+// Bandeau + textes configurables par JBV (Studio → Boutique → ⚙️ Réglages)
+const reglages = await client.fetch(`*[_id == "parametresBoutique"][0]{ heroImage, heroTitre, heroSousTitre }`)
+const heroImg = reglages?.heroImage?.asset ? reglages.heroImage : null
+const heroPos = heroImg?.hotspot
+  ? `${Math.round(heroImg.hotspot.x * 100)}% ${Math.round(heroImg.hotspot.y * 100)}%`
+  : 'center'
+const heroStyle = heroImg
+  ? `background-image: linear-gradient(to top, rgba(7,24,31,0.85) 0%, rgba(13,43,62,0.55) 100%), url(${urlFor(heroImg).width(1600).auto('format').url()}); background-size: cover; background-position: ${heroPos}; background-repeat: no-repeat;`
+  : ''
+
 const produits = await client.fetch(`
   *[_type == "produit" && disponible == true] | order(categorie asc, title asc) {
     title, slug, categorie, espece, prix, stock,
@@ -45,11 +55,11 @@ const hasGoodies = produits.some(p => p.categorie === 'goodies')
 >
 
   <section class="page-hero">
-    <div class="page-hero-bg"></div>
+    <div class="page-hero-bg" style={heroStyle}></div>
     <div class="container page-hero-content">
       <p class="eyebrow">Enjoy Fishing</p>
-      <h1>La boutique</h1>
-      <p class="hero-sub">Mouches montées à la main par Jean-Baptiste, et goodies Enjoy Fishing.</p>
+      <h1>{reglages?.heroTitre || 'La boutique'}</h1>
+      <p class="hero-sub">{reglages?.heroSousTitre || 'Mouches montées à la main par Jean-Baptiste, et goodies Enjoy Fishing.'}</p>
     </div>
   </section>
 

@@ -1,7 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { client } from '../lib/sanity.js'
+import imageUrlBuilder from '@sanity/image-url'
 // Page de retour après un paiement Stripe réussi.
 // Vide le panier localStorage côté client.
+
+// Bandeau : photo configurable par JBV (Studio → Boutique → ⚙️ Réglages)
+const reglages = await client.fetch(`*[_id == "parametresBoutique"][0]{ heroImage }`)
+const heroImg = reglages?.heroImage?.asset ? reglages.heroImage : null
+const heroPos = heroImg?.hotspot
+  ? `${Math.round(heroImg.hotspot.x * 100)}% ${Math.round(heroImg.hotspot.y * 100)}%`
+  : 'center'
+const heroStyle = heroImg
+  ? `background-image: linear-gradient(to top, rgba(7,24,31,0.85) 0%, rgba(13,43,62,0.55) 100%), url(${imageUrlBuilder(client).image(heroImg).width(1600).auto('format').url()}); background-size: cover; background-position: ${heroPos}; background-repeat: no-repeat;`
+  : ''
 ---
 
 <BaseLayout
@@ -11,7 +23,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 >
 
   <section class="page-hero">
-    <div class="page-hero-bg"></div>
+    <div class="page-hero-bg" style={heroStyle}></div>
     <div class="container page-hero-content">
       <p class="eyebrow">Boutique</p>
       <h1>Merci pour votre commande&nbsp;!</h1>

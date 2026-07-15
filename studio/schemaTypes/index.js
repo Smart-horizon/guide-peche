@@ -27,6 +27,7 @@ import {
   sectionMaterielIntro, sectionEquipement, sectionMaterielNav,
   sectionVideos, sectionGrilleSubPages, sectionTarifs,
   sectionAvantages, sectionVoyagesGrid, sectionFaq, sectionBlog,
+  sectionProduits,
 } from './sections.js'
 
 export const schemaTypes = [
@@ -91,4 +92,5 @@ export const schemaTypes = [
   sectionVoyagesGrid,
   sectionFaq,
   sectionBlog,
+  sectionProduits,
 ]

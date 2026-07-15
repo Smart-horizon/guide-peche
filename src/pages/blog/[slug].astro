@@ -50,7 +50,12 @@ const article = await client.fetch(
   `*[_type == "article" && slug.current == $slug][0]{
     title, slug, date, image, extrait, contenu, tags, espece, seoTitle, seoDescription,
     prestationLiee->{ title, "slug": slug.current },
-    pageLiee->{ title, "slug": slug.current }
+    pageLiee->{ title, "slug": slug.current },
+    "produitsAssocies": produitsAssocies[]->{
+      _id, title, "slug": slug.current, prix, categorie,
+      "image": images[0],
+      "variantes": variantes[]{ prix }
+    }
   }`,
   { slug }
 )
@@ -225,6 +230,121 @@ const jsonLd = [
   <div class="article-nav container">
     <a href="/blog" class="retour">← Retour au blog</a>
   </div>
+
+<style>
+  /* Produits associés en bas d'article */
+  .bp-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .bp-titre {
+    font-family: var(--font-serif);
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  }
+  .bp-all {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-ocean-main);
+  }
+  .bp-all:hover { text-decoration: underline; }
+  .bp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  .bp-card {
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .bp-card:hover {
+    box-shadow: 0 8px 26px rgba(27,94,138,0.14);
+    transform: translateY(-3px);
+  }
+  .bp-img {
+    aspect-ratio: 1;
+    background: linear-gradient(160deg, var(--color-ocean) 0%, var(--color-ocean-main) 100%) center / cover no-repeat;
+  }
+  .bp-body {
+    padding: 1rem 1.15rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1;
+  }
+  .bp-h3 {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 1.3;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+  .bp-card:hover .bp-h3 { color: var(--color-ocean-main); }
+  .bp-prix {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--color-ocean-main);
+  }
+  .bp-apartir {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+  .bp-voir {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ocean-main);
+  }
+  @media (max-width: 1000px) { .bp-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px)  { .bp-grid { grid-template-columns: 1fr; } }
+</style>
+
+  <!-- Produits de la boutique associés (choisis par JBV dans l'article) -->
+  {article.produitsAssocies?.length > 0 && (
+    <section class="section section--sand bp-section">
+      <div class="container">
+        <div class="bp-head">
+          <h2 class="bp-titre">Dans la boutique</h2>
+          <a href="/boutique" class="bp-all">Toute la boutique →</a>
+        </div>
+        <div class="bp-grid">
+          {article.produitsAssocies.filter(p => p?.slug).map(p => {
+            const prixVar = (p.variantes ?? []).map(v => v.prix).filter(x => x != null)
+            const prixMin = prixVar.length ? Math.min(...prixVar, p.prix) : p.prix
+            const aPartir = prixVar.length > 0 && new Set([...prixVar, p.prix]).size > 1
+            return (
+              <a href={`/boutique/${p.slug}`} class="bp-card">
+                <div class="bp-img" style={p.image
+                  ? `background-image:url(${urlFor(p.image).width(400).height(400).fit('crop').crop('focalpoint').url()})`
+                  : ''}></div>
+                <div class="bp-body">
+                  <h3 class="bp-h3">{p.title}</h3>
+                  <p class="bp-prix">
+                    {aPartir && <span class="bp-apartir">À partir de </span>}
+                    {prixMin != null && `${prixMin.toFixed(2).replace('.', ',')} €`}
+                  </p>
+                  <span class="bp-voir">Voir le produit →</span>
+                </div>
+              </a>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- Maillage interne : articles de la même espèce -->
   <RelatedArticles articles={articlesLies} titre="À lire aussi" lang="fr" />
