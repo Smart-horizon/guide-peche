@@ -27,6 +27,14 @@ const placeholder = nl?.sectionPlaceholder || 'votre@email.fr'
 const boutonTexte = nl?.sectionBoutonTexte || "S'inscrire gratuitement"
 const seoTitle    = nl?.seoTitle        || 'Newsletter — Conseils pêche mouche | Jean-Baptiste Vidal'
 const seoDesc     = nl?.seoDescription  || "Recevez les conseils, récits de sorties et annonces de stages de Jean-Baptiste Vidal, guide de pêche à la mouche en Bretagne."
+const eyebrow     = nl?.pageEyebrow     || '📧 Newsletter gratuite'
+const ctaHero     = nl?.pageCtaHero     || "S'inscrire maintenant"
+const lead        = nl?.pageLead        || 'Chaque lettre contient…'
+const citation    = nl?.pageCitation    || "J'essaie de partager dans cette lettre ce que je dis à mes clients sur le terrain. Le genre de détails qui font vraiment la différence."
+const citationAuteur = nl?.pageCitationAuteur || 'Jean-Baptiste Vidal'
+const succes      = nl?.pageSucces      || 'Inscription confirmée ! À très vite dans votre boîte mail.'
+const basTexte    = nl?.pageBasTexte    || 'Curieux de voir à quoi ça ressemble ?'
+const basLienLabel = nl?.pageBasLienLabel || 'Lire les derniers articles du blog'
 
 const benefices: { emoji: string; titre: string; description: string }[] = nl?.pageBenefices?.length
   ? nl.pageBenefices
@@ -49,10 +57,10 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
   <section class="nl-hero" style={`background-image: url('${heroImageUrl}')`}>
     <div class="nl-hero__overlay"></div>
     <div class="container nl-hero__content">
-      <p class="nl-hero__eyebrow">📧 Newsletter gratuite</p>
+      <p class="nl-hero__eyebrow">{eyebrow}</p>
       <h1 class="nl-hero__titre">{titre}</h1>
       <p class="nl-hero__sous">{sousTitre}</p>
-      <a href="#nl-page-form" class="nl-hero__cta">S'inscrire maintenant</a>
+      <a href="#nl-page-form" class="nl-hero__cta">{ctaHero}</a>
     </div>
     <div class="nl-hero__wave" aria-hidden="true">
       <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
@@ -64,7 +72,7 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
   <!-- ── BÉNÉFICES ── -->
   <section class="nl-benefices">
     <div class="container">
-      <p class="nl-benefices__lead">Chaque lettre contient…</p>
+      <p class="nl-benefices__lead">{lead}</p>
       <div class="nl-benefices__grid">
         {benefices.map(b => (
           <div class="nl-benefice-card">
@@ -112,7 +120,7 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
           <p class="nl-page-form__mention">{frequence}</p>
           <div class="nl-page-form__success" id="nl-page-success" aria-live="polite">
             <span class="nl-page-form__success-icon">✅</span>
-            <span>Inscription confirmée ! À très vite dans votre boîte mail.</span>
+            <span>{succes}</span>
           </div>
         </form>
 
@@ -121,8 +129,8 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
       <!-- Aside -->
       <div class="nl-page-aside">
         <blockquote class="nl-page-aside__quote">
-          <p>« J'essaie de partager dans cette lettre ce que je dis à mes clients sur le terrain. Le genre de détails qui font vraiment la différence. »</p>
-          <footer>— Jean-Baptiste Vidal</footer>
+          <p>« {citation} »</p>
+          <footer>— {citationAuteur}</footer>
         </blockquote>
         <div class="nl-page-aside__signature" aria-hidden="true">
           <svg viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="nl-page-aside__fish">
@@ -139,8 +147,8 @@ const benefices: { emoji: string; titre: string; description: string }[] = nl?.p
   <!-- ── CTA BAS ── -->
   <section class="nl-bottom-cta">
     <div class="container nl-bottom-cta__inner">
-      <p>Curieux de voir à quoi ça ressemble ?</p>
-      <a href="/blog/" class="nl-bottom-cta__link">Lire les derniers articles du blog →</a>
+      <p>{basTexte}</p>
+      <a href="/blog/" class="nl-bottom-cta__link">{basLienLabel} →</a>
     </div>
   </section>
 
