@@ -205,9 +205,11 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                 start: String(debut),
                 ...(fin != null ? { end: String(fin) } : {}),
               })
-              const posterUrl = s.image?.asset
-                ? urlFor(s.image).width(1600).auto('format').url()
-                : null
+              // Le poster porte SON PROPRE voile (curseur photo) : il est peint
+              // au-dessus de .pb-hero__overlay (z-index 1 vs auto), donc le voile
+              // vidéo ne l'atteint jamais. Sans ce dégradé cuit dedans, la photo
+              // resterait nue tant que la vidéo n'a pas démarré.
+              const posterStyle = s.image?.asset ? heroBg(s.image, s.voile) : null
               const loopScript = `(function(){
                 function init(){
                   if(typeof YT==='undefined'||!YT.Player){setTimeout(init,150);return;}
@@ -249,9 +251,9 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                   <div
                     id="yt-hero-poster"
                     class="pb-hero__yt-poster"
-                    style={posterUrl ? `background-image:url(${posterUrl})` : ''}
+                    style={posterStyle ?? ''}
                   />
-                  <div class="pb-hero__overlay" style={`--voile-k:${voileMult(s.voile)}`}></div>
+                  <div class="pb-hero__overlay" style={`--voile-k:${voileMult(s.voileVideo)}`}></div>
                 </>
               )
             })() : stegaClean(s.videoUrl) ? (
@@ -264,7 +266,10 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             {stegaClean(s.videoWebmUrl) && <source src={stegaClean(s.videoWebmUrl)} type="video/webm" />}
             <source src={stegaClean(s.videoUrl)} type="video/mp4" />
           </video>
-          <div class="pb-hero__overlay" style={`--voile-k:${voileMult(s.voile)}`}></div>
+          {/* Vidéo MP4 : le poster est natif (attribut poster), rendu par
+              l'élément <video> lui-même — impossible de le voiler à part.
+              L'overlay porte donc le voile vidéo pour les deux. */}
+          <div class="pb-hero__overlay" style={`--voile-k:${voileMult(s.voileVideo)}`}></div>
         </>
       ) : (
         <div class="pb-hero__bg" style={heroBg(s.image, s.voile)}></div>
@@ -1854,6 +1859,10 @@ span.ts-row__name { color: var(--color-text, #1a1a1f); }
   transform: translate(-50%, -50%);
   border: none;
 }
+/* Photo affichée le temps que la vidéo démarre. Son voile (curseur photo) est
+   cuit dans son background par heroBg() côté template — un overlay séparé ne
+   marcherait pas, ce calque étant au-dessus de .pb-hero__overlay.
+   Le background ci-dessous n'est que le fond de repli (aucune photo). */
 .pb-hero__yt-poster {
   position: absolute;
   inset: 0;
@@ -1873,10 +1882,17 @@ span.ts-row__name { color: var(--color-text, #1a1a1f); }
   object-fit: cover;
   object-position: center;
 }
+/* Voile de la VIDÉO uniquement.
+   ⚠️ Empilement du hero vidéo (ne pas y toucher sans relire ceci) :
+      .pb-hero__yt-wrapper (auto) < .pb-hero__overlay (auto) < .pb-hero__yt-poster
+      (z-index 1) < .pb-hero__content (z-index 1, plus loin dans le DOM).
+   Cet overlay est donc SOUS le poster : il ne voile que la vidéo. La photo de
+   poster porte son propre voile, cuit dans son background par heroBg(). C'est
+   voulu — deux curseurs distincts (voile photo / voile vidéo). */
 .pb-hero__overlay {
   position: absolute;
   inset: 0;
-  /* --voile-k : multiplicateur posé par le curseur "Épaisseur du voile bleu"
+  /* --voile-k : multiplicateur posé par le curseur "voile vidéo"
      (1 = réglage d'origine). Les alphas > 1 sont clampés par le navigateur. */
   background: linear-gradient(to top,
     rgba(7,24,31, calc(.88 * var(--voile-k, 1))) 0%,

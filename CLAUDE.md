@@ -136,12 +136,21 @@ Footer fond           : #07181f
 - Bouton "Réserver" très visible dès le hero
 - Badge "21 ans de guidage" en coin
 
-**Curseur "Épaisseur du voile bleu"** (`sectionHero.voile`, 0–100) : dose le voile pour que le titre blanc ressorte sur une photo claire. Aperçu en direct dans le Studio (vraie photo + titre témoin).
-- **50 = réglage d'origine** et le champ est alors *absent* du document (le curseur fait `unset` à 50) → les heros jamais touchés rendent exactement comme avant.
-- Le curseur est un composant maison (`studio/components/VoileSlider.jsx`) : Sanity **n'a pas** d'input "range" natif pour les nombres (`NumberOptions` n'accepte que les listes d'énumération — `options.range` est silencieusement ignoré).
-- ⚠️ Le calcul (`mult` / `alpha`) est **dupliqué** entre `VoileSlider.jsx` (aperçu Studio) et `voileMult`/`voileAlpha` de `src/components/PageBuilderSections.astro` (rendu du site). Modifier les deux ensemble, sinon l'aperçu ment.
-- S'applique aux 3 branches du hero : photo (via `heroBg`), vidéo YouTube et vidéo MP4 (via la variable CSS `--voile-k` sur `.pb-hero__overlay`).
+**Deux curseurs "Épaisseur du voile bleu"** — dosent le voile pour que le titre blanc ressorte. Aperçu en direct dans le Studio (vraie photo + titre témoin).
+
+| Champ | Ce qu'il voile | Où c'est appliqué |
+|---|---|---|
+| `sectionHero.voile` | la **photo** : fond du hero image **et** poster d'un hero vidéo | dégradé cuit dans le `background` par `heroBg()` |
+| `sectionHero.voileVideo` | la **vidéo** une fois démarrée (YouTube + MP4) | variable CSS `--voile-k` sur `.pb-hero__overlay` |
+
+- **50 = réglage d'origine** et le champ est alors *absent* du document (le curseur fait `unset` à 50) → les heros jamais touchés rendent exactement comme avant. **En-dessous de 50 le voile s'éclaircit, au-dessus il s'assombrit** — pour faire ressortir un titre blanc il faut MONTER (70–100).
+- `voileVideo` est masqué dans le Studio s'il n'y a ni `videoYoutubeUrl` ni `videoUrl`.
+- ⚠️ **Pourquoi deux champs et pas un** : sur un hero vidéo, `.pb-hero__yt-poster` (z-index 1) est peint **au-dessus** de `.pb-hero__overlay` (z-index auto). Un overlay unique ne pouvait donc jamais voiler la photo — d'où le dégradé cuit dans le poster. Ne pas « simplifier » en remettant un seul overlay : le bug reviendrait (photo nue, voile visible seulement une fois la vidéo lancée).
+- Vidéo MP4 : son poster est natif (attribut `poster` de `<video>`), impossible à voiler à part → c'est `voileVideo` qui couvre les deux.
+- Les curseurs sont des composants maison (`studio/components/VoileSlider.jsx`) : Sanity **n'a pas** d'input "range" natif pour les nombres (`NumberOptions` n'accepte que les listes d'énumération — `options.range` est silencieusement ignoré).
+- ⚠️ Le calcul (`mult` / `alpha`) et les paliers du dégradé sont **dupliqués** entre `VoileSlider.jsx` (aperçu Studio) et `voileMult`/`voileAlpha`/`heroBg` de `src/components/PageBuilderSections.astro` (rendu du site). Modifier les deux ensemble, sinon l'aperçu ment. Les paliers diffèrent selon le calque : photo `.88/.45@60%/.3`, vidéo `.88/.5@55%/.25`.
 - `heroBg()` sert aussi à `sectionBoutiqueCta` — l'appel s'y fait sans voile, donc au réglage d'origine.
+- ⚠️ En test local : `astro dev` fige `PUBLIC_SANITY_PREVIEW` dans le cache Vite. Passer du mode aperçu au mode publié **sans** `rm -rf node_modules/.vite` fait lire les brouillons en croyant lire le publié (c'est aussi ce que nettoie `deploy.sh`).
 
 ### Cartes prestations
 - Photos en arrière-plan (comme Wild Fly Production)

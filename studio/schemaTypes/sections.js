@@ -5,7 +5,7 @@
  * des schemas prestation, voyage, page, etc.
  */
 
-import { VoileSlider } from '../components/VoileSlider.jsx'
+import { VoilePhotoSlider, VoileVideoSlider } from '../components/VoileSlider.jsx'
 
 // ── Images grisées dans les sections EN (partagées depuis le FR) ──────────
 // Renvoie true si le champ est à l'intérieur d'un pagebuilderEn → readOnly
@@ -76,14 +76,24 @@ export const sectionHero = {
       description: 'Grande photo en arrière-plan du hero',
     },
     {
-      // Réglage visuel (pas une traduction) : hérité du FR côté EN.
+      // Réglages visuels (pas des traductions) : hérités du FR côté EN.
       // mergeEnSections prend les nombres depuis le FR — rien à synchroniser.
-      // Curseur maison : Sanity n'a pas d'input "range" natif pour les nombres.
+      // Curseurs maison : Sanity n'a pas d'input "range" natif pour les nombres.
       // Pas d'initialValue : 50 = absence de valeur = rendu d'origine.
-      name: 'voile', title: 'Épaisseur du voile bleu',
+      name: 'voile', title: 'Épaisseur du voile bleu — photo',
       type: 'number', readOnly: enRO,
-      components: { input: VoileSlider },
-      description: 'Assombrit la photo pour que le titre blanc reste lisible. 50 = réglage d\'origine. Photo claire (ciel, sable, reflets) → montez vers 70-100. Photo déjà sombre → descendez. 0 = aucun voile.',
+      components: { input: VoilePhotoSlider },
+      description: 'Assombrit la PHOTO pour que le titre blanc reste lisible. 50 = réglage d\'origine. Photo claire (ciel, sable, reflets) → montez vers 70-100. Photo déjà sombre → descendez. 0 = aucun voile.',
+    },
+    {
+      // Voile de la vidéo, indépendant de celui de la photo : sur un hero
+      // vidéo, la photo sert de poster au démarrage et les deux n'ont pas la
+      // même luminosité. Masqué s'il n'y a pas de vidéo.
+      name: 'voileVideo', title: 'Épaisseur du voile bleu — vidéo',
+      type: 'number', readOnly: enRO,
+      components: { input: VoileVideoSlider },
+      hidden: ({ parent }) => !parent?.videoYoutubeUrl && !parent?.videoUrl,
+      description: 'Même réglage, mais pour la VIDÉO une fois qu\'elle a démarré. La photo ci-dessus a son propre curseur : réglez les deux séparément. 50 = réglage d\'origine.',
     },
     {
       name: 'eyebrow', title: 'Texte au-dessus du titre (eyebrow)',
