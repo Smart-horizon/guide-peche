@@ -32,20 +32,27 @@ const PREVIEW = import.meta.env.PUBLIC_SANITY_PREVIEW === 'true'
 // listé ici perd son overlay cliquable dans l'aperçu.
 const CHAMPS_LOGIQUE = new Set([
   // filtrage / routage
-  'espece', 'categorie', 'tags', 'slug', 'current', 'mode', 'statut', 'pays',
+  'espece', 'categorie', 'tags', 'current', 'mode', 'statut', 'pays',
   // mise en forme (comparés à des valeurs en dur)
   'fond', 'largeur', 'style', 'listItem', 'hauteur', 'videoPosition', 'type',
-  // liens et URLs — un marqueur stega dans un href casse le lien
-  'url', 'lien', 'href', 'boutonLien', 'featuredLien', 'videoUrl',
-  'videoYoutubeUrl', 'videoWebmUrl', 'youtubeUrl', 'youtubeId',
+  'youtubeId',
 ])
 
+// Tout champ de LIEN, reconnu par son nom plutôt que listé un par un — le
+// projet en compte une trentaine (btnLien, lienChaine, urlArticle, titreUrl,
+// barCtaUrl…) et la liste serait vite périmée. Un marqueur stega dans un href
+// casse le lien : ils ne doivent JAMAIS être encodés.
+// ⚠️ On exclut les LIBELLÉS (lienLabel, labelLien, lienLabel2…) : ce sont des
+// textes affichés, ils doivent garder leur overlay cliquable.
+const EST_LIEN = (cle) => /(lien|url|href|slug)/i.test(cle) && !/label/i.test(cle)
+
 // sourcePath = chemin dans le document source, ex. ['pagebuilder', {_key}, 'espece'].
-// On regarde le dernier segment nommé.
+// On regarde le dernier segment nommé (pour un slug : ['slug','current']).
 const stegaFilter = (props) => {
   const segments = props.sourcePath.filter((p) => typeof p === 'string')
   const cle = segments[segments.length - 1]
-  if (CHAMPS_LOGIQUE.has(cle)) return false
+  if (!cle) return props.filterDefault(props)
+  if (CHAMPS_LOGIQUE.has(cle) || EST_LIEN(cle)) return false
   return props.filterDefault(props)
 }
 

@@ -673,14 +673,24 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             ))}
           </div>
           {s.note && <p class="pb-prog-cart__note">{s.note}</p>}
-          {s.btnTexte && (s.btnFichier?.asset?.url || s.btnLien) && (
-            <div class="pb-prog-cart__btn-wrap">
-              <a href={s.btnFichier?.asset?.url || s.btnLien} class="btn-download" download={!!s.btnFichier?.asset?.url}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                {s.btnTexte}
-              </a>
-            </div>
-          )}
+          {/* Le bouton sert à DEUX choses : télécharger un PDF, ou renvoyer vers
+              une page. L'icône doit suivre : flèche de téléchargement seulement
+              s'il y a un fichier, sinon flèche de lien (convention du site).
+              Un PDF est prioritaire sur l'URL — cf. le schéma. */}
+          {s.btnTexte && (s.btnFichier?.asset?.url || stegaClean(s.btnLien)) && (() => {
+            const fichier = s.btnFichier?.asset?.url
+            return (
+              <div class="pb-prog-cart__btn-wrap">
+                <a href={fichier || stegaClean(s.btnLien)} class="btn-download" download={!!fichier}>
+                  {fichier && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  )}
+                  {s.btnTexte}
+                  {!fichier && <span aria-hidden="true">→</span>}
+                </a>
+              </div>
+            )
+          })()}
         </div>
       </section>
     )
