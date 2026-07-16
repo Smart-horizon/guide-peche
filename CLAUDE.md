@@ -118,6 +118,10 @@ especes.includes(stegaClean(a.espece)) // ✅ logique
 
 **Le symptôme** : l'aperçu et le site publié divergent alors que le contenu est identique — typiquement une liste filtrée qui se vide. Vécu le 16/07/2026 : le bloc « Derniers récits » affichait 3 articles en publié et 1 en aperçu, parce que `maillage.js` comparait `espece` sans nettoyer (42 articles trouvés en public, **0** en aperçu).
 
+- 🛡️ **Filet automatique** : `scripts/verifier-apercu.mjs` compare la STRUCTURE de 7 pages entre le site publié et l'aperçu. Il tourne après chaque déploiement (job « Contrôle — aperçu = publié » de `deploy.yml`, qui attend les 2 workers) et se lance à la main : `SANITY_TOKEN=… node scripts/verifier-apercu.mjs`.
+  - ⚠️ Il ne conclut **PAS** si un brouillon est en cours : une différence est alors NORMALE (c'est la raison d'être de l'aperçu). Un contrôle qui crie au loup finit ignoré.
+  - Il compare une signature (compteurs de blocs, iframes, liens), pas le HTML brut — l'aperçu contient forcément les marqueurs stega et les overlays.
+  - Le slash final est normalisé : public statique (`/page/`) vs aperçu SSR (`/page`).
 - ⚠️ **Un build public ne révèle JAMAIS ce bug** (pas de stega). Il faut tester avec le worker d'aperçu, ou un client stega en local.
 - ⚠️ Les regex y échappent souvent (les marqueurs sont ajoutés en fin de chaîne) — d'où des bugs partiels, très trompeurs : une partie de la logique marche, l'autre non.
 - ⚠️ Autre piège du même écran : en perspective `previewDrafts`, un document qui a un brouillon remonte avec `_id = "drafts.xxx"` alors qu'une `reference` pointe l'`_id` publié. Comparer des ids demande de retirer le préfixe `drafts.` (cf. `sectionBlog` mode manuel).

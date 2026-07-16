@@ -74,3 +74,35 @@ jobs:
           SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: e1c99d02d3183b6fe3a4f517bb657e54
+
+  # ── Contrôle : l'aperçu doit rendre comme le site publié ─────────────────────
+  # Attend que les DEUX workers soient déployés, puis compare leur structure.
+  # Attrape la classe de bug qu'aucun build ne révèle : une comparaison de chaîne
+  # Sanity cassée par le stega (l'aperçu diverge en silence), ou un worker
+  # d'aperçu qui tombe en CPU alors que le site public, statique, va bien.
+  # ⚠️ Ne conclut PAS si un brouillon est en cours : la différence est alors
+  # normale. Voir scripts/verifier-apercu.mjs.
+  verifier-apercu:
+    name: Contrôle — aperçu = publié
+    runs-on: ubuntu-latest
+    needs: [deploy, deploy-preview]
+    timeout-minutes: 6
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # Le temps que les deux workers soient réellement servis en périphérie.
+      - name: Laisser les workers se propager
+        run: sleep 25
+
+      # Aucune dépendance : le script n'utilise que fetch (natif Node 24).
+      - name: Comparer aperçu et site publié
+        run: node scripts/verifier-apercu.mjs
+        env:
+          SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
