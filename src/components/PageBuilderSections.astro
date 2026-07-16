@@ -12,6 +12,10 @@ const urlFor  = (source: any) => {
 }
 
 // ── Rendu Portable Text ───────────────────────────────────────────────────────
+// NB stega : `marks`, `style` et `listItem` ne sont PAS encodés (vérifié sur la
+// vraie requête — le stega épargne les champs structurels du Portable Text et
+// n'encode que `children[].text`, la cible des overlays). Rien à nettoyer ici.
+// Les champs d'une SECTION (fond, largeur, mode…), eux, sont encodés.
 function spanHtml(b: any): string {
   return (b.children || []).map((span: any) => {
     let t = (span.text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -485,7 +489,8 @@ const voyagesForGrid: any[] = hasVoyagesGrid
   {/* ════════════ TEXTE ════════════ */}
   {s._type === 'sectionTexte' && (
     <section class={`section pb-texte ${bg(s.fond)||''}`}>
-      <div class="container" style={`max-width:${s.largeur==='wide'?'960px':s.largeur==='full'?'var(--max-width)':'760px'}`}>
+      {/* stegaClean : sans lui, la largeur retombe toujours à 760px en aperçu */}
+      <div class="container" style={`max-width:${stegaClean(s.largeur)==='wide'?'960px':stegaClean(s.largeur)==='full'?'var(--max-width)':'760px'}`}>
         <div class="prose" set:html={blocks(s.texte)} />
       </div>
     </section>

@@ -80,7 +80,18 @@ Test à blanc possible à tout moment : onglet Actions → « Purge RGPD des com
 
 ## 👁️ STEGA — la règle qui casse l'aperçu en silence
 
-En mode aperçu (`PUBLIC_SANITY_PREVIEW=true`), le client Sanity encode des **caractères invisibles dans toutes les chaînes** — c'est ce qui rend les overlays cliquables dans le Studio. Conséquence : `'bar' !== 'bar␣marqueurs`.
+En mode aperçu (`PUBLIC_SANITY_PREVIEW=true`), le client Sanity encode des **caractères invisibles** dans les chaînes — c'est ce qui rend les overlays cliquables dans le Studio. Conséquence : `'bar' !== 'bar␣marqueurs`.
+
+**Ce qui est encodé, et ce qui ne l'est pas** (mesuré le 16/07/2026 sur les vraies requêtes) :
+
+| Encodé ❌ | Propre ✅ |
+|---|---|
+| Champs d'un document ou d'une section : `categorie`, `espece`, `largeur`, `fond`, `mode`, `statut`, `slug`… | Champs **structurels** du Portable Text : `style`, `marks`, `listItem` |
+| `children[].text` (c'est la cible de l'overlay — à garder tel quel) | Champs système : `_id`, `_type`, `_key` |
+
+Autrement dit : un champ éditable dans le Studio est encodé. `blocks()`/`spanHtml()` n'ont donc **rien à nettoyer**.
+
+⚠️ **Piège de diagnostic** : une projection GROQ inventée (`contenu[...][0..3].style`) crée des chemins encodables que la vraie requête ne produit pas — elle fait croire à un bug inexistant. **Toujours tester avec la requête réelle du site.**
 
 **Règle : toute comparaison de chaîne venant de Sanity doit passer par `stegaClean()`.** Et tout ce qui est relu par une machine (href, `data-*`, clé d'objet) doit être nettoyé aussi — un marqueur stega dans un `href` casse le lien.
 
