@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import PageBuilderSections from '../../components/PageBuilderSections.astro'
 import { client, stegaClient } from '../../lib/sanity.js'
 import { fullTitle } from '../../lib/seo.js'
-import { hotspotPosition } from '../../lib/image.js'
+import { hotspotVars } from '../../lib/image.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -14,6 +14,17 @@ const urlFor = (source: any) => {
   const b = builder.image(source)
   const hs = source?.hotspot
   return (hs?.x != null && hs?.y != null) ? b.focalPoint(hs.x, hs.y) : b
+}
+
+// Fond d'une carte : image Sanity servie à son ratio naturel et cadrée par son
+// hotspot (position + zoom, cf. src/lib/image.js), sinon repli statique.
+// `hs` indique s'il faut poser la classe .img-hotspot (motif défini dans le
+// <style is:global> de BaseLayout).
+const cardBg = (image: any, fallback: string | null) => {
+  if (image?.asset) {
+    return { style: hotspotVars(urlFor(image).width(1400).auto('format').url(), image), hs: true }
+  }
+  return { style: fallback ? `background-image:url('${fallback}')` : undefined, hs: false }
 }
 
 const hp = await stegaClient.fetch(`
@@ -129,11 +140,11 @@ const guideHP = hp?.pagebuilderEn?.find((s: any) => s._type === 'sectionGuideHP'
 const guidePhoto = guideHPfr?.photo ?? guideHP?.photo
 // Pas de recadrage CDN : .guide-photo passe de 3/4 à 16/9 sous 1024px, et un
 // ratio figé s'y ferait redécouper au centre — hotspot perdu, visage coupé.
-// On sert le ratio naturel et on positionne par le hotspot (cf. hotspotPosition).
+// Ratio naturel + cadrage par le hotspot (position ET zoom) → cf. src/lib/image.js
 const guidePhotoUrl  = guidePhoto?.asset
-  ? urlFor(guidePhoto).width(900).auto('format').url()
+  ? urlFor(guidePhoto).width(1200).auto('format').url()
   : null
-const guidePhotoPos  = hotspotPosition(guidePhoto)
+const guidePhotoVars = hotspotVars(guidePhotoUrl, guidePhoto)
 const guideEyebrow   = 'Your guide'
 const guideNom       = stegaClean(guideHP?.nom) || 'Jean-Baptiste Vidal'
 const guideAccroche  = '33 years of fly fishing and experience at your service, including 21 years of professional guiding in France and abroad.'
@@ -162,9 +173,7 @@ const materielSection = {
   featuredEyebrow: 'Rods · Lines · Reels · Accessories',
   featuredTitre:   'My gear',
   featuredLien:    '/en/materiel-jeanbaptistevidal',
-  featuredImage:   materielHP?.featuredImage?.asset
-    ? urlFor(materielHP.featuredImage).width(900).height(700).fit('crop').crop('focalpoint').url()
-    : '/images/materiel-hero.jpg',
+  featuredBg:      cardBg(materielHP?.featuredImage, '/images/materiel-hero.jpg'),
   sousLiens: (materielHP?.sousLiens?.length > 0)
     ? materielHP.sousLiens.map((l: any) => ({ label: stegaClean(l.label) || '', href: '/en' + (stegaClean(l.href) || '#') }))
     : [
@@ -180,11 +189,9 @@ const materielSection = {
         eyebrow:  stegaClean(c.eyebrow) || MATERIEL_CARDS_FALLBACK[i]?.eyebrow || '',
         titre:    stegaClean(c.titre)   || MATERIEL_CARDS_FALLBACK[i]?.titre   || '',
         lien:     '/en' + (stegaClean(c.lien) || MATERIEL_CARDS_FALLBACK[i]?.lien || '#'),
-        imageUrl: c.image?.asset
-          ? urlFor(c.image).width(600).height(500).fit('crop').crop('focalpoint').url()
-          : MATERIEL_CARDS_FALLBACK[i]?.imageUrl || null,
+        bg:       cardBg(c.image, MATERIEL_CARDS_FALLBACK[i]?.imageUrl || null),
       }))
-    : MATERIEL_CARDS_FALLBACK,
+    : MATERIEL_CARDS_FALLBACK.map((c) => ({ ...c, bg: cardBg(null, c.imageUrl) })),
 }
 ---
 
@@ -227,7 +234,7 @@ const materielSection = {
     if (s._type === 'sectionGuideHP') return (
       <section class="section section--sand guide-section">
         <div class="container guide-inner">
-          <div class="guide-photo" style={guidePhotoUrl ? `background-image: url('${guidePhotoUrl}'); background-position: ${guidePhotoPos}` : undefined}></div>
+          <div class:list={['guide-photo', guidePhotoVars && 'img-hotspot']} style={guidePhotoVars}></div>
           <div class="guide-text">
             <p class="eyebrow">{guideEyebrow}</p>
             <h2>{guideNom}</h2>
@@ -252,7 +259,7 @@ const materielSection = {
         </div>
         <div class="hp-materiel__grid">
           <div class="hp-mat-card hp-mat-card--featured">
-            <div class="hp-mat-card__bg" style={`background-image: url('${materielSection.featuredImage}')`}></div>
+            <div class:list={['hp-mat-card__bg', materielSection.featuredBg.hs && 'img-hotspot']} style={materielSection.featuredBg.style}></div>
             <div class="hp-mat-card__body hp-mat-card__body--featured">
               <div class="hp-mat-card__left">
                 <p class="hp-mat-card__eyebrow">{materielSection.featuredEyebrow}</p>
@@ -268,7 +275,7 @@ const materielSection = {
           </div>
           {materielSection.cardsSecondaires.map((c: any) => (
             <a href={c.lien} class="hp-mat-card">
-              <div class="hp-mat-card__bg" style={`background-image: url('${c.imageUrl}')`}></div>
+              <div class:list={['hp-mat-card__bg', c.bg.hs && 'img-hotspot']} style={c.bg.style}></div>
               <div class="hp-mat-card__body">
                 <p class="hp-mat-card__eyebrow">{c.eyebrow}</p>
                 <h3>{c.titre}</h3>
@@ -467,6 +474,12 @@ const materielSection = {
     background-size: cover;
     background-position: center;
     border-radius: 3px;
+    position: relative; /* requis par le ::before de .img-hotspot */
+  }
+  /* Photo Sanity présente : le ::before de .img-hotspot la porte. On coupe le
+     repli statique, sinon le navigateur le télécharge pour rien derrière. */
+  .guide-photo.img-hotspot {
+    background-image: none;
   }
   .guide-accroche {
     font-family: var(--font-serif);

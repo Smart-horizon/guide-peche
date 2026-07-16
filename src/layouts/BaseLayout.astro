@@ -185,6 +185,40 @@ const allJsonLd = [businessJsonLd, ...jsonLd]
     --header-height: 72px;
   }
 
+  /* ── Cadrage d'image piloté par le hotspot Sanity ──────────────────────────
+     À poser sur tout conteneur affichant une image Sanity dont le cadre change
+     de ratio selon l'écran. Les variables viennent de hotspotVars()
+     (src/lib/image.js) en style inline :
+        <div class="img-hotspot" style={hotspotVars(url, image)}></div>
+
+     Pourquoi un ::before + transform plutôt que background-size sur l'élément :
+     le fond reste en `cover` (donc il couvre TOUJOURS le cadre) et le zoom est
+     appliqué par-dessus, centré sur le hotspot. Une hauteur en pourcentage
+     laisserait des bandes dès qu'une image serait plus étroite que le cadre.
+
+     Sans hotspot, --img-zoom vaut 1 → strictement équivalent à `cover`. */
+     ⚠️ À poser sur un calque d'image DÉDIÉ et SANS enfant (le ::before, étant
+     absolu, passerait au-dessus d'un contenu non positionné). L'hôte doit être
+     positionné : .guide-photo est en `relative`, .hp-mat-card__bg en `absolute`.
+     On ne force donc pas `position` ici, pour ne pas écraser ce dernier. */
+  .img-hotspot {
+    overflow: hidden;
+  }
+  .img-hotspot::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--img);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: var(--img-pos, center);
+    /* Même origine que la position : le hotspot reste au même endroit du cadre
+       pendant que le reste s'agrandit autour de lui. Se compose proprement avec
+       un scale de survol posé sur l'hôte (ex. .hp-mat-card:hover). */
+    transform-origin: var(--img-pos, center);
+    transform: scale(var(--img-zoom, 1));
+  }
+
   /* ── Reset ── */
   *, *::before, *::after {
     box-sizing: border-box;

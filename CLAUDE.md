@@ -157,16 +157,26 @@ Footer fond           : #07181f
 - Overlay gradient sombre pour lisibilité
 - Titre + description + flèche → par-dessus la photo
 
-### ⚠️ Hotspot Sanity et ratio responsive — le piège
+### 🎯 Cadrage des images : le hotspot pilote TOUT
 
-`urlFor(img).width(W).height(H).fit('crop').crop('focalpoint')` produit une image d'un **ratio figé**. Tant que le cadre CSS a le même ratio, le hotspot est respecté. Mais si une media query change le ratio du cadre, `background-size: cover` **redécoupe l'image au centre** et le hotspot est perdu.
+**Le piège** : `urlFor(img).width(W).height(H).fit('crop').crop('focalpoint')` produit une image d'un **ratio figé**. Tant que le cadre CSS a le même ratio, le hotspot est respecté. Mais si une media query change ce ratio, `background-size: cover` **redécoupe l'image au centre** et le hotspot est perdu. C'est ce qui coupait le visage du guide sur mobile (`.guide-photo` : 3/4 → 16/9 sous 1024px, image en 600×800 → seule la bande 29–71 % visible, visage à 25 % hors champ).
 
-C'est ce qui coupait le visage du guide sur mobile (`.guide-photo` : 3/4 → 16/9 sous 1024px, image servie en 600×800 → seule la bande 29–71 % restait visible, visage à 25 % hors champ).
+**La règle** — on ne recadre plus côté CDN. L'image est servie à son **ratio naturel** (`urlFor(img).width(W).auto('format')`, sans `height`/`crop`), puis `src/lib/image.js` en déduit :
+- la **position** (`--img-pos`) → le sujet reste visible quel que soit le ratio du cadre ;
+- le **zoom** (`--img-zoom`) → déduit de la **TAILLE** du hotspot. C'est la sémantique Sanity : le hotspot n'est pas un point mais « la zone qui doit rester visible ». Cercle serré = gros plan, cercle large = plan large. **JBV recadre n'importe quelle image depuis le Studio, sans développeur.**
 
-**La parade** (déjà celle de `heroBg`) : servir l'image à son **ratio naturel** (`urlFor(img).width(W).auto('format')`, sans `height`/`crop`) et positionner par le hotspot via `hotspotPosition()` de `src/lib/image.js` → le sujet reste visible quel que soit le ratio du cadre.
+**Usage** :
+```astro
+<div class:list={['ma-carte', vars && 'img-hotspot']} style={vars}></div>
+// vars = hotspotVars(urlFor(image).width(1400).auto('format').url(), image)
+```
+Le motif `.img-hotspot` est dans le `<style is:global>` de `BaseLayout.astro`.
 
+- **`CIBLE` (0.9) est le seul réglage global du cadrage** : part du cadre occupée par le hotspot. La monter zoome tout le site, la baisser l'élargit. Calé sur le réel : guide (h=0.46) → ×1.97, cartes Matériel (h=0.81) → ×1.11, sans hotspot → ×1 (rendu strictement inchangé).
+- ⚠️ Le zoom passe par `transform: scale()` sur un `::before` en `cover`, **pas** par `background-size: auto Z%` : agrandir un fond déjà en `cover` couvre toujours le cadre, alors qu'une hauteur en % laisserait des bandes si l'image était plus étroite que le cadre (ex. photo paysage remplacée par un portrait).
+- ⚠️ `.img-hotspot` se pose sur un calque d'image **dédié et sans enfant** (le `::before` absolu passerait au-dessus d'un contenu non positionné), et l'hôte doit être **positionné** (`.guide-photo` en `relative`, `.hp-mat-card__bg` en `absolute`). Le motif ne force pas `position` pour ne pas écraser ce dernier.
 - ⚠️ `hotspotPosition()` suppose qu'aucun `rect`/crop CDN n'est appliqué : les coordonnées du hotspot sont relatives à l'image ENTIÈRE.
-- 🔎 **Reste à auditer** : `.hp-mat-card` (section Matériel) passe de `4/3` à `16/9` sous 1024px avec des images en 600×500 → même motif à risque.
+- **Périmètre actuel** : les cartes (photo du guide, cartes Matériel), FR + EN. Les heros gardent `heroBg()` — ils rendent déjà correctement. 🔎 Reste éventuellement à étendre au blog / à la boutique.
 - ⚠️ `src/pages/en/index.astro` prenait sa `sectionGuideHP` en bloc depuis `pagebuilderEn`, **photo comprise** — donc avec un hotspot périmé (la copie EN n'est pas resynchronisée quand JBV recadre en FR). La photo est désormais forcée depuis le FR, conformément à la règle de `mergeEnSections`. Vérifier ce réflexe sur toute section lue directement depuis `pagebuilderEn`.
 
 ---
