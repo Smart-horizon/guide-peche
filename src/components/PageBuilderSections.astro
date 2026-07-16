@@ -77,7 +77,17 @@ const heroHeight = (h: string) => {
   return v === 'medium' ? '52vh' : v === 'compact' ? '36vh' : '72vh'
 }
 
-const heroBg = (image: any) => {
+// Curseur "Épaisseur du voile bleu" (sectionHero.voile, 0–100) → multiplicateur
+// appliqué aux alphas du dégradé. 50 = réglage d'origine (×1), d'où le /50 :
+// un hero sans le champ (undefined) rend donc exactement comme avant.
+const voileMult = (v: any) => {
+  const n = typeof v === 'number' && Number.isFinite(v) ? v : 50
+  return Math.min(100, Math.max(0, n)) / 50
+}
+// Alpha borné à 1 : au-delà de 50 le voile densifie jusqu'à l'aplat opaque.
+const voileAlpha = (base: number, k: number) => +Math.min(1, base * k).toFixed(3)
+
+const heroBg = (image: any, voile?: any) => {
   if (!image?.asset) return 'background:var(--color-ocean)'
   // On sert l'image à pleine largeur sans crop CDN,
   // et on laisse background-position CSS gérer le hotspot (plus fiable que crop=focalpoint)
@@ -86,7 +96,8 @@ const heroBg = (image: any) => {
   const bgPos = (hs?.x != null && hs?.y != null)
     ? `${Math.round(hs.x * 100)}% ${Math.round(hs.y * 100)}%`
     : 'center'
-  return `background:linear-gradient(to top,rgba(7,24,31,.88) 0%,rgba(13,43,62,.45) 60%,rgba(13,43,62,.3) 100%),url(${url}) ${bgPos}/cover no-repeat`
+  const k = voileMult(voile)
+  return `background:linear-gradient(to top,rgba(7,24,31,${voileAlpha(.88, k)}) 0%,rgba(13,43,62,${voileAlpha(.45, k)}) 60%,rgba(13,43,62,${voileAlpha(.3, k)}) 100%),url(${url}) ${bgPos}/cover no-repeat`
 }
 
 interface Props {
@@ -240,7 +251,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                     class="pb-hero__yt-poster"
                     style={posterUrl ? `background-image:url(${posterUrl})` : ''}
                   />
-                  <div class="pb-hero__overlay"></div>
+                  <div class="pb-hero__overlay" style={`--voile-k:${voileMult(s.voile)}`}></div>
                 </>
               )
             })() : stegaClean(s.videoUrl) ? (
@@ -253,10 +264,10 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             {stegaClean(s.videoWebmUrl) && <source src={stegaClean(s.videoWebmUrl)} type="video/webm" />}
             <source src={stegaClean(s.videoUrl)} type="video/mp4" />
           </video>
-          <div class="pb-hero__overlay"></div>
+          <div class="pb-hero__overlay" style={`--voile-k:${voileMult(s.voile)}`}></div>
         </>
       ) : (
-        <div class="pb-hero__bg" style={heroBg(s.image)}></div>
+        <div class="pb-hero__bg" style={heroBg(s.image, s.voile)}></div>
       )}
       <div class="pb-hero__content container">
         {s.badges?.length > 0 && (
@@ -1865,7 +1876,12 @@ span.ts-row__name { color: var(--color-text, #1a1a1f); }
 .pb-hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(7,24,31,.88) 0%, rgba(13,43,62,.5) 55%, rgba(13,43,62,.25) 100%);
+  /* --voile-k : multiplicateur posé par le curseur "Épaisseur du voile bleu"
+     (1 = réglage d'origine). Les alphas > 1 sont clampés par le navigateur. */
+  background: linear-gradient(to top,
+    rgba(7,24,31, calc(.88 * var(--voile-k, 1))) 0%,
+    rgba(13,43,62, calc(.5 * var(--voile-k, 1))) 55%,
+    rgba(13,43,62, calc(.25 * var(--voile-k, 1))) 100%);
 }
 .pb-hero__content {
   position: relative;

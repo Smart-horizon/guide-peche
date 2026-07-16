@@ -136,6 +136,13 @@ Footer fond           : #07181f
 - Bouton "Réserver" très visible dès le hero
 - Badge "21 ans de guidage" en coin
 
+**Curseur "Épaisseur du voile bleu"** (`sectionHero.voile`, 0–100) : dose le voile pour que le titre blanc ressorte sur une photo claire. Aperçu en direct dans le Studio (vraie photo + titre témoin).
+- **50 = réglage d'origine** et le champ est alors *absent* du document (le curseur fait `unset` à 50) → les heros jamais touchés rendent exactement comme avant.
+- Le curseur est un composant maison (`studio/components/VoileSlider.jsx`) : Sanity **n'a pas** d'input "range" natif pour les nombres (`NumberOptions` n'accepte que les listes d'énumération — `options.range` est silencieusement ignoré).
+- ⚠️ Le calcul (`mult` / `alpha`) est **dupliqué** entre `VoileSlider.jsx` (aperçu Studio) et `voileMult`/`voileAlpha` de `src/components/PageBuilderSections.astro` (rendu du site). Modifier les deux ensemble, sinon l'aperçu ment.
+- S'applique aux 3 branches du hero : photo (via `heroBg`), vidéo YouTube et vidéo MP4 (via la variable CSS `--voile-k` sur `.pb-hero__overlay`).
+- `heroBg()` sert aussi à `sectionBoutiqueCta` — l'appel s'y fait sans voile, donc au réglage d'origine.
+
 ### Cartes prestations
 - Photos en arrière-plan (comme Wild Fly Production)
 - Overlay gradient sombre pour lisibilité

@@ -5,6 +5,8 @@
  * des schemas prestation, voyage, page, etc.
  */
 
+import { VoileSlider } from '../components/VoileSlider.jsx'
+
 // ── Images grisées dans les sections EN (partagées depuis le FR) ──────────
 // Renvoie true si le champ est à l'intérieur d'un pagebuilderEn → readOnly
 const enRO = ({ path }) => Array.isArray(path) && path.some(p => p === 'pagebuilderEn')
@@ -72,6 +74,16 @@ export const sectionHero = {
       name: 'image', title: 'Photo de fond', type: 'image',
       options: { hotspot: true }, readOnly: enRO ,
       description: 'Grande photo en arrière-plan du hero',
+    },
+    {
+      // Réglage visuel (pas une traduction) : hérité du FR côté EN.
+      // mergeEnSections prend les nombres depuis le FR — rien à synchroniser.
+      // Curseur maison : Sanity n'a pas d'input "range" natif pour les nombres.
+      // Pas d'initialValue : 50 = absence de valeur = rendu d'origine.
+      name: 'voile', title: 'Épaisseur du voile bleu',
+      type: 'number', readOnly: enRO,
+      components: { input: VoileSlider },
+      description: 'Assombrit la photo pour que le titre blanc reste lisible. 50 = réglage d\'origine. Photo claire (ciel, sable, reflets) → montez vers 70-100. Photo déjà sombre → descendez. 0 = aucun voile.',
     },
     {
       name: 'eyebrow', title: 'Texte au-dessus du titre (eyebrow)',
