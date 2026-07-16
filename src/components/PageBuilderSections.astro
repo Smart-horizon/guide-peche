@@ -277,8 +277,9 @@ const voyagesForGrid: any[] = hasVoyagesGrid
       <div class="pb-hero__content container">
         {s.badges?.length > 0 && (
           <div class="pb-hero__badges">
+            {/* stegaClean : sans lui, le style du badge ne s'applique pas en aperçu */}
             {s.badges.map((b: any) => (
-              <span class={`pb-hero__badge${b.style === 'mouche' ? ' pb-hero__badge--mouche' : ''}`}>{b.texte}</span>
+              <span class={`pb-hero__badge${stegaClean(b.style) === 'mouche' ? ' pb-hero__badge--mouche' : ''}`}>{b.texte}</span>
             ))}
           </div>
         )}
@@ -931,11 +932,16 @@ const voyagesForGrid: any[] = hasVoyagesGrid
     const n = parseInt(stegaClean(s.nombre) || '3', 10) || 3
     let arts: any[] = []
     if (mode === 'manuel') {
+      // ⚠️ En aperçu (perspective previewDrafts), un article qui a un brouillon
+      // remonte avec _id = "drafts.xxx" alors que la référence pointe l'_id
+      // publié. Sans normaliser, le choix manuel de JBV se viderait en aperçu.
+      const nuId = (id: string) => String(id ?? '').replace(/^drafts\./, '')
       arts = (s.articlesChoisis ?? [])
-        .map((r: any) => blogArticles.find((a: any) => a._id === (r._ref || r._id)))
+        .map((r: any) => blogArticles.find((a: any) => nuId(a._id) === nuId(r._ref || r._id)))
         .filter(Boolean)
     } else if (mode === 'espece' && stegaClean(s.espece)) {
-      arts = blogArticles.filter((a: any) => a.espece === stegaClean(s.espece))
+      // ⚠️ a.espece porte des marqueurs stega en aperçu → nettoyer LES DEUX côtés
+      arts = blogArticles.filter((a: any) => stegaClean(a.espece) === stegaClean(s.espece))
     } else if (mode === 'lies' && articlesLies?.length) {
       arts = articlesLies
     } else {

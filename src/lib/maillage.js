@@ -1,3 +1,22 @@
+import { stegaClean } from '@sanity/client/stega'
+
+/**
+ * ⚠️ STEGA — à lire avant de toucher aux comparaisons ci-dessous.
+ *
+ * En mode aperçu, le client Sanity encode des caractères invisibles dans TOUTES
+ * les chaînes (c'est ce qui rend les overlays cliquables dans le Studio). Une
+ * égalité stricte devient alors fausse : `'bar' !== 'bar␣marqueurs`.
+ *
+ * Ce module ne fait presque QUE des comparaisons de chaînes (espece, categorie,
+ * slug) — sans nettoyage, le bloc "Derniers récits" se vidait en aperçu (42
+ * articles trouvés en public, 0 en aperçu) alors que le site publié était bon.
+ *
+ * Règle : on nettoie ce qui sert à la LOGIQUE et les URLs (un marqueur stega
+ * dans un href casse le lien). On ne touche pas aux objets retournés : leurs
+ * textes gardent leur stega pour rester cliquables dans l'aperçu.
+ */
+const net = (v) => stegaClean(v)
+
 /**
  * maillage.js — Maillage interne SEO (cocon sémantique)
  *
@@ -125,19 +144,20 @@ const CIBLES_PAGES = [
  * Retourne { url, titre, titreEn } ou null.
  */
 export function cibleArticle(article) {
-  // 1. Choix manuel dans Sanity
+  // 1. Choix manuel dans Sanity — slug nettoyé : il part dans un href
   const ref = article?.prestationLiee
   if (ref?.slug) {
-    return { url: `/${ref.slug}`, titre: ref.title || 'cette prestation', titreEn: ref.title || 'this experience' }
+    return { url: `/${net(ref.slug)}`, titre: ref.title || 'cette prestation', titreEn: ref.title || 'this experience' }
   }
   // 2. Mots-clés
-  const haystack = [article?.title || '', ...(article?.tags || [])].join(' · ')
+  const espece = net(article?.espece)
+  const haystack = net([article?.title || '', ...(article?.tags || [])].join(' · '))
   for (const c of CIBLES) {
-    if (c.espece && article?.espece !== c.espece) continue
+    if (c.espece && espece !== c.espece) continue
     if (c.rx.test(haystack)) return { url: c.url, titre: c.titre, titreEn: c.titreEn }
   }
   // 3. Pilier de l'espèce
-  return article?.espece ? PILIERS[article.espece] ?? null : null
+  return espece ? PILIERS[espece] ?? null : null
 }
 
 /**
@@ -150,18 +170,19 @@ export function cibleArticle(article) {
  */
 export function cibleSecondaire(article) {
   const principale = cibleArticle(article)?.url ?? null
-  // 1. Choix manuel dans Sanity
+  // 1. Choix manuel dans Sanity — slug nettoyé : il part dans un href
   const ref = article?.pageLiee
   if (ref?.slug) {
-    const url = `/${ref.slug}`
+    const url = `/${net(ref.slug)}`
     if (url !== principale) {
       return { url, titre: ref.title || 'cette page', titreEn: ref.title || 'this page' }
     }
   }
   // 2. Mots-clés
-  const haystack = [article?.title || '', ...(article?.tags || [])].join(' · ')
+  const espece = net(article?.espece)
+  const haystack = net([article?.title || '', ...(article?.tags || [])].join(' · '))
   for (const c of CIBLES_PAGES) {
-    if (c.espece && article?.espece !== c.espece) continue
+    if (c.espece && espece !== c.espece) continue
     if (c.rx.test(haystack) && c.url !== principale) {
       return { url: c.url, titre: c.titre, titreEn: c.titreEn }
     }
@@ -173,7 +194,7 @@ export function cibleSecondaire(article) {
 export function especesPourDoc(doc) {
   if (doc?._type === 'voyage') return ['exotique']
   if (doc?._type !== 'prestation') return null
-  switch (doc.categorie) {
+  switch (net(doc.categorie)) {
     case 'bar':         return ['bar']
     case 'eau-douce':   return ['truite', 'saumon', 'alose', 'brochet']
     case 'masterclass': return ['truite']
@@ -189,27 +210,28 @@ export function especesPourDoc(doc) {
  * dans plus de 30 % des articles sont ignorés). Égalité → le plus récent.
  */
 export function articlesSimilaires(article, allArticles) {
-  const monSlug = article?.slug?.current || article?.slug
+  const monSlug = net(article?.slug?.current || article?.slug)
   const maCible = cibleArticle(article)?.url ?? null
   const maCibleSec = cibleSecondaire(article)?.url ?? null
+  const monEspece = net(article?.espece)
 
   // Fréquence des tags → ignorer les tags trop communs ("pêche à la mouche"…)
   const freq = {}
   for (const a of allArticles) for (const t of a.tags || []) {
-    const k = t.toLowerCase()
+    const k = net(t).toLowerCase()
     freq[k] = (freq[k] || 0) + 1
   }
   const seuil = allArticles.length * 0.3
-  const mesTags = new Set((article?.tags || []).map((t) => t.toLowerCase()).filter((t) => (freq[t] || 0) <= seuil))
+  const mesTags = new Set((article?.tags || []).map((t) => net(t).toLowerCase()).filter((t) => (freq[t] || 0) <= seuil))
 
   return allArticles
-    .filter((a) => (a.slug?.current || a.slug) !== monSlug)
+    .filter((a) => net(a.slug?.current || a.slug) !== monSlug)
     .map((a) => {
       let score = 0
       if (maCible && cibleArticle(a)?.url === maCible) score += 4
       if (maCibleSec && cibleSecondaire(a)?.url === maCibleSec) score += 2
-      if (article?.espece && a.espece === article.espece) score += 2
-      const partages = (a.tags || []).filter((t) => mesTags.has(t.toLowerCase())).length
+      if (monEspece && net(a.espece) === monEspece) score += 2
+      const partages = (a.tags || []).filter((t) => mesTags.has(net(t).toLowerCase())).length
       score += Math.min(partages, 3)
       return { a, score }
     })
@@ -225,12 +247,12 @@ export function articlesSimilaires(article, allArticles) {
  * `allArticles` : liste légère { title, titleEn, slug, date, image, espece, tags, prestationLiee }.
  */
 export function articlesPourPage(slug, doc, allArticles) {
-  const url = `/${slug}`
+  const url = `/${net(slug)}`
   // Un article compte s'il cible cette page en principal OU en secondaire
   const precis = allArticles.filter(
     (a) => cibleArticle(a)?.url === url || cibleSecondaire(a)?.url === url
   )
   const especes = especesPourDoc(doc) ?? []
-  const parEspece = allArticles.filter((a) => especes.includes(a.espece) && !precis.includes(a))
+  const parEspece = allArticles.filter((a) => especes.includes(net(a.espece)) && !precis.includes(a))
   return [...precis, ...parEspece].slice(0, 3)
 }

@@ -78,6 +78,29 @@ Test à blanc possible à tout moment : onglet Actions → « Purge RGPD des com
 
 ---
 
+## 👁️ STEGA — la règle qui casse l'aperçu en silence
+
+En mode aperçu (`PUBLIC_SANITY_PREVIEW=true`), le client Sanity encode des **caractères invisibles dans toutes les chaînes** — c'est ce qui rend les overlays cliquables dans le Studio. Conséquence : `'bar' !== 'bar␣marqueurs`.
+
+**Règle : toute comparaison de chaîne venant de Sanity doit passer par `stegaClean()`.** Et tout ce qui est relu par une machine (href, `data-*`, clé d'objet) doit être nettoyé aussi — un marqueur stega dans un `href` casse le lien.
+
+En revanche, **le texte affiché garde son stega** : c'est lui qui rend l'élément cliquable dans l'aperçu. D'où le motif du projet : `pick(v, fallback)` teste avec `stegaClean` mais rend la valeur ORIGINALE.
+
+```js
+stegaClean(doc.categorie) === 'bar'   // ✅ logique
+especes.includes(stegaClean(a.espece)) // ✅ logique
+<a href={stegaClean(s.lien)}>{s.titre}</a>  // ✅ href nettoyé, texte intact
+```
+
+**Le symptôme** : l'aperçu et le site publié divergent alors que le contenu est identique — typiquement une liste filtrée qui se vide. Vécu le 16/07/2026 : le bloc « Derniers récits » affichait 3 articles en publié et 1 en aperçu, parce que `maillage.js` comparait `espece` sans nettoyer (42 articles trouvés en public, **0** en aperçu).
+
+- ⚠️ **Un build public ne révèle JAMAIS ce bug** (pas de stega). Il faut tester avec le worker d'aperçu, ou un client stega en local.
+- ⚠️ Les regex y échappent souvent (les marqueurs sont ajoutés en fin de chaîne) — d'où des bugs partiels, très trompeurs : une partie de la logique marche, l'autre non.
+- ⚠️ Autre piège du même écran : en perspective `previewDrafts`, un document qui a un brouillon remonte avec `_id = "drafts.xxx"` alors qu'une `reference` pointe l'`_id` publié. Comparer des ids demande de retirer le préfixe `drafts.` (cf. `sectionBlog` mode manuel).
+- Corrigés le 16/07/2026 : `src/lib/maillage.js` (toutes les comparaisons), `sectionBlog` (modes `espece` et `manuel`), `relTitre` de `[slug].astro` FR+EN, style des badges du hero, `commander.astro` (`data-type` relu par le JS).
+
+---
+
 ## 📁 STRUCTURE DU PROJET
 
 ```

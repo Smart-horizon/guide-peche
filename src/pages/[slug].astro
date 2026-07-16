@@ -5,6 +5,7 @@ import { articlesPourPage } from '../lib/maillage.js'
 import { fullTitle } from '../lib/seo.js'
 import PageBuilderSections from '../components/PageBuilderSections.astro'
 import { client } from '../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
 const builder = imageUrlBuilder(client)
@@ -104,7 +105,10 @@ const tousArticles = await client.fetch(`
   }
 `)
 const articlesLies = articlesPourPage(slug, doc, tousArticles)
-const relTitre = doc.categorie === 'bar' ? 'Derniers récits de pêche au bar'
+// stegaClean : en aperçu, doc.categorie porte des marqueurs invisibles et
+// l'égalité stricte échouerait → titre générique alors que le site publié
+// affiche le bon. Toute comparaison de chaîne Sanity doit être nettoyée.
+const relTitre = stegaClean(doc.categorie) === 'bar' ? 'Derniers récits de pêche au bar'
   : doc._type === 'voyage' ? 'Derniers récits de voyage'
   : doc._type === 'page' ? 'À lire sur le blog'
   : 'Derniers récits de pêche'

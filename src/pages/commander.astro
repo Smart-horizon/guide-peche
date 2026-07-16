@@ -3,6 +3,7 @@ export const prerender = false
 
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { client } from '../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 
 // Page de commande — SSR pour lire la config livraison à jour à chaque visite.
 // Étape 1 : récap panier + choix du mode de livraison (+ point relais Mondial
@@ -76,10 +77,13 @@ const fmtPrix = (n) => n.toFixed(2).replace('.', ',') + ' €'
         )}
         <div class="modes" id="modes">
           {modes.map((m) => (
-            <label class="mode" data-key={m._key} data-prix={m.prix} data-poids-max={m.poidsMax ?? ''} data-type={m.type ?? 'domicile'}>
+            /* stegaClean sur `type` : en aperçu il porterait des marqueurs invisibles
+               — data-type est relu par le JS (dataset.type === 'relais'), un marqueur
+               y casserait la logique point relais, comme dans un href. */
+            <label class="mode" data-key={m._key} data-prix={m.prix} data-poids-max={m.poidsMax ?? ''} data-type={stegaClean(m.type) || 'domicile'}>
               <input type="radio" name="mode" value={m._key} />
               <span class="mode-infos">
-                <span class="mode-nom">{m.type === 'relais' ? '📍 ' : ''}{m.nom}</span>
+                <span class="mode-nom">{stegaClean(m.type) === 'relais' ? '📍 ' : ''}{m.nom}</span>
                 {m.delai && <span class="mode-delai">{m.delai}</span>}
               </span>
               <span class="mode-prix" data-prix-affiche>{fmtPrix(m.prix)}</span>

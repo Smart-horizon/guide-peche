@@ -7,6 +7,7 @@ import RelatedArticles from '../../components/RelatedArticles.astro'
 import { articlesPourPage } from '../../lib/maillage.js'
 import { fullTitle } from '../../lib/seo.js'
 import { client } from '../../lib/sanity.js'
+import { stegaClean } from '@sanity/client/stega'
 import { mergeSectionsEn } from '../../lib/mergeEnSections.js'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -88,7 +89,10 @@ const tousArticles = await client.fetch(`
 `)
 const articlesLies = articlesPourPage(slug, doc, tousArticles)
 const articlesLiesEn = articlesLies.map((a: any) => ({ ...a, title: a.titleEn || a.title }))
-const relTitre = doc.categorie === 'bar' ? 'Latest sea bass fishing stories'
+// stegaClean : en aperçu, doc.categorie porte des marqueurs invisibles et
+// l'égalité stricte échouerait → titre générique alors que le site publié
+// affiche le bon. Toute comparaison de chaîne Sanity doit être nettoyée.
+const relTitre = stegaClean(doc.categorie) === 'bar' ? 'Latest sea bass fishing stories'
   : doc._type === 'voyage' ? 'Latest trip reports'
   : doc._type === 'page' ? 'From the blog'
   : 'Latest fishing stories'
