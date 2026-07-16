@@ -17,6 +17,20 @@ import { stegaClean } from '@sanity/client/stega'
  */
 const net = (v) => stegaClean(v)
 
+// Mémo par article : `cibleSecondaire` appelle `cibleArticle`, qui reconstruit
+// sinon le même « haystack » (titre + tags) pour chacun des 156 articles, à
+// chaque page. Le worker d'aperçu tourne dans un budget CPU serré (~10 ms) :
+// ce cache évite de refaire deux fois le même travail.
+const _cible = new WeakMap()
+const _cibleSec = new WeakMap()
+const memo = (map, obj, calcul) => {
+  if (!obj || typeof obj !== 'object') return calcul()
+  if (map.has(obj)) return map.get(obj)
+  const v = calcul()
+  map.set(obj, v)
+  return v
+}
+
 /**
  * maillage.js — Maillage interne SEO (cocon sémantique)
  *
@@ -144,20 +158,22 @@ const CIBLES_PAGES = [
  * Retourne { url, titre, titreEn } ou null.
  */
 export function cibleArticle(article) {
-  // 1. Choix manuel dans Sanity — slug nettoyé : il part dans un href
-  const ref = article?.prestationLiee
-  if (ref?.slug) {
-    return { url: `/${net(ref.slug)}`, titre: ref.title || 'cette prestation', titreEn: ref.title || 'this experience' }
-  }
-  // 2. Mots-clés
-  const espece = net(article?.espece)
-  const haystack = net([article?.title || '', ...(article?.tags || [])].join(' · '))
-  for (const c of CIBLES) {
-    if (c.espece && espece !== c.espece) continue
-    if (c.rx.test(haystack)) return { url: c.url, titre: c.titre, titreEn: c.titreEn }
-  }
-  // 3. Pilier de l'espèce
-  return espece ? PILIERS[espece] ?? null : null
+  return memo(_cible, article, () => {
+    // 1. Choix manuel dans Sanity — slug nettoyé : il part dans un href
+    const ref = article?.prestationLiee
+    if (ref?.slug) {
+      return { url: `/${net(ref.slug)}`, titre: ref.title || 'cette prestation', titreEn: ref.title || 'this experience' }
+    }
+    // 2. Mots-clés
+    const espece = net(article?.espece)
+    const haystack = net([article?.title || '', ...(article?.tags || [])].join(' · '))
+    for (const c of CIBLES) {
+      if (c.espece && espece !== c.espece) continue
+      if (c.rx.test(haystack)) return { url: c.url, titre: c.titre, titreEn: c.titreEn }
+    }
+    // 3. Pilier de l'espèce
+    return espece ? PILIERS[espece] ?? null : null
+  })
 }
 
 /**
@@ -169,25 +185,27 @@ export function cibleArticle(article) {
  * Jamais identique à la cible principale. Retourne { url, titre, titreEn } ou null.
  */
 export function cibleSecondaire(article) {
-  const principale = cibleArticle(article)?.url ?? null
-  // 1. Choix manuel dans Sanity — slug nettoyé : il part dans un href
-  const ref = article?.pageLiee
-  if (ref?.slug) {
-    const url = `/${net(ref.slug)}`
-    if (url !== principale) {
-      return { url, titre: ref.title || 'cette page', titreEn: ref.title || 'this page' }
+  return memo(_cibleSec, article, () => {
+    const principale = cibleArticle(article)?.url ?? null
+    // 1. Choix manuel dans Sanity — slug nettoyé : il part dans un href
+    const ref = article?.pageLiee
+    if (ref?.slug) {
+      const url = `/${net(ref.slug)}`
+      if (url !== principale) {
+        return { url, titre: ref.title || 'cette page', titreEn: ref.title || 'this page' }
+      }
     }
-  }
-  // 2. Mots-clés
-  const espece = net(article?.espece)
-  const haystack = net([article?.title || '', ...(article?.tags || [])].join(' · '))
-  for (const c of CIBLES_PAGES) {
-    if (c.espece && espece !== c.espece) continue
-    if (c.rx.test(haystack) && c.url !== principale) {
-      return { url: c.url, titre: c.titre, titreEn: c.titreEn }
+    // 2. Mots-clés
+    const espece = net(article?.espece)
+    const haystack = net([article?.title || '', ...(article?.tags || [])].join(' · '))
+    for (const c of CIBLES_PAGES) {
+      if (c.espece && espece !== c.espece) continue
+      if (c.rx.test(haystack) && c.url !== principale) {
+        return { url: c.url, titre: c.titre, titreEn: c.titreEn }
+      }
     }
-  }
-  return null
+    return null
+  })
 }
 
 // ── Espèces pertinentes pour une prestation/un voyage (repli sens inverse) ──

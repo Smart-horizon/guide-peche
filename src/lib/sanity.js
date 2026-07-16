@@ -14,6 +14,41 @@ const STUDIO_URL = 'https://jbvidal.sanity.studio/site'
 // client standard, published, sans stega. Aucune pollution du site public.
 const PREVIEW = import.meta.env.PUBLIC_SANITY_PREVIEW === 'true'
 
+// ── Champs JAMAIS encodés par le stega ─────────────────────────────────────
+// Le stega insère ~1500 caractères invisibles par chaîne pour rendre le texte
+// cliquable dans l'aperçu. Sur un champ AFFICHÉ (titre, accroche) c'est utile.
+// Sur un champ de LOGIQUE, c'est doublement nuisible :
+//
+//  1. CORRECTION — toute égalité stricte devient fausse ('bar' !== 'bar␣…').
+//     C'est ce qui vidait le bloc « Derniers récits » en aperçu.
+//  2. CPU — `tags` pesait 9 698 caractères par article. Sur 156 articles, le
+//     seul maillage coûtait 20 ms, au-delà du budget CPU d'un Worker (10 ms) :
+//     le worker d'aperçu tombait en erreur 1102.
+//
+// On coupe donc le stega à la source pour ces champs. C'est la parade de fond :
+// elle vaut pour tout le code, présent et à venir, sans avoir à se souvenir
+// d'appeler stegaClean() à chaque comparaison.
+// ⚠️ N'ajouter ici que des champs NON affichés comme texte éditable — un champ
+// listé ici perd son overlay cliquable dans l'aperçu.
+const CHAMPS_LOGIQUE = new Set([
+  // filtrage / routage
+  'espece', 'categorie', 'tags', 'slug', 'current', 'mode', 'statut', 'pays',
+  // mise en forme (comparés à des valeurs en dur)
+  'fond', 'largeur', 'style', 'listItem', 'hauteur', 'videoPosition', 'type',
+  // liens et URLs — un marqueur stega dans un href casse le lien
+  'url', 'lien', 'href', 'boutonLien', 'featuredLien', 'videoUrl',
+  'videoYoutubeUrl', 'videoWebmUrl', 'youtubeUrl', 'youtubeId',
+])
+
+// sourcePath = chemin dans le document source, ex. ['pagebuilder', {_key}, 'espece'].
+// On regarde le dernier segment nommé.
+const stegaFilter = (props) => {
+  const segments = props.sourcePath.filter((p) => typeof p === 'string')
+  const cle = segments[segments.length - 1]
+  if (CHAMPS_LOGIQUE.has(cle)) return false
+  return props.filterDefault(props)
+}
+
 // Client principal.
 //  · Public  : useCdn true, contenu publié, PAS de stega (site propre).
 //  · Aperçu  : brouillons en temps réel + stega (overlays cliquables dans Sanity).
@@ -26,7 +61,7 @@ export const client = createClient({
     ? {
         perspective: 'previewDrafts',
         token:       import.meta.env.SANITY_TOKEN,
-        stega:       { enabled: true, studioUrl: STUDIO_URL },
+        stega:       { enabled: true, studioUrl: STUDIO_URL, filter: stegaFilter },
       }
     : {}),
 })
@@ -60,5 +95,6 @@ export const previewClient = createClient({
   stega: {
     enabled:   true,
     studioUrl: STUDIO_URL,
+    filter:    stegaFilter, // même règle que le client principal
   },
 })

@@ -93,7 +93,20 @@ Autrement dit : un champ éditable dans le Studio est encodé. `blocks()`/`spanH
 
 ⚠️ **Piège de diagnostic** : une projection GROQ inventée (`contenu[...][0..3].style`) crée des chemins encodables que la vraie requête ne produit pas — elle fait croire à un bug inexistant. **Toujours tester avec la requête réelle du site.**
 
-**Règle : toute comparaison de chaîne venant de Sanity doit passer par `stegaClean()`.** Et tout ce qui est relu par une machine (href, `data-*`, clé d'objet) doit être nettoyé aussi — un marqueur stega dans un `href` casse le lien.
+**La parade de fond : `stegaFilter` dans `src/lib/sanity.js`.** Les champs qui ne servent qu'à la LOGIQUE (`espece`, `categorie`, `tags`, `slug`, `fond`, `largeur`, `url`, `lien`…) ne sont **plus encodés du tout**, à la source. Plus besoin de se souvenir d'un `stegaClean()` à chaque comparaison : ces champs arrivent propres. Pour ajouter un champ, l'inscrire dans `CHAMPS_LOGIQUE` — ⚠️ uniquement s'il n'est pas affiché comme texte éditable, sinon il perd son overlay cliquable.
+
+**Règle de secours** : pour un champ affiché ET comparé, `stegaClean()` reste nécessaire. Et tout ce qui est relu par une machine (href, `data-*`, clé d'objet) doit être nettoyé — un marqueur stega dans un `href` casse le lien.
+
+### 💥 Le stega coûte très cher en CPU — le worker d'aperçu en est mort
+
+Le stega ajoute **~1 500 caractères invisibles PAR CHAÎNE**. Mesuré le 16/07/2026 : le mot « bar » du champ `espece` pesait 1 566 caractères, et les `tags` d'un article 9 698. Sur 156 articles, le seul maillage passait de 0,6 ms à **20 ms** — au-delà du budget CPU d'un Worker Cloudflare (~10 ms). Le worker d'aperçu renvoyait **error 1102 (CPU exceeded)** sur toutes les pages SSR, alors que le site public (statique) allait bien.
+
+Deux parades, cumulées :
+- **`stegaFilter`** : `tags` retombe de 9 698 à 98 caractères → 20 ms → 2,7 ms.
+- **Mémo (`WeakMap`) dans `maillage.js`** : `cibleSecondaire` appelait `cibleArticle`, qui reconstruisait le même « haystack » pour chacun des 156 articles → 2,7 ms → **1,9 ms**.
+
+⚠️ Le worker d'aperçu rend **tout** en SSR (`deploy-preview.sh` bascule `prerender` à `false`) : chaque page paie ce coût à chaque requête. Toute logique ajoutée qui boucle sur les 156 articles doit rester frugale.
+⚠️ En mesurant un mémo, **cloner les objets** entre les itérations — sinon on chronomètre le cache et non le coût réel.
 
 En revanche, **le texte affiché garde son stega** : c'est lui qui rend l'élément cliquable dans l'aperçu. D'où le motif du projet : `pick(v, fallback)` teste avec `stegaClean` mais rend la valeur ORIGINALE.
 
