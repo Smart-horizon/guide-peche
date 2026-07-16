@@ -758,9 +758,16 @@ export const sectionVideo = {
   type: 'object',
   fields: [
     {
-      name: 'url', title: 'URL de la vidéo (YouTube)', type: 'url',
-      description: 'Ex : https://www.youtube.com/watch?v=xxxxx',
-      validation: Rule => Rule.required(),
+      // ⚠️ Validation alignée sur videoEmbed() de src/components/PageBuilderSections.astro.
+      // Sans elle, une URL non reconnue faisait disparaître la section SANS
+      // message — impossible à comprendre depuis le Studio.
+      name: 'url', title: 'URL de la vidéo (YouTube ou Vimeo)', type: 'url',
+      description: 'Ex : https://www.youtube.com/watch?v=xxxxx ou https://vimeo.com/123456789',
+      validation: Rule => Rule.required().custom((url) => {
+        if (!url) return true // le required() s'en charge
+        const ok = /(?:youtube\.com|youtu\.be)/.test(url) || /vimeo\.com\/(?:[\w-]+\/)*\d+/.test(url)
+        return ok || 'Seuls YouTube et Vimeo sont gérés — sinon la section ne s\'affichera pas sur le site.'
+      }),
     },
     {
       name: 'eyebrow', title: 'Libellé (texte au-dessus du titre)', type: 'string',

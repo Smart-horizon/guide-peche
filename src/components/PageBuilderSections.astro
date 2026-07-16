@@ -71,6 +71,21 @@ const ytId = (url: string) =>
   url?.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)?.[1]
   ?? (url?.match(/^[a-zA-Z0-9_-]{11}$/) ? url : null)
 
+// URL d'intégration d'une vidéo, YouTube OU Vimeo. null si l'URL n'est ni l'un
+// ni l'autre — la section n'est alors pas rendue.
+// ⚠️ Historiquement sectionVideo n'acceptait que YouTube : une URL Vimeo faisait
+// disparaître la section SANS message (JBV ne pouvait pas comprendre pourquoi).
+// Le schéma valide désormais l'URL côté Studio — garder les deux alignés.
+const videoEmbed = (url: string) => {
+  const u = stegaClean(url) || ''
+  const yt = ytId(u)
+  if (yt) return `https://www.youtube.com/embed/${yt}`
+  // vimeo.com/197506448, /video/197506448, /channels/xxx/197506448…
+  const vi = u.match(/vimeo\.com\/(?:[\w-]+\/)*(\d+)/)?.[1]
+  if (vi) return `https://player.vimeo.com/video/${vi}`
+  return null
+}
+
 // ── Helpers hero ──────────────────────────────────────────────────────────────
 const heroHeight = (h: string) => {
   const v = stegaClean(h)
@@ -519,13 +534,13 @@ const voyagesForGrid: any[] = hasVoyagesGrid
   )}
 
   {/* ════════════ VIDÉO ════════════ */}
-  {s._type === 'sectionVideo' && ytId(s.url) && (
+  {s._type === 'sectionVideo' && videoEmbed(s.url) && (
     <section class={`section pb-video2 ${bg(s.fond)||''}`}>
       <div class={`container pb-video2__grid${stegaClean(s.videoPosition)==='right' ? ' pb-video2__grid--rev' : ''}`}>
         <div class="pb-video2__player">
           <div class="video-wrap">
             <iframe
-              src={`https://www.youtube.com/embed/${ytId(s.url)}`}
+              src={videoEmbed(s.url)!}
               title={s.titre || pageTitle}
               allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
               allowfullscreen
