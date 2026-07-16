@@ -1,0 +1,49 @@
+name: Purge RGPD des commandes
+
+# Anonymise les commandes de plus de 24 mois dans le dataset privé "commandes".
+# Voir scripts/anonymiser-commandes.mjs pour le raisonnement (24 mois, et
+# pourquoi l'obligation comptable des 10 ans est portée par Stripe, pas Sanity).
+
+on:
+  schedule:
+    # Le 1er de chaque mois à 3h du matin (UTC). La rétention se compte en
+    # mois : un passage mensuel suffit largement.
+    - cron: '0 3 1 * *'
+  # Permet de lancer à la main depuis l'onglet Actions (avec un mode simulation)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Simulation : lister sans rien effacer'
+        type: boolean
+        default: true
+
+# Pas de concurrency partagée avec le deploy : cette purge ne doit jamais être
+# annulée par un déploiement (ni l'inverse).
+concurrency:
+  group: purge-rgpd
+  cancel-in-progress: false
+
+jobs:
+  purge:
+    name: Anonymiser les commandes de +24 mois
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Purge
+        # Le cron passe en réel ; le déclenchement manuel respecte la case cochée.
+        run: node scripts/anonymiser-commandes.mjs ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}
+        env:
+          SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}

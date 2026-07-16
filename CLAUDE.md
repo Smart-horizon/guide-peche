@@ -63,6 +63,19 @@ Sanity Studio  →  Astro  →  Cloudflare Pages
 - Un dataset privé renvoie `200` + liste vide (pas un `401`) aux requêtes non authentifiées.
 - ⚠️ Rendre un dataset privé ne protège **pas** les assets (images) : `cdn.sanity.io` reste accessible par URL.
 
+### ⏳ Rétention RGPD — 24 mois
+
+Un cron mensuel (`.github/workflows/anonymiser-commandes.yml`) lance `scripts/anonymiser-commandes.mjs`, qui **anonymise** les commandes de plus de 24 mois : `client`, `adresseLivraison`, `pointRelais`, `note` et `stripeSessionId` sont effacés, `anonymisee: true` est posé. Le numéro, la date, les articles et les montants restent → JBV garde son historique de ventes.
+
+**Le raisonnement, à ne pas perdre** :
+- L'obligation comptable des **10 ans** (art. L123-22 code de commerce) porte sur les factures : c'est **Stripe** qui la remplit, pas Sanity. Les documents `commande` ne sont qu'un outil opérationnel (préparer et expédier le colis).
+- Une fois cette finalité éteinte, le RGPD **impose** d'effacer (art. 5.1.e) — les 10 ans ne sont pas une autorisation de garder 10 ans.
+- 24 mois = couverture de la garantie légale de conformité (2 ans). La CNIL recommande par ailleurs « relation commerciale + 3 ans » en base active et 5 ans d'archivage intermédiaire (prescription, art. L110-4) — durées applicables à un fichier client, que JBV n'a pas ici.
+- ⚠️ `stripeSessionId` est effacé **volontairement** : le garder rendrait la commande ré-identifiable via Stripe → pseudonymisation et non anonymisation, donc toujours dans le champ du RGPD. Ne pas le remettre.
+- `note` est effacé aussi : JBV peut y mettre un n° de suivi colis, lié à une adresse.
+
+Test à blanc possible à tout moment : onglet Actions → « Purge RGPD des commandes » → Run workflow (case simulation cochée par défaut).
+
 ---
 
 ## 📁 STRUCTURE DU PROJET
@@ -284,7 +297,7 @@ Champs : title, slug, date, image, extrait, contenu (blocks), tags, espece (bar/
 - [ ] Après transfert du domaine : configurer SPF/DKIM et brancher des e-mails personnalisés aux couleurs du site via Resend (confirmation de commande + notification "commande expédiée"). D'ici là : notifications Stripe pour JBV + suivi dans Sanity → Commandes
 - [ ] Remplacer les frais de port provisoires par les vrais tarifs (Colissimo / lettre suivie / Mondial Relay ? — à décider avec JBV)
 - [ ] Raccorder la page CGV à la boutique (lien au checkout) et vérifier les mentions vente à distance / rétractation
-- [ ] Définir une durée de conservation des commandes (RGPD) : purge ou anonymisation des données clients après X mois — Stripe garde de son côté une copie des mêmes données
+- [x] ✅ RGPD — rétention : les commandes de plus de **24 mois** sont anonymisées automatiquement (cron mensuel `.github/workflows/anonymiser-commandes.yml` → `scripts/anonymiser-commandes.mjs`). Voir la section Rétention ci-dessous.
 - [x] ✅ RGPD — données clients isolées : les commandes vivent dans le dataset **privé** `commandes`, pas dans `production` (public en lecture). Voir la section Datasets ci-dessous.
 
 ---

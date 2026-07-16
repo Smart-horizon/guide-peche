@@ -120,6 +120,16 @@ export default {
       readOnly: true,
       hidden: true,
     },
+    {
+      // Posé par scripts/anonymiser-commandes.mjs (purge RGPD à 24 mois).
+      // Sert aussi de garde : une commande déjà anonymisée n'est pas retraitée.
+      name: 'anonymisee',
+      title: 'Données client effacées (RGPD)',
+      type: 'boolean',
+      readOnly: true,
+      hidden: ({ document }) => !document?.anonymisee,
+      description: 'Cette commande a plus de 24 mois : les coordonnées du client ont été effacées automatiquement. Le détail des articles et les montants sont conservés.',
+    },
   ],
 
   orderings: [
@@ -131,14 +141,15 @@ export default {
   ],
 
   preview: {
-    select: { numero: 'numero', date: 'date', statut: 'statut', total: 'totalPaye', client: 'client.nom' },
-    prepare({ numero, date, statut, total, client }) {
+    select: { numero: 'numero', date: 'date', statut: 'statut', total: 'totalPaye', client: 'client.nom', anonymisee: 'anonymisee' },
+    prepare({ numero, date, statut, total, client, anonymisee }) {
       const badges = {
         commandee: '🆕', preparee: '📦', expediee: '🚚', livree: '✅', annulee: '❌',
       }
       const jour = date ? new Date(date).toLocaleDateString('fr-FR') : ''
+      const qui = anonymisee ? '🔒 client effacé (+24 mois)' : (client ?? '')
       return {
-        title: `${badges[statut] ?? ''} ${numero ?? 'Commande'} — ${client ?? ''}`,
+        title: `${badges[statut] ?? ''} ${numero ?? 'Commande'} — ${qui}`,
         subtitle: `${jour} · ${total != null ? total.toFixed(2).replace('.', ',') + ' €' : ''}`,
       }
     },
