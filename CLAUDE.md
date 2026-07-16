@@ -157,6 +157,18 @@ Footer fond           : #07181f
 - Overlay gradient sombre pour lisibilité
 - Titre + description + flèche → par-dessus la photo
 
+### ⚠️ Hotspot Sanity et ratio responsive — le piège
+
+`urlFor(img).width(W).height(H).fit('crop').crop('focalpoint')` produit une image d'un **ratio figé**. Tant que le cadre CSS a le même ratio, le hotspot est respecté. Mais si une media query change le ratio du cadre, `background-size: cover` **redécoupe l'image au centre** et le hotspot est perdu.
+
+C'est ce qui coupait le visage du guide sur mobile (`.guide-photo` : 3/4 → 16/9 sous 1024px, image servie en 600×800 → seule la bande 29–71 % restait visible, visage à 25 % hors champ).
+
+**La parade** (déjà celle de `heroBg`) : servir l'image à son **ratio naturel** (`urlFor(img).width(W).auto('format')`, sans `height`/`crop`) et positionner par le hotspot via `hotspotPosition()` de `src/lib/image.js` → le sujet reste visible quel que soit le ratio du cadre.
+
+- ⚠️ `hotspotPosition()` suppose qu'aucun `rect`/crop CDN n'est appliqué : les coordonnées du hotspot sont relatives à l'image ENTIÈRE.
+- 🔎 **Reste à auditer** : `.hp-mat-card` (section Matériel) passe de `4/3` à `16/9` sous 1024px avec des images en 600×500 → même motif à risque.
+- ⚠️ `src/pages/en/index.astro` prenait sa `sectionGuideHP` en bloc depuis `pagebuilderEn`, **photo comprise** — donc avec un hotspot périmé (la copie EN n'est pas resynchronisée quand JBV recadre en FR). La photo est désormais forcée depuis le FR, conformément à la règle de `mergeEnSections`. Vérifier ce réflexe sur toute section lue directement depuis `pagebuilderEn`.
+
 ---
 
 ## ✅ RÈGLES IMPORTANTES À RESPECTER ABSOLUMENT

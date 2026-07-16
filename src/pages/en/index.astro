@@ -5,6 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import PageBuilderSections from '../../components/PageBuilderSections.astro'
 import { client, stegaClient } from '../../lib/sanity.js'
 import { fullTitle } from '../../lib/seo.js'
+import { hotspotPosition } from '../../lib/image.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -118,12 +119,21 @@ const cadeauBtn1L  = '/en/bon-cadeau'
 const cadeauBtn2T  = 'Ask a question'
 const cadeauBtn2L  = '/contact'
 
-// ── Guide section (EN first, fallback FR)
+// ── Guide section (textes EN d'abord, repli FR)
+const guideHPfr = hp?.pagebuilder?.find((s: any) => s._type === 'sectionGuideHP')
 const guideHP = hp?.pagebuilderEn?.find((s: any) => s._type === 'sectionGuideHP')
-             || hp?.pagebuilder?.find((s: any) => s._type === 'sectionGuideHP')
-const guidePhotoUrl  = guideHP?.photo?.asset
-  ? urlFor(guideHP.photo).width(600).height(800).fit('crop').crop('focalpoint').url()
+             || guideHPfr
+// La PHOTO vient toujours du FR — règle mergeEnSections : « la structure, les
+// images et le design viennent du pagebuilder FR ». La copie EN garde sinon un
+// hotspot périmé (elle n'est pas resynchronisée quand JBV recadre côté FR).
+const guidePhoto = guideHPfr?.photo ?? guideHP?.photo
+// Pas de recadrage CDN : .guide-photo passe de 3/4 à 16/9 sous 1024px, et un
+// ratio figé s'y ferait redécouper au centre — hotspot perdu, visage coupé.
+// On sert le ratio naturel et on positionne par le hotspot (cf. hotspotPosition).
+const guidePhotoUrl  = guidePhoto?.asset
+  ? urlFor(guidePhoto).width(900).auto('format').url()
   : null
+const guidePhotoPos  = hotspotPosition(guidePhoto)
 const guideEyebrow   = 'Your guide'
 const guideNom       = stegaClean(guideHP?.nom) || 'Jean-Baptiste Vidal'
 const guideAccroche  = '33 years of fly fishing and experience at your service, including 21 years of professional guiding in France and abroad.'
@@ -217,7 +227,7 @@ const materielSection = {
     if (s._type === 'sectionGuideHP') return (
       <section class="section section--sand guide-section">
         <div class="container guide-inner">
-          <div class="guide-photo" style={guidePhotoUrl ? `background-image: url('${guidePhotoUrl}')` : undefined}></div>
+          <div class="guide-photo" style={guidePhotoUrl ? `background-image: url('${guidePhotoUrl}'); background-position: ${guidePhotoPos}` : undefined}></div>
           <div class="guide-text">
             <p class="eyebrow">{guideEyebrow}</p>
             <h2>{guideNom}</h2>

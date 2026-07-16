@@ -5,6 +5,7 @@ import NewsletterSection from '../components/NewsletterSection.astro'
 import NewsletterPopup from '../components/NewsletterPopup.astro'
 import { client, stegaClient } from '../lib/sanity.js'
 import { fullTitle } from '../lib/seo.js'
+import { hotspotPosition } from '../lib/image.js'
 import { stegaClean } from '@sanity/client/stega'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -92,9 +93,13 @@ const cadeauBtn2L  = stegaClean(bonCadeauHP?.btn2Lien)  || '/contact'
 
 // ── Guide HP ──────────────────────────────────────────────────────────────────
 const guideHP    = hp?.pagebuilder?.find((s: any) => s._type === 'sectionGuideHP')
+// Pas de recadrage CDN : .guide-photo passe de 3/4 à 16/9 sous 1024px, et un
+// ratio figé s'y ferait redécouper au centre — hotspot perdu, visage coupé.
+// On sert le ratio naturel et on positionne par le hotspot (cf. hotspotPosition).
 const guidePhotoUrl  = guideHP?.photo?.asset
-  ? urlFor(guideHP.photo).width(600).height(800).fit('crop').crop('focalpoint').url()
+  ? urlFor(guideHP.photo).width(900).auto('format').url()
   : null
+const guidePhotoPos  = hotspotPosition(guideHP?.photo)
 const guideEyebrow   = pick(guideHP?.eyebrow, 'Votre guide')
 const guideNom       = pick(guideHP?.nom, 'Jean-Baptiste Vidal')
 const guideAccroche  = pick(guideHP?.accroche, "33 ans de pêche à la mouche et d'expérience à votre service, dont 21 années de guidage en France et à l'étranger.")
@@ -224,7 +229,7 @@ const nlPopupImageUrl  = nl?.popupImage?.asset?.url || '/images/bar-a-vue.jpg'
     if (s._type === 'sectionGuideHP') return (
       <section class="section section--sand guide-section">
         <div class="container guide-inner">
-          <div class="guide-photo" style={guidePhotoUrl ? `background-image: url('${guidePhotoUrl}')` : undefined}></div>
+          <div class="guide-photo" style={guidePhotoUrl ? `background-image: url('${guidePhotoUrl}'); background-position: ${guidePhotoPos}` : undefined}></div>
           <div class="guide-text">
             <p class="eyebrow">{guideEyebrow}</p>
             <h2>{guideNom}</h2>
