@@ -196,11 +196,15 @@ const allJsonLd = [businessJsonLd, ...jsonLd]
      appliqué par-dessus, centré sur le hotspot. Une hauteur en pourcentage
      laisserait des bandes dès qu'une image serait plus étroite que le cadre.
 
-     Sans hotspot, --img-zoom vaut 1 → strictement équivalent à `cover`. */
+     Sans hotspot, --img-zoom vaut 1 → strictement équivalent à `cover`.
+
      ⚠️ À poser sur un calque d'image DÉDIÉ et SANS enfant (le ::before, étant
      absolu, passerait au-dessus d'un contenu non positionné). L'hôte doit être
      positionné : .guide-photo est en `relative`, .hp-mat-card__bg en `absolute`.
-     On ne force donc pas `position` ici, pour ne pas écraser ce dernier. */
+     On ne force donc pas `position` ici, pour ne pas écraser ce dernier.
+
+     ⚠️ `overflow: hidden` n'est PAS cosmétique : sans lui, le ::before agrandi
+     par scale() déborde du cadre et recouvre le contenu voisin. */
   .img-hotspot {
     overflow: hidden;
   }
