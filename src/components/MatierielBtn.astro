@@ -2,11 +2,13 @@
 interface Props {
   href: string
   label?: string
+  /** 'dark' = pour fond sombre (contour clair, défaut) · 'light' = pour fond clair (contour foncé) */
+  tone?: 'dark' | 'light'
 }
-const { href, label = 'Voir le matériel' } = Astro.props
+const { href, label = 'Voir le matériel', tone = 'dark' } = Astro.props
 ---
 
-<a href={href} class="reel-btn" title={label}>
+<a href={href} class="reel-btn" data-tone={tone} title={label}>
   <svg
     class="reel-icon"
     viewBox="0 0 40 40"
@@ -97,8 +99,8 @@ const { href, label = 'Voir le matériel' } = Astro.props
     display: inline-flex;
     align-items: baseline;
     gap: 0.55rem;
-    border: 1.5px solid rgba(255, 255, 255, 0.32);
-    color: rgba(255, 255, 255, 0.75);
+    border: 1.5px solid var(--reel-border, rgba(255, 255, 255, 0.32));
+    color: var(--reel-color, rgba(255, 255, 255, 0.75));
     padding: 0.65rem 1.35rem 0.65rem 1rem;
     border-radius: 4px;
     font-size: 0.78rem;
@@ -110,10 +112,21 @@ const { href, label = 'Voir le matériel' } = Astro.props
     white-space: nowrap;
   }
 
+  /* Fond clair : contour et texte foncés (bleu océan) */
+  .reel-btn[data-tone="light"] {
+    --reel-border: rgba(27, 94, 138, 0.45);
+    --reel-color: var(--color-ocean-main, #1B5E8A);
+  }
+
   .reel-btn:hover {
     border-color: var(--color-ocean-light, #7ec8e3);
     color: var(--color-ocean-light, #7ec8e3);
     background: rgba(126, 200, 227, 0.08);
+  }
+  .reel-btn[data-tone="light"]:hover {
+    border-color: var(--color-ocean-main, #1B5E8A);
+    color: var(--color-ocean-main, #1B5E8A);
+    background: rgba(27, 94, 138, 0.06);
   }
 
   .reel-icon {

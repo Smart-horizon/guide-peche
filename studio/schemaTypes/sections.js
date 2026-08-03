@@ -3076,7 +3076,23 @@ export const sectionBoutons = {
         },
       }],
     },
-    fondField('white'),
+    {
+      name: 'fond',
+      title: 'Couleur de fond',
+      type: 'string',
+      description: 'Les boutons, titres et flèches s\'adaptent automatiquement (clair ou foncé) pour rester lisibles.',
+      options: {
+        list: [
+          { title: '⬜ Blanc',         value: 'white' },
+          { title: '🟫 Beige (sable)', value: 'sand'  },
+          { title: '◻️ Gris clair',    value: 'mist'  },
+          { title: '🟦 Bleu océan',    value: 'ocean' },
+          { title: '🟦 Bleu nuit',     value: 'dark'  },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'white',
+    },
   ],
   preview: {
     select: { boutons: 'boutons', titre: 'titre' },

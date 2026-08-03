@@ -906,9 +906,12 @@ const voyagesForGrid: any[] = hasVoyagesGrid
     const btns = (s.boutons ?? []).filter((b: any) => stegaClean(b.texte))
     if (!btns.length) return null
     const align = stegaClean(s.alignement) || 'centre'
+    const fond  = stegaClean(s.fond) || 'white'
+    // Fonds sombres → boutons/titres clairs ; fonds clairs → foncés
+    const tone  = (fond === 'dark' || fond === 'ocean') ? 'dark' : 'light'
     const coul = { ocean: 'var(--color-ocean-main)', clair: 'var(--color-ocean-mid)', nuit: 'var(--color-ocean)' }
     return (
-      <section class={`section pb-btns ${bg(s.fond) || 'section--white'}`}>
+      <section class={`section pb-btns ${bg(s.fond) || 'section--white'}`} data-tone={tone}>
         <div class="container" data-align={align}>
           {stegaClean(s.eyebrow) && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
           {stegaClean(s.titre)   && <h2 class="pb-btns__titre">{s.titre}</h2>}
@@ -927,7 +930,7 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               const attrs = ext ? { target: '_blank', rel: 'noopener noreferrer' } : {}
 
               if (type === 'materiel') {
-                return <MatierielBtn href={cible} label={texte} />
+                return <MatierielBtn href={cible} label={texte} tone={tone} />
               }
               if (type === 'youtube') {
                 return (
@@ -3100,11 +3103,26 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   color: #fff;
 }
 .pbb--download:hover { background: #144b72; }
-/* Sur fond bleu nuit : contour et flèche passent en clair pour rester lisibles */
-.pb-btns.section--dark .pbb--contour { border-color: rgba(255,255,255,0.5); color: #fff; }
-.pb-btns.section--dark .pbb--contour:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
-.pb-btns.section--dark .pbb--fleche { color: var(--color-ocean-light); }
-.pb-btns.section--dark .pb-btns__titre { color: #fff; }
+
+/* ── Adaptation au fond (data-tone : light = fonds clairs · dark = océan/nuit) ── */
+/* Titre + eyebrow lisibles sur fond sombre */
+.pb-btns[data-tone="dark"] .pb-btns__titre { color: #fff; }
+.pb-btns[data-tone="dark"] .pb-eyebrow-sm  { color: var(--color-ocean-light); }
+
+/* YouTube — fond clair : contour + texte foncés (l'icône reste rouge) */
+.pb-btns[data-tone="light"] .btn-youtube {
+  border-color: rgba(26,26,31,0.25);
+  color: var(--color-text);
+}
+.pb-btns[data-tone="light"] .btn-youtube:hover {
+  border-color: #FF0000;
+  background: rgba(255,0,0,0.06);
+}
+
+/* Contour + flèche — fond sombre : passent en clair pour rester lisibles */
+.pb-btns[data-tone="dark"] .pbb--contour { border-color: rgba(255,255,255,0.5); color: #fff; }
+.pb-btns[data-tone="dark"] .pbb--contour:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+.pb-btns[data-tone="dark"] .pbb--fleche { color: var(--color-ocean-light); }
 @media (max-width: 900px) {
   .pb-prog-cart__header { grid-template-columns: 1fr; gap: 2rem; }
   .pb-prog-cart__header-img { height: 260px; }
