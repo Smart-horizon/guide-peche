@@ -14,7 +14,7 @@
  */
 
 // Champs "design / liens / techniques" — toujours pris côté FR
-const NON_TEXT_KEY = /^(fond|style|hauteur|alignement|colonnes|position\w*|isLarge|showInfoCard|lien|href|url\w*|video\w*|voyageFeaturedSlug|avatar|emoji|icone|statut|couleur\w*|slug|categorie|badges|mode|nombre|espece|articlesChoisis)$/i
+const NON_TEXT_KEY = /^(fond|style|hauteur|alignement|colonnes|position\w*|isLarge|showInfoCard|lien|href|url\w*|video\w*|voyageFeaturedSlug|avatar|emoji|icone|statut|couleur\w*|slug|categorie|badges|mode|nombre|espece|articlesChoisis|type|nouvelOnglet)$/i
 
 const isAssetObj = (v) =>
   v && typeof v === 'object' && !Array.isArray(v) &&

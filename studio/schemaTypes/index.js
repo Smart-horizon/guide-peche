@@ -28,7 +28,7 @@ import {
   sectionCards3, sectionBanniereCard, sectionPartenaires, sectionRevuePresse,
   sectionMaterielIntro, sectionEquipement, sectionMaterielNav,
   sectionVideos, sectionGrilleSubPages, sectionTarifs,
-  sectionAvantages, sectionVoyagesGrid, sectionFaq, sectionBlog,
+  sectionAvantages, sectionVoyagesGrid, sectionFaq, sectionBlog, sectionBoutons,
   sectionProduits, sectionBoutiqueCta,
 } from './sections.js'
 
@@ -98,6 +98,7 @@ export const schemaTypes = [
   sectionVoyagesGrid,
   sectionFaq,
   sectionBlog,
+  sectionBoutons,
   sectionProduits,
   sectionBoutiqueCta,
 ]

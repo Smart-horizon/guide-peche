@@ -50,6 +50,7 @@ const doc = await client.fetch(`
       'galerie': galerie[]{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
       items[]{..., photos[]{ _type, hotspot, crop, asset->{_id, url}, alt, caption}},
       cartes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url } } },
+      boutons[]{ ..., fichier{ asset->{ _id, url } } },
       specs[], liens[], sejours[], stats[], lignesInfo[],
     },
     pagebuilderEn[]{
@@ -67,6 +68,7 @@ const doc = await client.fetch(`
       'galerie': galerie[]{ _type, hotspot, crop, asset->{ _id, url, metadata{ dimensions } } },
       items[]{..., photos[]{ _type, hotspot, crop, asset->{_id, url}, alt, caption}},
       cartes[]{ ..., image{ _type, hotspot, crop, asset->{ _id, url } } },
+      boutons[]{ ..., fichier{ asset->{ _id, url } } },
       specs[], liens[], sejours[], stats[], lignesInfo[],
     },
   }

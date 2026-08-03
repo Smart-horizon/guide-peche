@@ -2975,6 +2975,118 @@ export const sectionBoutiqueCta = {
   },
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION — BOUTONS (un ou plusieurs boutons entre deux sections)
+// ─────────────────────────────────────────────────────────────────────────────
+export const sectionBoutons = {
+  name: 'sectionBoutons',
+  title: '🔘 Boutons',
+  type: 'object',
+  description: 'Un ou plusieurs boutons, à placer entre deux sections',
+  fields: [
+    { name: 'eyebrow', title: 'Petit texte au-dessus (optionnel)', type: 'string' },
+    { name: 'titre',   title: 'Titre au-dessus des boutons (optionnel)', type: 'string' },
+    {
+      name: 'alignement',
+      title: 'Position des boutons',
+      type: 'string',
+      options: {
+        list: [
+          { title: '⬅️ À gauche',  value: 'gauche' },
+          { title: '⏺️ Au centre', value: 'centre' },
+          { title: '➡️ À droite',  value: 'droite' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'centre',
+    },
+    {
+      name: 'boutons',
+      title: 'Boutons',
+      type: 'array',
+      validation: Rule => Rule.min(1).error('Ajoutez au moins un bouton'),
+      of: [{
+        type: 'object',
+        name: 'bouton',
+        fields: [
+          { name: 'texte', title: 'Texte du bouton', type: 'string', validation: Rule => Rule.required() },
+          {
+            name: 'type',
+            title: 'Type de bouton',
+            type: 'string',
+            options: {
+              list: [
+                { title: '🔵 Plein (couleur au choix)',        value: 'principal' },
+                { title: '⭕ Contour (couleur au choix)',      value: 'contour' },
+                { title: '➡️ Lien avec flèche',                value: 'fleche' },
+                { title: '🔴 YouTube (rouge)',                 value: 'youtube' },
+                { title: '🎣 Matériel (moulinet animé)',       value: 'materiel' },
+                { title: '⬇️ Téléchargement',                  value: 'telechargement' },
+                { title: '📞 Téléphone',                       value: 'telephone' },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'principal',
+            validation: Rule => Rule.required(),
+          },
+          {
+            name: 'couleur',
+            title: 'Couleur',
+            type: 'string',
+            description: 'Uniquement pour les types « Plein », « Contour » et « Lien avec flèche »',
+            options: {
+              list: [
+                { title: '🟦 Bleu océan (défaut)', value: 'ocean' },
+                { title: '🔵 Bleu clair',          value: 'clair' },
+                { title: '🟫 Bleu nuit',           value: 'nuit'  },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'ocean',
+            hidden: ({ parent }) => !['principal', 'contour', 'fleche'].includes(parent?.type),
+          },
+          {
+            name: 'lien',
+            title: 'Lien / URL',
+            type: 'string',
+            description: 'Ex : /peche-du-bar-a-la-mouche · https://youtube.com/... · Pour un n° de téléphone, saisir juste le numéro',
+            hidden: ({ parent }) => parent?.type === 'telechargement' && parent?.fichier,
+          },
+          {
+            name: 'fichier',
+            title: 'Fichier à télécharger',
+            type: 'file',
+            description: 'PDF ou autre. S\'il est renseigné, le bouton télécharge ce fichier (le lien est ignoré).',
+            hidden: ({ parent }) => parent?.type !== 'telechargement',
+          },
+          {
+            name: 'nouvelOnglet',
+            title: 'Ouvrir dans un nouvel onglet ?',
+            type: 'boolean',
+            initialValue: false,
+            hidden: ({ parent }) => ['telechargement', 'telephone'].includes(parent?.type),
+          },
+        ],
+        preview: {
+          select: { title: 'texte', type: 'type', couleur: 'couleur' },
+          prepare: ({ title, type, couleur }) => {
+            const icons = { principal: '🔵', contour: '⭕', fleche: '➡️', youtube: '🔴', materiel: '🎣', telechargement: '⬇️', telephone: '📞' }
+            return { title: `${icons[type] || '🔘'} ${title || '(sans texte)'}`, subtitle: type === 'principal' || type === 'contour' || type === 'fleche' ? couleur : type }
+          },
+        },
+      }],
+    },
+    fondField('white'),
+  ],
+  preview: {
+    select: { boutons: 'boutons', titre: 'titre' },
+    prepare: ({ boutons, titre }) => ({
+      title: `🔘 Boutons${titre ? ' — ' + titre : ''}`,
+      subtitle: `${boutons?.length || 0} bouton(s)`,
+    }),
+  },
+}
+
 // ── Export de tous les types ──────────────────────────────────────────────────
 export const allSectionTypes = [
   sectionHero,
@@ -3019,6 +3131,7 @@ export const allSectionTypes = [
   sectionVoyagesGrid,
   sectionFaq,
   sectionBlog,
+  sectionBoutons,
   sectionProduits,
   sectionBoutiqueCta,
 ]

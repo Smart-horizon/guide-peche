@@ -901,6 +901,70 @@ const voyagesForGrid: any[] = hasVoyagesGrid
     </div>
   )}
 
+  {/* ════════════ BOUTONS ════════════ */}
+  {s._type === 'sectionBoutons' && (() => {
+    const btns = (s.boutons ?? []).filter((b: any) => stegaClean(b.texte))
+    if (!btns.length) return null
+    const align = stegaClean(s.alignement) || 'centre'
+    const coul = { ocean: 'var(--color-ocean-main)', clair: 'var(--color-ocean-mid)', nuit: 'var(--color-ocean)' }
+    return (
+      <section class={`section pb-btns ${bg(s.fond) || 'section--white'}`}>
+        <div class="container" data-align={align}>
+          {stegaClean(s.eyebrow) && <p class="pb-eyebrow-sm">{s.eyebrow}</p>}
+          {stegaClean(s.titre)   && <h2 class="pb-btns__titre">{s.titre}</h2>}
+          <div class="pb-btns__row" data-align={align}>
+            {btns.map((b: any) => {
+              const type   = stegaClean(b.type) || 'principal'
+              const texte  = b.texte
+              const c      = coul[stegaClean(b.couleur) || 'ocean']
+              const fichier = b.fichier?.asset?.url
+              const lien   = stegaClean(b.lien)
+              const cible  = type === 'telechargement' ? (fichier || pfx(lien) || '#')
+                : type === 'telephone' ? `tel:${(lien || '').replace(/\s/g, '')}`
+                : type === 'youtube' ? (lien || '#')
+                : (pfx(lien) || '#')
+              const ext = b.nouvelOnglet || type === 'youtube'
+              const attrs = ext ? { target: '_blank', rel: 'noopener noreferrer' } : {}
+
+              if (type === 'materiel') {
+                return <MatierielBtn href={cible} label={texte} />
+              }
+              if (type === 'youtube') {
+                return (
+                  <a href={cible} class="btn-youtube" {...attrs}>
+                    <svg class="btn-youtube__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/>
+                    </svg>
+                    {texte}
+                  </a>
+                )
+              }
+              if (type === 'telechargement') {
+                return (
+                  <a href={cible} class="pbb pbb--download" download={!!fichier} {...(fichier ? {} : attrs)}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    {texte}
+                  </a>
+                )
+              }
+              if (type === 'contour') {
+                return <a href={cible} class="pbb pbb--contour" style={`--pbb-c:${c}`} {...attrs}>{texte}</a>
+              }
+              if (type === 'fleche') {
+                return <a href={cible} class="pbb pbb--fleche" style={`--pbb-c:${c}`} {...attrs}>{texte}<span aria-hidden="true">→</span></a>
+              }
+              if (type === 'telephone') {
+                return <a href={cible} class="pbb pbb--prim" style={`--pbb-c:${coul.ocean}`}>{texte}</a>
+              }
+              // principal
+              return <a href={cible} class="pbb pbb--prim" style={`--pbb-c:${c}`} {...attrs}>{texte}</a>
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  })()}
+
   {/* ════════════ CARROUSEL 3 IMAGES ════════════ */}
   {s._type === 'sectionCarrousel3Images' && (
     <section class={`pb-carr-outer ${bg(s.fond)||'section--dark'}`}>
@@ -2979,6 +3043,68 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   text-decoration: none; transition: background 0.2s;
 }
 .btn-download:hover { background: #144b72; }
+
+/* ── SECTION BOUTONS (page builder) ─────────────────────────────────────────── */
+.pb-btns .pb-eyebrow-sm { margin-bottom: 0.5rem; }
+.pb-btns__titre {
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+}
+.pb-btns .container[data-align="centre"] { text-align: center; }
+.pb-btns .container[data-align="droite"] { text-align: right; }
+.pb-btns__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+.pb-btns__row[data-align="centre"] { justify-content: center; }
+.pb-btns__row[data-align="droite"] { justify-content: flex-end; }
+.pb-btns__row[data-align="gauche"] { justify-content: flex-start; }
+
+/* Base commune des boutons de cette section */
+.pbb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.8rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.pbb--prim {
+  background: var(--pbb-c, var(--color-ocean-main));
+  color: #fff;
+}
+.pbb--prim:hover { filter: brightness(0.9); }
+.pbb--contour {
+  border: 1.5px solid var(--pbb-c, var(--color-ocean-main));
+  color: var(--pbb-c, var(--color-ocean-main));
+}
+.pbb--contour:hover { background: var(--pbb-c, var(--color-ocean-main)); color: #fff; }
+.pbb--fleche {
+  color: var(--pbb-c, var(--color-ocean-main));
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  font-weight: 600;
+}
+.pbb--fleche span { transition: transform 0.2s; }
+.pbb--fleche:hover span { transform: translateX(4px); }
+.pbb--download {
+  background: var(--color-ocean-main);
+  color: #fff;
+}
+.pbb--download:hover { background: #144b72; }
+/* Sur fond bleu nuit : contour et flèche passent en clair pour rester lisibles */
+.pb-btns.section--dark .pbb--contour { border-color: rgba(255,255,255,0.5); color: #fff; }
+.pb-btns.section--dark .pbb--contour:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+.pb-btns.section--dark .pbb--fleche { color: var(--color-ocean-light); }
+.pb-btns.section--dark .pb-btns__titre { color: #fff; }
 @media (max-width: 900px) {
   .pb-prog-cart__header { grid-template-columns: 1fr; gap: 2rem; }
   .pb-prog-cart__header-img { height: 260px; }
