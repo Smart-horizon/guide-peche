@@ -3030,22 +3030,6 @@ export const sectionBoutons = {
             validation: Rule => Rule.required(),
           },
           {
-            name: 'couleur',
-            title: 'Couleur',
-            type: 'string',
-            description: 'Uniquement pour les types « Plein », « Contour » et « Lien avec flèche »',
-            options: {
-              list: [
-                { title: '🟦 Bleu océan (défaut)', value: 'ocean' },
-                { title: '🔵 Bleu clair',          value: 'clair' },
-                { title: '🟫 Bleu nuit',           value: 'nuit'  },
-              ],
-              layout: 'radio',
-            },
-            initialValue: 'ocean',
-            hidden: ({ parent }) => !['principal', 'contour', 'fleche'].includes(parent?.type),
-          },
-          {
             name: 'lien',
             title: 'Lien / URL',
             type: 'string',
@@ -3068,10 +3052,10 @@ export const sectionBoutons = {
           },
         ],
         preview: {
-          select: { title: 'texte', type: 'type', couleur: 'couleur' },
-          prepare: ({ title, type, couleur }) => {
-            const icons = { principal: '🔵', contour: '⭕', fleche: '➡️', youtube: '🔴', materiel: '🎣', telechargement: '⬇️', telephone: '📞' }
-            return { title: `${icons[type] || '🔘'} ${title || '(sans texte)'}`, subtitle: type === 'principal' || type === 'contour' || type === 'fleche' ? couleur : type }
+          select: { title: 'texte', type: 'type' },
+          prepare: ({ title, type }) => {
+            const labels = { principal: '🔵 Plein', contour: '⭕ Contour', fleche: '➡️ Flèche', youtube: '🔴 YouTube', materiel: '🎣 Matériel', telechargement: '⬇️ Téléchargement', telephone: '📞 Téléphone' }
+            return { title: title || '(sans texte)', subtitle: labels[type] || type }
           },
         },
       }],

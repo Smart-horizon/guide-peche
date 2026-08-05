@@ -909,7 +909,6 @@ const voyagesForGrid: any[] = hasVoyagesGrid
     const fond  = stegaClean(s.fond) || 'white'
     // Fonds sombres → boutons/titres clairs ; fonds clairs → foncés
     const tone  = (fond === 'dark' || fond === 'ocean') ? 'dark' : 'light'
-    const coul = { ocean: 'var(--color-ocean-main)', clair: 'var(--color-ocean-mid)', nuit: 'var(--color-ocean)' }
     return (
       <section class={`section pb-btns ${bg(s.fond) || 'section--white'}`} data-tone={tone}>
         <div class="container" data-align={align}>
@@ -919,7 +918,6 @@ const voyagesForGrid: any[] = hasVoyagesGrid
             {btns.map((b: any) => {
               const type   = stegaClean(b.type) || 'principal'
               const texte  = b.texte
-              const c      = coul[stegaClean(b.couleur) || 'ocean']
               const fichier = b.fichier?.asset?.url
               const lien   = stegaClean(b.lien)
               const cible  = type === 'telechargement' ? (fichier || pfx(lien) || '#')
@@ -951,16 +949,16 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                 )
               }
               if (type === 'contour') {
-                return <a href={cible} class="pbb pbb--contour" style={`--pbb-c:${c}`} {...attrs}>{texte}</a>
+                return <a href={cible} class="pbb pbb--contour" {...attrs}>{texte}</a>
               }
               if (type === 'fleche') {
-                return <a href={cible} class="pbb pbb--fleche" style={`--pbb-c:${c}`} {...attrs}>{texte}<span aria-hidden="true">→</span></a>
+                return <a href={cible} class="pbb pbb--fleche" {...attrs}>{texte}<span aria-hidden="true">→</span></a>
               }
               if (type === 'telephone') {
-                return <a href={cible} class="pbb pbb--prim" style={`--pbb-c:${coul.ocean}`}>{texte}</a>
+                return <a href={cible} class="pbb pbb--prim">{texte}</a>
               }
               // principal
-              return <a href={cible} class="pbb pbb--prim" style={`--pbb-c:${c}`} {...attrs}>{texte}</a>
+              return <a href={cible} class="pbb pbb--prim" {...attrs}>{texte}</a>
             })}
           </div>
         </div>
@@ -3081,17 +3079,17 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
   white-space: nowrap;
 }
 .pbb--prim {
-  background: var(--pbb-c, var(--color-ocean-main));
+  background: var(--color-ocean-main);
   color: #fff;
 }
 .pbb--prim:hover { filter: brightness(0.9); }
 .pbb--contour {
-  border: 1.5px solid var(--pbb-c, var(--color-ocean-main));
-  color: var(--pbb-c, var(--color-ocean-main));
+  border: 1.5px solid var(--color-ocean-main);
+  color: var(--color-ocean-main);
 }
-.pbb--contour:hover { background: var(--pbb-c, var(--color-ocean-main)); color: #fff; }
+.pbb--contour:hover { background: var(--color-ocean-main); color: #fff; }
 .pbb--fleche {
-  color: var(--pbb-c, var(--color-ocean-main));
+  color: var(--color-ocean-main);
   padding-left: 0.4rem;
   padding-right: 0.4rem;
   font-weight: 600;
@@ -3108,6 +3106,16 @@ a.pb-banniere__inner:hover { text-decoration: underline; }
 /* Titre + eyebrow lisibles sur fond sombre */
 .pb-btns[data-tone="dark"] .pb-btns__titre { color: #fff; }
 .pb-btns[data-tone="dark"] .pb-eyebrow-sm  { color: var(--color-ocean-light); }
+
+/* Bouton plein — fond sombre : bleu ciel + texte foncé pour ressortir (l'océan
+   plein disparaîtrait sur le fond océan) */
+.pb-btns[data-tone="dark"] .pbb--prim,
+.pb-btns[data-tone="dark"] .pbb--download {
+  background: var(--color-ocean-light);
+  color: var(--color-ocean);
+}
+.pb-btns[data-tone="dark"] .pbb--prim:hover,
+.pb-btns[data-tone="dark"] .pbb--download:hover { filter: brightness(1.08); background: var(--color-ocean-light); }
 
 /* YouTube — fond clair : contour + texte foncés (l'icône reste rouge) */
 .pb-btns[data-tone="light"] .btn-youtube {
