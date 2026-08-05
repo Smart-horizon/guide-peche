@@ -922,9 +922,10 @@ const voyagesForGrid: any[] = hasVoyagesGrid
               const lien   = stegaClean(b.lien)
               const cible  = type === 'telechargement' ? (fichier || pfx(lien) || '#')
                 : type === 'telephone' ? `tel:${(lien || '').replace(/\s/g, '')}`
-                : type === 'youtube' ? (lien || '#')
+                : type === 'whatsapp' ? ((lien || '').startsWith('http') ? lien : `https://wa.me/${(lien || '').replace(/\D/g, '').replace(/^0/, '33')}`)
+                : ['youtube', 'facebook', 'instagram'].includes(type) ? (lien || '#')
                 : (pfx(lien) || '#')
-              const ext = b.nouvelOnglet || type === 'youtube'
+              const ext = b.nouvelOnglet || ['youtube', 'facebook', 'instagram', 'whatsapp'].includes(type)
               const attrs = ext ? { target: '_blank', rel: 'noopener noreferrer' } : {}
 
               if (type === 'materiel') {
@@ -936,6 +937,51 @@ const voyagesForGrid: any[] = hasVoyagesGrid
                     <svg class="btn-youtube__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/>
                     </svg>
+                    {texte}
+                  </a>
+                )
+              }
+              if (type === 'facebook') {
+                return (
+                  <a href={cible} class="btn-social btn-fb" {...attrs}>
+                    <span class="btn-social__ico" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/></svg>
+                    </span>
+                    {texte}
+                  </a>
+                )
+              }
+              if (type === 'instagram') {
+                return (
+                  <a href={cible} class="btn-social btn-ig" {...attrs}>
+                    <span class="btn-social__ico" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <linearGradient id="pbb-ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#feda75"/>
+                            <stop offset="28%" stop-color="#fa7e1e"/>
+                            <stop offset="58%" stop-color="#d62976"/>
+                            <stop offset="82%" stop-color="#962fbf"/>
+                            <stop offset="100%" stop-color="#4f5bd5"/>
+                          </linearGradient>
+                        </defs>
+                        <g fill="none" stroke="url(#pbb-ig-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5"/>
+                          <circle cx="12" cy="12" r="4.2"/>
+                          <line x1="17.6" y1="6.4" x2="17.61" y2="6.4"/>
+                        </g>
+                      </svg>
+                    </span>
+                    {texte}
+                  </a>
+                )
+              }
+              if (type === 'whatsapp') {
+                return (
+                  <a href={cible} class="btn-social btn-wa" {...attrs}>
+                    <span class="btn-social__ico" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="currentColor"/></svg>
+                    </span>
                     {texte}
                   </a>
                 )
@@ -2093,6 +2139,61 @@ span.ts-row__name { color: var(--color-text, #1a1a1f); }
   color: #FF0000;
   flex-shrink: 0;
 }
+
+/* ── Boutons réseaux sociaux (Facebook, Instagram, WhatsApp) ─────────────────
+   Même gabarit que le bouton YouTube : contour neutre qui s'adapte au fond,
+   icône aux couleurs de la marque, accent de marque au survol. */
+.btn-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.3s, transform 0.2s;
+}
+.btn-social__ico { display: inline-flex; width: 20px; height: 20px; flex-shrink: 0; }
+.btn-social__ico svg { width: 100%; height: 100%; display: block; }
+/* Sur fond clair : contour + texte foncés (les icônes gardent leur couleur de marque) */
+.pb-btns[data-tone="light"] .btn-social { border-color: rgba(26,26,31,0.22); color: var(--color-text); }
+
+/* Facebook */
+.btn-fb .btn-social__ico { color: #1877F2; }
+.btn-fb:hover { border-color: #1877F2; background: rgba(24,119,242,0.10); transform: translateY(-1px); }
+.pb-btns[data-tone="light"] .btn-fb:hover { background: rgba(24,119,242,0.07); }
+
+/* WhatsApp */
+.btn-wa .btn-social__ico { color: #25D366; }
+.btn-wa:hover { border-color: #25D366; background: rgba(37,211,102,0.12); transform: translateY(-1px); }
+.pb-btns[data-tone="light"] .btn-wa:hover { background: rgba(37,211,102,0.08); }
+
+/* Instagram — contour dégradé animé + halo au survol (le bouton qui pète) */
+.btn-ig { --ig-bg: #fff; }
+.pb-btns.section--sand  .btn-ig { --ig-bg: var(--color-sand); }
+.pb-btns.section--mist  .btn-ig { --ig-bg: var(--color-mist); }
+.pb-btns.section--ocean .btn-ig { --ig-bg: var(--color-ocean-main); }
+.pb-btns.section--dark  .btn-ig { --ig-bg: var(--color-ocean); }
+.btn-ig:hover {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--ig-bg), var(--ig-bg)) padding-box,
+    linear-gradient(70deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75) border-box;
+  background-size: 100% 100%, 250% 250%;
+  animation: ig-shift 3s linear infinite;
+  box-shadow: 0 6px 26px rgba(214,41,118,0.32);
+  transform: translateY(-1px);
+}
+@keyframes ig-shift {
+  to { background-position: 0 0, 250% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-ig:hover { animation: none; }
+}
+
 .btn-ghost-light {
   border: 1.5px solid rgba(255,255,255,0.35);
   color: white;

@@ -3019,7 +3019,10 @@ export const sectionBoutons = {
                 { title: '🔵 Plein (couleur au choix)',        value: 'principal' },
                 { title: '⭕ Contour (couleur au choix)',      value: 'contour' },
                 { title: '➡️ Lien avec flèche',                value: 'fleche' },
-                { title: '🔴 YouTube (rouge)',                 value: 'youtube' },
+                { title: '🔴 YouTube',                         value: 'youtube' },
+                { title: '🔵 Facebook',                        value: 'facebook' },
+                { title: '🟣 Instagram (dégradé animé)',       value: 'instagram' },
+                { title: '🟢 WhatsApp',                        value: 'whatsapp' },
                 { title: '🎣 Matériel (moulinet animé)',       value: 'materiel' },
                 { title: '⬇️ Téléchargement',                  value: 'telechargement' },
                 { title: '📞 Téléphone',                       value: 'telephone' },
@@ -3033,7 +3036,7 @@ export const sectionBoutons = {
             name: 'lien',
             title: 'Lien / URL',
             type: 'string',
-            description: 'Ex : /peche-du-bar-a-la-mouche · https://youtube.com/... · Pour un n° de téléphone, saisir juste le numéro',
+            description: 'Ex : /peche-du-bar-a-la-mouche · une URL YouTube/Facebook/Instagram · pour Téléphone ou WhatsApp, saisir juste le numéro',
             hidden: ({ parent }) => parent?.type === 'telechargement' && parent?.fichier,
           },
           {
@@ -3054,7 +3057,7 @@ export const sectionBoutons = {
         preview: {
           select: { title: 'texte', type: 'type' },
           prepare: ({ title, type }) => {
-            const labels = { principal: '🔵 Plein', contour: '⭕ Contour', fleche: '➡️ Flèche', youtube: '🔴 YouTube', materiel: '🎣 Matériel', telechargement: '⬇️ Téléchargement', telephone: '📞 Téléphone' }
+            const labels = { principal: '🔵 Plein', contour: '⭕ Contour', fleche: '➡️ Flèche', youtube: '🔴 YouTube', facebook: '🔵 Facebook', instagram: '🟣 Instagram', whatsapp: '🟢 WhatsApp', materiel: '🎣 Matériel', telechargement: '⬇️ Téléchargement', telephone: '📞 Téléphone' }
             return { title: title || '(sans texte)', subtitle: labels[type] || type }
           },
         },
